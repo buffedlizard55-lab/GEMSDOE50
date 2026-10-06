@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-10-06T20:49:14+00:00",
+ "generated_utc": "2026-10-06T20:50:11+00:00",
  "submission": "gems50-seislin-44709-20261006T2041Z-79e260ae.tif",
  "sha256": "79e260ae223d7dfd96413da28a9c6fed30107285ab843795181a5c9e5dff7262",
  "format": {
@@ -21,21 +21,18 @@
   ],
   "compression": "Compression.deflate",
   "nodata": NaN,
-  "footprint_source": "competition sample_submission.tif",
+  "footprint_source": "registry/footprint_mask.npz",
   "footprint_px": 5167373,
   "outside_footprint_all_nan": true,
   "all_checks_pass": true
  },
  "uniqueness": {
-  "n_prior": 50,
-  "identical_sha256": [],
-  "max_iou": 0.3563091530343806,
-  "worst_overlap_file": "gems32-bayesopt-dilation-scarp-d28-20261004-nan.tif",
-  "min_novel_fraction_at_2px": 0.472880180724239,
-  "my_dots": 44709,
+  "verdict": "SKIPPED",
+  "verdict_unique": null,
   "my_sha256": "79e260ae223d7dfd96413da28a9c6fed30107285ab843795181a5c9e5dff7262",
-  "verdict_unique": true
+  "my_dots": 44709,
+  "reason": "prior artifacts not present in this environment"
  },
- "verdict": "PASS",
+ "verdict": "SKIPPED (prior-artifact corpus not present here)",
  "checked_by": "scripts/check_submission.py"
 }
