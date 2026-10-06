@@ -1,37 +1,18 @@
-name: feed
-# Nightly refresh of the official USGS ComCat catalogue that the detector consumes.
-# The query, licence and provenance are recorded in registry/sources.json.
+name: legacy-comcat-refresh-disabled
+
+# The former scheduled refresh used mixed-network ComCat data before H50-S1's
+# source-specific rights, competition-rule shareability, and location-uncertainty
+# review was complete. Keep this historical workflow file for auditability, but
+# do not schedule, fetch, commit, or consume that data.
 on:
-  schedule:
-    - cron: "31 5 * * *"
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  refresh-catalog:
+  disabled:
+    if: ${{ false }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Fetch the official catalogue (FDSN event service, public domain)
-        run: |
-          set -euo pipefail
-          URL="https://earthquake.usgs.gov/fdsnws/event/1/query"
-          PARAMS="format=csv&starttime=1900-01-01&endtime=now&minlatitude=37.27&maxlatitude=40.79&minlongitude=-120.10&maxlongitude=-116.08&orderby=time-asc&limit=400000"
-          curl --fail --silent --show-error --retry 3 "$URL?$PARAMS" -o /tmp/comcat.csv
-          rows=$(($(wc -l < /tmp/comcat.csv) - 1))
-          echo "rows: $rows"
-          test "$rows" -gt 150000
-          gzip -9 -c /tmp/comcat.csv > data/external/usgs_comcat_earthquakes.csv.gz
-      - name: Commit only if the catalogue changed
-        run: |
-          git config user.name  "gemsdoe50-feed"
-          git config user.email "gemsdoe50-feed@users.noreply.github.com"
-          git add data/external/usgs_comcat_earthquakes.csv.gz
-          if git diff --cached --quiet; then
-            echo "no change"
-          else
-            git commit -m "feed: refresh USGS ComCat catalogue $(date -u +%Y-%m-%dT%H:%MZ)"
-            git push
-          fi
+      - run: echo "Disabled pending source and competition-rule review; no data fetched."

@@ -1,87 +1,18 @@
-name: fetch-external-data
+name: legacy-comcat-fetch-disabled
 
-# GitHub-hosted runners have unrestricted egress; the development sandbox does not.
-# This workflow is the project's *only* mechanism for reaching official data services
-# that are otherwise unreachable (USGS FDSN/ComCat). It uses no credentials beyond the
-# ephemeral GITHUB_TOKEN and it publishes the catalogue two ways:
-#   1. as a build artifact (retained 90 days), and
-#   2. committed back to the branch that triggered the run, because the development
-#      sandbox can reach `git`/`api.github.com` but not the artifact blob storage.
-#
-# Manual run:  gh workflow run fetch-external-data -R <owner>/<repo> -f min_magnitude=1.0
-# Retrieve:    git pull    (file lands in data/external/)
-
+# This is retained only as a historical audit record. The prior workflow fetched
+# mixed-network ComCat data and committed it to the triggering branch. H50-S1 does
+# not use that data; source-specific rights, competition-rule shareability, and
+# location uncertainty remain unresolved. Do not dispatch this workflow.
 on:
-  push:
-    paths:
-      - 'scripts/fetch_earthquake_catalog.py'
-      - '.github/workflows/fetch-external-data.yml'
   workflow_dispatch:
-    inputs:
-      min_magnitude:
-        description: 'Minimum magnitude for the dense catalogue band'
-        required: false
-        default: '1.0'
-      start_year:
-        description: 'First year of the dense band'
-        required: false
-        default: '1970'
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  fetch-catalog:
+  disabled:
+    if: ${{ false }}
     runs-on: ubuntu-latest
-    timeout-minutes: 120
     steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.ref_name }}
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-      - name: Fetch USGS ComCat catalogue for the GEMS footprint
-        env:
-          MIN_MAG: ${{ github.event.inputs.min_magnitude || '1.0' }}
-          START_YEAR: ${{ github.event.inputs.start_year || '1970' }}
-        run: |
-          set -euo pipefail
-          python scripts/fetch_earthquake_catalog.py \
-            --out data/external \
-            --min-magnitude "$MIN_MAG" \
-            --start "$START_YEAR-01-01"
-      - name: Sanity-check the fetched catalogue
-        run: |
-          python - <<'PY'
-          import csv, json, pathlib
-          p = pathlib.Path('data/external/usgs_comcat_earthquakes.csv')
-          rows = list(csv.DictReader(p.open()))
-          assert rows, 'catalogue is empty'
-          mags = [float(r['mag']) for r in rows if r['mag']]
-          print('rows', len(rows), 'mag range', min(mags), max(mags))
-          print('first', rows[0]['time'], 'last', rows[-1]['time'])
-          s = json.load(open('data/external/usgs_comcat_earthquakes.summary.json'))
-          print('types', s['event_types'])
-          PY
-      - name: Commit the catalogue back to the branch
-        run: |
-          set -euo pipefail
-          git config user.name "gemsdoe50-data"
-          git config user.email "gemsdoe50-data@users.noreply.github.com"
-          # the raw CSV is ~43 MB; the repository keeps the gzip (about a quarter of
-          # that) and the JSON summary, and the CSV is never committed.
-          gzip -9 -n -k -f data/external/usgs_comcat_earthquakes.csv
-          git add data/external/usgs_comcat_earthquakes.csv.gz \
-                  data/external/usgs_comcat_earthquakes.summary.json
-          git diff --cached --quiet && echo "nothing new" || \
-            git commit -m "data: official USGS ComCat catalogue for the GEMS footprint"
-          git push origin "HEAD:${{ github.ref_name }}"
-      - uses: actions/upload-artifact@v4
-        with:
-          name: usgs-comcat-catalog
-          path: |
-            data/external/usgs_comcat_earthquakes.csv
-            data/external/usgs_comcat_earthquakes.summary.json
-          retention-days: 90
-          if-no-files-found: error
+      - run: echo "Disabled pending source and competition-rule review; no data fetched."

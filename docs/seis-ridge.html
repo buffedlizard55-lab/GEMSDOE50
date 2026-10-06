@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Seismicity-first submission — GEMSDOE50</title>
+<title>Archived seismicity-first candidate — GEMSDOE50</title>
 <style>
   :root { --ink:#111; --mut:#555; --line:#ddd; --acc:#0b5; --bg:#fff; }
   * { box-sizing:border-box; }
@@ -32,8 +32,10 @@
 </style>
 </head>
 <body>
+<div role="note" style="margin:14px auto;padding:12px 16px;max-width:1100px;background:#fff1df;border-left:5px solid #a96519;border-radius:6px;font:600 15px/1.5 system-ui,sans-serif;color:#3b2b19">ARCHIVED, UNVERIFIED PRIOR WORK — this page describes earlier main-branch experiments/artifacts, not H50-S1. Do not upload files linked here. Historical local metrics and copied leaderboard notes are not a fresh independent official check, and no organizer receipt authenticates a score-to-TIFF mapping. See the <a href="../index.html">current H50-S1 project site</a>.</div>
+
 <header>
-  <h1>GEMSDOE50 — seismicity-first fault prediction</h1>
+  <h1>GEMSDOE50 — archived seismicity-first experiment (not the H50-S1 submission)</h1>
   <nav class="mut"><a href="index.html">Project home</a><a href="seis-ridge.html">Seismicity submission</a><a href="executive-summary.html">How to submit</a>
      <a href="hypotheses.html">Hypotheses</a><a href="analysis.html">Why 0.2778 / what beats it</a>
      <a href="sources.html">Sources</a></nav>
@@ -124,46 +126,32 @@ and uniform-random controls at matched mass cover 0 %.</li>
 hidden truth is smaller (the sibling ledger's two published estimates are ≈5,667 and ≈15,100 cells,
 i.e. 57–151 km of fault) and the two disagree by a factor of 2.7; the mass choice therefore sits at the
 ledger's own optimum neighbourhood, not at the optimum of the instrument.</li>
-<li>No competitor's score other than the public leaderboard rows is known, and no automated
-leaderboard monitoring is performed (DrivenData’s terms of use forbid it).</li>
+<li>The earlier project stored leaderboard assertions; they were not freshly independently
+verified by H50-S1 and no score is authenticated to any TIFF. Current code does not read or
+publish leaderboard rows (see DrivenData’s terms of use).</li>
 </ul>
 </div>
 
-<h2>How to submit (short version)</h2>
-<ol>
-<li>Sign in at <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">the competition page</a>
-    → <em>Submit</em>.</li>
-<li>Upload <code>gemsdoe50-seis-ridge-v1.tif</code> (or the <code>.zip</code>).</li>
-<li>Paste the note text above into <em>Note (optional)</em>.</li>
-<li>Press submit. Two weekly slots; the file is unique, so a “duplicate submission” refusal means a
-    different file with the same bytes already exists — it does not.</li>
-</ol>
-<p>Full step-by-step, including the exact format checks and what to do if the portal objects:
-<a href="executive-summary.html">How to submit</a>.</p>
-
-<h2>Status feed</h2>
-<table>
-<tr><th>Built (UTC)</th><td>2026-10-06</td></tr>
-<tr><th>Public leaderboard at last observation</th>
-    <td>#1 xiaofanhu 0.3774 · #2 alexoktaba 0.3345 · #3 nchuzhoy 0.3262 ·
-        #13 extradr19 (this project's family) 0.2778</td></tr>
-<tr><th>Next actions</th>
-    <td>(1) spend a weekly slot on this file; (2) re-run the detector on the 2026 ComCat refresh
-        (the feed workflow pulls it nightly); (3) add the radiometric ridge mass once the
-        GeoDAWN survey-geometry metadata is reachable; (4) test the two alternative masses
-        (37,654 and 60,000) if a slot can be spared.</td></tr>
-<tr><th>Known limitations</th>
-    <td>the lidar scarp layer only uncovers 75 % of the survey; the corridor detector needs
-        M ≥ 1.5 / depth ≤ 20 km events, so it is blind along fault strands with no instrumented
-        seismicity; the 200-m catalogue ring is excluded by construction, which costs recall on
-        splays that hug mapped faults.</td></tr>
-</table>
+<h2>Current status</h2>
+<p>This legacy page and its linked files are retained for audit/education only. The previous
+submission steps and “spend a weekly slot” recommendation are withdrawn. Do not upload this
+artifact or use its metrics as an H50-S1 result. Current upload instructions, if a new candidate
+passes the preregistered spatial gate, will be published only on the
+<a href="../index.html">current project site</a>.</p>
+<p>The numerical leaderboard table and refresh schedule formerly displayed here have been
+removed: prior sibling-repository notes conflict and are not a fresh independent official
+check. No current official score or score-to-TIFF mapping is asserted.</p>
+<h2>Known legacy limitations</h2>
+<p>The previous experiment used a mixed-network ComCat extract and a 3DEP scarp layer. Neither
+is used by H50-S1. Source-specific rights/shareability and location-uncertainty review for the
+ComCat extract remain unresolved. See the current README and protocol before considering any
+external data.</p>
 
 </main>
 <footer>
-  Reproducible from the repository: <code>python3 scripts/build_submission.py --name seis-ridge-v1 --mass 45000</code>.
-  Data provenance and licences: <a href="sources.html">Sources</a>.
-  This site is a research record; the only authority on scores is the organiser’s leaderboard.
+  Historical reproduction instructions are retained for audit only and do not authorize external-data use or submission.
+  Data provenance and terms require review: <a href="sources.html">legacy source inventory</a>.
+  Current H50-S1 status and submission instructions are on the <a href="../index.html">root project site</a>.
 </footer>
 </body>
 </html>

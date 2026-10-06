@@ -1,4 +1,8 @@
-# External data: what is committed, what is restored, and how
+# Legacy external-data inventory — not authorized H50-S1 inputs
+
+> This inventory was inherited from earlier `main` work. H50-S1 does **not** consume these ComCat, SGMC, LiDAR, radiometric, or other derived files. The mixed-network ComCat extract's source-specific rights, competition-rule shareability, and event-location uncertainty have not been reviewed for this experiment. Its scheduled and manual GitHub refresh workflows have been disabled. Do not use these files as H50-S1 evidence until the required source/terms and scientific review is complete. The pre-existing GEMSDOE50 TIFF is separately pinned as a same-fold comparator only; its score provenance is not authenticated.
+
+The table below records the inherited repository inventory as historical metadata, not as an approval or verification of the sources or processing claims.
 
 | file | committed | bytes | sha256 |
 |---|---|---|---|

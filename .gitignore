@@ -1,14 +1,33 @@
-data/external/*.csv
-data/raw/
-.cache/
-__pycache__/
-*.pyc
+# Arena-local data, credentials, and run outputs
+.arena/
+.venv/
+venv/
+.env
+.env.*
 
-# Large derived rasters (reproducible; see data/external/README.md)
+# Python artifacts and tests
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Local caches and rebuildable intermediates
+.cache/
+cache/
+work/
+data/raw/
+data/intermediate/
+
+# Legacy external-data ignore policy from the existing repository
+data/external/*.csv
 data/external/lidar_scarp_features_u8.tif
 data/external/geodawn_rad_u8.tif
 data/external/geodawn_extensions_u8.tif
 
-# python bytecode caches (were tracked by mistake before 2026-10-06)
-__pycache__/
-*.pyc
+# Raster sidecars
+*.aux.xml
+*.ovr
+*.tfw
+*.tif.aux.xml

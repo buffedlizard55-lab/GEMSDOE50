@@ -1,4 +1,6 @@
-# Why the dotted file scored 0.2778, and what it would take to beat it
+# Archived dotted-file metric analysis (not an organizer score report)
+
+> Legacy research context only. Numeric scores below originated in prior project records and are not independently authenticated organizer results or mapped to a TIFF by H50-S1. Prior sibling-repository leaderboard notes conflict; no current official score or rank is asserted here. See the current project status in [`../../README.md`](../../README.md).
 
 **Verification status of every number is labelled** — `[OFFICIAL]` read from an
 organizer source, `[MEASURED]` computed here from hash-pinned bytes,
@@ -39,12 +41,13 @@ thresholded support. All competitive artifacts are binary.
 
 **Corollary 2 — the marginal-inclusion rule.** A dot that is the unique maximiser for
 one truth pixel raises `T` by `k` and the denominator by exactly `0.2`. It therefore
-pays iff `k > 0.2·s`. At the current best public score of 0.2778 the bar is 0.0556
-(within 283 m); at the 2026-10-06 leader's 0.3774 it is 0.0755 (within 277 m).
+pays iff `k > 0.2·s`. For an illustrative hypothetical `s = 0.5`, the kernel threshold
+is `0.1`, corresponding to a distance below 270 m. This is algebra only, not a
+leaderboard target or score assertion.
 
 **Corollary 3 — coverage arithmetic.** With `x = T/G` and `ρ = F/G`,
-`x = s·(0.2ρ + 0.8)/(1 − 0.2s)`. Reaching s = 0.3774 requires 32.7 % weighted
-coverage of the hidden truth at zero false-positive mass, 40.8 % at ρ = 1.
+`x = s·(0.2ρ + 0.8)/(1 − 0.2s)`. This relation is kept symbolic; no current or
+organizer-reported leaderboard value is used as a target.
 
 ## 2. What the highest-scoring artifact actually is [MEASURED]
 
@@ -101,15 +104,19 @@ The practical consequence is the whole strategy of this project: the binding con
 is *coverage of faults the catalogue does not contain*, and the only lever that can
 move it is evidence that is independent of the catalogue.
 
-## 5. What the live board says now
+## 5. Leaderboard provenance — no current claim
 
-[OFFICIAL, fetched 2026-10-06] The public leaderboard's best score is **0.3774**
-(xiaofanhu, 11 submissions); then 0.3345, 0.3262, 0.3222, 0.3220, 0.3218, 0.3195 …
-The task instruction's target of "> 0.3195" is therefore already the **seventh** place.
-Any claim that a file "scores higher than 0.3195" must be checked against 0.3774.
+Earlier sibling-repository notes contain historical leaderboard assertions, but they
+conflict and were not freshly independently checked by GEMSDOE50. The current project
+makes no claim about the official leader, rank, or score, and no score is mapped to a
+TIFF without an organizer receipt. DrivenData's Terms of Use prohibit automated
+monitoring/copying and manual monitoring/copying without prior written consent; this
+repository links to the official page but does not poll, scrape, or publish leaderboard
+rows.
 
 ## 6. Ceiling
 
-With `G = 13,833`, perfect knowledge and dots every ≈ 3 px along the hidden traces would
-give `T ≈ 0.8G`, `F ≈ 4,200`, hence DTI ≈ 0.78. The gap between 0.28 and 0.38 is
-therefore a *coverage* gap of roughly 25–50 % relative, not an emission-quality gap.
+Under the stated legacy model assumptions (`G = 13,833`, perfect knowledge, and dots
+every ≈3 px along hidden traces), `T ≈ 0.8G`, `F ≈ 4,200`, hence DTI ≈ 0.78. This
+is a model ceiling, not a forecast, current score, or independently verified leaderboard
+comparison. Any gap analysis is conditional on these owner-reported assumptions.

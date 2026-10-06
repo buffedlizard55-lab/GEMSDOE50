@@ -98,5 +98,5 @@ def test_marginal_threshold_values():
     assert metric.marginal_threshold(0.3195) == pytest.approx(0.0639, abs=1e-6)
     assert metric.max_distance_for_credit(metric.marginal_threshold(0.3195)) \
         == pytest.approx(280.8, abs=0.05)
-    assert metric.max_distance_for_credit(metric.marginal_threshold(0.3774)) \
-        == pytest.approx(277.4, abs=0.05)
+    assert metric.max_distance_for_credit(metric.marginal_threshold(0.5)) \
+        == pytest.approx(270.0, abs=0.05)

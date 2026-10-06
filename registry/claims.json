@@ -22,7 +22,7 @@
  "instruments_with_named_bias": [
   {
    "instrument": "off-catalogue USGS SGMC credit per emitted cell at matched mass",
-   "bias": "dispersion-biased at low mass (uniform random scores 0.103 at 5,243 cells while every structured field scores <= 0.003); ranks the family's 16 live scores positively but only at LOO Spearman 0.705, below the sibling repos' self-imposed 0.80 bar"
+   "bias": "dispersion-biased at low mass (uniform random scores 0.103 at 5,243 cells while every structured field scores <= 0.003); was compared with 16 historical sibling-repository score notes but only at LOO Spearman 0.705, below the sibling repos' self-imposed 0.80 bar"
   },
   {
    "instrument": "2020 Monte Cristo rupture trend",
@@ -30,13 +30,13 @@
   },
   {
    "instrument": "given catalogue raster",
-   "bias": "an ANTI-instrument: the hidden set is defined as faults not in it, and the ledger shows catalogue-alignment correlates negatively with live score"
+   "bias": "an ANTI-instrument: the hidden set is defined as faults not in it, and the ledger shows catalogue-alignment was associated with lower owner-reported historical proxy values"
   }
  ],
  "flagged_unresolved": [
   {
    "issue": "hidden-truth size |G|",
-   "detail": "family estimates 5,667 and 15,100 cells (2.7x disagreement) drive the mass optimum by \u00b10.03 DTI; resolvable only by a live score"
+   "detail": "Legacy model estimates differ; unresolved for this prior analysis and not used for H50-S1. H50-S1 uses a separately frozen spatial holdout."
   },
   {
    "issue": "organizer external-data clause",
@@ -51,8 +51,9 @@
    "detail": "byte-identical in the sibling mirror; whether the public leadboard truth equals the given catalogue is contradicted by the fact that the 0.2778 file has zero mass within 200 m of it -- the public truth is therefore NOT the given catalogue raster"
   },
   {
-   "issue": "sibling repositories are live",
-   "detail": "GEMSDOE32/40 were being written during this session; their ledger numbers were read at the snapshot recorded here and may move"
+   "issue": "sibling-repository score-note provenance",
+   "detail": "Historical notes conflict and are not a fresh independent official check; no current score or score-to-TIFF mapping is asserted."
   }
- ]
+ ],
+ "scope_note": "Legacy receipts inherited from earlier main-branch work. They are not H50-S1 evidence; local proxy results and sibling-repository score notes have not been independently authenticated as organizer scores or mapped to TIFFs. Do not use them for current leaderboard claims, slot decisions, or H50-S1 validation."
 }

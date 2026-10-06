@@ -5,6 +5,9 @@ on:
     branches: [main, 'arena/**']
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   pytest:
     runs-on: ubuntu-latest
@@ -13,5 +16,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - run: pip install numpy scipy scikit-image rasterio pandas scikit-learn tifffile Pillow pytest
-      - run: python3 -m pytest tests/ -q
+      - name: Install the repository package and test dependencies
+        run: python -m pip install -e '.[test]'
+      - name: Run the complete repository suite
+        run: python -m pytest tests/ -q

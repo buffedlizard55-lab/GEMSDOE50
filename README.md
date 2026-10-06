@@ -1,155 +1,91 @@
-# GEMSDOE50 — GEMS Prize (DrivenData #306)
+# GEMSDOE50 — seismic-geometry research for the DOE GEMS Prize
 
-**Submission:** [`downloads/gems50-seislin-44709-20261006T2041Z-79e260ae.tif`](downloads/gems50-seislin-44709-20261006T2041Z-79e260ae.tif)
-(single-band float32 GeoTIFF, EPSG:32611, 100 m, values exactly {0, 1}, NaN outside the
-study footprint; a `.zip` containing the identical file is provided for the form's
-alternative upload path). **Format checks: 15/15 pass. Uniqueness gate: pass** against
-all 50 known prior artifacts (no identical hash, ≤ 0.36 IoU, ≥ 47 % of dots novel at
-200 m); CI re-runs the gate at coarse 32× signature level from
-`registry/prior_artifact_signatures.npz`. See [`registry/submission_checks.json`](registry/submission_checks.json).
+**Project aim:** maximize the probability of a strong result in the [DOE Geologic Enhanced Mapping System (GEMS) Prize Challenge, DrivenData competition 306](https://www.drivendata.org/competitions/306/competition-doe-gems/), by finding defensible, previously unmapped fault traces in the GeoDAWN study area. Core values: **Maximize P(Win)** and **Own the Outcome**.
 
-**Paste-in note (one line for the submission form):**
+> **Read this charter before each work session.** It is the standing project purpose and the acceptance criteria for every experiment and deliverable.
 
-> GEMSDOE50 — 44,709 binary dots placed on the marginal-credit support of a
-> LiDAR-scarp-chain field with a falsified seismicity-corridor hedge; identical GeoTIFF
-> also in the .zip. Format, range and uniqueness verified in
-> registry/submission_checks.json.
+## Standing project brief
 
----
+1. **Deliver a new, unique GeoTIFF prediction.** Generate it from this repository's documented method and pinned inputs. Never copy a previous submission's prediction pixels; earlier artifacts may be inspected only for education, controls, or comparison. The intended download must be a single-band float32 GeoTIFF on the actual competition grid, EPSG:32611, 100 m resolution, with the official shape, transform, and bounds. Predictions must be finite and within `[0, 1]` wherever data are valid; outside-footprint handling must follow the official sample/template and be tested against the reported portal error `Predicted values must be in range [0, 1]`.
+2. **Make the artifact easy to find and download.** Put a one-click download and a concise executive summary at the top of the site. Include a clear, numbered “how to submit” page, a unique submission name, and a short distinguishing note for the competition's optional note field. Do not imply portal acceptance when no upload receipt exists.
+3. **Do the science before implementation.** Before writing a detector, list and rank 3–5 genuinely distinct geological hypotheses. Each must state the exact layers/data, physical signature, why it could detect a fault missing from USGS/INGENIOUS, how it differs from prior GEMSDOE work, expected DTI direction/impact, implementation cost, and data/license requirements. Preserve the ranking in [`docs/hypotheses-preregistered.md`](docs/hypotheses-preregistered.md); exact implementation choices and controls are frozen in [`docs/h50s1-protocol-addendum.md`](docs/h50s1-protocol-addendum.md).
+4. **Protect the weekly submission budget.** Validate the leading hypothesis on a spatially blocked holdout against a frozen, same-fold incumbent and appropriate controls before using any of the competition's three weekly scoring slots. A hypothesis that does not beat the holdout incumbent is not slot-eligible. A local proxy score is not an organizer score or a prediction of private-test performance.
+5. **Use compliant, traceable evidence.** Prefer official and peer-reviewed primary sources; link sources directly, state evidence and license status, pin file hashes, and disclose attribution/changes. External data may be used only where the competition permits it, the license permits commercial use, and the data can be shared with the organizers for independent verification. Do not use the scratch mixed-network USGS ComCat extract until its source-specific rights and location uncertainty are resolved.
+6. **Do not overstate the literature.** The project tests a 2-D raster adaptation of earthquake lineament methods cited by the user—Ouillon et al. (2008), Ouillon & Sornette (2011), and Wang et al. (2013, arXiv:1304.6912). These papers reconstruct 3-D fault networks from seismicity; the Nevada catalog lacks per-event location probability distributions. A 2-D adaptation is a hypothesis, not a validated transfer of those methods.
+7. **Work autonomously and auditably.** Review rules, data, sources, prior attempts, and limitations; record every material decision and irregularity; run multiple implementation/review passes; fix defects found; and maintain a concise next-steps list. Do not ask the owner to do research or resolve issues the agent can verify independently.
+8. **Keep the score context honest.** The owner-quoted `0.3195` is historical, not the live leader. Prior sibling-repository notes contain conflicting historical leaderboard values and are not a fresh independent official check; do not repeat them as current official scores or map any score to a TIFF without organizer-verified provenance. DrivenData's Terms of Use prohibit automated monitoring/copying and manual monitoring/copying without prior written consent. This repository links to the official board but does not scrape, poll, or publish leaderboard snapshots.
+9. **Follow the prize rules.** The September 2026 NLR/DOE rules require an AI-use disclosure in the narrative, permit up to three feedback submissions per week, and require selection of one final submission for both prize rounds. Finalists must provide reproducible code/assets and documentation. The competition ends December 3, 2026 at 23:59 UTC (verify the official page before any deadline-dependent action).
+10. **Create and merge a PR when practical.** Keep all work on Arena's fixed branch `arena/c6060a3e-gemsdoe50`. Run tests and review the PR before merging. Do not switch branches or push elsewhere.
 
-## Standing project prompt (the owner's words)
+## Current evidence and decision (2026-10-06 UTC)
 
-> Deliver in repo `GEMSDOE50` (fork-free, must become a new public GitHub repo + Pages site):
->
-> * **A unique .tif submission for DrivenData DOE GEMS Prize (#306), easy one-click
->   download, one file, zero range violations**, named uniquely with a short paste-in
->   note. Must NOT duplicate any prior GEMSDOE artifact (uniqueness gate required).
-> * Answer, with PhD-level reasoning, why `GEMSDOE32/h33-h33-2-b2` scored 0.2778 and
->   whether a higher score is achievable (current public leaderboard best ≈0.3195 per
->   user — **updated: the live board reads 0.3774 as of 2026-10-06**).
-> * Before implementing: generate **3–5 candidate geological hypotheses not yet tried**,
->   each naming the specific layer(s), the physical signature/transform targeted
->   (edge/curvature etc.), why it should catch a fault missing from USGS/INGENIOUS
->   catalogues rather than one already in them, and how it differs from everything
->   already in the repo; rank by expected DTI improvement vs implementation cost;
->   **validate the top candidate on the spatially-blocked holdout before spending a
->   weekly submission slot**; if a candidate needs new external data, name specific free
->   official sources and verify obtainability.
-> * Put the user's full project prompt into the repo README and treat it as the standing
->   starting point (re-read each session); keep "**Maximize P(Win)**" and
->   "**Own the Outcome**" as focal decision values.
-> * Site: clean, simple, user-friendly GitHub Pages with official verified source links,
->   executive-summary subpage explaining exactly how to submit, and the report/utilities
->   the user asked for (automatic no-manual-check workflow, current feed, CSV preview).
+- This research branch began from a minimal README-only commit. Since then, `origin/main` added an older GEMSDOE50 submission, research site, data, and workflows; these are preserved as repository history, not silently treated as H50-S1 evidence. The full standing charter, prior-work audit, and ranked hypotheses are maintained here.
+- The local ignored `.arena/cache/` bridge contains the competition feature, label, and template rasters. The assembled 19-band feature raster is 418,912,844 bytes with SHA-256 `4371c82e3b8339b807bdffcf4ef59a225520fe2988d521be208ae33743123bc5`; the label and example-submission rasters also match the bridge manifest. **Provenance caveat:** the bridge manifest points to the official data tab and public Dropbox mirrors, but this session did not authenticate to DrivenData and independently re-download the official bytes. Matching hashes establish consistency with the bridge manifest, not organizer provenance.
+- The ranked lead remains **H50-S1**, a research hypothesis about waveform-relocated Nevada hypocenter planes and plausible z=0 trace projections. The catalog is public, 2008–2023, 183,002 rows, 103,976 waveform-relocated in the paper, CC BY 4.0, and has Zenodo MD5 `38fa663f473378b61c74b597c53c416b` (13,833,354 bytes). It does not provide per-event location covariance. The data file has **not yet been downloaded into this sandbox**: direct Zenodo `curl` fails TLS here. A manually dispatched GitHub Actions workflow now provides a pinned, auditable acquisition path; it has not yet been run.
+- Four prior-work rasters are pinned for comparison only: H32-D, H47-S3, H48-DS, and the pre-existing `main`-branch GEMSDOE50 artifact `gems50-seislin-44709-20261006T2041Z-79e260ae.tif`. Their source commits/blob IDs and file hashes are pinned in the experiment code. The prior artifact's local claims are not an organizer score or verified score-to-TIFF mapping; no prior pixels are copied into the H50-S1 output.
+- The H50-S1 implementation includes a format-checked catalog parser, robust local 3-D plane/lineament geometry, frozen spatial-mask reconstruction, same-grid comparisons, translation/time-shuffle controls, and byte-level GeoTIFF validation. Its metric is transcribed from the official problem page's distance-weighted TP/FP/FN equations and tested against the published worked example and hand-calculated spatial cases. I reviewed the reference-solution notebook: it uses Tversky loss for model training but does not implement the official distance-weighted scoring evaluator, so it is not treated as metric authority. Its focused unit suite has **18 tests**; the complete repository suite passes **57 tests with 1 skipped**, including tests for the pre-existing `gems50` code. The real Nevada-catalog experiment has not run; **no H50-S1 DTI, result report, or new candidate TIFF, organizer score, portal upload, or weekly slot use is claimed**. The prior TIFF present on `main` is comparator-only.
+- Pre-DTI review caught and corrected two evaluation issues: selecting the best baseline by the holdout score would leak labels, and subtile false-positive weighting must use neighboring truth in the metric halo even when a subtile has no truth of its own. H50-prior is now selected chronologically as the fixed incumbent; other comparators are descriptive only. Regression tests enforce both fixes, and evaluation refuses to run without all 20 preregistered time shuffles.
+- The exact 3292 × 3730 four-macrofold split and 10 km/300 m mask rules are in [`evidence/holdout-v1.json`](evidence/holdout-v1.json). The realized valid, truth, and per-fold mask hashes are in [`evidence/holdout-realized-v1.json`](evidence/holdout-realized-v1.json). These were created and hash-pinned before any H50-S1 DTI computation. Split-spec SHA-256: `78b6692155c6c6d5f9f19ccee6d595167c2065f1f25eb8d08636d1d9b285ff16`; realized-mask report SHA-256: `981b42e6d0310bf77f79c7c7662a0569c8d2e79514ef4e4a3624a5b07583ae3f`.
+- The method remains unvalidated against the hidden expert-labeled set. Existing mapped fault labels are an imperfect spatial proxy; catalog location error may exceed the 300 m metric support. No submission slot will be used unless the preregistered gate passes and an owner manually reviews the data provenance, method, and downloaded TIFF bytes.
+- The inherited mixed-network ComCat extract under `data/external/` is not used by H50-S1; its source-specific rights and location uncertainty remain unresolved. The project also does not scrape, poll, or copy DrivenData leaderboard rows; a historical `0.3195` is not called the current lead and no score is mapped to a TIFF without verified provenance.
 
-**Focal decision values (kept in view at every step):** *Maximize P(Win)* — spend effort
-where it changes the probability of winning the prize, not where it produces tidy
-artifacts; *Own the Outcome* — every number here is produced, checked and reported by
-this repository, including the result that failed.
+## Executive summary and submission instructions
 
-**Standing rules honoured by this repository:** read the whole prompt each session;
-work line by line; verify from official sources with links for manual review; no
-hallucinations; flag irregularities for review; **no manual input** — everything below
-is produced by scripts in this repository.
+Static site pages are generated at repository root by [`scripts/build_h50_site.py`](scripts/build_h50_site.py): [`index.html`](index.html), [`results.html`](results.html), [`methods.html`](methods.html), and [`submission.html`](submission.html). When the fixed branch is merged to `main`, the repository's existing GitHub Pages configuration serves the root site at [buffedlizard55-lab.github.io/GEMSDOE50](https://buffedlizard55-lab.github.io/GEMSDOE50/). The site labels the output **research-only** unless every gate passes, and even a local pass is only eligible for manual owner review—not an organizer score or upload receipt.
 
----
+If (and only if) the protocol passes and the owner approves the artifact, `submission.html` provides a numbered manual portal checklist. The planned unique filename is `gemsdoe50-h50s1-relocated-planes-20261006-research.tif`; the short optional note is “Relocated Nevada event-plane lineaments; 300 m known-fault exclusion; research proxy, not organizer-scored.” The name is only a plan until the verified run produces the TIFF. Re-check the current portal specification and the report's on-disk SHA-256 before any manual upload. No automated portal access is used.
 
-## What was delivered
+## Verified project references
 
-| deliverable | path |
-| --- | --- |
-| submission GeoTIFF (one click) | `downloads/gems50-seislin-44709-20261006T2041Z-79e260ae.tif` |
-| submission as a .zip (form's alternative) | `downloads/gems50-seislin-44709-20261006T2041Z-79e260ae.zip` |
-| format + uniqueness evidence | `registry/submission_checks.json` |
-| both-frame validation of the exact file | `registry/submission_validation.json` |
-| build diagnostics | `registry/submission_build.json` |
-| hypothesis ranking (5) | `docs/research/hypotheses.md` |
-| metric / 0.2778 analysis | `docs/research/score-model.md` |
-| data provenance receipts | `registry/sources.json` |
-| site | `docs/` (GitHub Pages) |
+| Source | Verified use | Link |
+|---|---|---|
+| Challenge overview and current deadline | Prize structure; external data must be appropriately licensed and shareable with organizers | [Competition page](https://www.drivendata.org/competitions/306/competition-doe-gems/) |
+| Problem, data, metric, and TIFF contract | EPSG:32611, 100 m, single float32 band, `[0,1]`, null/NaN outside; DTI uses 300 m support, α=0.2, β=0.8 | [Problem description](https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/) |
+| Prize rules | AI disclosure, 3 weekly feedback submissions, one final selection across both rounds, reproducible finalist package | [September 2026 official rules PDF](https://docs.nlr.gov/docs/fy26osti/96647.pdf) |
+| Competition-specific rules entry | Points to the NLR/DOE rules | [DrivenData rules page](https://www.drivendata.org/competitions/306/competition-doe-gems/rules/) |
+| Restrictions on leaderboard monitoring | No robot/automatic access for monitoring or copying; no manual monitoring/copying without written consent | [DrivenData Terms of Use](https://www.drivendata.org/termsofuse/) |
+| Nevada relocated earthquake catalog | Trugman (2024), CC BY 4.0; metadata and exact downloadable file/checksum | [Zenodo record](https://zenodo.org/records/11167510) · [record API/file metadata](https://zenodo.org/api/records/11167510) |
+| Catalog paper | 183,002 3-D-model locations; 103,976 additionally waveform-relocated; location quality depends on the regional velocity model | [Trugman (2024), DOI 10.1785/0220240106](https://doi.org/10.1785/0220240106) |
+| Seismicity-to-fault literature | 3-D anisotropic clustering, spatial clustering/segmentation, and explicit location-uncertainty methods | [Ouillon et al. 2008](https://doi.org/10.1029/2007JB005032) · [Ouillon & Sornette 2011](https://doi.org/10.1029/2010JB007752) · [Wang et al. 2013](https://arxiv.org/abs/1304.6912) |
+| Reference-solution notebook | Reviewed 2026-10-06: uses a Tversky training loss with α=0.2/β=0.8, but does not implement the official distance-weighted scoring evaluator; scoring authority is the problem-description page above. | [DrivenData reference solution](https://github.com/drivendataorg/gems-prize-reference-solution/blob/main/unet-mc-cv-reference-solution.ipynb) |
+| Prior GEMSDOE experiments | Educational evidence only; prior outputs are never copied into this project's deliverable | [GEMSDOE32](https://github.com/buffedlizard55-lab/GEMSDOE32) · [GEMSDOE47](https://github.com/buffedlizard55-lab/GEMSDOE47) · [GEMSDOE48](https://github.com/buffedlizard55-lab/GEMSDOE48) |
 
-## Headline numbers [MEASURED]
+## Reproduction
 
-Equal-dot-budget comparison on two frames, 44,090 dots (details in
-`registry/field_validation.json`, `registry/fusion_experiment.json`):
-
-| field | catalogue-fold frame (F1) | off-catalogue SGMC frame (F2) |
-| --- | ---: | ---: |
-| LiDAR scarp-dipole chains | 0.0113 | **0.0345** |
-| multi-physics lineaments | **0.0217** | 0.0087 |
-| seismicity corridors | 0.0073 | 0.0066 |
-| smoothed 300 m quake density | 0.0112 | 0.0043 |
-| uniform random | 0.0209 | 0.0190 |
-
-The shipped file, scored on the same frames, reaches **F1 = 0.0416 mean / F2 = 0.0670**
-(2.2–5.7× the matched random control, `registry/submission_validation.json`) — the
-fusion uses scarp as the leading term (0.60) with the falsified corridor field at 0.25
-and the multi-physics consensus at 0.35, because the off-catalogue frame, not the
-catalogue frame, is the one that resembles the private test set.
-
-**The honest falsification.** The owner's seismicity-lineament hypothesis (H50-B) was
-implemented and **failed its registered test** on both available frames: the corridors do
-not beat smoothed earthquake density at equal dot budget. It is retained at low weight as
-a diversity hedge only, and the failure is reported everywhere the score is reported.
-See `docs/research/hypotheses.md` § H50-B.
-
-## Reproduce
+New H50-S1 raw and large inputs belong in ignored `.arena/` or documented external storage, not Git. The inherited `main` history also contains legacy external/derived data and a prior submission; H50-S1 does not consume those files except the pinned prior raster as a same-fold comparator. New deliverables, source/license notes, code, tests, and evidence reports belong in the repository.
 
 ```bash
-python3 -m pytest tests/ -q                       # 13 tests, metric identity included
-python3 scripts/fetch_external_data.py            # ComCat fetch (needs network/GH runner)
-python3 scripts/build_field.py                    # components -> /tmp/gems50/cache
-python3 scripts/validate_fields.py                # two-frame equal-budget table
-python3 scripts/fuse_experiment.py                # fusion variants (slow, ~9 min)
-python3 scripts/build_submission.py               # writes the GeoTIFF
-python3 scripts/check_submission.py               # 15 format checks + uniqueness gate
-python3 scripts/validate_submission.py            # scores the exact file on both frames
+python -m pip install -e '.[test]'
+python -m pytest -q
+
+# Public raster mirrors and the CC BY 4.0 catalog; all input hashes are checked.
+scripts/download_inputs.sh .arena/run/inputs
+
+# Prior maps are retrieved through GitHub Contents API and checked against pinned commits/hashes.
+GH_TOKEN="$(gh auth token)" scripts/fetch_comparators.sh .arena/run/prior
+
+# Optional no-score reconstruction; write to scratch and compare with the committed freeze.
+python scripts/freeze_holdout.py \
+  --template .arena/run/inputs/example_submission.tif \
+  --labels .arena/run/inputs/existing_faults.tif \
+  --output .arena/run/recomputed-holdout.json
+
+# Reads the committed split and realized-mask hashes, then runs H50-S1, 20 time shuffles,
+# 32 translations, same-fold baselines, and byte-level GeoTIFF checks.
+python scripts/run_experiment.py \
+  --catalog .arena/run/inputs/nvreloc_catalog_newmag.txt \
+  --template .arena/run/inputs/example_submission.tif \
+  --labels .arena/run/inputs/existing_faults.tif \
+  --prior-dir .arena/run/prior
+python scripts/build_h50_site.py
 ```
 
-## Official sources
+The manually dispatched [H50-S1 research workflow](.github/workflows/h50s1-research.yml) runs on `arena/c6060a3e-gemsdoe50` only. It verifies tests and the already-frozen masks before scoring, downloads no hidden labels, does not use the feature stack for H50-S1, and commits only the result report/site/research-only TIFF back to this fixed branch. If sandbox egress is still blocked there, the workflow fails visibly and the limitation remains recorded; no raw data are committed.
 
-* Problem + scoring: <https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/>
-* Competition rules: <https://www.drivendata.org/competitions/306/competition-doe-gems/page/964/>
-* Leaderboard (read 2026-10-06): <https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/>
-* Reference solution: <https://github.com/drivendataorg/gems-prize-reference-solution>
-* USGS ComCat (public domain): <https://earthquake.usgs.gov/fdsnws/event/1/>
-* USGS SGMC / GDR 1391 (public domain / CC BY 4.0): receipts in `registry/sources.json`
+## Open gates / next actions
 
----
-
-*Every quantitative statement here is reproduced by a script committed in this
-repository; nothing relies on manual inspection. Scores on the private leaderboard are
-unknown to this project, and none of the numbers above is presented as a leaderboard
-score.*
-
----
-
-## Second submission on this branch — seismicity-first (unique TIF, 45,000 dots)
-
-Built from a *different evidence stream* than the release above, and shipped as its own file:
-
-**Submit:** [`docs/downloads/gemsdoe50-seis-ridge-v1.tif`](docs/downloads/gemsdoe50-seis-ridge-v1.tif)
-· zip twin `…-v1.zip` · [what it is](docs/seis-ridge.html) · [how to submit](docs/executive-summary.html)
-· [analysis](docs/analysis.html) · [hypotheses](docs/hypotheses.html) · [sources](docs/sources.html)
-
-| item | value |
-|---|---|
-| SHA-256 | `5cad91ac7580db912ebac0cf352cce56d713e99ad53f596a57f714f51636d3c9` |
-| content | 45,000 cells = 1.0, every cell of the grid finite, min 0.0, max 1.0, **no NaN and no nodata tag** (the zero-outside encoding cannot trip the “Predicted values must be in range [0, 1]” validator) |
-| method | decluster → DBSCAN in (x, y, 3 km/yr·t) → recursive 2-means splitting until the minor-axis σ ≤ 600 m → λ₁/λ₂ ≥ 3 at Monte-Carlo p < 0.01 → thin axes + curved spines + 300 m gap bridges → **snapped to the USGS 3DEP 1 m lidar scarp ridge** → ≥300 m exclusion around the given catalogue |
-| mass | 45,000 cells, the family ledger’s operating neighbourhood; the full 25,000→79,977 sweep is in `evidence/build_seis-ridge-v1.json` |
-| uniqueness | max \|Pearson r\| **0.043**, max Jaccard **0.026** against **119** retrievable prior rasters (`evidence/uniqueness_seis-ridge-v1.json`) |
-| predictive gate | with **only pre-2020 earthquakes**, the corridor field is the only field covering any of the 2020 Monte Cristo rupture trend (2.4 %); smoothed density σ=10/20 px and uniform random at matched mass cover **0 %** (`evidence/falsification_test.json`) |
-| honest range | the family’s own saturating instrument reads 0.267–0.312 for this file (implied live ≈0.27–0.40); **no organiser score exists for it** |
-
-Reproduce: `PYTHONPATH=src python3 scripts/build_seisridge.py --name seis-ridge-v1 --mass 45000`
-
-### Metric correction found while integrating the two releases [MEASURED]
-
-`gems50.metric.score` queried each prediction against its *nearest* truth pixel and took the
-per-truth maximum over that subset, instead of the published rule
-`TP_w = Σ_g max_x p(x)·k(d(x,g))` over every prediction inside the kernel. That under-counted
-`TP_w` by **53 %** and `DTI` by **0.040 absolute** on this repository’s own 44,709-dot
-submission (0.0358 → **0.0760**, `evidence/metric_bug_impact.json`). The implementation is fixed,
-`tests/test_cross_metric.py` now asserts that two independently written implementations agree on
-random cases and on the real grids, and the whole suite passes (40 tests).
+1. Run the fixed-branch `H50-S1 preregistered research run` workflow to retrieve and verify the catalog and input rasters from public sources.
+2. Review the complete event-count, depth/magnitude irregularity, and spatial-coverage audit; stop if the relocated points do not overlap the valid footprint adequately.
+3. Compute the frozen fold-wise DTI, 16-block bootstrap, same-fold incumbent, and matched translation/year-shuffle controls. If the promotion gate fails, do not spend a slot.
+4. Re-open and byte-validate the generated unique GeoTIFF, update the static executive-summary/results/submission pages, and review licensing, attribution, limitations, and AI disclosure.
+5. Continue PR #6 from the fixed branch through full implementation/review passes; merge only if the report, artifact, site, evidence, and conflict resolution agree. No upload is performed by this repository.

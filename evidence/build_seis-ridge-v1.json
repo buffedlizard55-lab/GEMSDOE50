@@ -168,7 +168,7 @@
   }
  ],
  "honesty": [
-  "No organizer score exists for this file. Every local score here is an instrument, not a receipt; the only live scores quoted are the sibling ledger's.",
+  "No organizer score is authenticated for this file. Every local score here is a legacy instrument, not a receipt; sibling-repository score notes are historical, conflicting, and not a fresh independent official check.",
   "The Monte Cristo axis instrument is circular (derived from the sequence's own epicentres) and is reported only as a consistency check.",
   "The 2020 Monte Cristo rupture (Koehler et al. 2021, doi:10.1785/0220200371) is cited from the sibling repositories' quarantine note; it has NOT been re-verified against the primary source in this session."
  ]

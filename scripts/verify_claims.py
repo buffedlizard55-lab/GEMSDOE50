@@ -1,100 +1,61 @@
 #!/usr/bin/env python3
-"""Cross-check every headline claim in the documentation against the JSON receipts.
-
-This is the repository's "no manual vetting" gate: if a number on the site, in the
-README or in the report stops matching the evidence the checks wrote, this fails and
-CI turns red.  Run it after any rebuild.
-"""
+"""Check current-project score-provenance, data-use, and incumbent-selection guardrails."""
 
 from __future__ import annotations
 
-import hashlib
 import json
-import re
-import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-REG = ROOT / "registry"
-
-
-def load(name: str):
-    return json.loads((REG / name).read_text())
 
 
 def main() -> int:
-    checks = load("submission_checks.json")
-    validation = load("submission_validation.json")
-    build = load("submission_build.json")
-    field = load("field_validation.json")
-    sources = load("sources.json")
     failures: list[str] = []
 
-    def expect(label: str, got, want) -> None:
-        ok = got == want
-        print(f"  {'OK ' if ok else 'FAIL'} {label}: {got!r}" + ("" if ok else f" != {want!r}"))
-        if not ok:
+    def check(label: str, condition: bool) -> None:
+        print(f"{'OK  ' if condition else 'FAIL'} {label}")
+        if not condition:
             failures.append(label)
 
-    # --- submission identity -------------------------------------------------
-    tif = next(iter(sorted((ROOT / "downloads").glob("*.tif"))))
-    expect("submission sha256", hashlib.sha256(tif.read_bytes()).hexdigest(), checks["uniqueness"]["my_sha256"])
-    expect("submission bytes", tif.stat().st_size, sources["submission"]["bytes"])
-    expect("shipped name matches sources receipt", tif.name, sources["submission"]["file"])
-    expect("zip alongside the tif", (ROOT / "downloads" / (tif.stem + ".zip")).exists(), True)
+    feed = json.loads((ROOT / "docs/data/feed.json").read_text(encoding="utf-8"))
+    submissions = json.loads((ROOT / "registry/submissions.json").read_text(encoding="utf-8"))
+    README = (ROOT / "README.md").read_text(encoding="utf-8")
+    prior = (ROOT / "docs/prior-work.md").read_text(encoding="utf-8")
+    protocol = (ROOT / "docs/h50s1-protocol-addendum.md").read_text(encoding="utf-8")
+    evaluator = (ROOT / "src/gemsdoe50/evaluation.py").read_text(encoding="utf-8")
+    external = (ROOT / "data/external/README.md").read_text(encoding="utf-8")
+    site_workflow = (ROOT / ".github/workflows/site.yml").read_text(encoding="utf-8")
+    feed_workflow = (ROOT / ".github/workflows/feed.yml").read_text(encoding="utf-8")
+    fetch_workflow = (ROOT / ".github/workflows/fetch-external-data.yml").read_text(
+        encoding="utf-8"
+    )
 
-    # --- format gates --------------------------------------------------------
-    fmt = checks["format"]
-    expect("all format checks pass", fmt["all_checks_pass"], True)
-    expect("values within [0, 1]", fmt["values_in_0_1"], True)
-    expect("single band", fmt["count_is_1"], True)
-    expect("float32", fmt["dtype_is_float32"], True)
-    expect("EPSG:32611", fmt["crs_is_epsg32611"], True)
-    expect("outside footprint all NaN", fmt["outside_footprint_all_nan"], True)
-    expect("unique positive value is 1.0", fmt["unique_positive_values"], [1.0])
-    expect("dots equal the build diagnostic", fmt["positive_px"], build["n_dots_shipped"])
+    check("current feed publishes no leaderboard snapshot", feed.get("leaderboard", {}).get("published") is False)
+    check("feed has no numerical public-board rows", "public_leaderboard_snapshot" not in feed)
+    check(
+        "legacy TIFF is explicitly comparator-only",
+        feed.get("legacy_artifact", {}).get("role", "").startswith("same-fold comparator"),
+    )
+    check("feed maps no organizer score to TIFF", feed.get("legacy_artifact", {}).get("organizer_score") is None)
+    check("H50-S1 status does not assert an organizer score", feed.get("h50_s1", {}).get("organizer_score") is None)
+    check("registry carries no copied leaderboard rows", "public_leaderboard_2026_10_06" not in submissions)
+    check("README rejects unverified/current score claims", "not a fresh independent official check" in README)
+    check(
+        "prior-work notes make no score-to-TIFF assertion",
+        "no score-to-tiff mapping is authenticated" in prior.lower(),
+    )
+    check("protocol fixes H50-prior before holdout scoring", "H50-prior is the fixed primary incumbent" in protocol)
+    check("evaluator uses a fixed incumbent, not max holdout score", "max(baseline_names" not in evaluator)
+    check("evaluator requires all 20 time-shuffle controls", "TIME_SHUFFLE_CONTROLS = 20" in evaluator)
+    check("legacy ComCat inputs are excluded from H50-S1", "does **not** consume these ComCat" in external)
+    check("scheduled ComCat refresh is disabled", "schedule:" not in feed_workflow and "if: ${{ false }}" in feed_workflow)
+    check("ComCat fetch workflow is disabled", "if: ${{ false }}" in fetch_workflow)
+    check("site workflow cannot push generated changes", "git push" not in site_workflow)
 
-    # --- uniqueness gate -----------------------------------------------------
-    u = checks["uniqueness"]
-    expect("uniqueness verdict", u["verdict_unique"], True)
-    expect("no identical prior hash", u.get("identical_sha256", []), [])
-    if u.get("max_iou", 0.0) >= 0.5:
-        failures.append("full-pixel max_iou")
-
-    ci = load("submission_checks_ci.json")
-    if ci:
-        expect("CI-level format checks pass", ci["format"]["all_checks_pass"], True)
-        expect("CI-level uniqueness verdict", bool(ci["uniqueness"].get("verdict_unique")), True)
-        expect("CI-level screen is below its threshold",
-               ci["uniqueness"]["max_iou_block8"] < ci["uniqueness"]["screen_threshold_block8"], True)
-
-    # --- validation of the exact file ---------------------------------------
-    expect("F2 beats the random control", validation["F2_dti"] > validation["controls"]["uniform_random_same_count"]["F2"], True)
-    expect("F1 beats the random control", validation["F1_mean"] > validation["controls"]["uniform_random_same_count"]["F1_mean"], True)
-
-    # --- evidence frames quoted on the site ---------------------------------
-    f1 = field["budget_44090"]["F1_smoothed"] if "budget_44090" in field else None
-    f2 = field["budget_44090"]["F2_smoothed"] if "budget_44090" in field else None
-    if f1 and f2:
-        expect("scarp is the off-catalogue leader", max(f2, key=f2.get), "scarp")
-    feed = json.loads((ROOT / "docs" / "data" / "feed.json").read_text())
-    expect("feed quotes the shipped dots", feed["our_submission"]["dots"], build["n_dots_shipped"])
-    expect("feed quotes the shipped sha256", feed["our_submission"]["sha256"], checks["uniqueness"]["my_sha256"])
-    expect("feed best public score", feed["public_leaderboard_snapshot"]["best"], 0.3774)
-
-    # --- the report's own numbers must exist in the receipts -----------------
-    report = (ROOT / "docs" / "report.html").read_text()
-    for token in (f"{validation['F2_dti']:.4f}", f"{validation['F1_mean']:.4f}"):
-        expect(f"report quotes {token}", token in report, True)
-    expect("report carries the no-leaderboard-score disclaimer",
-           "No private-leaderboard score is claimed" in report, True)
-    expect("falsification is stated on the site", "FALSIFIED" in report or "failed" in report, True)
-
-    print()
     if failures:
-        print(f"FAILED claims: {failures}")
+        print("\nFailed guardrails:", ", ".join(failures))
         return 1
-    print("all documented claims match the receipts")
+    print("\nAll current-project provenance and safety guardrails hold.")
     return 0
 
 

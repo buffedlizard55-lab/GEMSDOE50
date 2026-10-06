@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Why the incumbent scored 0.2778, and what beats it — GEMSDOE50</title>
+<title>Archived prior-work metric analysis — GEMSDOE50</title>
 <style>
  body{margin:0;font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:#111;background:#fff}
  header{border-bottom:1px solid #ddd;padding:18px 20px} main{max-width:900px;margin:0 auto;padding:0 20px 80px}
@@ -12,7 +12,9 @@
  td.num{text-align:right;font-variant-numeric:tabular-nums}
 </style></head>
 <body>
-<header><h1>Why the incumbent scored 0.2778, and what would beat 0.3774</h1>
+<div role="note" style="margin:14px auto;padding:12px 16px;max-width:1100px;background:#fff1df;border-left:5px solid #a96519;border-radius:6px;font:600 15px/1.5 system-ui,sans-serif;color:#3b2b19">ARCHIVED, UNVERIFIED PRIOR WORK — this page describes earlier main-branch experiments/artifacts, not H50-S1. Do not upload files linked here. Historical local metrics and copied leaderboard notes are not a fresh independent official check, and no organizer receipt authenticates a score-to-TIFF mapping. See the <a href="../index.html">current H50-S1 project site</a>.</div>
+
+<header><h1>Historical metric analysis — not a current leaderboard report</h1>
 <nav class="mut"><a href="index.html">Overview</a><a href="executive-summary.html">How to submit</a>
 <a href="hypotheses.html">Hypotheses</a><a href="analysis.html">Why 0.2778 / what beats it</a><a href="sources.html">Sources</a></nav></header>
 <main>
@@ -35,11 +37,12 @@ value vs a brute-force transcription agree to 1e-6, the gap being float32 accumu
     <strong>0.0556 credit</strong>.</li>
 </ol>
 
-<h2>2. The live ledger says the same thing</h2>
-<p>The sibling repositories publish 16 owner-reported live scores with masses
+<h2>2. Archived sibling-repository metric notes (reported, not independently verified)</h2>
+<p>Archived sibling-repository records contained 16 owner-reported scores with masses
 (<code>GEMSDOE40/docs/data/truth-inversion.json</code>, <code>instrument-recalibration.json</code>).
-Solving the algebra for the hidden-truth credit <code>T</code> under the ledger’s larger
-hidden-truth estimate (<code>|G| = 15,100</code>, §3) gives every anchor a credit per emitted cell:</p>
+These values are not a fresh independent official check and are not used in H50-S1. Solving the
+algebra under the legacy model's larger hidden-truth estimate (<code>|G| = 15,100</code>, §3)
+produces the following historical model inputs, not organizer-verified scores:</p>
 <table>
 <thead><tr><th>anchor (public score)</th><th class="num">mass</th><th class="num">credit / cell</th>
 <th class="num">score</th></tr></thead><tbody>
@@ -85,24 +88,15 @@ estimate’s optimum, and the whole mass sweep (25,000 → 79,977) is published 
 <code>evidence/build_seis-ridge-v1.json</code> so the next session can re-decide it with one more
 organiser score.</p>
 
-<h2>4. What would beat 0.3774 (the current public leader)</h2>
-<p>Under the model, with <code>|G| = 15,100</code> and this submission’s mass, a score of 0.3774 requires
-<code>T = 0.3774·(0.2·45,000 + 0.8·15,100) ≈ 7,954</code> cells of hidden-truth credit, i.e.
-<code>c ≈ 0.177</code> credit per emitted cell. The incumbent manages 0.145. So the leader is only
-≈22 % ahead of the incumbent on credit per cell — the competition is close, and a field with a genuinely
-better signal can take it.</p>
-<p>This submission’s measured credit per cell on the off-catalogue SGMC instrument is
-<strong>0.2227 at 45,000 cells</strong>, against 0.1434 for the incumbent at 37,654 cells (1.55×). Two of
-the three ledger anchors whose files exist locally transfer that instrument ~1:1 to the live score
-(d2.8: instrument 0.1236 vs live 0.124; b2: 0.1434 vs 0.145) — suggestive, but only two points, and the
-uniform-scatter anchor transfers at 0.39, which is the instrument’s known dispersion bias. Applying the
-family’s own saturating instrument (<code>TP = K(1 − exp(−a·M·w/K))</code>, <code>K = 6465.6</code>,
-<code>a = 1.0931</code>, GEMSDOE40) with the two possible scalings between my <code>w</code> scale and
-theirs (1.30 and 1.76, measured on d2.8 and b2 respectively) gives <strong>0.267–0.312</strong> — and
-because that instrument under-predicts the two best anchors by ≈0.09, the implied live range is
-<strong>≈0.27–0.40</strong>. That is the honest error bar: it contains both “no better than the incumbent”
-and “at the leader”. The instrument’s leave-one-out rank correlation is 0.705, below the 0.80 bar the
-sibling repositories set for themselves, which is why this page publishes the range instead of a claim.</p>
+<h2>4. Conditional metric arithmetic (not a leaderboard target)</h2>
+<p>For any assumed target score <code>s</code>, truth size <code>G</code>, and emitted mass <code>M</code>,
+use the metric identity <code>T = s(0.2M + 0.8G)/(1 − 0.2s)</code> to reason about required
+truth credit. This is an algebraic sensitivity calculation only. The prior sibling-repository proxy
+scores and instrument scalings below have not been independently authenticated as organizer results,
+and they do not predict a current score or identify which TIFF was scored.</p>
+<p>The prior local SGMC and rupture-trend analyses are retained in their original receipts for audit.
+They are not the H50-S1 spatial holdout, are not used to select its primary incumbent, and do not
+establish hidden-test performance. No fresh official leaderboard check is represented by this page.</p>
 
 <h2>5. The falsification test the brief demanded, run so it cannot be circular</h2>
 <p>The 2020 Mw 6.5 Monte Cristo Range earthquake ruptured a fault that no ground-truth raster in this

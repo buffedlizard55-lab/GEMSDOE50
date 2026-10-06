@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Regenerate the site's machine-readable feeds from the registry.
+"""Regenerate legacy archival feeds from old project receipts.
 
-Run by .github/workflows/site.yml on every push, so no page can drift from the
-JSON receipts that the checks wrote.
+This script is not used by the current H50-S1 site workflow. It never fetches a
+leaderboard or external catalog and must not label the inherited TIFF as a current
+submission. Current pages are built by scripts/build_h50_site.py.
 """
 
 from __future__ import annotations
@@ -16,18 +17,6 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 DOCS = ROOT / "docs"
 DATA = DOCS / "data"
-
-LEADERBOARD = [
-    ("xiaofanhu", 0.3774), ("alexoktaba", 0.3345), ("nchuzhoy", 0.3262),
-    ("kinghorton42", 0.3222), ("joeyfezster", 0.3220), ("Batik", 0.3218),
-    ("DARD", 0.3195), ("ndavis7", 0.2888), ("mzoorob", 0.2884),
-    ("GrigorSargsyan", 0.2876), ("HardcoreTechGod", 0.2854), ("op01", 0.2792),
-    ("extradr19", 0.2778), ("wbg1", 0.2750), ("smashi34", 0.2710),
-    ("smrtdoog5", 0.2708), ("jgaines", 0.2638), ("ad3002", 0.2634),
-    ("SDCF9", 0.2600), ("kpomazi", 0.2517), ("Mekhi12", 0.2515),
-    ("tchu", 0.2511), ("BrandenKMurray", 0.2502),
-]
-
 
 def read(name: str):
     p = ROOT / "registry" / name
@@ -74,24 +63,24 @@ def main() -> int:
     }, indent=1))
 
     (DATA / "feed.json").write_text(json.dumps({
-        "generated_from": "registry/*.json (committed receipts); no wall-clock stamp so that "
-                           "regenerating the site cannot create merge churn",
-        "kind": "static snapshot — regenerated on every push, no third-party API required",
-        "public_leaderboard_snapshot": {
-            "fetched": "2026-10-06",
+        "generated_from": "legacy receipts and H50-S1 project status; no third-party leaderboard data",
+        "kind": "archival status feed; no leaderboard snapshot is published",
+        "leaderboard": {
+            "published": False,
+            "reason": "Prior sibling-repository notes are conflicting and are not a fresh independent official check; no current score or score-to-TIFF mapping is asserted.",
             "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/",
-            "best": 0.3774,
-            "entries": [{"rank": i + 1, "team": t, "score": s} for i, (t, s) in enumerate(LEADERBOARD)],
         },
-        "our_submission": {"file": sub.name if sub else None, "sha256": sha,
-                           "dots": (checks.get("format") or {}).get("positive_px") if checks else (build.get("n_dots") if build else None)},
-        "evidence_frames": {
-            "F1_catalogue_folds": {"scarp": 0.01127, "struct": 0.02173, "seis": 0.00728,
-                                   "density_300m": 0.01120, "random": 0.02088},
-            "F2_sgmc_off_catalogue": {"scarp": 0.03450, "struct": 0.00867, "seis": 0.00660,
-                                      "density_300m": 0.00426, "random": 0.01900},
-            "budget_dots": 44090,
-            "source": "registry/field_validation.json",
+        "legacy_artifact": {
+            "file": sub.name if sub else None,
+            "sha256": sha,
+            "role": "same-fold comparator / historical reference only; not a current submission",
+            "organizer_score": None,
+        },
+        "h50_s1": {
+            "status": "research-only; real-data experiment not yet run",
+            "organizer_score": None,
+            "portal_upload": None,
+            "weekly_slot_used": False,
         },
     }, indent=1))
 

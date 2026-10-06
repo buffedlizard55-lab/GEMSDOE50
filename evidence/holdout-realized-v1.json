@@ -1,0 +1,367 @@
+{
+  "buffer_visible_labels_pixels": 3,
+  "dti_computed": false,
+  "erode_heldout_core_pixels": 100,
+  "label_metadata": {
+    "label_dtype": "int8",
+    "label_nodata": -1.0,
+    "positive_label_cells": 60988,
+    "valid_cells": 5167373,
+    "valid_mask_sha256": "c075e765e015e44f8da6b85aff1f5daa9c39d70d8fc3601d4811984fabe687cf"
+  },
+  "label_raster_sha256": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
+  "macrofold_count": 4,
+  "macrofolds": [
+    {
+      "cols": [
+        0,
+        1646
+      ],
+      "core_bounds": [
+        100,
+        1765,
+        100,
+        1546
+      ],
+      "eligible_cells": 2075898,
+      "eligible_mask_sha256": "b8e836a33f42d6f5219ef91ab0ba6bc2b573dc293cbbf4b7c0c63fc1943f2b07",
+      "id": "NW",
+      "rows": [
+        0,
+        1865
+      ],
+      "subtiles": [
+        {
+          "cols": [
+            0,
+            823
+          ],
+          "eligible_cells": 481818,
+          "eligible_mask_sha256": "1644c995424c795053a2b27d67b9c475df969bd5b5116ab4bf60916df469a32f",
+          "id": "NW-00",
+          "rows": [
+            0,
+            932
+          ],
+          "truth_cells": 4627,
+          "truth_mask_sha256": "adcda4e02e7ccea9aee4221139afbd8261071505a0e0af162e8c4c43211cc41e"
+        },
+        {
+          "cols": [
+            823,
+            1646
+          ],
+          "eligible_cells": 601528,
+          "eligible_mask_sha256": "7ef99372ad115cef94dcbe82475e7c6d5b2fdd9c5364913a005240e10c01f727",
+          "id": "NW-01",
+          "rows": [
+            0,
+            932
+          ],
+          "truth_cells": 5352,
+          "truth_mask_sha256": "aab0723e7930e93ce337ad59381d4d3873d91d8a6bd98ea458ba1418cb99bb46"
+        },
+        {
+          "cols": [
+            0,
+            823
+          ],
+          "eligible_cells": 404791,
+          "eligible_mask_sha256": "bd9d76c9897fab98c2fbb00e4e2fb1df640dea07b4ddcfc7f264ba78ad644a0b",
+          "id": "NW-10",
+          "rows": [
+            932,
+            1865
+          ],
+          "truth_cells": 7368,
+          "truth_mask_sha256": "7a8504dda92a20d69f229d9bd93f4d0abca19382e59815de3aa1e3fd261831c9"
+        },
+        {
+          "cols": [
+            823,
+            1646
+          ],
+          "eligible_cells": 587761,
+          "eligible_mask_sha256": "126edeb04e5736958b9c476a15ebdde8bbaa6e01618abd54fff9b72899303be1",
+          "id": "NW-11",
+          "rows": [
+            932,
+            1865
+          ],
+          "truth_cells": 7325,
+          "truth_mask_sha256": "c4669b167ed54c9f23353606af426e512184ab07f564a6aa18c3a5cf8a1ea7d8"
+        }
+      ],
+      "truth_cells": 24672,
+      "truth_mask_sha256": "f64085c79d49e4da294e9094d32c954758d0c28b2a6c3687dadd4ca1e4cbfd2f",
+      "visible_training_label_buffer_m": 300.0,
+      "visible_training_label_buffer_pixels": 3
+    },
+    {
+      "cols": [
+        1646,
+        3292
+      ],
+      "core_bounds": [
+        100,
+        1765,
+        1746,
+        3192
+      ],
+      "eligible_cells": 987533,
+      "eligible_mask_sha256": "386c36354541021b3e2306ef8af6b279fa51d7d7ab19003b998ea6b0a461b08c",
+      "id": "NE",
+      "rows": [
+        0,
+        1865
+      ],
+      "subtiles": [
+        {
+          "cols": [
+            1646,
+            2469
+          ],
+          "eligible_cells": 494929,
+          "eligible_mask_sha256": "3b83ba98fdb875436e219caf6997738c3e2c6b297350bfa762321866fbcbc226",
+          "id": "NE-00",
+          "rows": [
+            0,
+            932
+          ],
+          "truth_cells": 5035,
+          "truth_mask_sha256": "2db42fbf4b0900ef9add35bd0383fbe8cc0acadfa43aee3e43d1a6e90f8d275f"
+        },
+        {
+          "cols": [
+            2469,
+            3292
+          ],
+          "eligible_cells": 487404,
+          "eligible_mask_sha256": "e6f472f184e9901f374f0f5c3c8865e52bfe57d1c177c34db9791e641224d4a1",
+          "id": "NE-01",
+          "rows": [
+            0,
+            932
+          ],
+          "truth_cells": 4142,
+          "truth_mask_sha256": "0886d32f1f4dedd0b09b282134c2b4aeedd3bf6b1956dbfca37f0299cada86a1"
+        },
+        {
+          "cols": [
+            1646,
+            2469
+          ],
+          "eligible_cells": 5200,
+          "eligible_mask_sha256": "092ebd746c10dfa44ae8e0eb077aa6b542cfdd00fbaab8bc013690c9882ef4ad",
+          "id": "NE-10",
+          "rows": [
+            932,
+            1865
+          ],
+          "truth_cells": 98,
+          "truth_mask_sha256": "6e160b097888a0e527f000a107d5ffde295c2d1f9bcf5d962974ff342ae479fd"
+        },
+        {
+          "cols": [
+            2469,
+            3292
+          ],
+          "eligible_cells": 0,
+          "eligible_mask_sha256": "ff5f9fea48f2ce25808bd22e84368814404f0dd85a1a2bf7438b45c5e6df20d6",
+          "id": "NE-11",
+          "rows": [
+            932,
+            1865
+          ],
+          "truth_cells": 0,
+          "truth_mask_sha256": "ff5f9fea48f2ce25808bd22e84368814404f0dd85a1a2bf7438b45c5e6df20d6"
+        }
+      ],
+      "truth_cells": 9275,
+      "truth_mask_sha256": "c60d5e4fe3b38cd0d76d239f52dbf2d41911619b2c44ea806090cd28675ea086",
+      "visible_training_label_buffer_m": 300.0,
+      "visible_training_label_buffer_pixels": 3
+    },
+    {
+      "cols": [
+        0,
+        1646
+      ],
+      "core_bounds": [
+        1965,
+        3630,
+        100,
+        1546
+      ],
+      "eligible_cells": 375029,
+      "eligible_mask_sha256": "fb114fd4732bf612cfc28dc8c6fd624d7a1c0ff994d9aa498035efae3d6c9844",
+      "id": "SW",
+      "rows": [
+        1865,
+        3730
+      ],
+      "subtiles": [
+        {
+          "cols": [
+            0,
+            823
+          ],
+          "eligible_cells": 0,
+          "eligible_mask_sha256": "ff5f9fea48f2ce25808bd22e84368814404f0dd85a1a2bf7438b45c5e6df20d6",
+          "id": "SW-00",
+          "rows": [
+            1865,
+            2797
+          ],
+          "truth_cells": 0,
+          "truth_mask_sha256": "ff5f9fea48f2ce25808bd22e84368814404f0dd85a1a2bf7438b45c5e6df20d6"
+        },
+        {
+          "cols": [
+            823,
+            1646
+          ],
+          "eligible_cells": 295209,
+          "eligible_mask_sha256": "d967a38428c328aab3d059df1a8d9036d67aee97dd8b5546853bb616acf69073",
+          "id": "SW-01",
+          "rows": [
+            1865,
+            2797
+          ],
+          "truth_cells": 3816,
+          "truth_mask_sha256": "b41b70aa6840cac57741a17af99acb619e62f3c22443d7f4a0ff458a1d49a210"
+        },
+        {
+          "cols": [
+            0,
+            823
+          ],
+          "eligible_cells": 0,
+          "eligible_mask_sha256": "ff5f9fea48f2ce25808bd22e84368814404f0dd85a1a2bf7438b45c5e6df20d6",
+          "id": "SW-10",
+          "rows": [
+            2797,
+            3730
+          ],
+          "truth_cells": 0,
+          "truth_mask_sha256": "ff5f9fea48f2ce25808bd22e84368814404f0dd85a1a2bf7438b45c5e6df20d6"
+        },
+        {
+          "cols": [
+            823,
+            1646
+          ],
+          "eligible_cells": 79820,
+          "eligible_mask_sha256": "e78297e1cb374c235bb01dedcb2dd9b2fd140b27cd36a0ece078dad126afdbe6",
+          "id": "SW-11",
+          "rows": [
+            2797,
+            3730
+          ],
+          "truth_cells": 2698,
+          "truth_mask_sha256": "e7d0b33a6aec1a967e69cdc77423949939eb6a5d9af0eb823d764fe42ec2b48e"
+        }
+      ],
+      "truth_cells": 6514,
+      "truth_mask_sha256": "a83661c5069265e4c9422aaff1b28ca67a4941047f2bce2c87e332bac5b1c155",
+      "visible_training_label_buffer_m": 300.0,
+      "visible_training_label_buffer_pixels": 3
+    },
+    {
+      "cols": [
+        1646,
+        3292
+      ],
+      "core_bounds": [
+        1965,
+        3630,
+        1746,
+        3192
+      ],
+      "eligible_cells": 600955,
+      "eligible_mask_sha256": "45a25d753b4ef28098c58b93752a900e03feb8521c599c0f210e5e4dfe32c0d8",
+      "id": "SE",
+      "rows": [
+        1865,
+        3730
+      ],
+      "subtiles": [
+        {
+          "cols": [
+            1646,
+            2469
+          ],
+          "eligible_cells": 205867,
+          "eligible_mask_sha256": "4d403c0e396f07b7d72eb86008b38bd457e58209ed238980b9bf48c0c0f05656",
+          "id": "SE-00",
+          "rows": [
+            1865,
+            2797
+          ],
+          "truth_cells": 2530,
+          "truth_mask_sha256": "eae5bbb6adaaede1fb46da64971ba44eb2b5ab8b51b247e7bc0e8ccfc8b815f3"
+        },
+        {
+          "cols": [
+            2469,
+            3292
+          ],
+          "eligible_cells": 0,
+          "eligible_mask_sha256": "ff5f9fea48f2ce25808bd22e84368814404f0dd85a1a2bf7438b45c5e6df20d6",
+          "id": "SE-01",
+          "rows": [
+            1865,
+            2797
+          ],
+          "truth_cells": 0,
+          "truth_mask_sha256": "ff5f9fea48f2ce25808bd22e84368814404f0dd85a1a2bf7438b45c5e6df20d6"
+        },
+        {
+          "cols": [
+            1646,
+            2469
+          ],
+          "eligible_cells": 395088,
+          "eligible_mask_sha256": "71429f3ffe1e33297e7fa5d988b29fbcb18255a9421249c4262408ce69804d63",
+          "id": "SE-10",
+          "rows": [
+            2797,
+            3730
+          ],
+          "truth_cells": 4094,
+          "truth_mask_sha256": "f98037946a66fd61826028111a586793d3073d97fa96d42bcc8d14b2ed0432f9"
+        },
+        {
+          "cols": [
+            2469,
+            3292
+          ],
+          "eligible_cells": 0,
+          "eligible_mask_sha256": "ff5f9fea48f2ce25808bd22e84368814404f0dd85a1a2bf7438b45c5e6df20d6",
+          "id": "SE-11",
+          "rows": [
+            2797,
+            3730
+          ],
+          "truth_cells": 0,
+          "truth_mask_sha256": "ff5f9fea48f2ce25808bd22e84368814404f0dd85a1a2bf7438b45c5e6df20d6"
+        }
+      ],
+      "truth_cells": 6624,
+      "truth_mask_sha256": "e9bb7763671f4568c150aefc900c4dadf1ca699f25530e4f6870aa3c62cb74de",
+      "visible_training_label_buffer_m": 300.0,
+      "visible_training_label_buffer_pixels": 3
+    }
+  ],
+  "mask_pixel_size_m": 100.0,
+  "mass_budget": 37612,
+  "shape": [
+    3730,
+    3292
+  ],
+  "split_spec_sha256": "78b6692155c6c6d5f9f19ccee6d595167c2065f1f25eb8d08636d1d9b285ff16",
+  "status": "FROZEN_MASKS_BEFORE_ANY_DTI",
+  "template_raster_sha256": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc",
+  "truth_raster_mask_sha256": "d8b86f12ef44973501b3bced26105efa40fe311767166dc8fa7d4d5182122902",
+  "valid_mask_sha256": "c075e765e015e44f8da6b85aff1f5daa9c39d70d8fc3601d4811984fabe687cf"
+}

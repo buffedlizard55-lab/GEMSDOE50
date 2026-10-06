@@ -1,39 +1,18 @@
 {
- "note": "ledger of organisers' public scores for this family; append only, never edit a score",
- "family_best_owner_reported": {
-  "score": 0.2778,
-  "account": "extradr19",
-  "rank_2026_10_06": 13
+ "note": "Legacy submission registry retained from earlier main-branch work. It contains no independently verified organizer score and no score-to-TIFF mapping.",
+ "historical_leaderboard_context": {
+  "status": "not independently verified; not a current score source",
+  "score_rows_published": false,
+  "score_to_tiff_mapping": null,
+  "policy": "Do not poll, scrape, or copy leaderboard rows without the written consent required by DrivenData's Terms of Use."
  },
- "public_leaderboard_2026_10_06": [
-  {
-   "rank": 1,
-   "account": "xiaofanhu",
-   "score": 0.3774
-  },
-  {
-   "rank": 2,
-   "account": "alexoktaba",
-   "score": 0.3345
-  },
-  {
-   "rank": 3,
-   "account": "nchuzhoy",
-   "score": 0.3262
-  },
-  {
-   "rank": 16,
-   "account": "extradr19",
-   "score": 0.2778
-  }
- ],
  "submissions": [
   {
    "name": "GEMSDOE50-SEIS-RIDGE-V1-5CAD91AC",
    "file": "docs/downloads/gemsdoe50-seis-ridge-v1.tif",
    "sha256": "5cad91ac7580db912ebac0cf352cce56d713e99ad53f596a57f714f51636d3c9",
    "mass": 45000,
-   "status": "built, not yet submitted",
+   "status": "legacy prior-work record; not H50-S1 and not a deliverable",
    "organizer_score": null,
    "submitted_utc": null
   }

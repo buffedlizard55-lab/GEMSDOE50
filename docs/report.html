@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Report — why 0.2778, and what is achievable</title>
+<title>Archived prior-work report — GEMSDOE50</title>
 <style>
 :root{--ink:#12161c;--mut:#5b6674;--line:#e3e8ef;--acc:#0b6bcb;--card:#f7f9fc}
 *{box-sizing:border-box}
@@ -25,9 +25,11 @@ footer{color:var(--mut);font-size:.88rem;border-top:1px solid var(--line);paddin
 </style>
 </head>
 <body>
+<div role="note" style="margin:14px auto;padding:12px 16px;max-width:1100px;background:#fff1df;border-left:5px solid #a96519;border-radius:6px;font:600 15px/1.5 system-ui,sans-serif;color:#3b2b19">ARCHIVED, UNVERIFIED PRIOR WORK — this page describes earlier main-branch experiments/artifacts, not H50-S1. Do not upload files linked here. Historical local metrics and copied leaderboard notes are not a fresh independent official check, and no organizer receipt authenticates a score-to-TIFF mapping. See the <a href="../index.html">current H50-S1 project site</a>.</div>
+
 <header><nav><a href="./">Home</a><a href="how-to-submit.html">How to submit</a><a href="report.html">Report</a></nav></header>
 <main>
-<h1>Why <code>h33-h33-2-b2</code> scored 0.2778 — and whether more is achievable</h1>
+<h1>Historical local-proxy report — not organizer-scored results</h1>
 <p class="sub">Verification labels: <b>[OFFICIAL]</b> from an organizer source · <b>[MEASURED]</b> computed here from hash-pinned bytes · <b>[MODEL]</b> arithmetic under stated assumptions · <b>[PROJECT]</b> the owner's own records.</p>
 
 <h2>1. The metric, exactly [OFFICIAL]</h2>
@@ -39,8 +41,8 @@ DTI   = TP_w / (TP_w + 0.2·FP_w + 0.8·FN_w + ε)</pre>
 <p>The identity <b>TP_w + FN_w = |G|</b> follows because the same maximum appears in both sums, so <code>DTI = T / (0.8G + 0.2(T+F))</code>. The repository's test suite reproduces the page's own worked example to 1e-12 and checks the identity numerically.</p>
 <ul>
   <li><b>Binary beats graded.</b> A support scaled by λ∈(0,1) is strictly dominated: <code>dDTI/dλ = 0.8·T·G/(0.2λ(T+F)+0.8G)² &gt; 0</code>. Every competitive file is binary.</li>
-  <li><b>Marginal-inclusion rule.</b> One dot raises the denominator by exactly 0.2, so it pays iff <code>k &gt; 0.2·score</code> — within 283 m of hidden truth at 0.2778, 277 m at the current 0.3774 best. It is a distance filter, not a precision filter.</li>
-  <li><b>Coverage arithmetic.</b> <code>x = s(0.2ρ+0.8)/(1−0.2s)</code>, ρ = F/G. A score of 0.3774 needs 32.7 % weighted coverage with no false positives, 40.8 % at ρ = 1.</li>
+  <li><b>Marginal-inclusion rule.</b> One dot raises the denominator by exactly 0.2, so it pays iff <code>k &gt; 0.2·score</code>. This is a symbolic metric rule, not a current leaderboard target or official score claim.</li>
+  <li><b>Coverage arithmetic.</b> <code>x = s(0.2ρ+0.8)/(1−0.2s)</code>, ρ = F/G. The relation is shown symbolically; no board score is used for calibration.</li>
 </ul>
 
 <h2>2. What that artifact is [MEASURED]</h2>
@@ -71,10 +73,10 @@ DTI   = TP_w / (TP_w + 0.2·FP_w + 0.8·FN_w + ε)</pre>
 <tr><td>catalogue folds (F1 mean of 4)</td><td><b>0.0416</b></td><td>0.0073</td><td>5.7×</td></tr>
 <tr><td>SGMC off-catalogue (F2)</td><td><b>0.0670</b></td><td>0.0301</td><td>2.2×</td></tr>
 </table>
-<p>These are held-out-frame proxies, not leaderboard scores. <b>No private-leaderboard score is claimed anywhere in this repository</b>; the private board is not visible to this project.</p>
+<p>These are legacy held-out-frame proxies, not organizer scores. No organizer receipt authenticates a score for this file or maps a score to its TIFF; the current H50-S1 project does not use these proxies.</p>
 
-<h2>5. Is a higher score achievable? Yes — and the gap is coverage, not emission quality</h2>
-<p>With G ≈ 13,833, perfect knowledge at 300 m spacing gives <code>T ≈ 0.8G</code> and DTI ≈ 0.78. The step from 0.28 to 0.38 is therefore a <b>coverage problem</b>: find more of the faults the catalogue lacks, and put the dots exactly there. The lever is evidence independent of the catalogue, because the scored truth is by construction a different inventory. That is precisely what this project's leading component (1 m-LiDAR scarp chains) does, and it is why it is the leading term of the shipped field.</p>
+<h2>5. Conditional ceiling model (legacy assumptions only)</h2>
+<p>Under the legacy model assumptions, with G ≈ 13,833 and perfect knowledge at 300 m spacing, <code>T ≈ 0.8G</code> and DTI ≈ 0.78. This is a theoretical ceiling, not a forecast or a comparison to any current competition score. The data and method are distinct from the current H50-S1 candidate and are not used in its holdout evaluation.</p>
 
 <h2>6. The hypotheses, ranked</h2>
 <ol>
@@ -86,11 +88,11 @@ DTI   = TP_w / (TP_w + 0.2·FP_w + 0.8·FN_w + ε)</pre>
 </ol>
 <p>Full table with layers, novelty and falsification criteria: <code>docs/research/hypotheses.md</code>.</p>
 
-<h2>7. Regularities flagged for review</h2>
+<h2>7. Provenance and scope caveat</h2>
 <ul>
-<li>The live leaderboard changed while this project ran: the brief cites 0.3195 as the best public score; on 2026-10-06 the top score is <b>0.3774</b> and 0.3195 is seventh. Every target statement should be read against the fetched date.</li>
-<li>Public scores cluster at ≈0.32 for six entrants and drop sharply at rank 8 (0.2888) — a bimodal board, consistent with two families of method (dotted supports vs. probability maps).</li>
-<li>The 0.2600 file (44,090 dots) and the 0.2778 file (37,654 dots) differ only by pruning near the catalogue, which implies the scored inventory is nearly disjoint from the published catalogue — a strong, checkable clue about the test set.</li>
+<li>Prior sibling-repository leaderboard notes conflict and were not freshly independently checked for the current project. No live leader, current rank, or score-to-TIFF mapping is asserted here; do not use old leaderboard rows as a target.</li>
+<li>Numbers in this legacy local-proxy report are historical project records, not organizer receipts. The active H50-S1 protocol uses a separate frozen spatial split and a fixed primary comparator.</li>
+<li>These archived results are retained for audit and learning only; they do not justify spending a weekly slot or uploading the linked prior artifact.</li>
 </ul>
 
 <h2>8. Reproducibility</h2>

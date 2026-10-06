@@ -1,0 +1,96 @@
+name: H50-S1 preregistered research run
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: h50s1-research-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  research:
+    if: github.ref_name == 'arena/c6060a3e-gemsdoe50'
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Check out the fixed Arena branch
+        uses: actions/checkout@v4
+        with:
+          ref: arena/c6060a3e-gemsdoe50
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install project and test dependencies
+        run: python -m pip install --upgrade pip && python -m pip install -e '.[test]'
+
+      - name: Run unit tests before acquiring data or scoring
+        run: python -m pytest -q
+
+      - name: Download and verify public, pinned inputs
+        run: scripts/download_inputs.sh .arena/run/inputs
+
+      - name: Fetch exact prior-work comparison rasters through GitHub Contents API
+        run: scripts/fetch_comparators.sh .arena/run/prior
+
+      - name: Recheck frozen split masks before any DTI calculation
+        run: |
+          python - <<'PY'
+          import json
+          import numpy as np
+          from gemsdoe50.common import sha256_file
+          from gemsdoe50.holdout import build_spatial_blocks, load_split_spec
+          from gemsdoe50.raster import load_labels, load_template
+
+          spec_path = 'evidence/holdout-v1.json'
+          frozen_path = 'evidence/holdout-realized-v1.json'
+          inputs = '.arena/run/inputs'
+          spec = load_split_spec(spec_path)
+          template_path = f'{inputs}/example_submission.tif'
+          labels_path = f'{inputs}/existing_faults.tif'
+          _, valid, _ = load_template(template_path)
+          truth, _ = load_labels(labels_path, template_path, valid)
+          _, realized = build_spatial_blocks(valid, truth, spec)
+          frozen = json.load(open(frozen_path, encoding='utf-8'))
+          assert frozen['dti_computed'] is False
+          assert frozen['split_spec_sha256'] == sha256_file(spec_path)
+          assert frozen['template_raster_sha256'] == sha256_file(template_path)
+          assert frozen['label_raster_sha256'] == sha256_file(labels_path)
+          assert frozen['valid_mask_sha256'] == realized['valid_mask_sha256']
+          assert frozen['truth_raster_mask_sha256'] == realized['truth_raster_mask_sha256']
+          assert frozen['macrofolds'] == realized['macrofolds']
+          print('Frozen split and realized masks match; DTI has not yet been computed.')
+          PY
+
+      - name: Run H50-S1, time-shuffle and translation controls, and validate output bytes
+        run: |
+          python scripts/run_experiment.py \
+            --catalog .arena/run/inputs/nvreloc_catalog_newmag.txt \
+            --template .arena/run/inputs/example_submission.tif \
+            --labels .arena/run/inputs/existing_faults.tif \
+            --split evidence/holdout-v1.json \
+            --realized evidence/holdout-realized-v1.json \
+            --prior-dir .arena/run/prior \
+            --time-shuffles 20
+
+      - name: Build the executive-summary and submission-instructions pages
+        run: python scripts/build_h50_site.py
+
+      - name: Publish the auditable report, site, and generated research-only TIFF to this branch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add evidence/results/h50s1-evaluation-20261006.json \
+            docs/downloads/gemsdoe50-h50s1-relocated-planes-20261006-research.tif \
+            index.html results.html submission.html methods.html
+          git commit -m 'experiment: report preregistered H50-S1 holdout results'
+          git push origin HEAD:arena/c6060a3e-gemsdoe50
