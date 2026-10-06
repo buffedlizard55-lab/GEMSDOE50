@@ -1,0 +1,10 @@
+[project]
+name = "gems50"
+version = "0.1.0"
+description = "Seismicity-lineament fault discovery for the DOE GEMS Prize (DrivenData #306)"
+requires-python = ">=3.10"
+dependencies = ["numpy", "scipy", "rasterio", "scikit-image"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

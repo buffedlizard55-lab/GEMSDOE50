@@ -1,117 +1,47 @@
-"""The competition grid, taken from the organiser's own sample submission.
+"""Verified facts about the official competition grid (measured from the bytes).
 
-Facts established by reading the organiser files (not assumed):
-
-===============================  =============================================
-item                             value
-===============================  =============================================
-CRS                              EPSG:32611 (UTM 11N)
-cell size                        100 m
-width x height                   3292 x 3730
-origin (x, y)                    243350.0, 4508550.0
-bounds                           x 243350..572550, y 4135550..4508550
-dtype                            float32
-nodata tag on sample             nan
-valid-mask cells (finite)        5,167,373
-invalid cells (nan)              7,111,787
-sample values                    0.0 and 1.0 only
-cells equal to 1.0               60,988
-===============================  =============================================
-
-The 60,988 cells equal to 1.0 in the organiser's ``sample_submission.tif`` are exactly
-the 60,988 cells equal to 1 in ``labels.tif``: the sample submission is the *existing
-fault catalogue* rasterised, with the survey footprint set to nan.  This is used here
-only as a format template and as a validity mask; it is never treated as truth for a
-hidden set, because the competition states the hidden set is *not* in that catalogue.
+Every number here was read from the hash-pinned mirror of the official file, whose
+sha256 is recorded in registry/data_manifest.json.  These are the constants the rest
+of the pipeline asserts, so that a silently swapped grid cannot enter a submission.
 """
 
 from __future__ import annotations
 
-from dataclasses import dataclass
-from pathlib import Path
+CRS = "EPSG:32611"
+PIXEL_M = 100.0
+SHAPE = (3730, 3292)                     # (rows, cols)
+TRANSFORM = (100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)
+BOUNDS = (243350.0, 4135550.0, 572550.0, 4508550.0)  # left, bottom, right, top
 
-import numpy as np
-import rasterio
+#: number of pixels that are finite in the provided sample submission == the
+#: scored footprint (measured: 5,167,373 of 3730*3292 = 12,279,160)
+FOOTPRINT_PX = 5_167_373
 
-REPO = Path(__file__).resolve().parents[2]
-GRID_DIR = REPO / "data" / "grid"
-SAMPLE_SUBMISSION = GRID_DIR / "sample_submission.tif"
-LABELS = GRID_DIR / "labels.tif"
+#: number of catalogue fault pixels in labels.tif (measured: value == 1)
+CATALOGUE_PX = 60_988
 
-#: Published by the organiser (page 967): the triangular kernel support.
-RANGE_M = 300.0
-CELL_M = 100.0
+#: official nodata sentinel of training_features.tif
+NODATA = -3.4028234663852886e38
 
-#: Kernel half-width in cells; ``RANGE_M / CELL_M`` = 3.
-R_PX = int(round(RANGE_M / CELL_M))
-
-
-@dataclass(frozen=True)
-class Grid:
-    """Geometry of the competition raster."""
-
-    width: int
-    height: int
-    transform: tuple
-    crs: str
-
-    @property
-    def shape(self) -> tuple[int, int]:
-        return (self.height, self.width)
-
-    @property
-    def bounds(self) -> tuple[float, float, float, float]:
-        left, top = self.transform[2], self.transform[5]
-        return (
-            left,
-            top - self.height * self.transform[4],
-            left + self.width * self.transform[0],
-            top,
-        )
-
-    def col_row(self, x: np.ndarray, y: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
-        """Projected metres -> (col, row) integer arrays (top-left corner convention)."""
-        a, _, c, _, e, f = self.transform
-        col = np.floor((np.asarray(x) - c) / a).astype(np.int64)
-        row = np.floor((np.asarray(y) - f) / e).astype(np.int64)
-        return col, row
-
-    def xy(self, col: np.ndarray, row: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
-        """(col, row) -> projected metres at cell centres."""
-        a, _, c, _, e, f = self.transform
-        return c + (np.asarray(col) + 0.5) * a, f + (np.asarray(row) + 0.5) * e
-
-
-def load_grid() -> Grid:
-    """Read the grid geometry from the organiser's sample submission."""
-    with rasterio.open(SAMPLE_SUBMISSION) as src:
-        return Grid(
-            width=src.width,
-            height=src.height,
-            transform=tuple(src.transform)[:6],
-            crs=src.crs.to_string(),
-        )
-
-
-def load_valid_mask() -> np.ndarray:
-    """Boolean raster: True where the organiser's template is finite (inside the survey).
-
-    Also asserts the structural facts listed in the module docstring so that a changed
-    template cannot silently change the pipeline.
-    """
-    with rasterio.open(SAMPLE_SUBMISSION) as src:
-        a = src.read(1)
-        assert src.count == 1, "template is not single band"
-        assert src.crs.to_string() == "EPSG:32611", src.crs
-        assert (src.width, src.height) == (3292, 3730), (src.width, src.height)
-        assert src.dtypes[0] == "float32", src.dtypes
-    return np.isfinite(a)
-
-
-def load_labels() -> np.ndarray:
-    """The organiser's public fault catalogue (1 = mapped fault, 0 = none, -1 = nan mask)."""
-    with rasterio.open(LABELS) as src:
-        lab = src.read(1)
-    out = np.zeros(lab.shape, dtype=bool)
-    out[lab == 1] = True
-    return out
+#: band index (1-based, as written by gdalinfo/rasterio) -> official description
+BANDS = {
+    1: ("mag_anom", "Magnetic anomaly - deviation from expected Earth's magnetic field"),
+    2: ("rtp", "Reduced to pole magnetic data - magnetic anomaly corrected for latitude effects"),
+    3: ("tmi_hg", "Total magnetic intensity horizontal gradient - rate of change in horizontal direction"),
+    4: ("geodetic_2nd_invariant", "Geodetic second invariant - measure of strain rate tensor magnitude"),
+    5: ("iso_grav_anom_slope", "Isostatic gravity anomaly slope - gradient of gravity after isostatic correction"),
+    6: ("tilt_angle", "Tilt angle or total curvature - magnetic field derivative for edge detection"),
+    7: ("geodetic_shear_rate", "Geodetic shear rate - measure of rate of angular deformation from GPS/InSAR"),
+    8: ("geodetic_dilatation_rate", "Geodetic dilatation rate - measure of volumetric strain (expansion/contraction)"),
+    9: ("tmi_vg", "Total magnetic intensity vertical gradient - rate of change in vertical direction"),
+    10: ("deq_n100a15", "Distance to earthquake (n=100km radius, a=15 deg azimuth parameters)"),
+    11: ("iso_grav_anom_vg", "Isostatic gravity anomaly vertical gradient - vertical rate of change"),
+    12: ("det_elev", "Detrended elevation - topography with regional trends removed"),
+    13: ("iso_grav_anom", "Isostatic gravity anomaly - gravity after compensating for topographic mass"),
+    14: ("tmi", "Total magnetic intensity - total strength of magnetic field"),
+    15: ("depth_to_base_surf", "Depth to basement surface - thickness of sedimentary cover"),
+    16: ("ieq_n100a15", "Earthquake intensity or density (n=100km radius, a=15 deg parameters)"),
+    17: ("cond_surf", "Conductivity surface - electrical conductivity of subsurface"),
+    18: ("iso_grav_anom_hg", "Isostatic gravity anomaly horizontal gradient - horizontal rate of change"),
+    19: ("det_elev_slope", "Detrended elevation slope - gradient of elevation after detrending"),
+}

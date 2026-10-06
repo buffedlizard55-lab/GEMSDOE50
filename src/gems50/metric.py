@@ -1,168 +1,146 @@
-"""The official competition metric, implemented exactly as published, with its algebra.
+"""The official competition metric, implemented literally from the problem statement.
 
-Published definition (competition page 967, fetched 2026-10-06):
+Source (read 2026-10-06, quoted verbatim in docs/research/metric.md):
+  https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/
 
-    k(d)  = max(1 - d/R, 0)                     triangular kernel, R = 300 m = 3 cells
-    TPw   = sum_{g in G} max_{x: d(x,g)<=R} p(x) k(d(x,g))
-    FPw   = sum_{x: p(x)>0} p(x) [1 - max_{g in G} k(d(x,g))]
-    FNw   = sum_{g in G} [1 - max_{x: d(x,g)<=R} p(x) k(d(x,g))]
-    DTI   = TPw / (TPw + alpha FPw + beta FNw + eps),   alpha = 0.2, beta = 0.8
+Official definitions
+--------------------
+    k(d)   = max(1 - d/R, 0),   R = 300 m  (3 pixels at 100 m)
 
-Two exact consequences are used throughout this repository and are *tested* here rather
-than trusted:
+    TP_w   = sum_{g in G}  max_{x : d(x,g) <= R}  p(x) k(d(x,g))
+    FP_w   = sum_{x : p(x) > 0}  p(x) [ 1 - max_{g in G} k(d(x,g)) ]
+    FN_w   = sum_{g in G}  [ 1 - max_{x : d(x,g) <= R} p(x) k(d(x,g)) ]
+    DTI    = TP_w / (TP_w + alpha FP_w + beta FN_w + eps),  alpha = 0.2, beta = 0.8
 
-    (identity)  FNw = |G| - TPw                          (holds for any p, any raster)
-    (algebra)   DTI = T / (0.2 (T + S - M) + 0.8 |G|)
-                with T = TPw, S = sum_x p(x)  (emitted mass),
-                     M = sum_x p(x) max_g k(d(x,g))
+Two exact consequences used by the emitter (identities of the official formulas,
+not approximations):
 
-and the first-order condition that follows from the algebra:
-
-    (marginal rule)  adding one unit of mass at a cell whose kernel weight toward
-                     truth is w raises DTI  <=>  w > 0.2 * DTI
-
-for the single-truth-pixel case; :func:`marginal_condition` is the exact multi-pixel form.
+1.  TP_w + FN_w = |G|, because the same `max` appears in both sums.  Hence
+        DTI = T / (0.8 G + 0.2 T + 0.2 F)          (alpha = 0.2, beta = 0.8)
+    the "one-line form" of the metric.
+2.  A dot that is the unique maximiser for one truth pixel changes the denominator
+    by exactly alpha * (k + (1 - k)) = alpha = 0.2, giving the marginal-inclusion
+    rule  k_marginal > alpha * s  (docs/research/metric.md).
 """
 
 from __future__ import annotations
 
-from dataclasses import dataclass
-
 import numpy as np
-from scipy.ndimage import distance_transform_edt
 
 ALPHA = 0.2
 BETA = 0.8
+RADIUS_M = 300.0
+PIXEL_M = 100.0
+RADIUS_PX = RADIUS_M / PIXEL_M  # 3.0
+EPS = np.finfo(np.float64).eps
 
 
-@dataclass(frozen=True)
-class DTI:
-    """All components of the metric for one (prediction, truth) pair."""
-
-    tpw: float
-    fpw: float
-    fnw: float
-    mass: float  # S = sum of predicted values
-    best_cover: float  # M = sum_x p(x) max_g k
-    truth_cells: int  # |G|
-    value: float  # DTI
-
-    def as_dict(self) -> dict:
-        return {
-            "tpw": self.tpw,
-            "fpw": self.fpw,
-            "fnw": self.fnw,
-            "mass": self.mass,
-            "best_cover": self.best_cover,
-            "truth_cells": self.truth_cells,
-            "dti": self.value,
-        }
+def kernel(d_px) -> np.ndarray:
+    """Triangular kernel of the official metric, evaluated in pixel units."""
+    return np.maximum(1.0 - np.asarray(d_px, dtype=np.float64) / RADIUS_PX, 0.0)
 
 
-def _as_float(a) -> np.ndarray:
-    out = np.asarray(a, dtype=np.float32)
-    return np.nan_to_num(out, nan=0.0, posinf=0.0, neginf=0.0)
+def tversky_index(tp_w: float, fp_w: float, fn_w: float,
+                  alpha: float = ALPHA, beta: float = BETA) -> float:
+    """DTI from the three weighted counts, exactly as published."""
+    return tp_w / (tp_w + alpha * fp_w + beta * fn_w + EPS)
 
 
-def kernel_offsets(offsets: int = 3) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
-    """(dcol, drow, weight) for every offset inside the triangular support."""
-    rr, cc = np.mgrid[-offsets : offsets + 1, -offsets : offsets + 1]
-    d = np.sqrt(rr.astype(np.float64) ** 2 + cc.astype(np.float64) ** 2)
-    keep = d <= offsets
-    return cc[keep], rr[keep], np.maximum(1.0 - d[keep] / offsets, 0.0)
+def score(pred: np.ndarray, truth: np.ndarray, domain: np.ndarray | None = None,
+          max_truth: int = 200_000, rng: np.random.Generator | None = None) -> dict:
+    """Distance-weighted Tversky index between a prediction raster and a truth mask.
 
+    Parameters
+    ----------
+    pred : 2-D float array.  NaN outside the submission footprint is fine; NaNs are
+        simply not predicted.  Values > 0 are predictions, weighted by their value.
+    truth : 2-D bool/0-1 array of ground-truth pixels (already masked to the scored
+        inventory: pass `truth = truth_all & ~known_catalogue`).
+    domain : optional bool array.  Pixels outside it cannot contribute false
+        positives (the organizers' rule that the known catalogue is removed from
+        the scored domain).  Predictions outside `domain` are dropped.
+    max_truth : Monte-Carlo cap on the number of truth pixels used (unbiased).
 
-def dti_parts(pred, truth, offsets: int = 3, alpha: float = ALPHA, beta: float = BETA,
-              eps: float = 0.0) -> DTI:
-    """Exact components of the published metric.
-
-    ``pred`` holds probability mass in [0, 1]; ``truth`` is a boolean raster.  TPw is the
-    exact max-plus convolution over the (2R+1)^2 kernel support (zero-padded, so no
-    wrap-around), FPw = S - M with M obtained from an exact Euclidean distance transform,
-    and FNw = |G| - TPw.  No approximation is used anywhere.
+    Returns
+    -------
+    dict with tp_w, fp_w, fn_w, g, dti, the identity cross-check and counts.
     """
-    p = _as_float(pred)
-    g = np.asarray(truth).astype(bool)
-    if p.shape != g.shape:
-        raise ValueError(f"shape mismatch: pred {p.shape} vs truth {g.shape}")
+    from scipy.spatial import cKDTree
 
-    pad = offsets
-    pp = np.pad(p, pad, mode="constant")
-    dcol, drow, w = kernel_offsets(offsets)
-    acc = np.zeros_like(p)
-    for dc, dr, wk in zip(dcol, drow, w):
-        # offset (dr, dc) of the prediction relative to the truth cell
-        sl = pp[pad + dr : pad + dr + p.shape[0], pad + dc : pad + dc + p.shape[1]]
-        if wk == 1.0:
-            np.maximum(acc, sl, out=acc)
-        else:
-            np.maximum(acc, sl * np.float32(wk), out=acc)
-    tpw = float(acc[g].sum(dtype=np.float64))
+    pred = np.asarray(pred, dtype=np.float64)
+    truth = np.asarray(truth).astype(bool)
+    if domain is not None:
+        truth = truth & np.asarray(domain, dtype=bool)
 
-    if g.any():
-        d = distance_transform_edt(~g)
-        best = np.maximum(1.0 - d / offsets, 0.0).astype(np.float32)
-    else:
-        best = np.zeros(p.shape, dtype=np.float32)
-    mass = float(p.sum(dtype=np.float64))
-    m = float((p * best).sum(dtype=np.float64))
-    fpw = mass - m
-    truth_cells = int(g.sum())
-    fnw = truth_cells - tpw
-    denom = tpw + alpha * fpw + beta * fnw + eps
-    value = 0.0 if denom <= 0 else tpw / denom
-    return DTI(tpw=tpw, fpw=fpw, fnw=fnw, mass=mass, best_cover=m,
-               truth_cells=truth_cells, value=value)
+    pos = np.isfinite(pred) & (pred > 0)
+    if domain is not None:
+        pos &= np.asarray(domain, dtype=bool)
+
+    t_idx = np.argwhere(truth)
+    p_idx = np.argwhere(pos)
+    g_total = float(truth.sum())
+    if p_idx.size == 0:
+        return dict(tp_w=0.0, fp_w=0.0, fn_w=g_total, g=g_total, dti=0.0,
+                    dti_identity=0.0, n_truth=t_idx.shape[0], n_pred=0,
+                    truth_subsampled=False)
+    if t_idx.size == 0:
+        return dict(tp_w=0.0, fp_w=float(pred[pos].sum()), fn_w=0.0, g=0.0, dti=0.0,
+                    dti_identity=0.0, n_truth=0, n_pred=p_idx.shape[0],
+                    truth_subsampled=False)
+
+    rng = rng or np.random.default_rng(0)
+    sampled = False
+    if t_idx.shape[0] > max_truth:
+        sel = rng.choice(t_idx.shape[0], max_truth, replace=False)
+        t_idx = t_idx[np.sort(sel)]
+        sampled = True
+    scale = g_total / t_idx.shape[0]
+
+    t_tree = cKDTree(t_idx)
+
+    # --- TP_w = sum_g max_x p(x) k(d(x,g)) -------------------------------------
+    p_vals = pred[tuple(p_idx.T)]
+    d_p2t, i_p2t = t_tree.query(p_idx, k=1)
+    contrib = p_vals * kernel(d_p2t)
+    cred = np.zeros(t_idx.shape[0], dtype=np.float64)
+    for j in np.argsort(-contrib):
+        if contrib[j] <= 0.0:
+            break
+        g = i_p2t[j]
+        if contrib[j] > cred[g]:
+            cred[g] = contrib[j]
+    tp_w = float(cred.sum() * scale)
+
+    # --- FN_w = the complement of the same max ---------------------------------
+    fn_w = float((1.0 - cred).sum() * scale)
+
+    # --- FP_w = sum_{p>0} p (1 - max_g k(d)) -----------------------------------
+    near = kernel(d_p2t)
+    fp_w = float((p_vals * (1.0 - near)).sum())
+
+    dti = tversky_index(tp_w, fp_w, fn_w)
+    dti_identity = tp_w / (BETA * g_total + (1.0 - BETA) * tp_w + ALPHA * fp_w + EPS)
+    return dict(tp_w=tp_w, fp_w=fp_w, fn_w=fn_w, g=g_total, dti=dti,
+                dti_identity=dti_identity, n_truth=int(truth.sum()),
+                n_pred=int(p_idx.shape[0]), truth_subsampled=sampled,
+                tp_plus_fn_minus_g=float(tp_w + fn_w - g_total))
 
 
-def dti(pred, truth, offsets: int = 3, alpha: float = ALPHA, beta: float = BETA) -> float:
-    """The scalar published metric."""
-    return dti_parts(pred, truth, offsets, alpha, beta).value
+def marginal_threshold(current_score: float, alpha: float = ALPHA) -> float:
+    """Credit a new dot must earn to improve a file currently scoring s.
 
-
-def algebra_rhs(t: float, s: float, m: float, truth_cells: int, alpha: float = ALPHA) -> float:
-    """DTI = T / (0.2 (T + S - M) + 0.8 |G|), the closed form used for decision rules."""
-    return t / (alpha * (t + s - m) + (1.0 - alpha) * truth_cells)
-
-
-def credit_bar(current_dti: float, spec: float = 1.0, alpha: float = ALPHA) -> float:
-    """Kernel weight a new unit of mass must reach to raise DTI (single-truth-pixel case)."""
-    return alpha * current_dti * spec
-
-
-def marginal_condition(w_new: float, delta_t: float, current_dti: float,
-                       alpha: float = ALPHA) -> bool:
-    """Exact test: does adding one unit of mass at this cell raise DTI?
-
-    ``delta_t`` = increase of TPw (sum of kernel weights over the truth cells for which
-    this cell becomes the best cover), ``w_new`` = increase of M (= the kernel weight
-    toward the cell's nearest truth cell).
+    Exact: a dot that is the unique maximiser for one truth pixel raises the
+    denominator by exactly alpha, so it pays iff k > alpha * s.
     """
-    return delta_t > alpha * current_dti * (delta_t + 1.0 - w_new)
+    return alpha * current_score
 
 
-def brute_force(pred, truth, offsets: int = 3, alpha: float = ALPHA, beta: float = BETA) -> dict:
-    """O(|G| * N) transcription of the published equations, for tests only."""
-    p = _as_float(pred)
-    g = np.asarray(truth).astype(bool)
-    gc = np.argwhere(g)
-    pc = np.argwhere(p > 0)
-    tpw = 0.0
-    for r, c in gc:
-        best = 0.0
-        for r2, c2 in pc:
-            d = float(np.hypot(r - r2, c - c2))
-            if d <= offsets:
-                best = max(best, float(p[r2, c2]) * max(1.0 - d / offsets, 0.0))
-        tpw += best
-    fpw = 0.0
-    for r2, c2 in pc:
-        bestk = 0.0
-        if len(gc):
-            dmin = float(np.min(np.hypot(gc[:, 0] - r2, gc[:, 1] - c2)))
-            bestk = max(1.0 - dmin / offsets, 0.0)
-        fpw += float(p[r2, c2]) * (1.0 - bestk)
-    fnw = float(len(gc)) - tpw
-    denom = tpw + alpha * fpw + beta * fnw
-    return {"tpw": tpw, "fpw": fpw, "fnw": fnw,
-            "dti": 0.0 if denom <= 0 else tpw / denom}
+def max_distance_for_credit(credit: float) -> float:
+    """Distance (metres) at which a dot still earns `credit`."""
+    return RADIUS_M * (1.0 - credit)
+
+
+def coverage_required(target: float, rho: float, alpha: float = ALPHA,
+                      beta: float = BETA) -> float:
+    """Invert DTI = s for weighted coverage x = T/G at false-positive ratio rho = F/G."""
+    return target * (alpha * rho + beta) / (1.0 - alpha * target)

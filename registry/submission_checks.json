@@ -1,0 +1,33 @@
+{
+ "format": {
+  "driver": "GTiff",
+  "count_is_1": true,
+  "dtype_is_float32": true,
+  "crs_is_epsg32611": true,
+  "same_shape": true,
+  "same_transform": true,
+  "same_bounds": true,
+  "min": 0.0,
+  "max": 1.0,
+  "nan_count": 7111787,
+  "values_in_0_1": true,
+  "nan_only_outside_footprint": true,
+  "positive_px": 44709,
+  "unique_positive_values": [
+   1.0
+  ],
+  "compression": "Compression.deflate",
+  "nodata": NaN,
+  "footprint_source": "registry/footprint_mask.npz",
+  "footprint_px": 5167373,
+  "outside_footprint_all_nan": true,
+  "all_checks_pass": true
+ },
+ "uniqueness": {
+  "verdict": "SKIPPED",
+  "verdict_unique": null,
+  "my_sha256": "79e260ae223d7dfd96413da28a9c6fed30107285ab843795181a5c9e5dff7262",
+  "my_dots": 44709,
+  "reason": "prior artifacts not present in this environment"
+ }
+}

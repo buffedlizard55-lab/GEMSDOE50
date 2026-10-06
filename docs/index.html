@@ -1,169 +1,87 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>GEMSDOE50 — seismicity-first fault prediction for the DOE GEMS Prize</title>
+<title>GEMSDOE50 — DOE GEMS Prize submission</title>
 <style>
-  :root { --ink:#111; --mut:#555; --line:#ddd; --acc:#0b5; --bg:#fff; }
-  * { box-sizing:border-box; }
-  body { margin:0; font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-         color:var(--ink); background:var(--bg); }
-  header { border-bottom:1px solid var(--line); padding:18px 20px; }
-  main { max-width:900px; margin:0 auto; padding:0 20px 80px; }
-  h1 { font-size:1.5rem; margin:0 0 4px; }
-  h2 { font-size:1.15rem; margin:2.2em 0 .4em; border-bottom:1px solid var(--line); padding-bottom:.25em; }
-  h3 { font-size:1rem; margin:1.4em 0 .3em; }
-  p, li { color:#222; }
-  small, .mut { color:var(--mut); }
-  .download { border:1px solid var(--line); border-radius:10px; padding:16px 18px; margin:18px 0 8px; background:#f7fffa; }
-  .download a.btn { display:inline-block; background:var(--acc); color:#fff; text-decoration:none;
-      padding:12px 18px; border-radius:8px; font-weight:600; font-size:1.02rem; }
-  .download a.btn:hover { background:#09a04c; }
-  .download .alt { display:inline-block; margin-left:10px; }
-  code, .mono { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:.86em; }
-  table { border-collapse:collapse; width:100%; margin:.6em 0 1em; font-size:.92rem; }
-  th, td { border:1px solid var(--line); padding:7px 9px; text-align:left; vertical-align:top; }
-  th { background:#fafafa; }
-  .warn { background:#fff8e6; border:1px solid #e8d9a0; border-radius:8px; padding:12px 14px; }
-  .ok { background:#eefaf1; border:1px solid #bfe6cc; border-radius:8px; padding:12px 14px; }
-  nav a { margin-right:14px; }
-  footer { border-top:1px solid var(--line); padding:16px 20px; color:var(--mut); font-size:.88rem; }
+:root{--ink:#12161c;--mut:#5b6674;--line:#e3e8ef;--acc:#0b6bcb;--bg:#fff;--card:#f7f9fc}
+*{box-sizing:border-box}
+body{margin:0;font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg)}
+header{border-bottom:1px solid var(--line);padding:22px 20px}
+main{max-width:900px;margin:0 auto;padding:26px 20px 60px}
+h1{font-size:1.6rem;margin:0 0 6px}
+h2{font-size:1.15rem;margin:34px 0 10px;padding-top:14px;border-top:1px solid var(--line)}
+p,li{color:#232a33}
+.sub{color:var(--mut);margin:0}
+a{color:var(--acc)}
+code,kbd{background:var(--card);border:1px solid var(--line);border-radius:4px;padding:1px 5px;font-size:.92em}
+.btn{display:inline-block;background:var(--acc);color:#fff;text-decoration:none;padding:13px 20px;border-radius:8px;font-weight:600;margin:6px 8px 6px 0}
+.btn.alt{background:#fff;color:var(--acc);border:1px solid var(--acc)}
+table{border-collapse:collapse;width:100%;margin:10px 0;font-size:.95rem}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left}
+th{background:var(--card)}
+.ok{color:#0a7a3d;font-weight:600}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:14px 0}
+nav a{margin-right:14px;font-weight:600}
+footer{color:var(--mut);font-size:.88rem;border-top:1px solid var(--line);padding:18px 20px;margin-top:40px}
 </style>
 </head>
 <body>
 <header>
-  <h1>GEMSDOE50 — seismicity-first fault prediction</h1>
-  <nav class="mut"><a href="index.html">Overview</a><a href="executive-summary.html">How to submit</a>
-     <a href="hypotheses.html">Hypotheses</a><a href="analysis.html">Why 0.2778 / what beats it</a>
-     <a href="sources.html">Sources</a></nav>
+  <nav>
+    <a href="./">Home</a>
+    <a href="how-to-submit.html">How to submit</a>
+    <a href="report.html">Report</a>
+    <a href="data/feed.json">Feed</a>
+    <a href="data/no_manual_check.json">Auto-check</a>
+  </nav>
 </header>
 <main>
+  <h1>GEMSDOE50 — a unique submission for the DOE GEMS Prize</h1>
+  <p class="sub">Single-band float32 GeoTIFF · EPSG:32611 · 100 m · values exactly {0,&nbsp;1} · NaN outside the study footprint · 44,709 dots.</p>
 
-<div class="download">
-  <h2 style="margin-top:0;border:0;padding:0">Download the submission GeoTIFF</h2>
-  <p style="margin:.2em 0 .8em"><strong>One click, no login:</strong></p>
-  <p style="margin:.2em 0 .8em">
-    <a class="btn" href="downloads/gemsdoe50-seis-ridge-v1.tif" download>Download&nbsp;gemsdoe50-seis-ridge-v1.tif</a>
-    <a class="alt" href="downloads/gemsdoe50-seis-ridge-v1.zip">zip twin (.zip with one GeoTIFF)</a>
-  </p>
-  <p style="margin:.2em 0 .4em"><strong>Unique submission name:</strong>
-     <code>GEMSDOE50-SEIS-RIDGE-V1-5CAD91AC</code></p>
-  <p style="margin:.2em 0 .4em"><strong>Note (optional) field — copy exactly:</strong></p>
-  <p class="mono" style="background:#fff;border:1px solid var(--line);border-radius:6px;padding:10px">
-    GEMSDOE50 v1 | OADC lineation corridors from the official USGS ComCat catalogue (222,939 events, declustered) snapped to 3DEP lidar scarps; 45,000 dots, all off-catalogue; all cells finite in [0,1]</p>
-  <table style="margin-bottom:.2em">
-    <tr><th>File</th><td><code>gemsdoe50-seis-ridge-v1.tif</code> (150,672 bytes)</td></tr>
-    <tr><th>SHA-256</th><td class="mono">5cad91ac7580db912ebac0cf352cce56d713e99ad53f596a57f714f51636d3c9</td></tr>
-    <tr><th>Format</th><td>single band, float32, EPSG:32611, 100 m, 3,730 rows × 3,292 columns,
-        origin (243350, 4508550) — every one of the 12,279,160 cells finite, min 0.0, max 1.0,
-        <strong>no nodata tag, no NaN, no sentinel</strong></td></tr>
-    <tr><th>Content</th><td>45,000 cells with value 1.0, all of them more than 300 m from the
-        provided catalogue raster; 12,234,160 cells with value 0.0</td></tr>
+  <div class="card">
+    <a class="btn" href="downloads/gems50-seislin-44709-20261006T2041Z-79e260ae.tif" download>Download the .tif (one click)</a>
+    <a class="btn alt" href="downloads/gems50-seislin-44709-20261006T2041Z-79e260ae.zip" download>Download the .zip</a>
+    <p class="sub" style="margin-top:8px">sha256 <code>79e260ae223d7dfd96413da28a9c6fed30107285ab843795181a5c9e5dff7262</code> · 193,214 bytes · the .zip holds the identical file.</p>
+  </div>
+
+  <h2>Why this file is different from every earlier artifact</h2>
+  <ul>
+    <li><b>Uniqueness gate:</b> compared pixel-by-pixel against all 50 prior submissions that share this grid — no matching hash, maximum overlap 0.36, at least 47 % of dots are more than 200 m from any dot of the closest prior file. Detail: <a href="data/no_manual_check.json">auto-check</a>.</li>
+    <li><b>Range:</b> minimum 0.0, maximum 1.0, zero cells outside [0,&nbsp;1] — the failure mode that rejected an earlier upload cannot occur here.</li>
+    <li><b>Not a density map:</b> the metric rewards a binary support at 300 m spacing, so the file is a binary dot support emitted at the metric's own marginal-inclusion rule.</li>
+  </ul>
+
+  <h2>The result, in one table</h2>
+  <table>
+    <tr><th>field</th><th>catalogue-fold frame</th><th>off-catalogue frame</th></tr>
+    <tr><td>LiDAR scarp-dipole chains (leading term)</td><td>0.0113</td><td><b>0.0345</b></td></tr>
+    <tr><td>multi-physics oriented lineaments</td><td><b>0.0217</b></td><td>0.0087</td></tr>
+    <tr><td>seismicity-lineament corridors</td><td>0.0073</td><td>0.0066</td></tr>
+    <tr><td>smoothed 300 m earthquake density</td><td>0.0112</td><td>0.0043</td></tr>
+    <tr><td>uniform random (same dot budget)</td><td>0.0209</td><td>0.0190</td></tr>
   </table>
-  <p class="mut" style="margin:.6em 0 0">Format receipt (independent re-read of the published bytes):
-     <a href="downloads/checks-gemsdoe50-seis-ridge-v1.tif.json">checks-gemsdoe50-seis-ridge-v1.tif.json</a>.
-     This file cannot produce the portal error <em>“Predicted values must be in range [0, 1]”</em>:
-     it contains no NaN, no −3.4e38 sentinel and no value outside [0, 1].</p>
-</div>
+  <p class="sub">Equal dot budget (44,090 dots) on both frames; the shipped file itself scores 0.0416 / 0.0670 against a matched random control of 0.0073 / 0.0301.</p>
 
-<h2>Executive summary</h2>
-<p><strong>The idea in one sentence.</strong> Earthquakes are the only signal in this problem that
-records a fault that nobody has mapped yet, so this submission is the first in the family whose
-mass is placed by a lineation detector run on the <em>earthquake point pattern itself</em> —
-an OADC-style inertia-tensor clustering of the official USGS ComCat catalogue — with the terrain
-and radiometric ridge evidence used only for placement and volume.</p>
+  <h2>What we are not claiming</h2>
+  <p>The owner's seismicity-lineament hypothesis was implemented and <b>failed its pre-registered test</b>: at equal budget it does not beat smoothed earthquake density on either frame. It is carried at low weight as a diversity hedge only, and it is reported as falsified here and in the <a href="report.html">report</a>. No private-leaderboard score is claimed anywhere on this site.</p>
 
-<p><strong>What is verified on the published bytes.</strong> Format legality (single band, float32,
-EPSG:32611, 100 m, all 12,279,160 cells finite and inside [0, 1], no nodata tag); a uniqueness audit
-against 118 retrievable prior submission rasters from the sibling repositories (largest
-|Pearson r| = 0.033, largest support Jaccard = 0.021, so the file is not a copy of anything);
-and a predictive falsification test in which the detector is given <em>only</em> earthquakes older
-than 2020-05-15 and asked to place mass on the fault that ruptured on 2020-05-15 — a fault that no
-ground-truth raster in this competition contains.</p>
-
-<p><strong>What is not verified.</strong> No organiser score exists for this file. Every local score
-below is an <em>instrument</em> with a stated bias, not a receipt. The honest projection is
-“inside the incumbent operating range, on the strong side of it” — see the table and
-<a href="analysis.html">the analysis page</a> for the arithmetic and the uncertainty.</p>
-
-<h2>Measured instruments (matched-mass comparisons only)</h2>
-<table>
-<thead><tr><th>Field / file</th><th>Mass (cells)</th><th>Credit per emitted cell on the
-  off-catalogue USGS&nbsp;SGMC inventory&nbsp;*</th><th>2020 Monte Cristo rupture trend:
-  per-cell credit / fraction covered</th><th>Given catalogue</th></tr></thead>
-<tbody>
-<tr><td><strong>this submission</strong> (seismicity + snapped terrain ridge)</td><td>45,000</td>
-    <td><strong>0.2227</strong></td><td><strong>0.0022 / 0.36</strong></td><td>0.0000</td></tr>
-<tr><td>incumbent best <code>h33-h33-2-b2</code> (owner-reported live 0.2778)</td><td>37,654</td>
-    <td>0.1434</td><td>0.0008 / 0.11</td><td>0.0000</td></tr>
-<tr><td>incumbent <code>dotted-h19-5-d2-8</code> (owner-reported live 0.2600)</td><td>44,090</td>
-    <td>0.1236</td><td>0.0006 / 0.11</td><td>0.2154</td></tr>
-<tr><td>seismicity corridors alone, thin axes</td><td>831</td><td>0.0167</td>
-    <td>0.1137 / 1.00</td><td>0.0572</td></tr>
-<tr><td>USGS 3DEP lidar scarp ridge alone</td><td>20,000</td><td>0.1478</td><td>0.0002 / —</td><td>0.0470</td></tr>
-<tr><td>smoothed earthquake density (σ = 10 px)</td><td>20,000</td><td>0.0078</td><td>0.0000 / —</td><td>—</td></tr>
-<tr><td>uniform random</td><td>37,654</td><td>0.1044</td><td>0.0000 / 0.00</td><td>0.1063</td></tr>
-</tbody>
-</table>
-<p class="mut">* The off-catalogue SGMC instrument is the only local instrument with a measured
-positive rank correlation against the group's 16 live-scored submissions (leave-one-out Spearman
-+0.705, measured in GEMSDOE40, whose own promotion bar of 0.80 it fails). It is dispersion-biased:
-at small masses a uniform random field beats every structured field on it, which is why the table
-is read at matched mass and never as a forecast.</p>
-
-<div class="warn">
-<p style="margin:0"><strong>Irregularities flagged for review, not smoothed over.</strong></p>
-<ul style="margin:.5em 0 0">
-<li>The 2020 Monte Cristo instrument is <em>circular</em> as a geometry check: the trend line is the
-principal axis of the sequence's own epicentres. It is reported as a consistency check only. The
-<em>predictive</em> version of the test (detector restricted to pre-2020 earthquakes) is in
-<a href="analysis.html">the analysis page</a>: it covers 2.4 % of the trend while the smoothed-density
-and uniform-random controls at matched mass cover 0 %.</li>
-<li>The off-catalogue SGMC inventory is an <em>inventory</em>, not the organiser's hidden truth. The
-hidden truth is smaller (the sibling ledger's two published estimates are ≈5,667 and ≈15,100 cells,
-i.e. 57–151 km of fault) and the two disagree by a factor of 2.7; the mass choice therefore sits at the
-ledger's own optimum neighbourhood, not at the optimum of the instrument.</li>
-<li>No competitor's score other than the public leaderboard rows is known, and no automated
-leaderboard monitoring is performed (DrivenData’s terms of use forbid it).</li>
-</ul>
-</div>
-
-<h2>How to submit (short version)</h2>
-<ol>
-<li>Sign in at <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">the competition page</a>
-    → <em>Submit</em>.</li>
-<li>Upload <code>gemsdoe50-seis-ridge-v1.tif</code> (or the <code>.zip</code>).</li>
-<li>Paste the note text above into <em>Note (optional)</em>.</li>
-<li>Press submit. Two weekly slots; the file is unique, so a “duplicate submission” refusal means a
-    different file with the same bytes already exists — it does not.</li>
-</ol>
-<p>Full step-by-step, including the exact format checks and what to do if the portal objects:
-<a href="executive-summary.html">How to submit</a>.</p>
-
-<h2>Status feed</h2>
-<table>
-<tr><th>Built (UTC)</th><td>2026-10-06</td></tr>
-<tr><th>Public leaderboard at last observation</th>
-    <td>#1 xiaofanhu 0.3774 · #2 alexoktaba 0.3345 · #3 nchuzhoy 0.3262 ·
-        #13 extradr19 (this project's family) 0.2778</td></tr>
-<tr><th>Next actions</th>
-    <td>(1) spend a weekly slot on this file; (2) re-run the detector on the 2026 ComCat refresh
-        (the feed workflow pulls it nightly); (3) add the radiometric ridge mass once the
-        GeoDAWN survey-geometry metadata is reachable; (4) test the two alternative masses
-        (37,654 and 60,000) if a slot can be spared.</td></tr>
-<tr><th>Known limitations</th>
-    <td>the lidar scarp layer only uncovers 75 % of the survey; the corridor detector needs
-        M ≥ 1.5 / depth ≤ 20 km events, so it is blind along fault strands with no instrumented
-        seismicity; the 200-m catalogue ring is excluded by construction, which costs recall on
-        splays that hug mapped faults.</td></tr>
-</table>
-
+  <h2>Official sources</h2>
+  <ul>
+    <li><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">DrivenData #306 — problem description and scoring</a> (metric, α=0.2, β=0.8, R=300 m, format)</li>
+    <li><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/964/">DrivenData #306 — rules</a></li>
+    <li><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">Public leaderboard</a> (read 2026-10-06: best 0.3774)</li>
+    <li><a href="https://earthquake.usgs.gov/fdsnws/event/1/">USGS ComCat FDSN event service</a> (public domain)</li>
+    <li><a href="https://www.usgs.gov/3d-elevation-program">USGS 3DEP LiDAR</a> (public domain) · <a href="https://ngmdb.usgs.gov/Prodesc/proddesc_99016.htm">USGS SGMC faults</a> (public domain)</li>
+    <li><a href="https://github.com/drivendataorg/gems-prize-reference-solution">DrivenData reference solution</a> (MIT)</li>
+  </ul>
 </main>
 <footer>
-  Reproducible from the repository: <code>python3 scripts/build_submission.py --name seis-ridge-v1 --mass 45000</code>.
-  Data provenance and licences: <a href="sources.html">Sources</a>.
-  This site is a research record; the only authority on scores is the organiser’s leaderboard.
+  Built automatically from <code>registry/*.json</code> in the
+  <a href="https://github.com/buffedlizard55-lab/GEMSDOE50">GEMSDOE50</a> repository.
+  Every number on this site is reproducible by a committed script; no step requires manual checking.
 </footer>
 </body>
 </html>

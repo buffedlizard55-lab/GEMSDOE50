@@ -1,0 +1,22 @@
+{
+ "n_dots": 44727,
+ "footprint_px": 5167373,
+ "dots_within_200m_of_catalogue": 3122,
+ "dots_within_300m_of_catalogue": 4455,
+ "median_distance_to_catalogue_px": 19.4164878389476,
+ "expected_credit_total": 6939.7021484375,
+ "expected_credit_per_dot": 0.15515688842170278,
+ "nn_median_px": 3.0,
+ "nn_p10_px": 3.0,
+ "belief_sum": 13833.0,
+ "target_score": 0.28,
+ "w_struct": 0.6,
+ "w_seis": 0.25,
+ "g_est": 13833,
+ "emitted_at_2026": "2026-10-06T20:45:36Z",
+ "n_dots_shipped": 44709,
+ "n_dots_dropped_by_domain_clip": 18,
+ "path": "/tmp/gems50/submission_r2.tif",
+ "bytes": 193214,
+ "sha256": "79e260ae223d7dfd96413da28a9c6fed30107285ab843795181a5c9e5dff7262"
+}

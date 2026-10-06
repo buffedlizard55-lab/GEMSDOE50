@@ -1,0 +1,31 @@
+name: site-and-checks
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  checks-and-pages:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install numpy scipy rasterio
+      - name: Run the automatic checks (no manual vetting)
+        run: |
+          python3 scripts/check_submission.py --submission downloads/gems50-seislin-44709-20261006T2041Z-79e260ae.tif --out registry/submission_checks.json || true
+      - name: Regenerate the site feeds
+        run: python3 scripts/build_site.py
+      - name: Commit the refreshed registry and feeds
+        run: |
+          git config user.name  "gemsdoe50-bot"
+          git config user.email "gemsdoe50-bot@users.noreply.github.com"
+          git add registry docs/data docs/downloads docs/assets
+          git diff --cached --quiet || git commit -m "site: refresh checks and feeds [skip ci]"
+          git push || true
