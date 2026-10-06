@@ -31,7 +31,9 @@ from scipy.ndimage import distance_transform_edt
 REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO / "src"))
 
-from gems50 import catalog as gcat, emission, grid, lineation, metric  # noqa: E402
+from gems50 import catalog as gcat, emission, lineation  # noqa: E402
+from gems50 import dti as metric  # noqa: E402
+from gems50 import grid_io as grid  # noqa: E402
 
 CUTOFF = pd.Timestamp("2020-05-15", tz="UTC")
 MC_POINT = (425569.0, 4224896.0)  # USGS epicentre of the 2020-05-15 Mw 6.5 event

@@ -120,3 +120,35 @@ python3 scripts/validate_submission.py            # scores the exact file on bot
 repository; nothing relies on manual inspection. Scores on the private leaderboard are
 unknown to this project, and none of the numbers above is presented as a leaderboard
 score.*
+
+---
+
+## Second submission on this branch — seismicity-first (unique TIF, 45,000 dots)
+
+Built from a *different evidence stream* than the release above, and shipped as its own file:
+
+**Submit:** [`docs/downloads/gemsdoe50-seis-ridge-v1.tif`](docs/downloads/gemsdoe50-seis-ridge-v1.tif)
+· zip twin `…-v1.zip` · [what it is](docs/seis-ridge.html) · [how to submit](docs/executive-summary.html)
+· [analysis](docs/analysis.html) · [hypotheses](docs/hypotheses.html) · [sources](docs/sources.html)
+
+| item | value |
+|---|---|
+| SHA-256 | `5cad91ac7580db912ebac0cf352cce56d713e99ad53f596a57f714f51636d3c9` |
+| content | 45,000 cells = 1.0, every cell of the grid finite, min 0.0, max 1.0, **no NaN and no nodata tag** (the zero-outside encoding cannot trip the “Predicted values must be in range [0, 1]” validator) |
+| method | decluster → DBSCAN in (x, y, 3 km/yr·t) → recursive 2-means splitting until the minor-axis σ ≤ 600 m → λ₁/λ₂ ≥ 3 at Monte-Carlo p < 0.01 → thin axes + curved spines + 300 m gap bridges → **snapped to the USGS 3DEP 1 m lidar scarp ridge** → ≥300 m exclusion around the given catalogue |
+| mass | 45,000 cells, the family ledger’s operating neighbourhood; the full 25,000→79,977 sweep is in `evidence/build_seis-ridge-v1.json` |
+| uniqueness | max \|Pearson r\| **0.043**, max Jaccard **0.026** against **119** retrievable prior rasters (`evidence/uniqueness_seis-ridge-v1.json`) |
+| predictive gate | with **only pre-2020 earthquakes**, the corridor field is the only field covering any of the 2020 Monte Cristo rupture trend (2.4 %); smoothed density σ=10/20 px and uniform random at matched mass cover **0 %** (`evidence/falsification_test.json`) |
+| honest range | the family’s own saturating instrument reads 0.267–0.312 for this file (implied live ≈0.27–0.40); **no organiser score exists for it** |
+
+Reproduce: `PYTHONPATH=src python3 scripts/build_seisridge.py --name seis-ridge-v1 --mass 45000`
+
+### Metric correction found while integrating the two releases [MEASURED]
+
+`gems50.metric.score` queried each prediction against its *nearest* truth pixel and took the
+per-truth maximum over that subset, instead of the published rule
+`TP_w = Σ_g max_x p(x)·k(d(x,g))` over every prediction inside the kernel. That under-counted
+`TP_w` by **53 %** and `DTI` by **0.040 absolute** on this repository’s own 44,709-dot
+submission (0.0358 → **0.0760**, `evidence/metric_bug_impact.json`). The implementation is fixed,
+`tests/test_cross_metric.py` now asserts that two independently written implementations agree on
+random cases and on the real grids, and the whole suite passes (40 tests).

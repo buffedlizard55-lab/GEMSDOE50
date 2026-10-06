@@ -37,11 +37,11 @@
  },
  "mass": 45000,
  "uniqueness": {
-  "n_prior_rasters_compared": 118,
-  "max_abs_pearson": 0.03333738686694264,
-  "max_abs_pearson_file": "gems32-bayesopt-dilation-scarp-d28-20261004-nan.tif",
-  "max_jaccard": 0.021322953665982,
-  "max_jaccard_file": "gems32-bayesopt-dilation-scarp-d28-20261004-nan.tif",
+  "n_prior_rasters_compared": 119,
+  "max_abs_pearson": 0.043037354149540165,
+  "max_abs_pearson_file": "gems50-seislin-44709-20261006T2041Z-79e260ae.tif",
+  "max_jaccard": 0.026348305608310644,
+  "max_jaccard_file": "gems50-seislin-44709-20261006T2041Z-79e260ae.tif",
   "is_unique_by_correlation": true,
   "is_unique_by_jaccard": true
  },

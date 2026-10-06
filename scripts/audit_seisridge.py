@@ -25,9 +25,13 @@ import rasterio
 REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO / "src"))
 
-from gems50 import emission, grid, metric  # noqa: E402
+from gems50 import emission  # noqa: E402
+from gems50 import dti as metric  # noqa: E402
+from gems50 import grid_io as grid  # noqa: E402
 
 PRIOR_GLOBS = [
+    "docs/downloads/*.tif",          # this repository (including the sibling session's file)
+    "downloads/*.tif",
     "/tmp/ref/*/docs/downloads/*.tif",
     "/tmp/ref/*/docs/research/quarantine/*.tif",
     "/tmp/ref/*/data/bridge/*.tif",

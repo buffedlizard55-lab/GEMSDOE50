@@ -32,6 +32,7 @@ footer{color:var(--mut);font-size:.88rem;border-top:1px solid var(--line);paddin
   <nav>
     <a href="./">Home</a>
     <a href="how-to-submit.html">How to submit</a>
+    <a href="seis-ridge.html">Seismicity submission</a>
     <a href="report.html">Report</a>
     <a href="data/feed.json">Feed</a>
     <a href="data/no_manual_check.json">Auto-check</a>
@@ -47,6 +48,17 @@ footer{color:var(--mut);font-size:.88rem;border-top:1px solid var(--line);paddin
     <p class="sub" style="margin-top:8px">sha256 <code>79e260ae223d7dfd96413da28a9c6fed30107285ab843795181a5c9e5dff7262</code> · 193,214 bytes · the .zip holds the identical file.</p>
   </div>
 
+  <div class="card">
+    <h3 style="margin:0 0 6px">Second, independent submission — seismicity-first (this branch)</h3>
+    <p class="sub" style="margin:0 0 8px">A different file built from a different evidence stream:
+      OADC-style inertia-tensor lineation corridors extracted from the official USGS ComCat
+      catalogue (222,939 events, declustered) and snapped to the USGS 3DEP 1 m lidar scarp ridge.
+      45,000 dots, <strong>zeros everywhere else — no NaN, no nodata tag</strong>.
+      Unique against 119 prior rasters (max |r| 0.043, max Jaccard 0.026).</p>
+    <a class="btn" href="downloads/gemsdoe50-seis-ridge-v1.tif" download>Download gemsdoe50-seis-ridge-v1.tif</a>
+    <a class="btn alt" href="seis-ridge.html">What it is and why</a>
+    <a class="btn alt" href="downloads/checks-gemsdoe50-seis-ridge-v1.tif.json">Format receipt</a>
+  </div>
   <h2>Why this file is different from every earlier artifact</h2>
   <ul>
     <li><b>Uniqueness gate:</b> compared pixel-by-pixel against all 50 prior submissions that share this grid — no matching hash, maximum overlap 0.36, at least 47 % of dots are more than 200 m from any dot of the closest prior file. Detail: <a href="data/no_manual_check.json">auto-check</a>.</li>

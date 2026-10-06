@@ -28,7 +28,7 @@ import numpy as np
 import rasterio
 from rasterio.transform import Affine
 
-from . import grid as gridmod
+from . import grid_io as gridmod
 
 
 @dataclass

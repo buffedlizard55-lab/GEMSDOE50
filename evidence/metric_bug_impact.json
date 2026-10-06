@@ -1,0 +1,30 @@
+{
+ "metric": "fixed: TP_w = sum_g max_x p(x) k(d(x,g)) over all predictions in the kernel",
+ "truth": "labels.tif (the given catalogue raster)",
+ "files": {
+  "gems50-seislin-44709-20261006T2041Z-79e260ae.tif": {
+   "mass": 44709,
+   "dti_fixed": 0.07602649481773387,
+   "tp_w_fixed": 4423.616015624538,
+   "tp_w_old_rule": 2066.454886336486,
+   "tp_w_understated_by": 2357.1611292880516,
+   "tp_w_relative_error_old": 0.5328584400097985,
+   "dti_old_rule": 0.035805239172447205,
+   "dti_absolute_correction": 0.04022125564528666,
+   "fp_w": 42550.33198643233,
+   "fn_w": 56564.38398437546
+  },
+  "gemsdoe50-seis-ridge-v1.tif": {
+   "mass": 45000,
+   "dti_fixed": 0.0,
+   "tp_w_fixed": 0.0,
+   "tp_w_old_rule": 0.0,
+   "tp_w_understated_by": 0.0,
+   "tp_w_relative_error_old": null,
+   "dti_old_rule": 0.0,
+   "dti_absolute_correction": 0.0,
+   "fp_w": 45000.0,
+   "fn_w": 60988.0
+  }
+ }
+}
