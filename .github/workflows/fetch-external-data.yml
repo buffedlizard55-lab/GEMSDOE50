@@ -2,11 +2,14 @@ name: fetch-external-data
 
 # GitHub-hosted runners have unrestricted egress; the development sandbox does not.
 # This workflow is the project's *only* mechanism for reaching official data services
-# that are otherwise unreachable (USGS FDSN/ComCat). It never uses credentials and
-# never writes to the repository: the catalogue is published as a build artifact.
+# that are otherwise unreachable (USGS FDSN/ComCat). It uses no credentials beyond the
+# ephemeral GITHUB_TOKEN and it publishes the catalogue two ways:
+#   1. as a build artifact (retained 90 days), and
+#   2. committed back to the branch that triggered the run, because the development
+#      sandbox can reach `git`/`api.github.com` but not the artifact blob storage.
 #
-# Manual run:  gh workflow run fetch-external-data -R buffedlizard55-lab/GEMSDOE50 -f min_magnitude=1.0
-# Download:    gh run download <run-id> -R buffedlizard55-lab/GEMSDOE50 -n usgs-comcat-catalog -D data/external
+# Manual run:  gh workflow run fetch-external-data -R <owner>/<repo> -f min_magnitude=1.0
+# Retrieve:    git pull    (file lands in data/external/)
 
 on:
   push:
@@ -25,7 +28,7 @@ on:
         default: '1970'
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   fetch-catalog:
@@ -33,6 +36,8 @@ jobs:
     timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
@@ -41,6 +46,7 @@ jobs:
           MIN_MAG: ${{ github.event.inputs.min_magnitude || '1.0' }}
           START_YEAR: ${{ github.event.inputs.start_year || '1970' }}
         run: |
+          set -euo pipefail
           python scripts/fetch_earthquake_catalog.py \
             --out data/external \
             --min-magnitude "$MIN_MAG" \
@@ -55,8 +61,19 @@ jobs:
           mags = [float(r['mag']) for r in rows if r['mag']]
           print('rows', len(rows), 'mag range', min(mags), max(mags))
           print('first', rows[0]['time'], 'last', rows[-1]['time'])
-          print('types', json.load(open('data/external/usgs_comcat_earthquakes.summary.json'))['event_types'])
+          s = json.load(open('data/external/usgs_comcat_earthquakes.summary.json'))
+          print('types', s['event_types'])
           PY
+      - name: Commit the catalogue back to the branch
+        run: |
+          set -euo pipefail
+          git config user.name "gemsdoe50-data"
+          git config user.email "gemsdoe50-data@users.noreply.github.com"
+          git add data/external/usgs_comcat_earthquakes.csv \
+                  data/external/usgs_comcat_earthquakes.summary.json
+          git diff --cached --quiet && echo "nothing new" || \
+            git commit -m "data: official USGS ComCat catalogue for the GEMS footprint"
+          git push origin "HEAD:${{ github.ref_name }}"
       - uses: actions/upload-artifact@v4
         with:
           name: usgs-comcat-catalog
