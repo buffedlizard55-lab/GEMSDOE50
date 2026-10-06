@@ -98,6 +98,10 @@ def main() -> int:
         "leaderboard irregularity and non-use are documented",
         "unintended automated request" in README and "no rows/scores were saved or used" in README,
     )
+    check(
+        "blocked H50-S1 dispatch is documented without claiming a run",
+        "HTTP 403" in README and "no job ran and no data was fetched" in README,
+    )
 
     if failures:
         print("\nFailed guardrails:", ", ".join(failures))

@@ -41,6 +41,8 @@ Known mapped-label buffers and the frozen spatial holdout remain in force. Faili
 
 These source checks establish that some licensed screening layers exist; they do **not** establish that all relevant 2008–2023 mining or injection activity is represented. None of these files has been downloaded into the H50-S1 run inputs.
 
-## Irregularity note
+## Irregularity and execution note
 
 A single unintended automated request to the DrivenData leaderboard page occurred during prior research. No rows or scores were saved to the repository or used in analysis or artifact creation. No further automated access will be made; all score context remains as user-reported historical context, not a fresh official claim.
+
+A manual H50-S1 workflow dispatch was attempted on the fixed Arena branch after pushing the reviewed code. GitHub returned HTTP 403, `Resource not accessible by integration`, so no job started, no catalog or raster inputs were acquired, and no DTI/TIFF was produced. Push, PR creation, and automated PR checks succeeded. The connected GitHub integration needs Actions workflow-dispatch permission before this research-only runner can be retried; no credentials were requested or stored.
