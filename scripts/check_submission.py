@@ -41,7 +41,9 @@ LABELS = Path("/tmp/gems_work/labels.tif")
 #: directories holding *submission artifacts* (never raw data rasters: a continuous
 #: data field has a positive value nearly everywhere and would trivially "cover"
 #: every dot, which would say nothing about whether the submission is unique).
-CORPUS_DIRS = [
+import os
+
+CORPUS_DIRS = [Path(p) for p in os.environ.get("GEMS50_CORPUS", "").split(":") if p] or [
     Path("/tmp/gems_work/scored"),
     Path("/tmp/scratch/ref/GEMSDOE32/docs/downloads"),
     Path("/tmp/scratch/ref/GEMSDOE30/docs/downloads"),
@@ -137,7 +139,10 @@ def main() -> int:
     if not corpus:
         print("corpus: not available in this environment — uniqueness gate recorded as SKIPPED")
         Path(args.out).write_text(json.dumps({"format": checks, "uniqueness": {
-            "verdict": "SKIPPED", "reason": "prior artifacts not present in this environment"}}, indent=1))
+            "verdict": "SKIPPED", "verdict_unique": None,
+            "my_sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+            "my_dots": checks.get("positive_px"),
+            "reason": "prior artifacts not present in this environment"}}, indent=1))
         return 0 if checks["all_checks_pass"] else 1
     print(f"corpus: {len(corpus)} prior artifacts with matching grid")
     uniq = {"n_prior": len(corpus), "identical_sha256": [], "max_iou": 0.0,

@@ -71,7 +71,7 @@ jobs:
           git config user.email "gemsdoe50-data@users.noreply.github.com"
           # the raw CSV is ~43 MB; the repository keeps the gzip (about a quarter of
           # that) and the JSON summary, and the CSV is never committed.
-          gzip -9 -k -f data/external/usgs_comcat_earthquakes.csv
+          gzip -9 -n -k -f data/external/usgs_comcat_earthquakes.csv
           git add data/external/usgs_comcat_earthquakes.csv.gz \
                   data/external/usgs_comcat_earthquakes.summary.json
           git diff --cached --quiet && echo "nothing new" || \

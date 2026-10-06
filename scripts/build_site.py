@@ -51,7 +51,10 @@ def main() -> int:
         "sha256": sha,
         "format": checks.get("format") if checks else None,
         "uniqueness": {k: v for k, v in (checks.get("uniqueness") or {}).items() if k != "corpus_entries"} if checks else None,
-        "verdict": "PASS" if checks and checks["format"]["all_checks_pass"] and checks["uniqueness"]["verdict_unique"] else "UNKNOWN",
+        "verdict": ("PASS" if checks["format"]["all_checks_pass"]
+                    and checks["uniqueness"].get("verdict_unique")
+                    else "SKIPPED (prior-artifact corpus not present here)"
+                    if checks["uniqueness"].get("verdict") == "SKIPPED" else "UNKNOWN") if checks else "UNKNOWN",
         "checked_by": "scripts/check_submission.py",
     }, indent=1))
 
