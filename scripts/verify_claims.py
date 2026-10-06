@@ -103,6 +103,29 @@ def main() -> int:
         "HTTP 403" in README and "no job ran and no data was fetched" in README,
     )
 
+    marker_paths = [
+        "README.md", "index.html", "results.html", "methods.html", "submission.html",
+        "docs/index.html", "docs/executive-summary.html", "docs/how-to-submit.html",
+        "docs/methods.html", "registry/sources.json", "registry/submissions.json",
+        "registry/claims.json", "registry/hypotheses.json", "docs/data/feed.json",
+        "docs/pass3-review-20261006.md",
+    ]
+    marker_hits = []
+    for rel in marker_paths:
+        path = ROOT / rel
+        if not path.exists():
+            continue
+        text = path.read_text(encoding="utf-8")
+        for token in ("<<<<<<< ", ">>>>>>> ", "\n=======\n"):
+            if token in text:
+                marker_hits.append(f"{rel}:{token.strip()}")
+    check(
+        "no unresolved merge-conflict markers in hand-merged text files",
+        not marker_hits,
+    )
+    if marker_hits:
+        print("     markers:", ", ".join(marker_hits[:8]))
+
     if failures:
         print("\nFailed guardrails:", ", ".join(failures))
         return 1

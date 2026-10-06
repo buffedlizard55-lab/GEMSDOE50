@@ -75,6 +75,11 @@
   official bytes; matching hashes establish consistency with the bridge manifest, not organizer provenance.
 
 
+- **Pass-3 re-check (2026-10-06).** Every clause of the original request is mapped to an artifact in
+  [`docs/pass3-review-20261006.md`](docs/pass3-review-20261006.md), together with the defects found in
+  Pass 2/3, the remaining work, and the limitations. The 5 ranked *untried* hypotheses now also appear
+  as a card on the executive-summary page (rank, layers, signature, why the catalogue can miss the
+  fault, difference from what is implemented, cost, expected gain, and the slot rule).
 
 ## Executive summary and submission instructions
 
@@ -146,26 +151,23 @@ The manually dispatched [H50-S1 research workflow](.github/workflows/h50s1-resea
 
 ## Open gates / next actions
 
-<<<<<<< HEAD
 1. **Manual owner decision** on whether to spend one of the three weekly slots on the H51 file. Nothing is
-   uploaded by this repository.
+   uploaded by this repository: H51 has an artifact and local proxy evidence, but no organizer score.
 2. If a slot is spent, record the returned score and the portal receipt next to the pinned sha256; never
    restate proxy numbers as official.
 3. **Top untried candidate (H52-A: scarp-profile matched filter with drainage-deflection corroboration)**
    must pass its own preregistration and the same spatially blocked test
    ([`scripts/validate_h51_holdout.py`](scripts/validate_h51_holdout.py)) before it can be considered for a
-   slot. The ranked list is in [`docs/h51-candidates.md`](docs/h51-candidates.md).
-4. **H50-S1 stays blocked** on egress to Zenodo; the dispatch-only workflow remains the auditable
-   acquisition route.
+   slot. The ranked list is in [`docs/h51-candidates.md`](docs/h51-candidates.md) and in the site's
+   executive-summary card.
+4. **H50-S1 stays blocked.** The fixed-branch dispatch-only workflow returns HTTP 403 in this repository, so
+   the Nevada catalog still needs an auditable acquisition route; the hypothesis itself is unchanged and
+   unimplemented, and no H50-S1 DTI or raster is claimed.
 5. Re-verify the large snapshot-excluded input stack (`/home/user/.arena/inputs/`) before any rebuild; the
    build regenerates deterministically from those pinned bytes
    (`python scripts/build_h51.py`, then `scripts/verify_h51_raster.py`, `scripts/uniqueness_h51.py`,
    `scripts/mc_sensitivity_h51.py`, `scripts/validate_h51_holdout.py`,
    `scripts/update_registries_h51.py`, `python scripts/build_h50_site.py`).
-=======
-1. Dispatch the fixed-branch `H50-S1 preregistered research run` workflow to retrieve and verify the catalog, comparison rasters, and competition mirrors; raw inputs stay in ignored runner scratch.
-2. Review the event-count, depth/magnitude irregularity, input provenance, and spatial-coverage audit; stop if relocated points do not overlap the valid footprint adequately.
-3. Compute the frozen fold-wise DTI, 16-block bootstrap, fixed incumbent, both smoothed-density maps, and matched translation/year-shuffle controls. Regardless of numeric outcome, H50-S1 remains NO SLOT until formal aftershock declustering, mine/injection-site screening, and uncertainty-calibrated output width are resolved.
-4. Independently re-open and byte-validate any generated unique GeoTIFF, update the static executive-summary/results/submission pages, and review source licenses, attribution, limitations, and AI disclosure.
-5. Open/review a PR from the fixed Arena branch; merge only if the report, artifact, site, evidence, and source/confound controls agree. No upload is performed by this repository.
->>>>>>> origin/main
+6. Any next iteration must independently re-open and byte-validate its GeoTIFF, refresh the
+   executive-summary/results/submission pages, and re-check source licenses, attribution, limitations, and
+   the AI-use disclosure before a slot is spent.
