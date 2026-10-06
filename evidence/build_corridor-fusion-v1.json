@@ -1,0 +1,180 @@
+{
+ "name": "corridor-fusion-v1",
+ "built_utc": "2026-10-06T21:08:21Z",
+ "seconds": 60.3,
+ "grid": {
+  "width": 3292,
+  "height": 3730,
+  "crs": "EPSG:32611",
+  "pixel_m": 100,
+  "transform": [
+   100.0,
+   0.0,
+   243350.0,
+   0.0,
+   -100.0,
+   4508550.0
+  ]
+ },
+ "mass": 41473,
+ "placement": {
+  "ring_px": [
+   1,
+   4
+  ],
+  "ring_share": 0.3,
+  "suppression_px": 4,
+  "n_ring_dots": 11483,
+  "n_deep_dots": 29244,
+  "n_core_dots": 1485,
+  "n_mc_spine_dots": 49,
+  "n_new_core_dots": 1307
+ },
+ "instruments": {
+  "cat_all": {
+   "credit_per_px": 0.1908568239371133,
+   "tpw": 7915.405059143901,
+   "dti": 0.13629802441245603,
+   "truth_px": 60988,
+   "covered_frac": 0.12978627039981472
+  },
+  "sgmc_off": {
+   "credit_per_px": 0.1991968838977165,
+   "tpw": 8261.292365889996,
+   "dti": 0.14089360114680335,
+   "truth_px": 61664,
+   "covered_frac": 0.13397269664455755
+  },
+  "ring": {
+   "credit_per_px": 1.971151262665463,
+   "tpw": 81749.55631652474,
+   "dti": 0.19251735314505336,
+   "truth_px": 503394,
+   "covered_frac": 0.16239676340306947
+  },
+  "all_valid": {
+   "credit_per_px": 8.598846259728228,
+   "tpw": 356619.9509297088,
+   "dti": 0.08480406452747441,
+   "truth_px": 5167373,
+   "covered_frac": 0.06901378145717539
+  }
+ },
+ "sweep": {
+  "25000": {
+   "n_dots": 23509,
+   "n_ring": 7500,
+   "n_deep": 15677,
+   "n_core": 1388,
+   "c_deep_sgmc": 0.29265679983240256,
+   "implied_dti": {
+    "G=5667": 0.6136,
+    "G=15100": 0.41
+   }
+  },
+  "30000": {
+   "n_dots": 26742,
+   "n_ring": 9000,
+   "n_deep": 18031,
+   "n_core": 1368,
+   "c_deep_sgmc": 0.28459100193846054,
+   "implied_dti": {
+    "G=5667": 0.5735,
+    "G=15100": 0.4367
+   }
+  },
+  "37654": {
+   "n_dots": 31429,
+   "n_ring": 11296,
+   "n_deep": 21433,
+   "n_core": 1346,
+   "c_deep_sgmc": 0.2759580965712371,
+   "implied_dti": {
+    "G=5667": 0.5238,
+    "G=15100": 0.4722
+   }
+  },
+  "45000": {
+   "n_dots": 35570,
+   "n_ring": 13500,
+   "n_deep": 24391,
+   "n_core": 1334,
+   "c_deep_sgmc": 0.2688156485036434,
+   "implied_dti": {
+    "G=5667": 0.4865,
+    "G=15100": 0.4982
+   }
+  },
+  "55000": {
+   "n_dots": 40900,
+   "n_ring": 16500,
+   "n_deep": 28167,
+   "n_core": 1308,
+   "c_deep_sgmc": 0.2635334989462484,
+   "implied_dti": {
+    "G=5667": 0.4457,
+    "G=15100": 0.532
+   }
+  },
+  "70000": {
+   "n_dots": 48346,
+   "n_ring": 21000,
+   "n_deep": 33415,
+   "n_core": 1283,
+   "c_deep_sgmc": 0.2550526551925706,
+   "implied_dti": {
+    "G=5667": 0.399,
+    "G=15100": 0.567
+   }
+  },
+  "90000": {
+   "n_dots": 57749,
+   "n_ring": 27000,
+   "n_deep": 39908,
+   "n_core": 1241,
+   "c_deep_sgmc": 0.24287591905702663,
+   "implied_dti": {
+    "G=5667": 0.3524,
+    "G=15100": 0.5936
+   }
+  }
+ },
+ "chosen_mass": 52000,
+ "layers": {
+  "terrain": {
+   "layer": "USGS 3DEP 1 m DEM scarp descriptors (step_max, lapneg_max, coh100)",
+   "transform": "sqrt(step_max)*(1+lapneg_max)*coh100, max over 12 orientations of a 15 px oriented mean, min-max normalised over lidar coverage",
+   "source": "GEMSDOE24 data/external/lidar_scarp_features_u8.tif from official 3DEP 1 m tiles; USGS, no use restrictions"
+  },
+  "radiometric": {
+   "layer": "GeoDAWN airborne radiometrics K/Th/U/TC (USGS 22103)",
+   "source": "https://doi.org/10.5066/P93LGLVQ (USGS, public domain)",
+   "transform": "sum of |grad| over the four channels (sigma 2 px), max over 12 orientations of a 15 px oriented mean, normalised over coverage"
+  },
+  "seismicity": {
+   "events_in_survey": 18142,
+   "triangle_filter_kept": 17795,
+   "triangle_area_threshold_km2": 0.0,
+   "n_clusters": 28,
+   "n_spines": 37,
+   "n_connectors": 3,
+   "hough_spans": 1129,
+   "core_support_cells": 30361,
+   "seconds": 14.9,
+   "paper": "Ouillon & Sornette 2011 (doi:10.1029/2010JB007752) tetrahedra-randomisation test, reduced here to 2-D triangle areas (our own adaptation, unverified against a 3-D implementation)"
+  },
+  "monte_cristo": {
+   "events_used": 20570,
+   "azimuth_deg": 11.06191678108317,
+   "half_length_m": 14000,
+   "spine_cells": 276,
+   "source": "USGS ComCat sequence of the 2020-05-15 Mw 6.5 Monte Cristo earthquake"
+  }
+ },
+ "sources": [
+  "https://community.drivendata.org/t/scoring-clarification-are-known-usgs-ingenious-faults-masked-when-scoring-and-are-they-in-the-final-round-label-set/11516/4",
+  "https://pangea.stanford.edu/ERE/db/GeoConf/papers/SGW/2025/Hermant.pdf",
+  "https://gdr.openei.org/submissions/1391",
+  "https://doi.org/10.5066/P93LGLVQ"
+ ]
+}

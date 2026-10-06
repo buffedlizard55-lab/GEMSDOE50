@@ -244,3 +244,34 @@ def audit_submission(path: str | Path) -> dict:
         and info["values_in_unit_interval"] and info["all_finite"]
     )
     return info
+
+
+def thin_support(support: np.ndarray, priority: np.ndarray, spacing_px: int) -> np.ndarray:
+    """Greedily thin a support so that kept cells are >= spacing_px apart.
+
+    Dots closer than the kernel radius compete for the same truth pixels, so every
+    extra dot in a dense corridor only pays the metric tax (0.2 per dot).  The
+    family's own derivation (credit per dot = s(1 - s/12) for spacing s) puts the
+    optimum at s = 6 px; s = 4 is where this build's measured credit/dot curve was
+    still flat, so 4 px is used as the conservative operating point.
+    """
+    h, w = support.shape
+    flat = np.where(support, np.asarray(priority, dtype=np.float32), -1.0).ravel()
+    part = np.argpartition(-flat, min(flat.size - 1, 400_000))[:400_000]
+    order = part[np.argsort(-flat[part], kind="stable")]
+    order = order[flat[order] > 0.0]
+    taken = np.zeros(flat.size, bool)
+    r2 = spacing_px * spacing_px
+    for idx in order:
+        r, c = divmod(int(idx), w)
+        hit = False
+        for rr in range(max(0, r - spacing_px), min(h - 1, r + spacing_px) + 1):
+            dr = rr - r
+            span = int(np.floor(np.sqrt(max(r2 - dr * dr, 0))))
+            lo, hi = max(c - span, 0), min(c + span, w - 1)
+            if taken[rr * w + lo: rr * w + hi + 1].any():
+                hit = True
+                break
+        if not hit:
+            taken[idx] = True
+    return taken.reshape(h, w)

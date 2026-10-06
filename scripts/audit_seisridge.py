@@ -39,13 +39,19 @@ PRIOR_GLOBS = [
 ]
 
 
-def prior_files(exclude: Path) -> list[Path]:
+def prior_files(exclude: Path, also_exclude: tuple[str, ...] = ()) -> list[Path]:
+    """All retrievable prior TIFs except the file under test and named siblings.
+
+    ``also_exclude`` exists so that the *other* artifact built by this same session
+    (a superseded candidate, or the sibling session's file) is not mistaken for a
+    prior submission when the uniqueness gate is reported.
+    """
     seen, out = set(), []
     for pat in PRIOR_GLOBS:
         for f in glob.glob(pat):
             p = Path(f)
             try:
-                if p.resolve() == exclude.resolve() or p.name in seen:
+                if p.resolve() == exclude.resolve() or p.name in seen or p.name in also_exclude:
                     continue
             except OSError:
                 continue
@@ -58,6 +64,7 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("tif")
     ap.add_argument("--out", default=None)
+    ap.add_argument("--exclude", default="", help="comma-separated basenames to skip (own artifacts)")
     args = ap.parse_args()
     tif = Path(args.tif)
     g = grid.load_grid()
@@ -72,7 +79,8 @@ def main() -> int:
 
     max_r, max_r_file, max_j, max_j_file = 0.0, None, 0.0, None
     n_priors = 0
-    for f in prior_files(tif):
+    drop = tuple(x.strip() for x in args.exclude.split(",") if x.strip())
+    for f in prior_files(tif, also_exclude=drop):
         try:
             with rasterio.open(f) as s:
                 if (s.height, s.width) != g.shape or s.count != 1:

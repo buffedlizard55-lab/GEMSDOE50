@@ -1,95 +1,119 @@
 {
- "cutoff": "2020-05-15 00:00:00+00:00",
- "events_before_cutoff": 74147,
- "events_before_cutoff_within_40km": 1207,
- "n_clusters": 69,
- "n_spines": 127,
- "monte_cristo_truth_px": 276,
+ "protocol": "(fixed before the run, no tuning on the outcome)\n  1. Build the earthquake catalogue from the official USGS ComCat export and keep ONLY\n     events strictly before 2020-05-15 -- i.e. the detector never sees the Monte Cristo\n     sequence, the earthquake whose rupture is used as the positive test.\n  2. Run the shipped detector on those events: 2-D Ouillon-Sornette triangle-area\n     declustering, DBSCAN clusters in (x, y, 3 km/yr*t), recursive 2-means splitting to\n     minor-axis sigma <= 600 m, corridor axes + spines + gap connectors, thinned to one\n     dot every 400 m so that no two dots compete for the same 300 m kernel.\n  3. Build the controls from the SAME event set at the SAME emitted mass: smoothed\n     earthquake density (sigma = 10 and 20 px), uniform random inside the footprint, and\n     the provided catalogue raster itself (reference, not a control).\n  4. Score every field on three truths: the 2020 Monte Cristo rupture trend (a real,\n     uncatalogued rupture -- the pre-registered positive), the USGS SGMC faults the\n     provided catalogue does not contain, and the provided catalogue itself.",
+ "cutoff_utc": "2020-05-15 00:00:00+00:00",
+ "pre_2020_events_in_footprint": 6062,
+ "detector": {
+  "kept_after_triangle": 5930,
+  "n_clusters": 17,
+  "axis_cells": 309
+ },
+ "spacing_px": 4,
+ "seconds": 22.8,
  "results": {
-  "corridors (this work)": {
-   "mass": 5243,
-   "mc_rupture_2020": {
-    "credit_per_px": 0.0012633358850441382,
-    "tpw": 6.623670045286417,
-    "truth_px": 276,
-    "covered_frac": 0.023998804511907307
+  "corridors (this detector)": {
+   "mass": 78,
+   "mc_2020_rupture_trend": {
+    "credit_per_px": 0.03763467923570902,
+    "covered_frac": 0.010635887610091679,
+    "tpw": 2.9355049803853035,
+    "dti_on_that_truth": 0.012397233498406782
    },
-   "sgmc_off_catalogue": {
-    "credit_per_px": 0.002192943432069384,
-    "tpw": 11.49760241433978,
-    "truth_px": 61664,
-    "covered_frac": 0.00018645566966690096
+   "sgmc_not_in_catalogue": {
+    "credit_per_px": 0.060496724664400786,
+    "covered_frac": 6.016274430180232e-05,
+    "tpw": 4.718744523823261,
+    "dti_on_that_truth": 7.51841801529401e-05
    },
    "given_catalogue": {
-    "credit_per_px": 0.027272254710328868,
-    "tpw": 142.98843144625425,
-    "truth_px": 60988,
-    "covered_frac": 0.00234453386643691
+    "credit_per_px": 0.24731603900018412,
+    "covered_frac": 0.0003163024044404532,
+    "tpw": 19.29065104201436,
+    "dti_on_that_truth": 0.00039523073199439137
    }
   },
-  "smoothed earthquake density (sigma=10 px), top 5243 px in survey": {
-   "mass": 5243,
-   "mc_rupture_2020": {
+  "smoothed density sigma=10 px": {
+   "mass": 140,
+   "mc_2020_rupture_trend": {
     "credit_per_px": 0.0,
+    "covered_frac": 0.0,
     "tpw": 0.0,
-    "truth_px": 276,
-    "covered_frac": 0.0
+    "dti_on_that_truth": 0.0
    },
-   "sgmc_off_catalogue": {
+   "sgmc_not_in_catalogue": {
     "credit_per_px": 0.0,
+    "covered_frac": 0.0,
     "tpw": 0.0,
-    "truth_px": 61664,
-    "covered_frac": 0.0
+    "dti_on_that_truth": 0.0
    },
    "given_catalogue": {
-    "credit_per_px": 0.03853964334737134,
-    "tpw": 202.06335007026792,
-    "truth_px": 60988,
-    "covered_frac": 0.003313165705880959
+    "credit_per_px": 0.20701764523983002,
+    "covered_frac": 0.0004752159495896931,
+    "tpw": 28.982470333576202,
+    "dti_on_that_truth": 0.000593639003558361
    }
   },
-  "smoothed earthquake density (sigma=20 px), top 5243 px in survey": {
-   "mass": 5243,
-   "mc_rupture_2020": {
+  "smoothed density sigma=20 px": {
+   "mass": 146,
+   "mc_2020_rupture_trend": {
     "credit_per_px": 0.0,
+    "covered_frac": 0.0,
     "tpw": 0.0,
-    "truth_px": 276,
-    "covered_frac": 0.0
+    "dti_on_that_truth": 0.0
    },
-   "sgmc_off_catalogue": {
-    "credit_per_px": 0.0028486563055860436,
-    "tpw": 14.935505010187626,
-    "truth_px": 61664,
-    "covered_frac": 0.00024220785239665975
+   "sgmc_not_in_catalogue": {
+    "credit_per_px": 0.0,
+    "covered_frac": 0.0,
+    "tpw": 0.0,
+    "dti_on_that_truth": 0.0
    },
    "given_catalogue": {
-    "credit_per_px": 0.05214154250079977,
-    "tpw": 273.3781073316932,
-    "truth_px": 60988,
-    "covered_frac": 0.00448249011824774
+    "credit_per_px": 0.19878455164701972,
+    "covered_frac": 0.00047587303306330554,
+    "tpw": 29.022544540464878,
+    "dti_on_that_truth": 0.000594443938326864
    }
   },
-  "uniform random, matched mass": {
-   "mass": 5243,
-   "mc_rupture_2020": {
+  "uniform random": {
+   "mass": 78,
+   "mc_2020_rupture_trend": {
     "credit_per_px": 0.0,
+    "covered_frac": 0.0,
     "tpw": 0.0,
-    "truth_px": 276,
-    "covered_frac": 0.0
+    "dti_on_that_truth": 0.0
    },
-   "sgmc_off_catalogue": {
-    "credit_per_px": 0.10330651887507242,
-    "tpw": 541.6360784620047,
-    "truth_px": 61664,
-    "covered_frac": 0.008783667593117616
+   "sgmc_not_in_catalogue": {
+    "credit_per_px": 0.06281810807876098,
+    "covered_frac": 6.247131220459955e-05,
+    "tpw": 4.899812430143356,
+    "dti_on_that_truth": 7.806900916234642e-05
    },
    "given_catalogue": {
-    "credit_per_px": 0.10630820542943403,
-    "tpw": 557.3739210665226,
-    "truth_px": 60988,
-    "covered_frac": 0.009139075245401106
+    "credit_per_px": 0.0830456834190931,
+    "covered_frac": 0.00010621045626499085,
+    "tpw": 6.477563306689262,
+    "dti_on_that_truth": 0.0001327186035006539
+   }
+  },
+  "provided catalogue (reference)": {
+   "mass": 60988,
+   "mc_2020_rupture_trend": {
+    "credit_per_px": 6.105885919443215e-05,
+    "covered_frac": 0.013492238059963869,
+    "tpw": 3.723857704550028,
+    "dti_on_that_truth": 0.000299865199549543
+   },
+   "sgmc_not_in_catalogue": {
+    "credit_per_px": 0.12624713504645294,
+    "covered_frac": 0.09816735649806933,
+    "tpw": 7699.560272213072,
+    "dti_on_that_truth": 0.10312557694415113
+   },
+   "given_catalogue": {
+    "credit_per_px": 1.0,
+    "covered_frac": 1.0,
+    "tpw": 60988.0,
+    "dti_on_that_truth": 1.0
    }
   }
- },
- "note": "the detector sees only events before 2020-05-15; the 2020-2021 sequence supplies the truth trend, so this test cannot reward memorising the rupture"
+ }
 }
