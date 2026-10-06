@@ -1,0 +1,23 @@
+# Local-only, large or credential-bearing assets
+.arena/
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Rebuildable intermediates and raw source data
+work/
+cache/
+data/raw/
+data/intermediate/
+*.aux.xml
+*.ovr
+*.tfw
+*.tif.aux.xml
+
+# Local environment
+.env
+.env.*
