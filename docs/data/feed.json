@@ -1,0 +1,20 @@
+{
+ "kind": "current-project status; no leaderboard snapshot",
+ "generated_from": "manual project metadata only; no third-party leaderboard data",
+ "leaderboard": {
+  "published": false,
+  "reason": "Prior sibling-repository notes conflict and are not a fresh independent official check; no current score or score-to-TIFF mapping is asserted."
+ },
+ "legacy_artifact": {
+  "file": "gems50-seislin-44709-20261006T2041Z-79e260ae.tif",
+  "sha256": "79e260ae223d7dfd96413da28a9c6fed30107285ab843795181a5c9e5dff7262",
+  "role": "same-fold comparator only; not a new deliverable",
+  "organizer_score": null
+ },
+ "h50_s1": {
+  "status": "research-only; real-data experiment not yet run",
+  "organizer_score": null,
+  "portal_upload": null,
+  "weekly_slot_used": false
+ }
+}

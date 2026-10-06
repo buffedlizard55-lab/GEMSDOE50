@@ -1,0 +1,98 @@
+{
+ "updated_utc": "2026-10-06",
+ "ranking_rule": "expected DTI gain per unit implementation cost; every candidate measured at matched emitted mass",
+ "hypotheses": [
+  {
+   "id": "H50-1",
+   "name": "seismicity lineation corridors (OADC on ComCat) + snap to 3DEP scarp ridge",
+   "status": "SHIPPED",
+   "layers": [
+    "USGS ComCat events",
+    "USGS 3DEP 1 m DEM descriptors (placement)"
+   ],
+   "transform": "decluster -> DBSCAN in (x,y,3 km/yr t) -> recursive 2-means split until minor-sigma <= 600 m -> lambda1/lambda2 >= 3 at p<0.01 -> thin axis + curved spine + 300 m gap bridges -> snap to scarp ridge",
+   "why_missing_faults": "mapped-trace inventories are geometry; seismicity is process. Epineural lineaments sit 1-4 km off the mapped traces (median 32.7 px) and the catalogue shows 0.8x enrichment within 300 m of events, i.e. no enrichment.",
+   "difference": "no prior submission in the family contains any seismicity-derived mass; their ieq/deq bands are self-correlated at 3 km and the 'seismic lineaments vs Poisson null' arm is listed unimplemented",
+   "measured": {
+    "c_sgmc_off_at_45000": 0.2227,
+    "incumbent_c_sgmc_off": 0.1434,
+    "mc_credit_per_cell": 0.0022,
+    "mc_covered_frac": 0.36,
+    "predictive_pre2020_mc_frac": 0.024
+   },
+   "cost": "low (already built)"
+  },
+  {
+   "id": "H50-2",
+   "name": "catalogue gap closure and splay continuation",
+   "status": "PARTLY SHIPPED (3 connectors + 37 spines)",
+   "layers": [
+    "corridor axes",
+    "catalogue endpoints"
+   ],
+   "transform": "bridge corridor endpoints within 1.5 km and <= 40 deg apart at one dot per 300 m",
+   "why_missing_faults": "much of a hidden fault inventory is extension/splay of mapped structures",
+   "difference": "the sibling H44 bridges with Euler depth clusters from gravity/magnetics; this bridges with epicentral spines",
+   "cost": "low"
+  },
+  {
+   "id": "H50-3",
+   "name": "cross-inventory disagreement (SGMC / QFaults traces absent from the catalogue)",
+   "status": "MEASURED, NOT SHIPPED",
+   "layers": [
+    "SGMC",
+    "NBMG QFaults/INGENIOUS"
+   ],
+   "transform": "none - emit the traces",
+   "why_missing_faults": "these are faults mapped by others but omitted from the competition raster",
+   "difference": "the family used SGMC only as a validation instrument",
+   "measured": {
+    "c_sgmc_off_at_30000": 1.29,
+    "instrument_ceiling_at_that_mass": 1.63
+   },
+   "reason_not_shipped": "near-self-fulfilling on the only instrument that can score it; SGMC/QFaults may be the organisers' label source, so emission would be indistinguishable from leakage",
+   "cost": "low"
+  },
+  {
+   "id": "H50-4",
+   "name": "radiometric ridge lineaments (oriented matched filter on K/Th/U/TC)",
+   "status": "MEASURED, IN SHIPPED FILE at weight 0.55",
+   "layers": [
+    "GeoDAWN radiometrics"
+   ],
+   "transform": "sum |grad| over four channels (sigma 2 px) -> max over 12 orientations of a 15 px mean",
+   "why_missing_faults": "K/Th anomalies trace alteration and fluid pathways along faults lacking Quaternary surface expression",
+   "difference": "the family used raw channel statistics, not an oriented ridge transform",
+   "measured": {
+    "c_sgmc_off_at_20000": 0.0269,
+    "lidar_ridge_comparator": 0.1478
+   },
+   "cost": "low"
+  },
+  {
+   "id": "H50-5",
+   "name": "cross-strike swath profiling of the 1 m DEM",
+   "status": "NOT STARTED - blocked by raw DEM volume (~100 GB)",
+   "layers": [
+    "USGS 3DEP 1 m DEM tiles"
+   ],
+   "transform": "per-candidate swath profile normal to strike scored for a persistent monoclinal step",
+   "why_missing_faults": "metre-scale cumulative scarps exist even where no trace is mapped; swath profiles separate tectonic steps from symmetric local artefacts",
+   "difference": "nothing in the family profiles across strike",
+   "cost": "high"
+  },
+  {
+   "id": "H50-6",
+   "name": "focal mechanisms as a strike prior",
+   "status": "REJECTED before implementation",
+   "layers": [
+    "ComCat moment tensors"
+   ],
+   "transform": "weight corridors by mechanism strike agreement within 20 deg",
+   "why_missing_faults": "confirms a lineation is a fault plane",
+   "difference": "not used in the family",
+   "reason_rejected": "~40 mechanisms in the survey (M >= 3.5) versus tens of thousands of events consumed by the detector; each is a catalogue-fault event, biasing the prior toward mapped structures",
+   "cost": "low but statistically powerless"
+  }
+ ]
+}

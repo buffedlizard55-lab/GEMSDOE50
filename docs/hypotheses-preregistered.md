@@ -1,12 +1,12 @@
 # Preregistered geological hypotheses — GEMSDOE50
 
-**Registered:** 2026-10-06 UTC, before implementation. This file freezes the candidate list, expected direction, data requirements, and promotion gate. Later results belong in a separate results document; do not edit these priors to make a failed idea look successful.
+**Registered:** 2026-10-06 UTC, before implementation. This file freezes the candidate list, expected direction, data requirements, and promotion gate. The comparator policy was amended later the same day, still before any H50-S1 DTI, after review identified holdout-based comparator selection as leakage; the scientific ranking and promotion thresholds are unchanged. Later results belong in a separate results document; do not edit these priors to make a failed idea look successful.
 
 ## Scope and metric context
 
 The target is a single-band 100 m fault-confidence raster for the GeoDAWN study area. The official distance-weighted Tversky index has 300 m support and weights false negatives more heavily than false positives (α=0.2, β=0.8). A useful hypothesis must find expert-labeled fault traces in held-out geographic blocks while not simply reproducing the existing USGS/INGENIOUS catalogue.
 
-The expectation categories below are **pre-experiment priors**, not scores: **High / Medium / Low potential** describes plausible upside versus the current local holdout incumbent; `ΔDTI` is intentionally not assigned a fabricated number. Numeric claims will appear only after the preregistered holdout is run. Cost is a 1–5 engineering/research estimate (1 = small, 5 = substantial).
+The expectation categories below are **pre-experiment priors**, not scores: **High / Medium / Low potential** describes plausible upside versus the fixed H50-prior comparator; `ΔDTI` is intentionally not assigned a fabricated number. Numeric claims will appear only after the preregistered holdout is run. Cost is a 1–5 engineering/research estimate (1 = small, 5 = substantial).
 
 ## Ranked hypotheses
 
@@ -29,7 +29,7 @@ The official DrivenData problem page encourages external data only where the par
 1. Use only the official training labels as validation truth; never infer hidden labels. Keep the feature data, label data, and catalog hashes in the result report.
 2. Freeze four contiguous macrofolds on the official 3292 × 3730 grid at the center row/column: NW, NE, SW, and SE. Within each macrofold, retain the four 2 × 2 subtiles as the units for block-bootstrap uncertainty. Erode each held-out core by 10 km (100 pixels) for scoring; exclude labels within 10 km of that held-out core from any supervised fit. Derive the visible-catalogue mask from non-held-out labels only, buffer that mask by 300 m (3 pixels), and score candidate traces only outside this buffer. The exact row/column bounds and valid-footprint mask must be serialized and hash-pinned before any DTI is computed. This emulates the “new fault” task rather than rewarding reproduction of known traces.
 3. Compute the official DTI locally with α=0.2, β=0.8, and a 300 m triangular distance kernel. Report pooled and fold-wise values. Use equal prediction mass when comparing raster emitters.
-4. Freeze the incumbent as the best eligible baseline among the same-fold current candidates and available prior artifacts. Run matched spatial random/translation controls and time-shuffle controls for seismicity. Use a spatial-block bootstrap for uncertainty; do not treat pixels as independent samples.
+4. Fix H50-prior as the primary incumbent before any holdout scoring; its choice is chronological, not based on a holdout score. Score H32-D, H47-S3, and H48-DS on the same folds as secondary descriptive comparators only; never use their holdout values to select an incumbent. Run matched spatial random/translation controls and time-shuffle controls for seismicity. Use a spatial-block bootstrap for uncertainty; do not treat pixels as independent samples.
 5. **Promotion threshold:** H50-S1 must exceed the frozen incumbent by at least **0.005 absolute DTI** on pooled held-out blocks, have positive paired deltas in at least **3 of 4** macrofolds, and have a 95% block-bootstrap lower bound for its paired improvement above zero. It must also beat the matched random/translation controls. These thresholds are fixed before implementation; a failure closes the slot gate.
 6. A passing proxy is necessary, not sufficient, for a weekly submission. No portal slot is used without a unique, fully validated GeoTIFF and explicit user submission/account access. A proxy pass is not a claim about private score or final prize ranking.
 

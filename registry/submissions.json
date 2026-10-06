@@ -1,0 +1,20 @@
+{
+ "note": "Legacy submission registry retained from earlier main-branch work. It contains no independently verified organizer score and no score-to-TIFF mapping.",
+ "historical_leaderboard_context": {
+  "status": "not independently verified; not a current score source",
+  "score_rows_published": false,
+  "score_to_tiff_mapping": null,
+  "policy": "Do not poll, scrape, or copy leaderboard rows without the written consent required by DrivenData's Terms of Use."
+ },
+ "submissions": [
+  {
+   "name": "GEMSDOE50-SEIS-RIDGE-V1-5CAD91AC",
+   "file": "docs/downloads/gemsdoe50-seis-ridge-v1.tif",
+   "sha256": "5cad91ac7580db912ebac0cf352cce56d713e99ad53f596a57f714f51636d3c9",
+   "mass": 45000,
+   "status": "legacy prior-work record; not H50-S1 and not a deliverable",
+   "organizer_score": null,
+   "submitted_utc": null
+  }
+ ]
+}

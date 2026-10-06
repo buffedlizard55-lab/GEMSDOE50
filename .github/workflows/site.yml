@@ -1,0 +1,30 @@
+name: h50s1-site-and-checks
+
+on:
+  push:
+    branches: [main, 'arena/**']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  checks-and-site:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install the project and checks
+        run: python -m pip install -e '.[test]' ruff
+      - name: Run the complete test suite and lint
+        run: |
+          python -m pytest -q
+          ruff check src/gemsdoe50 scripts/build_h50_site.py scripts/run_experiment.py scripts/freeze_holdout.py scripts/verify_claims.py tests/test_h50_*.py tests/test_site.py tests/test_raster.py tests/test_spatial.py tests/test_geometry.py tests/test_catalog.py
+      - name: Rebuild the H50-S1 static pages without external data or commits
+        run: |
+          python scripts/build_h50_site.py
+          git diff --check
+          git diff --exit-code -- index.html results.html methods.html submission.html

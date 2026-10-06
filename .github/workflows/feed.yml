@@ -1,0 +1,18 @@
+name: legacy-comcat-refresh-disabled
+
+# The former scheduled refresh used mixed-network ComCat data before H50-S1's
+# source-specific rights, competition-rule shareability, and location-uncertainty
+# review was complete. Keep this historical workflow file for auditability, but
+# do not schedule, fetch, commit, or consume that data.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  disabled:
+    if: ${{ false }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Disabled pending source and competition-rule review; no data fetched."

@@ -18,6 +18,7 @@ from gemsdoe50.catalog import read_nevada_catalog
 from gemsdoe50.common import jsonable, md5_file, sha256_array, sha256_file
 from gemsdoe50.evaluation import (
     PREDICTION_MASS,
+    TIME_SHUFFLE_CONTROLS,
     _top_n_prediction,
     evaluate_hypothesis,
     read_baseline_raster,
@@ -171,8 +172,11 @@ def _write_outputs(
     time_shuffle_metadata: dict[str, Any] = {}
     rng = np.random.default_rng(505011)
     relocated_indices = np.flatnonzero(events.relocated == 1)
-    if shuffle_count < 1:
-        raise ValueError("at least one time-shuffle control is required")
+    if shuffle_count != TIME_SHUFFLE_CONTROLS:
+        raise ValueError(
+            f"the preregistered protocol requires exactly {TIME_SHUFFLE_CONTROLS} "
+            "time-shuffle controls"
+        )
     for replicate in range(shuffle_count):
         shuffled_year = events.year.copy()
         shuffled_year[relocated_indices] = rng.permutation(shuffled_year[relocated_indices])
@@ -351,7 +355,7 @@ def main() -> None:
         "--report",
         default="evidence/results/h50s1-evaluation-20261006.json",
     )
-    parser.add_argument("--time-shuffles", type=int, default=20)
+    parser.add_argument("--time-shuffles", type=int, default=TIME_SHUFFLE_CONTROLS)
     args = parser.parse_args()
     _write_outputs(
         catalog_path=Path(args.catalog),

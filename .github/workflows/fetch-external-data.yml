@@ -1,0 +1,18 @@
+name: legacy-comcat-fetch-disabled
+
+# This is retained only as a historical audit record. The prior workflow fetched
+# mixed-network ComCat data and committed it to the triggering branch. H50-S1 does
+# not use that data; source-specific rights, competition-rule shareability, and
+# location uncertainty remain unresolved. Do not dispatch this workflow.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  disabled:
+    if: ${{ false }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Disabled pending source and competition-rule review; no data fetched."

@@ -1,0 +1,44 @@
+{
+ "source": "https://earthquake.usgs.gov/fdsnws/event/1/query",
+ "product": "ANSS Comprehensive Earthquake Catalog (ComCat)",
+ "query_bbox": {
+  "minlatitude": 37.27,
+  "maxlatitude": 40.79,
+  "minlongitude": -120.1,
+  "maxlongitude": -116.08
+ },
+ "fetched_utc": "2026-10-06T20:14:31",
+ "rows": 222939,
+ "first": "1906-04-20T04:15:00.000Z",
+ "last": "2026-10-06T19:44:10.140Z",
+ "event_types": {
+  "earthquake": 222400,
+  "explosion": 362,
+  "quarry blast": 88,
+  "nuclear explosion": 42,
+  "chemical explosion": 15,
+  "mining explosion": 10,
+  "mine collapse": 9,
+  "not reported": 5,
+  "quarry": 4,
+  "acoustic noise": 2,
+  "rockslide": 1,
+  "sonic boom": 1
+ },
+ "networks": {
+  "nc": 139957,
+  "nn": 77950,
+  "ci": 3637,
+  "us": 1163,
+  "ushis": 211,
+  "iscgem": 13,
+  "rusms": 5,
+  "cdmg": 2,
+  "official": 1
+ },
+ "notes": [
+  "Official USGS public-domain data; no licence restriction (USGS data are public domain, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits).",
+  "Rows with type in {explosion, quarry blast, mining explosion, anthropogenic event} are flagged, not silently deleted: the analysis removes them explicitly.",
+  "horizontalError is the catalogue's own 1-sigma epicentre uncertainty in km; it is used as the location-uncertainty weight (arXiv:1304.6912)."
+ ]
+}

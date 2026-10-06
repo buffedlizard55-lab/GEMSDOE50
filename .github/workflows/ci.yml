@@ -1,0 +1,31 @@
+name: ci
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  tests-and-artifacts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install package and test tools
+        run: python -m pip install -e '.[test]' ruff
+      - name: Test, lint, and compile all packages
+        run: |
+          python -m pytest -q
+          ruff check src/gemsdoe50 scripts/build_h50_site.py scripts/run_experiment.py scripts/freeze_holdout.py scripts/verify_claims.py tests/test_h50_*.py tests/test_site.py tests/test_raster.py tests/test_spatial.py tests/test_geometry.py tests/test_catalog.py
+          python -m compileall -q src scripts
+      - name: Verify frozen evidence hashes and project guardrails
+        run: |
+          echo '78b6692155c6c6d5f9f19ccee6d595167c2065f1f25eb8d08636d1d9b285ff16  evidence/holdout-v1.json' | sha256sum --check
+          echo '981b42e6d0310bf77f79c7c7662a0569c8d2e79514ef4e4a3624a5b07583ae3f  evidence/holdout-realized-v1.json' | sha256sum --check
+          python scripts/verify_claims.py

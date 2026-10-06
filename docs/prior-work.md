@@ -12,7 +12,7 @@
 
 ## Score context
 
-The `0.3195` value in the owner's earlier benchmark is historical. The newest accessible research snapshot in GEMSDOE47's README reports a public-board leader of `0.3774` on 2026-10-06 and a `0.3195` entry at rank 7; that number is recorded here as a **prior project's one-time observation**, not as a score re-fetched by GEMSDOE50, not as a verified score-to-file mapping, and not as a current live claim. DrivenData's Terms of Use prohibit robot/automatic access for monitoring or copying and manual monitoring/copying without prior written consent, so this repository links to the official leaderboard and does not poll or copy its rows.
+The `0.3195` value in the owner's earlier benchmark is historical, not the current lead. Sibling-repository leaderboard notes conflict and are not a fresh independent official check; this repository therefore does not repeat their numerical claims as current scores. No score-to-TIFF mapping is authenticated without an organizer receipt. DrivenData's Terms of Use prohibit robot/automatic access for monitoring or copying and manual monitoring/copying without prior written consent, so this repository links to the official leaderboard and does not poll or copy its rows.
 
 ## Limits
 

@@ -24,6 +24,27 @@ class DTIComponents:
         return asdict(self)
 
 
+def weighted_tversky_from_components(
+    tp_weight: float,
+    fp_weight: float,
+    fn_weight: float,
+    *,
+    alpha: float = 0.2,
+    beta: float = 0.8,
+    epsilon: float = 1e-9,
+) -> float:
+    """Apply the official Tversky ratio to already distance-weighted counts."""
+    values = np.asarray([tp_weight, fp_weight, fn_weight, alpha, beta, epsilon], dtype=np.float64)
+    if np.any(~np.isfinite(values)):
+        raise ValueError("Tversky components and parameters must be finite")
+    if min(tp_weight, fp_weight, fn_weight) < 0:
+        raise ValueError("Tversky components must be non-negative")
+    if alpha < 0 or beta < 0 or epsilon <= 0:
+        raise ValueError("alpha and beta must be non-negative and epsilon must be positive")
+    denominator = tp_weight + alpha * fp_weight + beta * fn_weight + epsilon
+    return float(tp_weight / denominator) if denominator > 0 else 0.0
+
+
 def distance_weighted_tversky(
     truth: np.ndarray,
     prediction: np.ndarray,
@@ -52,8 +73,8 @@ def distance_weighted_tversky(
         raise ValueError(f"shape mismatch: truth {truth.shape}, prediction {prediction.shape}")
     if pixel_size_m <= 0 or radius_m <= 0:
         raise ValueError("pixel_size_m and radius_m must be positive")
-    if not (0 <= alpha <= 1 and 0 <= beta <= 1):
-        raise ValueError("alpha and beta must be in [0, 1]")
+    if alpha < 0 or beta < 0:
+        raise ValueError("alpha and beta must be non-negative")
     if np.any(~np.isfinite(prediction)):
         raise ValueError("prediction contains NaN or infinity; mask/fill nodata before scoring")
     if np.any((prediction < 0) | (prediction > 1)):
@@ -97,7 +118,9 @@ def distance_weighted_tversky(
 
     tp_weight = float(np.sum(best_match))
     fn_weight = float(np.sum(1.0 - best_match))
-    if truth_coords.size:
+    if np.any(truth):
+        # ``truth`` may include halo context outside truth_eval_mask. It must still reduce
+        # nearby FP cost even when this subtile contains no truth cells of its own.
         nearest_truth_distance = distance_transform_edt(
             ~truth, sampling=(pixel_size_m, pixel_size_m)
         )
@@ -106,8 +129,14 @@ def distance_weighted_tversky(
         truth_support = np.zeros(truth.shape, dtype=np.float64)
     fp_weight = float(np.sum(prediction[prediction_eval] * (1.0 - truth_support[prediction_eval])))
     epsilon = 1e-9
-    denominator = tp_weight + alpha * fp_weight + beta * fn_weight + epsilon
-    score = float(tp_weight / denominator) if denominator > 0 else 0.0
+    score = weighted_tversky_from_components(
+        tp_weight,
+        fp_weight,
+        fn_weight,
+        alpha=alpha,
+        beta=beta,
+        epsilon=epsilon,
+    )
     return DTIComponents(
         score=score,
         tp_weight=tp_weight,

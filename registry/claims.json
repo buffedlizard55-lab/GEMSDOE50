@@ -1,0 +1,59 @@
+{
+ "updated_utc": "2026-10-06",
+ "rule": "claims are separated into what is verified on published bytes, what is an instrument, and what is flagged unresolved",
+ "verified_on_published_bytes": [
+  {
+   "claim": "format legal (single band float32 EPSG:32611 100 m, all cells finite, values in [0,1], no nodata tag)",
+   "evidence": "docs/downloads/checks-gemsdoe50-seis-ridge-v1.tif.json"
+  },
+  {
+   "claim": "unique against 118 retrievable prior submission rasters (max |r| 0.0333, max Jaccard 0.0213)",
+   "evidence": "evidence/uniqueness_seis-ridge-v1.json"
+  },
+  {
+   "claim": "metric algebra: FNw = |G| - TPw; DTI = T/(0.2(T+S-M)+0.8|G|); marginal rule k > 0.2 DTI; binary optimum",
+   "evidence": "tests/test_metric.py (21 passed)"
+  },
+  {
+   "claim": "predictive gate: with only pre-2020 events, the corridor field is the only field covering any of the 2020 Monte Cristo rupture trend (2.4 %), density and random cover 0 %",
+   "evidence": "evidence/falsification_test.json"
+  }
+ ],
+ "instruments_with_named_bias": [
+  {
+   "instrument": "off-catalogue USGS SGMC credit per emitted cell at matched mass",
+   "bias": "dispersion-biased at low mass (uniform random scores 0.103 at 5,243 cells while every structured field scores <= 0.003); was compared with 16 historical sibling-repository score notes but only at LOO Spearman 0.705, below the sibling repos' self-imposed 0.80 bar"
+  },
+  {
+   "instrument": "2020 Monte Cristo rupture trend",
+   "bias": "circular as a geometry check (the trend comes from the sequence's own epicentres); superseded as evidence by the pre-2020 predictive version"
+  },
+  {
+   "instrument": "given catalogue raster",
+   "bias": "an ANTI-instrument: the hidden set is defined as faults not in it, and the ledger shows catalogue-alignment was associated with lower owner-reported historical proxy values"
+  }
+ ],
+ "flagged_unresolved": [
+  {
+   "issue": "hidden-truth size |G|",
+   "detail": "Legacy model estimates differ; unresolved for this prior analysis and not used for H50-S1. H50-S1 uses a separately frozen spatial holdout."
+  },
+  {
+   "issue": "organizer external-data clause",
+   "detail": "quoted from the problem-description page; re-read the rules PDF before publishing a licence claim"
+  },
+  {
+   "issue": "lidar descriptor coverage",
+   "detail": "3.89 M of 5.17 M survey cells (75 %); corridors outside it are emitted unsnapped"
+  },
+  {
+   "issue": "labels.tif vs existing_faults.tif",
+   "detail": "byte-identical in the sibling mirror; whether the public leadboard truth equals the given catalogue is contradicted by the fact that the 0.2778 file has zero mass within 200 m of it -- the public truth is therefore NOT the given catalogue raster"
+  },
+  {
+   "issue": "sibling-repository score-note provenance",
+   "detail": "Historical notes conflict and are not a fresh independent official check; no current score or score-to-TIFF mapping is asserted."
+  }
+ ],
+ "scope_note": "Legacy receipts inherited from earlier main-branch work. They are not H50-S1 evidence; local proxy results and sibling-repository score notes have not been independently authenticated as organizer scores or mapped to TIFFs. Do not use them for current leaderboard claims, slot decisions, or H50-S1 validation."
+}

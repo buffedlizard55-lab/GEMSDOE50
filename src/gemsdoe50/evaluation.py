@@ -14,6 +14,8 @@ from .raster import check_same_grid
 PREDICTION_MASS = 37612
 BOOTSTRAP_REPLICATES = 5000
 TRANSLATION_CONTROLS = 32
+TIME_SHUFFLE_CONTROLS = 20
+PRIMARY_INCUMBENT_NAME = "H50-prior"
 
 
 def allocate_largest_remainder(total: int, weights: list[int]) -> list[int]:
@@ -216,6 +218,18 @@ def evaluate_hypothesis(
     """Run frozen equal-mass fold scoring and the spatial-translation control."""
     if not blocks:
         raise ValueError("no holdout blocks")
+    if not baseline_maps:
+        raise ValueError("at least one frozen baseline raster is required")
+    if PRIMARY_INCUMBENT_NAME not in baseline_maps:
+        raise ValueError(
+            f"the preregistered primary incumbent {PRIMARY_INCUMBENT_NAME!r} is required; "
+            "do not select an incumbent from holdout scores"
+        )
+    if time_shuffle_maps is None or len(time_shuffle_maps) != TIME_SHUFFLE_CONTROLS:
+        raise ValueError(
+            f"the preregistered protocol requires exactly {TIME_SHUFFLE_CONTROLS} "
+            "time-shuffle controls"
+        )
     total_area = sum(int(np.count_nonzero(block.eligible)) for block in blocks)
     if total_area <= 0:
         raise ValueError("holdout split has no eligible valid cells")
@@ -238,15 +252,15 @@ def evaluate_hypothesis(
 
     method_results: dict[str, dict[str, Any]] = {}
     internal_subtiles: dict[str, dict[str, DTIComponents]] = {}
-    for method_idx, (name, score_map) in enumerate(maps.items()):
-        result = _evaluate_method(score_map, blocks, fold_budgets, seed=seed + method_idx * 10000)
+    for name, score_map in maps.items():
+        # A common tie seed makes equal-score pixels resolve consistently across methods.
+        result = _evaluate_method(score_map, blocks, fold_budgets, seed=seed)
         internal_subtiles[name] = result.pop("_subtile_components")
         method_results[name] = result
 
-    baseline_names = list(baseline_maps)
-    if not baseline_names:
-        raise ValueError("at least one frozen baseline raster is required")
-    incumbent_name = max(baseline_names, key=lambda name: method_results[name]["pooled"]["score"])
+    # This comparator is fixed in the protocol before holdout scoring. Other baselines are
+    # reported as secondary context only; choosing the maximum on the holdout would leak labels.
+    incumbent_name = PRIMARY_INCUMBENT_NAME
     incumbent = method_results[incumbent_name]
     candidate = method_results["H50-S1"]
     paired_fold_deltas = [
@@ -331,7 +345,7 @@ def evaluate_hypothesis(
             candidate["pooled"]["score"] > control_q95
         ),
         "beats_95th_percentile_time_shuffle_control": bool(
-            not time_control_values.size or candidate["pooled"]["score"] > time_control_q95
+            candidate["pooled"]["score"] > time_control_q95
         ),
     }
     gate_pass = all(pass_components.values())
@@ -366,6 +380,10 @@ def evaluate_hypothesis(
         },
         "method_results": method_results,
         "incumbent_method": incumbent_name,
+        "incumbent_selection_policy": (
+            "H50-prior is fixed in the preregistered protocol before holdout scoring; "
+            "secondary comparator scores are descriptive only and never select the incumbent."
+        ),
         "candidate_minus_incumbent_pooled_dti": delta,
         "paired_fold_deltas": {
             fold["id"]: value

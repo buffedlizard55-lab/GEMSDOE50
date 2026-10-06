@@ -1,7 +1,11 @@
-# Local-only, large or credential-bearing assets
+# Arena-local data, credentials, and run outputs
 .arena/
 .venv/
 venv/
+.env
+.env.*
+
+# Python artifacts and tests
 __pycache__/
 *.py[cod]
 *.egg-info/
@@ -9,16 +13,21 @@ __pycache__/
 .coverage
 htmlcov/
 
-# Rebuildable intermediates and raw source data
-work/
+# Local caches and rebuildable intermediates
+.cache/
 cache/
+work/
 data/raw/
 data/intermediate/
+
+# Legacy external-data ignore policy from the existing repository
+data/external/*.csv
+data/external/lidar_scarp_features_u8.tif
+data/external/geodawn_rad_u8.tif
+data/external/geodawn_extensions_u8.tif
+
+# Raster sidecars
 *.aux.xml
 *.ovr
 *.tfw
 *.tif.aux.xml
-
-# Local environment
-.env
-.env.*
