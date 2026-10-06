@@ -3,3 +3,12 @@ data/raw/
 .cache/
 __pycache__/
 *.pyc
+
+# Large derived rasters (reproducible; see data/external/README.md)
+data/external/lidar_scarp_features_u8.tif
+data/external/geodawn_rad_u8.tif
+data/external/geodawn_extensions_u8.tif
+
+# python bytecode caches (were tracked by mistake before 2026-10-06)
+__pycache__/
+*.pyc

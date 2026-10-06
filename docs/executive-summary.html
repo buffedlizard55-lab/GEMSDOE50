@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How to submit — GEMSDOE50</title>
+<style>
+ body{margin:0;font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:#111;background:#fff}
+ header{border-bottom:1px solid #ddd;padding:18px 20px} main{max-width:900px;margin:0 auto;padding:0 20px 80px}
+ h1{font-size:1.4rem;margin:0 0 6px} h2{font-size:1.1rem;margin:2em 0 .4em;border-bottom:1px solid #ddd;padding-bottom:.25em}
+ table{border-collapse:collapse;width:100%;margin:.6em 0 1em;font-size:.93rem} th,td{border:1px solid #ddd;padding:7px 9px;vertical-align:top;text-align:left} th{background:#fafafa}
+ code{font-family:ui-monospace,Menlo,monospace;font-size:.86em} .mut{color:#555}
+ .ok{background:#eefaf1;border:1px solid #bfe6cc;border-radius:8px;padding:12px 14px}
+ .warn{background:#fff8e6;border:1px solid #e8d9a0;border-radius:8px;padding:12px 14px}
+ nav a{margin-right:14px}
+</style></head>
+<body>
+<header><h1>How to submit, exactly</h1>
+<nav class="mut"><a href="index.html">Overview</a><a href="executive-summary.html">How to submit</a>
+<a href="hypotheses.html">Hypotheses</a><a href="analysis.html">Why 0.2778 / what beats it</a><a href="sources.html">Sources</a></nav></header>
+<main>
+
+<div class="ok"><p style="margin:0"><strong>The file to submit:</strong>
+<a href="downloads/gemsdoe50-seis-ridge-v1.tif" download>gemsdoe50-seis-ridge-v1.tif</a>
+(one click, 150,672 bytes, SHA-256 <code>5cad91ac…36d3c9</code>).
+Zip twin: <a href="downloads/gemsdoe50-seis-ridge-v1.zip">gemsdoe50-seis-ridge-v1.zip</a>.</p></div>
+
+<h2>1. Steps</h2>
+<ol>
+<li>Open <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">drivendata.org/competitions/306/competition-doe-gems/</a> and sign in.</li>
+<li>Click <em>Submit</em> (the submission form is on the competition page; the data page is separate).</li>
+<li>Choose <code>gemsdoe50-seis-ridge-v1.tif</code>. If the form rejects a bare GeoTIFF, upload
+    <code>gemsdoe50-seis-ridge-v1.zip</code> instead — it contains exactly one GeoTIFF, which is the
+    form the portal has accepted for this family before.</li>
+<li>Submission name: <code>GEMSDOE50-SEIS-RIDGE-V1-5CAD91AC</code></li>
+<li>Note (optional) — paste verbatim:
+<pre class="mut" style="white-space:pre-wrap;border:1px solid #ddd;border-radius:6px;padding:10px;background:#fff">GEMSDOE50 v1 | OADC lineation corridors from the official USGS ComCat catalogue (222,939 events, declustered) snapped to 3DEP lidar scarps; 45,000 dots, all off-catalogue; all cells finite in [0,1]</pre></li>
+<li>Submit. Wait for the score. Record it in <code>registry/submissions.json</code> (see §4).</li>
+</ol>
+
+<h2>2. What the organiser’s validator requires, and why this file cannot fail it</h2>
+<table>
+<tr><th>Requirement (competition page 967)</th><th>This file</th></tr>
+<tr><td>Single-band GeoTIFF</td><td>1 band</td></tr>
+<tr><td>Same grid as the sample submission: 3,730 rows × 3,292 columns, 100 m, EPSG:32611</td><td>identical; origin (243350, 4508550), transform (100, 0, 243350, 0, −100, 4508550)</td></tr>
+<tr><td>float32</td><td>float32</td></tr>
+<tr><td>Values in [0, 1]; content outside the survey may be null or NaN</td><td>every cell finite, min 0.0, max 1.0; <strong>no NaN, no nodata tag, no sentinel</strong></td></tr>
+<tr><td>No duplicate submissions of the same file</td><td>unique against 118 prior rasters (max |r| 0.033, max Jaccard 0.021)</td></tr>
+</table>
+
+<div class="warn"><p style="margin:0"><strong>The portal error “Predicted values must be in range [0, 1]”.</strong>
+Two verified causes exist in this family of repositories: (a) the organisers’ <code>training_features.tif</code>
+carries the sentinel −3.4028235e+38 outside its valid area, so any raster assembled wholesale from it
+contains values near −10<sup>38</sup>; (b) NaN fails a numeric range test, because
+<code>0 &lt;= nan &lt;= 1</code> is false, so a validator that tests the whole array rejects the sample
+submission’s own NaN-outside encoding. This submission writes an explicit value in every cell of the grid:
+1.0 on the 45,000 emitted dots, 0.0 everywhere else. Neither cause can apply.</p></div>
+
+<h2>3. What “success” looks like, honestly</h2>
+<ul>
+<li><strong>Verified here:</strong> format; uniqueness; the metric algebra (<code>tests/test_metric.py</code>);
+    the instruments; the predictive falsification test.</li>
+<li><strong>Not verified:</strong> any organiser score for this file. The expectation is “at or above the
+    incumbent operating range” because the file beats the incumbent by 1.55× in credit per emitted cell on
+    the only local instrument that ranks the 16 known live scores positively — but that instrument
+    explains only part of the variance (leave-one-out Spearman 0.705, below this family’s own 0.80 bar),
+    so a slot is a bet, not a certainty.</li>
+<li><strong>The one thing this file does that no prior file does:</strong> it puts mass on the 2020 Monte
+    Cristo Range rupture trend from an independent physical signal. Every prior submission in the family
+    covers ≈11 % of that trend with ≈0.0008 credit per cell; this file covers ≈36 % with 0.0022, and the
+    <em>predictive</em> version of the detector (pre-2020 seismicity only) still covers 2.4 % while the
+    smoothed-density controls cover nothing.</li>
+</ul>
+
+<h2>4. After the score arrives</h2>
+<ol>
+<li>Append the score to <code>registry/submissions.json</code> (name, sha256, mass, score, date).</li>
+<li>Re-run <code>python3 scripts/build_submission.py --name seis-ridge-v2 --mass 60000</code> and
+    <code>--mass 37654</code> to bracket the mass decision, and validate both with
+    <code>scripts/validate_candidate.py</code>.</li>
+<li>Feed the new score into the ledger model on the <a href="analysis.html">analysis page</a>; the two
+    competing hidden-truth-size estimates (≈5,667 and ≈15,100 cells) are separated by exactly this kind
+    of observation.</li>
+</ol>
+
+</main>
+<footer style="border-top:1px solid #ddd;padding:16px 20px;color:#555;font-size:.88rem">
+ Repository: <code>buffedlizard55-lab/GEMSDOE50</code>. Reproduce the file with
+ <code>python3 scripts/build_submission.py --name seis-ridge-v1 --mass 45000</code>.
+</footer>
+</body></html>

@@ -97,18 +97,25 @@ def score(pred: np.ndarray, truth: np.ndarray, domain: np.ndarray | None = None,
     scale = g_total / t_idx.shape[0]
 
     t_tree = cKDTree(t_idx)
+    p_tree = cKDTree(p_idx)
 
     # --- TP_w = sum_g max_x p(x) k(d(x,g)) -------------------------------------
+    # The published definition takes, for EACH ground-truth pixel g, the maximum over
+    # ALL prediction pixels x within the kernel:
+    #     TP_w = sum_g max_x p(x) k(d(x,g)).
+    # A previous version of this function queried pred->nearest-truth instead, which
+    # silently assigns each prediction to a single truth pixel and under-counts TP_w
+    # (measured: 0.895 vs 0.941 exact on a 12-dot case; larger errors when truth pixels
+    # are clustered, i.e. always on real data).  See tests/test_cross_metric.py.
     p_vals = pred[tuple(p_idx.T)]
-    d_p2t, i_p2t = t_tree.query(p_idx, k=1)
-    contrib = p_vals * kernel(d_p2t)
+    d_p2t, _ = t_tree.query(p_idx, k=1)          # needed for FP_w below
     cred = np.zeros(t_idx.shape[0], dtype=np.float64)
-    for j in np.argsort(-contrib):
-        if contrib[j] <= 0.0:
-            break
-        g = i_p2t[j]
-        if contrib[j] > cred[g]:
-            cred[g] = contrib[j]
+    for j, neighbours in enumerate(p_tree.query_ball_point(t_idx, r=RADIUS_PX + 1e-9)):
+        if not neighbours:
+            continue
+        d = np.hypot(*(p_idx[neighbours] - t_idx[j]).T)
+        w = p_vals[neighbours] * kernel(d)
+        cred[j] = float(w.max())
     tp_w = float(cred.sum() * scale)
 
     # --- FN_w = the complement of the same max ---------------------------------
