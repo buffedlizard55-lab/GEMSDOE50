@@ -57,9 +57,16 @@ def main() -> int:
     # --- uniqueness gate -----------------------------------------------------
     u = checks["uniqueness"]
     expect("uniqueness verdict", u["verdict_unique"], True)
-    expect("no identical prior hash", u["identical_sha256"], [])
-    if u["max_iou"] >= 0.5:
-        failures.append("max_iou")
+    expect("no identical prior hash", u.get("identical_sha256", []), [])
+    if u.get("max_iou", 0.0) >= 0.5:
+        failures.append("full-pixel max_iou")
+
+    ci = load("submission_checks_ci.json")
+    if ci:
+        expect("CI-level format checks pass", ci["format"]["all_checks_pass"], True)
+        expect("CI-level uniqueness verdict", bool(ci["uniqueness"].get("verdict_unique")), True)
+        expect("CI-level screen is below its threshold",
+               ci["uniqueness"]["max_iou_block8"] < ci["uniqueness"]["screen_threshold_block8"], True)
 
     # --- validation of the exact file ---------------------------------------
     expect("F2 beats the random control", validation["F2_dti"] > validation["controls"]["uniform_random_same_count"]["F2"], True)

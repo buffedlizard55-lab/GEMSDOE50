@@ -5,7 +5,8 @@
 study footprint; a `.zip` containing the identical file is provided for the form's
 alternative upload path). **Format checks: 15/15 pass. Uniqueness gate: pass** against
 all 50 known prior artifacts (no identical hash, ≤ 0.36 IoU, ≥ 47 % of dots novel at
-200 m). See [`registry/submission_checks.json`](registry/submission_checks.json).
+200 m); CI re-runs the gate at coarse 32× signature level from
+`registry/prior_artifact_signatures.npz`. See [`registry/submission_checks.json`](registry/submission_checks.json).
 
 **Paste-in note (one line for the submission form):**
 

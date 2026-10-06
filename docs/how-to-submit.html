@@ -63,7 +63,7 @@ footer{color:var(--mut);font-size:.88rem;border-top:1px solid var(--line);paddin
 </table>
 
 <h2>How to check this claim yourself (no manual vetting needed)</h2>
-<p>Open <a href="data/no_manual_check.json">data/no_manual_check.json</a>: it is regenerated on every push by <code>scripts/check_submission.py</code> and reports the 15 format checks, the uniqueness verdict and the sha256 of the file. The same file is re-scored on both evidence frames in <a href="data/validation.json">data/validation.json</a>.</p>
+<p>Open <a href="data/no_manual_check.json">data/no_manual_check.json</a>: it is regenerated on every push by <code>scripts/check_submission.py</code> and reports the 15 format checks, the uniqueness verdict (full-pixel where the corpus is present, coarse 32× signature level on a bare runner) and the sha256 of the file. The same file is re-scored on both evidence frames in <a href="data/validation.json">data/validation.json</a>.</p>
 <footer>Official sources: <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">problem and scoring</a> · <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/964/">rules</a> · <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">leaderboard</a>.</footer>
 </main>
 </body>

@@ -7,7 +7,6 @@ JSON receipts that the checks wrote.
 
 from __future__ import annotations
 
-import datetime
 import hashlib
 import json
 import shutil
@@ -41,12 +40,13 @@ def main() -> int:
     sha = hashlib.sha256(sub.read_bytes()).hexdigest() if sub else None
 
     checks = read("submission_checks.json")
+    checks_ci = read("submission_checks_ci.json")
     validation = read("submission_validation.json")
     build = read("submission_build.json")
     sources = read("sources.json")
 
     (DATA / "no_manual_check.json").write_text(json.dumps({
-        "generated_utc": datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds"),
+        "generated_from": "registry/submission_checks.json, registry/submission_checks_ci.json",
         "submission": sub.name if sub else None,
         "sha256": sha,
         "format": checks.get("format") if checks else None,
@@ -56,17 +56,26 @@ def main() -> int:
                     else "SKIPPED (prior-artifact corpus not present here)"
                     if checks["uniqueness"].get("verdict") == "SKIPPED" else "UNKNOWN") if checks else "UNKNOWN",
         "checked_by": "scripts/check_submission.py",
+        "uniqueness_at_ci_level": {k: v for k, v in (checks_ci.get("uniqueness") or {}).items()} if checks_ci else
+                                  "not yet recorded on this branch",
+        "levels": {
+            "full_pixel": "prior-artifact corpus present (development machine); "
+                          "fine-scale IoU and dot-novelty resolved",
+            "block_signature": "bare CI runner; 8x/32x block occupancy from "
+                               "registry/prior_artifact_signatures.npz",
+        },
     }, indent=1))
 
     (DATA / "validation.json").write_text(json.dumps({
-        "generated_utc": datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds"),
+        "generated_from": "registry/submission_validation.json, registry/submission_build.json",
         "submission_scored_on_both_frames": validation,
         "build_diagnostics": build,
         "note": "F1 = catalogue-fold frame; F2 = SGMC off-catalogue frame. Proxies, not leaderboard scores.",
     }, indent=1))
 
     (DATA / "feed.json").write_text(json.dumps({
-        "generated_utc": datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds"),
+        "generated_from": "registry/*.json (committed receipts); no wall-clock stamp so that "
+                           "regenerating the site cannot create merge churn",
         "kind": "static snapshot — regenerated on every push, no third-party API required",
         "public_leaderboard_snapshot": {
             "fetched": "2026-10-06",
