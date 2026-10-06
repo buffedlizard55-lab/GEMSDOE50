@@ -1,12 +1,13 @@
-"""Loading and quality control of the official USGS ComCat catalogue.
+"""Legacy parser for the mixed-network USGS-hosted ComCat export.
 
-Source (official, free, public domain)
---------------------------------------
-USGS FDSN event web service / ANSS Comprehensive Earthquake Catalog (ComCat)
+The FDSN service is official, but this project has not audited contributor-specific
+rights or competition shareability for the mixed-network export. General USGS
+public-domain guidance is not treated as clearance for every contributed record.
+This legacy parser is not used by H50-S1; do not reuse its inputs externally until
+source-specific rights are reviewed.
+
   service : https://earthquake.usgs.gov/fdsnws/event/1/
-  docs    : https://earthquake.usgs.gov/fdsnws/event/1/
-  licence : USGS data are public domain
-            https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits
+  ComCat : https://earthquake.usgs.gov/data/comcat/index.php
 
 The competition's own feature stack carries two seismicity layers (``ieq_n100a15`` and
 ``deq_n100a15``) that are *density* fields over a ~100 km support; at the 300 m scale of

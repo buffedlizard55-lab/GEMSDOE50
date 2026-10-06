@@ -24,6 +24,12 @@ def main() -> int:
     protocol = (ROOT / "docs/h50s1-protocol-addendum.md").read_text(encoding="utf-8")
     evaluator = (ROOT / "src/gemsdoe50/evaluation.py").read_text(encoding="utf-8")
     external = (ROOT / "data/external/README.md").read_text(encoding="utf-8")
+    source_registry = json.loads((ROOT / "registry/sources.json").read_text(encoding="utf-8"))
+    research_review = (ROOT / "docs/research/earthquake-geometry-review-20261006.md").read_text(encoding="utf-8")
+    candidate_ranking = (ROOT / "docs/research/hypothesis-ranking-20261006.md").read_text(encoding="utf-8")
+    runner = (ROOT / "scripts/run_experiment.py").read_text(encoding="utf-8")
+    research_workflow = (ROOT / ".github/workflows/h50s1-research.yml").read_text(encoding="utf-8")
+    site_builder = (ROOT / "scripts/build_h50_site.py").read_text(encoding="utf-8")
     site_workflow = (ROOT / ".github/workflows/site.yml").read_text(encoding="utf-8")
     feed_workflow = (ROOT / ".github/workflows/feed.yml").read_text(encoding="utf-8")
     fetch_workflow = (ROOT / ".github/workflows/fetch-external-data.yml").read_text(
@@ -51,6 +57,47 @@ def main() -> int:
     check("scheduled ComCat refresh is disabled", "schedule:" not in feed_workflow and "if: ${{ false }}" in feed_workflow)
     check("ComCat fetch workflow is disabled", "if: ${{ false }}" in fetch_workflow)
     check("site workflow cannot push generated changes", "git push" not in site_workflow)
+    comcat = next(
+        (item for item in source_registry.get("sources", []) if "Comprehensive Earthquake Catalog" in item.get("name", "")),
+        {},
+    )
+    check(
+        "mixed-network ComCat rights remain explicitly unresolved",
+        "unresolved" in comcat.get("licence", "").lower()
+        and "not cleared" in comcat.get("used_for", "").lower(),
+    )
+    check(
+        "2-D ComCat method is not represented as new",
+        "do not present the 2-d comcat" in research_review.lower()
+        and "unverified" in research_review.lower(),
+    )
+    check(
+        "3–5 geological hypotheses are ranked against project history",
+        all(token in candidate_ranking for token in ("H50-S1", "H50-G1", "H50-RC", "H50-S2", "H50-B")),
+    )
+    check(
+        "H50-S1 evaluator requires both smoothed-density controls",
+        "smoothed-density-1km" in evaluator
+        and "smoothed-density-2km" in evaluator
+        and "beats_both_smoothed_density_controls" in evaluator,
+    )
+    check(
+        "H50-S1 output gate blocks unresolved confounds",
+        all(token in runner for token in ("aftershock_declustering_complete", "mining_injection_screen_complete", "event_location_uncertainty_informs_corridor")),
+    )
+    check(
+        "H50-S1 site describes the density and scientific gates",
+        "smoothed-density controls" in site_builder and "aftershock" in site_builder,
+    )
+    check(
+        "research workflow is pinned to this Arena branch",
+        "arena/c4f4db48-gemsdoe50" in research_workflow
+        and "arena/c6060a3e-gemsdoe50" not in research_workflow,
+    )
+    check(
+        "leaderboard irregularity and non-use are documented",
+        "unintended automated request" in README and "no rows/scores were saved or used" in README,
+    )
 
     if failures:
         print("\nFailed guardrails:", ", ".join(failures))

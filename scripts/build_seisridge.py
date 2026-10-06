@@ -2,9 +2,11 @@
 """Build the GEMSDOE50 submission.
 
 Content
-  core    seismicity lineation corridors from the official USGS ComCat catalogue
-          (OADC-style inertia-tensor clusters + pruned Hough spans, declustered),
-          snapped onto the ridge of the USGS 3DEP 1 m DEM scarp descriptors
+  core    legacy 2-D seismicity lineation corridors from a mixed-network ComCat
+          extract with unresolved contributor rights (covariance/inertia clusters +
+          pruned Hough spans). The triangle-area filter is computed but its keep mask
+          is not applied to subsequent fitting, so this builder does not establish
+          aftershock declustering. Not an H50-S1 input or a new detector.
   volume  ridge evidence from the USGS 3DEP lidar scarp descriptors and the GeoDAWN
           airborne radiometrics, restricted to >300 m from the provided catalogue
 

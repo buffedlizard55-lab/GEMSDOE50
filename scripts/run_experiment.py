@@ -12,12 +12,13 @@ from pathlib import Path
 from typing import Any
 
 import numpy as np
-from scipy.ndimage import distance_transform_edt
+from scipy.ndimage import distance_transform_edt, gaussian_filter
 
-from gemsdoe50.catalog import read_nevada_catalog
+from gemsdoe50.catalog import CatalogEvents, read_nevada_catalog
 from gemsdoe50.common import jsonable, md5_file, sha256_array, sha256_file
 from gemsdoe50.evaluation import (
     PREDICTION_MASS,
+    SMOOTHED_DENSITY_CONTROL_SIGMA_M,
     TIME_SHUFFLE_CONTROLS,
     _top_n_prediction,
     evaluate_hypothesis,
@@ -106,6 +107,39 @@ def _verify_frozen_realization(
         if frozen.get(key) != expected:
             raise ValueError(f"frozen holdout realization mismatch at {key}")
     return sha256_file(realization_path)
+
+
+def _smoothed_density_control(
+    events: CatalogEvents,
+    valid_mask: np.ndarray,
+    *,
+    pixel_size_m: float,
+    sigma_m: float,
+) -> np.ndarray:
+    """Build a normalized Gaussian event-count control from relocated events."""
+    valid = np.asarray(valid_mask, dtype=bool)
+    if pixel_size_m <= 0 or sigma_m <= 0:
+        raise ValueError("pixel_size_m and sigma_m must be positive")
+    relocated = np.asarray(events.relocated) == 1
+    rows = np.asarray(events.row)[relocated]
+    cols = np.asarray(events.col)[relocated]
+    if np.any((rows < 0) | (rows >= valid.shape[0]) | (cols < 0) | (cols >= valid.shape[1])):
+        raise ValueError("catalog event cell is outside the density-control grid")
+    if np.any(~valid[rows, cols]):
+        raise ValueError("catalog event falls outside the valid density-control footprint")
+    counts = np.zeros(valid.shape, dtype=np.float32)
+    np.add.at(counts, (rows, cols), 1.0)
+    density = gaussian_filter(
+        counts,
+        sigma=sigma_m / pixel_size_m,
+        mode="constant",
+        cval=0.0,
+    )
+    density[~valid] = 0.0
+    maximum = float(density.max()) if density.size else 0.0
+    if maximum > 0:
+        density /= maximum
+    return density.astype(np.float32, copy=False)
 
 
 def _write_outputs(
@@ -211,6 +245,30 @@ def _write_outputs(
         "holdout_spec": split_sha,
         "holdout_realized": realized_sha,
     }
+    pixel_size_m = float(spec["grid"]["pixel_size_m"])
+    for name, sigma_m in SMOOTHED_DENSITY_CONTROL_SIGMA_M.items():
+        density_map = _smoothed_density_control(
+            events,
+            valid_mask,
+            pixel_size_m=pixel_size_m,
+            sigma_m=sigma_m,
+        )
+        density_sha = sha256_array(density_map)
+        baseline_maps[name] = density_map
+        baseline_metadata[name] = {
+            "kind": "derived Gaussian-smoothed relocated-event count control",
+            "catalog_sha256": catalog_sha,
+            "score_map_sha256": density_sha,
+            "sigma_m": sigma_m,
+            "pixel_size_m": pixel_size_m,
+            "relocated_event_count": int(np.count_nonzero(events.relocated == 1)),
+            "normalization": "divide by map maximum after smoothing; zero outside valid footprint",
+            "confound_limitations": [
+                "uses the same un-declustered catalog events as H50-S1",
+                "not screened for mining or injection sites",
+            ],
+        }
+        input_hashes[name] = density_sha
     for name, pin in BASELINE_PINS.items():
         path = prior_dir / pin["file"]
         actual_sha = sha256_file(path)
@@ -231,6 +289,50 @@ def _write_outputs(
         time_shuffle_maps=time_shuffle_maps,
     )
     evaluation["time_shuffle_run_metadata"] = time_shuffle_metadata
+
+    numeric_gate = evaluation["promotion_gate"]
+    numeric_pass = bool(numeric_gate["pass"])
+    scientific_gates = {
+        "aftershock_declustering_complete": {
+            "pass": False,
+            "detail": (
+                "H50-S1 applies one-event-per-250-m-cell-per-year deduplication, not a "
+                "formal space-time aftershock/sequence-declustering control."
+            ),
+        },
+        "mining_injection_screen_complete": {
+            "pass": False,
+            "detail": (
+                "NBMG screening layers were reviewed at metadata level but were not acquired "
+                "or applied; coverage and operational dates are incomplete."
+            ),
+        },
+        "event_location_uncertainty_informs_corridor": {
+            "pass": False,
+            "detail": (
+                "The catalog has no event-specific location covariance; bootstrap orientation "
+                "stability does not estimate absolute position error or justify corridor width."
+            ),
+        },
+        "visible_label_300m_buffer_enforced": {
+            "pass": True,
+            "detail": (
+                "Frozen holdout scoring excludes visible labels buffered by 300 m; the unique "
+                "output also excludes the full training-label mask buffered by 300 m."
+            ),
+        },
+    }
+    for gate_name, gate in scientific_gates.items():
+        numeric_gate["components"][gate_name] = bool(gate["pass"])
+    overall_pass = numeric_pass and all(bool(gate["pass"]) for gate in scientific_gates.values())
+    numeric_gate["numeric_pass"] = numeric_pass
+    numeric_gate["scientific_gates"] = scientific_gates
+    numeric_gate["pass"] = bool(overall_pass)
+    numeric_gate["decision"] = "ELIGIBLE_FOR_REVIEW_ONLY" if overall_pass else "NO_SLOT"
+    numeric_gate["note"] = (
+        "A score-only pass is insufficient. All scientific data/confound gates and local proxy "
+        "criteria must pass before review; no portal acceptance or private-test performance is implied."
+    )
 
     # Final raster predicts candidate traces only, excludes the complete known
     # catalogue buffered by 300 m, and uses a fixed, binary 37,612-pixel budget.
@@ -256,7 +358,7 @@ def _write_outputs(
 
     prior_jaccard = {
         name: spatial_jaccard(final_predictions, baseline_maps[name], valid_mask)
-        for name in baseline_maps
+        for name in BASELINE_PINS
     }
     final_positive = int(np.count_nonzero(final_predictions > 0))
 
