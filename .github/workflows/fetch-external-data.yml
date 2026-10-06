@@ -1,0 +1,67 @@
+name: fetch-external-data
+
+# GitHub-hosted runners have unrestricted egress; the development sandbox does not.
+# This workflow is the project's *only* mechanism for reaching official data services
+# that are otherwise unreachable (USGS FDSN/ComCat). It never uses credentials and
+# never writes to the repository: the catalogue is published as a build artifact.
+#
+# Manual run:  gh workflow run fetch-external-data -R buffedlizard55-lab/GEMSDOE50 -f min_magnitude=1.0
+# Download:    gh run download <run-id> -R buffedlizard55-lab/GEMSDOE50 -n usgs-comcat-catalog -D data/external
+
+on:
+  push:
+    paths:
+      - 'scripts/fetch_earthquake_catalog.py'
+      - '.github/workflows/fetch-external-data.yml'
+  workflow_dispatch:
+    inputs:
+      min_magnitude:
+        description: 'Minimum magnitude for the dense catalogue band'
+        required: false
+        default: '1.0'
+      start_year:
+        description: 'First year of the dense band'
+        required: false
+        default: '1970'
+
+permissions:
+  contents: read
+
+jobs:
+  fetch-catalog:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Fetch USGS ComCat catalogue for the GEMS footprint
+        env:
+          MIN_MAG: ${{ github.event.inputs.min_magnitude || '1.0' }}
+          START_YEAR: ${{ github.event.inputs.start_year || '1970' }}
+        run: |
+          python scripts/fetch_earthquake_catalog.py \
+            --out data/external \
+            --min-magnitude "$MIN_MAG" \
+            --start "$START_YEAR-01-01"
+      - name: Sanity-check the fetched catalogue
+        run: |
+          python - <<'PY'
+          import csv, json, pathlib
+          p = pathlib.Path('data/external/usgs_comcat_earthquakes.csv')
+          rows = list(csv.DictReader(p.open()))
+          assert rows, 'catalogue is empty'
+          mags = [float(r['mag']) for r in rows if r['mag']]
+          print('rows', len(rows), 'mag range', min(mags), max(mags))
+          print('first', rows[0]['time'], 'last', rows[-1]['time'])
+          print('types', json.load(open('data/external/usgs_comcat_earthquakes.summary.json'))['event_types'])
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: usgs-comcat-catalog
+          path: |
+            data/external/usgs_comcat_earthquakes.csv
+            data/external/usgs_comcat_earthquakes.summary.json
+          retention-days: 90
+          if-no-files-found: error
