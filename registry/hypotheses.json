@@ -96,6 +96,120 @@
    "difference": "not used in the family",
    "reason_rejected": "~40 mechanisms in the survey (M >= 3.5) versus tens of thousands of events consumed by the detector; each is a catalogue-fault event, biasing the prior toward mapped structures",
    "cost": "low but statistically powerless"
+  },
+  {
+   "id": "H51-A",
+   "rank": 1,
+   "status": "SHIPPED",
+   "name": "corroborated LiDAR-scarp + radiometric lineaments, off-catalogue emission",
+   "layers": [
+    "lidar_scarp_features 3/4/9 (step_max, lapneg_max, relief)",
+    "topo_u8 2/5/6/8 (slope_max, relief_local, curvature, hillshade lineament)",
+    "radiometric_u8 1-7 and geodawn_rad_u8 1-4 (K, Th, U, TC and ratios)"
+   ],
+   "transform": "multi-scale structure tensor (sigma 2/5/10, coherence smoothed at 3) -> gradient-magnitude x coherence -> 98th-percentile normalisation per layer -> max over layers within a family -> 0.75/0.55 blend of the scarp-focused topographic family and the radiometric family -> greedy kernel-credit pack with 3 px suppression, restricted to >300 m from the catalogue",
+   "why_missing_faults": "the catalogue is dominated by LiDAR-scarp picks; requiring an independent radiometric family at the same location suppresses single-layer pattern matches, and the 300 m catalogue exclusion keeps every emitted dot out of the masked-out label set",
+   "difference": "H47-S3/H19 shipped scarp-only or hand-weighted multi-line fields; this uses the measured best two-family blend, a metric-derived emission rule, and a fully off-catalogue support",
+   "measured": {
+    "sgmc_off_credit_per_dot": 0.18885648729799223,
+    "sgmc_off_random_control": 0.11607926576571358,
+    "monte_cristo_tp_weight": 18.925278416510935,
+    "monte_cristo_random_control": 34.93655030268317,
+    "mass": 35000,
+    "folds_positive": "4/4"
+   },
+   "evidence": [
+    "evidence/build_h51.json",
+    "evidence/holdout_h51.json",
+    "docs/hypotheses-preregistered.md"
+   ]
+  },
+  {
+   "id": "H51-B",
+   "rank": 2,
+   "status": "NEGATIVE (no mass shipped)",
+   "name": "seismicity event-geometry corridors with a calibrated uncertainty width",
+   "layers": [
+    "USGS ComCat events (magnitude >= 1, depth <= 25 km)",
+    "documented horizontalError where published; a calibrated model otherwise"
+   ],
+   "transform": "space-time tetrahedron declustering against 200 time-shuffled surrogates -> 1/sigma^2-weighted 2-D covariance axes -> max(2 sigma, 300 m) Gaussian-width corridors",
+   "why_missing_faults": "aftershock sequences trace the causative fault, so a blind structure with recent seismicity is drawn where the catalogue has no trace",
+   "difference": "the provided ieq/deq bands are ~100 km density fields (autocorrelation 0.9986 at 1 km); the earlier gems50 line used a space-only decluster and no uncertainty model",
+   "measured": {
+    "sgmc_off_credit_per_dot_at_20000": 0.09215696417177613,
+    "sgmc_off_random_control": 0.11607926576571358,
+    "monte_cristo_tp_weight": 0.0,
+    "verdict": "level with or below the matched random control; 0.0 Monte Cristo coverage"
+   },
+   "evidence": [
+    "/home/user/.arena/work/seis_report.json (session scratch)",
+    "docs/hypotheses-preregistered.md"
+   ]
+  },
+  {
+   "id": "H51-C",
+   "rank": 3,
+   "status": "REJECTED on instrument",
+   "name": "depth-edge potential-field lineaments (tilt angle, vertical gradients)",
+   "layers": [
+    "training_features 1/2/3/6/9/14 (magnetic and derivatives)",
+    "5/11/13/18 (isostatic gravity and derivatives)",
+    "geodawn_extensions 4"
+   ],
+   "transform": "structure tensor on potential-field bands",
+   "why_missing_faults": "a buried fault with no surface scarp can still produce a mapped potential-field edge",
+   "difference": "isolates depth-derived edges rather than anomaly amplitudes",
+   "measured": {
+    "sgmc_off_credit_per_dot": 0.0866,
+    "sgmc_off_random_control": 0.1115,
+    "verdict": "below the random control"
+   },
+   "evidence": [
+    "docs/hypotheses-preregistered.md"
+   ]
+  },
+  {
+   "id": "H51-D",
+   "rank": 4,
+   "status": "DEFERRED (now H52-C)",
+   "name": "thermal spring / well conduit anchoring (GDR 1391, INGENIOUS)",
+   "layers": [
+    "data/external/gdr_wellspring_in_footprint.csv",
+    "INGENIOUS temperature grids",
+    "cond_surf 17"
+   ],
+   "transform": "conduit segments from each spring/well to the nearest mapped structure",
+   "why_missing_faults": "springs prove a plumbing system; the unmapped part of a conduit is a concealed-fault candidate",
+   "difference": "H19 used the thermal evidence as a favourability field, not as conduit segments",
+   "measured": {
+    "verdict": "not measured in this session"
+   },
+   "evidence": [
+    "docs/h51-candidates.md"
+   ]
+  },
+  {
+   "id": "H51-E",
+   "rank": 5,
+   "status": "REJECTED on instrument",
+   "name": "orientation-concordance gate across all families",
+   "layers": [
+    "all four structural families"
+   ],
+   "transform": "count families above their own 75th-percentile strength with azimuths agreeing within 25 deg",
+   "why_missing_faults": "independent physics agreeing on azimuth is more likely to be a real structure",
+   "difference": "makes agreement a gate rather than a hand weight",
+   "measured": {
+    "sgmc_off_credit_per_dot": 0.1784,
+    "sgmc_off_without_gate": 0.1817,
+    "monte_cristo_tp_weight": 13.8,
+    "monte_cristo_without_gate": 32.0,
+    "verdict": "concentrates mass on large structures and loses small ones; kept as a diagnostic"
+   },
+   "evidence": [
+    "docs/hypotheses-preregistered.md"
+   ]
   }
  ],
  "audit_note": "2026-10-06 review: see docs/research/earthquake-geometry-review-20261006.md and docs/research/hypothesis-ranking-20261006.md. Historical metric fields are retained but are not current official score claims."

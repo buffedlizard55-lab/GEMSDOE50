@@ -12,9 +12,50 @@
   "organizer_score": null
  },
  "h50_s1": {
-  "status": "research-only; real-data experiment not yet run",
+  "status": "research-only; the relocated-catalog data are still not fetchable in this sandbox",
   "organizer_score": null,
   "portal_upload": null,
   "weekly_slot_used": false
- }
+ },
+ "h51": {
+  "status": "built, format-verified and proxy-validated; no organizer score claimed",
+  "file": "docs/downloads/gems51-scarpradio-offcat-35000-20261006-ecf058ea-nan.tif",
+  "sha256": "8f8708d2872b66d71925707e0aede23eebcf217dfd2e57d6e61186f32e686f5d",
+  "mass": 35000,
+  "portal_name": "GEMSDOE50-H51-SCARPRADIO-OFFCAT",
+  "portal_note": "GEMSDOE50 H51 | corroborated 3DEP-scarp + radiometric lineaments, all dots >300 m from the given catalogue, metric-matched sparse emission; proxy-validated, NOT organizer-scored",
+  "instruments": {
+   "catalogue": {
+    "dti": 0.0,
+    "credit_per_dot": 0.0,
+    "truth_cells": 60988
+   },
+   "sgmc_off": {
+    "dti": 0.11582196973039599,
+    "credit_per_dot": 0.18885648729799223,
+    "truth_cells": 61664
+   },
+   "monte_cristo": {
+    "dti": 0.002630097708754347,
+    "credit_per_dot": 0.000540722240471741,
+    "truth_cells": 242
+   }
+  },
+  "random_control": {
+   "catalogue": 0.0,
+   "sgmc_off": 0.11607926576571358,
+   "monte_cristo": 0.0009981871515052335
+  },
+  "blocked_validation": {
+   "folds_positive": "4/4",
+   "subtile_ci95": [
+    0.04063435588099594,
+    0.07850941919485778
+   ]
+  },
+  "organizer_score": null,
+  "portal_upload": null,
+  "weekly_slot_used": false
+ },
+ "generated_utc": "2026-10-06T23:47:19Z"
 }

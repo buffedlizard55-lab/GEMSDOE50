@@ -1,0 +1,199 @@
+{
+ "schema": "gems51.uniqueness.v1",
+ "file": "docs/downloads/gems51-scarpradio-offcat-35000-20261006-ecf058ea-nan.tif",
+ "sha256": "8f8708d2872b66d71925707e0aede23eebcf217dfd2e57d6e61186f32e686f5d",
+ "predicted_cells": 35000,
+ "factors": [
+  8,
+  32
+ ],
+ "mine_blocks": {
+  "8": 13960,
+  "32": 3006
+ },
+ "per_prior_top10": {
+  "8": [
+   {
+    "name": "gems16-h16-1-topo-geophys-baseline-ridges-20260930-df20f65e-nan.tif",
+    "jaccard": 0.22537129104784825,
+    "mine_inside_prior": 0.5098137535816619,
+    "prior_inside_mine": 0.2877183053040103
+   },
+   {
+    "name": "gems19-h19-4-multiline-corroborated-openness-thermal-pop-20260930-691e4dfa-nan.tif",
+    "jaccard": 0.2224644884086318,
+    "mine_inside_prior": 0.4969914040114613,
+    "prior_inside_mine": 0.2871094558245396
+   },
+   {
+    "name": "gems32-bayesopt-dilation-scarp-d28-20261004-nan.tif",
+    "jaccard": 0.22151337940811625,
+    "mine_inside_prior": 0.4477077363896848,
+    "prior_inside_mine": 0.30480370641307
+   },
+   {
+    "name": "gems32-bayesopt-dilation-scarp-d28-20261004-zeros.tif",
+    "jaccard": 0.22151337940811625,
+    "mine_inside_prior": 0.4477077363896848,
+    "prior_inside_mine": 0.30480370641307
+   },
+   {
+    "name": "gemsdoe32-h32c-mt-claycap-breach-45890-20261004T183200Z-a5963d0a-nan.tif",
+    "jaccard": 0.21754035613246797,
+    "mine_inside_prior": 0.4681948424068768,
+    "prior_inside_mine": 0.28893506034215993
+   },
+   {
+    "name": "gemsdoe32-h32c-mt-claycap-breach-45890-20261004T183200Z-a5963d0a-zeros.tif",
+    "jaccard": 0.21754035613246797,
+    "mine_inside_prior": 0.4681948424068768,
+    "prior_inside_mine": 0.28893506034215993
+   },
+   {
+    "name": "gems19-h19-5-powerlaw-budget-multiline-corroborated-20260930-e27054cf-nan.tif",
+    "jaccard": 0.21751633986928104,
+    "mine_inside_prior": 0.47679083094555874,
+    "prior_inside_mine": 0.2857142857142857
+   },
+   {
+    "name": "QUARANTINED-gems32-h19-5-smoothmaxcov-44090-zeros.tif",
+    "jaccard": 0.2173584620614118,
+    "mine_inside_prior": 0.41224928366762176,
+    "prior_inside_mine": 0.31496278458844135
+   },
+   {
+    "name": "QUARANTINED-gems32-h19-5-smoothmaxcov-44090.tif",
+    "jaccard": 0.2173584620614118,
+    "mine_inside_prior": 0.41224928366762176,
+    "prior_inside_mine": 0.31496278458844135
+   },
+   {
+    "name": "gemsdoe32-h32b-transtensional-swarm-45890-20261004T183200Z-27b7c9e6-nan.tif",
+    "jaccard": 0.2160212730596643,
+    "mine_inside_prior": 0.46554441260744983,
+    "prior_inside_mine": 0.287261315417256
+   }
+  ],
+  "32": [
+   {
+    "name": "gems16-h16-1-topo-geophys-baseline-ridges-20260930-df20f65e-nan.tif",
+    "jaccard": 0.6597205197352293,
+    "mine_inside_prior": 0.8952095808383234,
+    "prior_inside_mine": 0.7149309245483528
+   },
+   {
+    "name": "gems19-h19-4-multiline-corroborated-openness-thermal-pop-20260930-691e4dfa-nan.tif",
+    "jaccard": 0.6592302034812454,
+    "mine_inside_prior": 0.894544244843646,
+    "prior_inside_mine": 0.7147793726741095
+   },
+   {
+    "name": "gemsdoe32-h32c-mt-claycap-breach-45890-20261004T183200Z-a5963d0a-nan.tif",
+    "jaccard": 0.6587689301416707,
+    "mine_inside_prior": 0.8972055888223552,
+    "prior_inside_mine": 0.712549537648613
+   },
+   {
+    "name": "gemsdoe32-h32c-mt-claycap-breach-45890-20261004T183200Z-a5963d0a-zeros.tif",
+    "jaccard": 0.6587689301416707,
+    "mine_inside_prior": 0.8972055888223552,
+    "prior_inside_mine": 0.712549537648613
+   },
+   {
+    "name": "gemsdoe32-h32b-transtensional-swarm-45890-20261004T183200Z-27b7c9e6-nan.tif",
+    "jaccard": 0.6585425898572131,
+    "mine_inside_prior": 0.8898868928809048,
+    "prior_inside_mine": 0.7169659608683999
+   },
+   {
+    "name": "gemsdoe32-h32b-transtensional-swarm-45890-20261004T183200Z-27b7c9e6-zeros.tif",
+    "jaccard": 0.6585425898572131,
+    "mine_inside_prior": 0.8898868928809048,
+    "prior_inside_mine": 0.7169659608683999
+   },
+   {
+    "name": "gemsdoe32-h32d-submodular-multipysics-46090-20261004T183200Z-4de30601-nan.tif",
+    "jaccard": 0.6565334640843344,
+    "mine_inside_prior": 0.8908848968729208,
+    "prior_inside_mine": 0.7139429485470541
+   },
+   {
+    "name": "gemsdoe32-h32d-submodular-multipysics-46090-20261004T183200Z-4de30601-zeros.tif",
+    "jaccard": 0.6565334640843344,
+    "mine_inside_prior": 0.8908848968729208,
+    "prior_inside_mine": 0.7139429485470541
+   },
+   {
+    "name": "gemsdoe32-h32a-dip-projected-step-46090-20261004T183200Z-838fcd84-nan.tif",
+    "jaccard": 0.6548260656540912,
+    "mine_inside_prior": 0.8892215568862275,
+    "prior_inside_mine": 0.7129901307015204
+   },
+   {
+    "name": "gemsdoe32-h32a-dip-projected-step-46090-20261004T183200Z-838fcd84-zeros.tif",
+    "jaccard": 0.6548260656540912,
+    "mine_inside_prior": 0.8892215568862275,
+    "prior_inside_mine": 0.7129901307015204
+   }
+  ]
+ },
+ "prior_vs_prior_null": {
+  "8": {
+   "pairs": 1225,
+   "median": 0.4544006824968008,
+   "p90": 0.956989247311828,
+   "p99": 1.0,
+   "max": 1.0,
+   "max_pair_example": [
+    "gems24-h25-1-dotted-h19-5-d1-5-20261002-989f59505db1-nan.tif",
+    "gemsdoe30-d15-poisson200m-offcat-60069-20261003T233210Z-68d0e2e4.tif",
+    1.0
+   ],
+   "top10_percentile_of_mine": 0.09877551020408164,
+   "share_of_priors_below_mine_top": 0.09877551020408164
+  },
+  "32": {
+   "pairs": 1225,
+   "median": 0.8251533742331288,
+   "p90": 0.9930685150626499,
+   "p99": 1.0,
+   "max": 1.0,
+   "max_pair_example": [
+    "gems24-h25-1-dotted-h19-5-d1-5-20261002-989f59505db1-nan.tif",
+    "gemsdoe30-d15-poisson200m-offcat-60069-20261003T233210Z-68d0e2e4.tif",
+    1.0
+   ],
+   "top10_percentile_of_mine": 0.2946938775510204,
+   "share_of_priors_below_mine_top": 0.2946938775510204
+  }
+ },
+ "exact_pixel_vs_local_priors": [
+  {
+   "file": "gems50-seislin-44709-20261006T2041Z-79e260ae.tif",
+   "sha256": "79e260ae223d7dfd96413da28a9c6fed30107285ab843795181a5c9e5dff7262",
+   "predicted_cells": 44709,
+   "shared_pixels": 953,
+   "share_of_mine": 0.02722857142857143,
+   "share_of_theirs": 0.021315618779216713,
+   "jaccard_pixels": 0.012100665346132359
+  },
+  {
+   "file": "gems50-seislin-44709-20261006T2041Z-79e260ae.tif",
+   "sha256": "79e260ae223d7dfd96413da28a9c6fed30107285ab843795181a5c9e5dff7262",
+   "predicted_cells": 44709,
+   "shared_pixels": 953,
+   "share_of_mine": 0.02722857142857143,
+   "share_of_theirs": 0.021315618779216713,
+   "jaccard_pixels": 0.012100665346132359
+  }
+ ],
+ "verdict": {
+  "headline": "no prior artifact's pixels are reused; the sha256 is new; the largest block-32 Jaccard against any prior artifact is 0.6597 against gems16-h16-1-topo-geophys-baseline-ridges-20260930-df20f65e-nan.tif",
+  "gate_note": "a fixed 0.5 Jaccard threshold is NOT informative for lineament fields of this size: 1225 prior-vs-prior pairs of independent artifacts reach a maximum Jaccard of 1.0000 at 32 px blocks and 1.0000 at 8 px, and this file's worst-case score sits at the 29th percentile of the same distribution",
+  "independent_evidence": [
+   "the generator never reads a prior submission raster into the belief field (scripts/build_h51.py reads only the official stack, the competition label raster, the SGMC raster and, read-only, the incumbent comparator for scoring)",
+   "the file's sha256 differs from all 50 recorded prior hashes",
+   "exact-pixel overlap with the only prior submission present in this sandbox is 0.0272 of this file's dots"
+  ]
+ }
+}
