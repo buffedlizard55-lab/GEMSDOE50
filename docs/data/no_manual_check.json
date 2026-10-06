@@ -1,0 +1,41 @@
+{
+ "generated_utc": "2026-10-06T20:45:55+00:00",
+ "submission": "gems50-seislin-44709-20261006T2041Z-79e260ae.tif",
+ "sha256": "79e260ae223d7dfd96413da28a9c6fed30107285ab843795181a5c9e5dff7262",
+ "format": {
+  "driver": "GTiff",
+  "count_is_1": true,
+  "dtype_is_float32": true,
+  "crs_is_epsg32611": true,
+  "same_shape": true,
+  "same_transform": true,
+  "same_bounds": true,
+  "min": 0.0,
+  "max": 1.0,
+  "nan_count": 7111787,
+  "values_in_0_1": true,
+  "nan_only_outside_footprint": true,
+  "positive_px": 44709,
+  "unique_positive_values": [
+   1.0
+  ],
+  "compression": "Compression.deflate",
+  "nodata": NaN,
+  "footprint_source": "competition sample_submission.tif",
+  "footprint_px": 5167373,
+  "outside_footprint_all_nan": true,
+  "all_checks_pass": true
+ },
+ "uniqueness": {
+  "n_prior": 50,
+  "identical_sha256": [],
+  "max_iou": 0.3563091530343806,
+  "worst_overlap_file": "gems32-bayesopt-dilation-scarp-d28-20261004-nan.tif",
+  "min_novel_fraction_at_2px": 0.472880180724239,
+  "my_dots": 44709,
+  "my_sha256": "79e260ae223d7dfd96413da28a9c6fed30107285ab843795181a5c9e5dff7262",
+  "verdict_unique": true
+ },
+ "verdict": "PASS",
+ "checked_by": "scripts/check_submission.py"
+}

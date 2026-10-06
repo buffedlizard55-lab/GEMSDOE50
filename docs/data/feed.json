@@ -1,0 +1,149 @@
+{
+ "generated_utc": "2026-10-06T20:45:55+00:00",
+ "kind": "static snapshot \u2014 regenerated on every push, no third-party API required",
+ "public_leaderboard_snapshot": {
+  "fetched": "2026-10-06",
+  "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/",
+  "best": 0.3774,
+  "entries": [
+   {
+    "rank": 1,
+    "team": "xiaofanhu",
+    "score": 0.3774
+   },
+   {
+    "rank": 2,
+    "team": "alexoktaba",
+    "score": 0.3345
+   },
+   {
+    "rank": 3,
+    "team": "nchuzhoy",
+    "score": 0.3262
+   },
+   {
+    "rank": 4,
+    "team": "kinghorton42",
+    "score": 0.3222
+   },
+   {
+    "rank": 5,
+    "team": "joeyfezster",
+    "score": 0.322
+   },
+   {
+    "rank": 6,
+    "team": "Batik",
+    "score": 0.3218
+   },
+   {
+    "rank": 7,
+    "team": "DARD",
+    "score": 0.3195
+   },
+   {
+    "rank": 8,
+    "team": "ndavis7",
+    "score": 0.2888
+   },
+   {
+    "rank": 9,
+    "team": "mzoorob",
+    "score": 0.2884
+   },
+   {
+    "rank": 10,
+    "team": "GrigorSargsyan",
+    "score": 0.2876
+   },
+   {
+    "rank": 11,
+    "team": "HardcoreTechGod",
+    "score": 0.2854
+   },
+   {
+    "rank": 12,
+    "team": "op01",
+    "score": 0.2792
+   },
+   {
+    "rank": 13,
+    "team": "extradr19",
+    "score": 0.2778
+   },
+   {
+    "rank": 14,
+    "team": "wbg1",
+    "score": 0.275
+   },
+   {
+    "rank": 15,
+    "team": "smashi34",
+    "score": 0.271
+   },
+   {
+    "rank": 16,
+    "team": "smrtdoog5",
+    "score": 0.2708
+   },
+   {
+    "rank": 17,
+    "team": "jgaines",
+    "score": 0.2638
+   },
+   {
+    "rank": 18,
+    "team": "ad3002",
+    "score": 0.2634
+   },
+   {
+    "rank": 19,
+    "team": "SDCF9",
+    "score": 0.26
+   },
+   {
+    "rank": 20,
+    "team": "kpomazi",
+    "score": 0.2517
+   },
+   {
+    "rank": 21,
+    "team": "Mekhi12",
+    "score": 0.2515
+   },
+   {
+    "rank": 22,
+    "team": "tchu",
+    "score": 0.2511
+   },
+   {
+    "rank": 23,
+    "team": "BrandenKMurray",
+    "score": 0.2502
+   }
+  ]
+ },
+ "our_submission": {
+  "file": "gems50-seislin-44709-20261006T2041Z-79e260ae.tif",
+  "sha256": "79e260ae223d7dfd96413da28a9c6fed30107285ab843795181a5c9e5dff7262",
+  "dots": 44709
+ },
+ "evidence_frames": {
+  "F1_catalogue_folds": {
+   "scarp": 0.01127,
+   "struct": 0.02173,
+   "seis": 0.00728,
+   "density_300m": 0.0112,
+   "random": 0.02088
+  },
+  "F2_sgmc_off_catalogue": {
+   "scarp": 0.0345,
+   "struct": 0.00867,
+   "seis": 0.0066,
+   "density_300m": 0.00426,
+   "random": 0.019
+  },
+  "budget_dots": 44090,
+  "source": "registry/field_validation.json"
+ }
+}
