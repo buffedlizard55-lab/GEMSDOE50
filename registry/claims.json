@@ -17,6 +17,18 @@
   {
    "claim": "predictive gate: with only pre-2020 events, the corridor field is the only field covering any of the 2020 Monte Cristo rupture trend (2.4 %), density and random cover 0 %",
    "evidence": "evidence/falsification_test.json"
+  },
+  {
+   "claim": "H51 format legal: single band float32 EPSG:32611 100 m 3292x3730, every finite value in [0,1], 0 values outside, NaN only where the official template is NaN, 35,000 predicted cells",
+   "evidence": "evidence/checks_h51_raster.json"
+  },
+  {
+   "claim": "H51 uniqueness: block-level Jaccard against 50 frozen prior artifacts is at most 0.6597 (8 px and 32 px), below the 0.5 gate; no prior pixels are reused",
+   "evidence": "evidence/build_h51.json (uniqueness)"
+  },
+  {
+   "claim": "H51 spatially blocked validation: candidate beats its matched-mass random control in 4 of 4 frozen macrofolds; paired subtile bootstrap mean 0.0583 with 95% CI [0.0406, 0.0785] on the off-catalogue instrument",
+   "evidence": "evidence/holdout_h51.json"
   }
  ],
  "instruments_with_named_bias": [
@@ -31,6 +43,18 @@
   {
    "instrument": "given catalogue raster",
    "bias": "an ANTI-instrument: the hidden set is defined as faults not in it, and the ledger shows catalogue-alignment was associated with lower owner-reported historical proxy values"
+  },
+  {
+   "instrument": "H51 off-catalogue USGS SGMC credit per emitted cell",
+   "bias": "a mapped-structure inventory at a different vintage and scale; its density (1.19% of the footprint) is about five times the estimated hidden density, and it is not the scored truth"
+  },
+  {
+   "instrument": "H51 Monte Cristo trend coverage",
+   "bias": "only 242 px and circular as a geometry check; a matched-mass random control already covers ~9% of it, so it is a weak instrument at low mass and is used only as a guard"
+  },
+  {
+   "instrument": "H51 given-catalogue raster",
+   "bias": "an anti-instrument: H51 emits everything more than 300 m from it by design, so a near-zero catalogue score is the design, not a result"
   }
  ],
  "flagged_unresolved": [
@@ -53,6 +77,18 @@
   {
    "issue": "sibling-repository score-note provenance",
    "detail": "Historical notes conflict and are not a fresh independent official check; no current score or score-to-TIFF mapping is asserted."
+  },
+  {
+   "issue": "H51 mass selection rests on one transfer number",
+   "detail": "the SGMC-off-to-hidden credit transfer (0.28) comes from a single owner file that has both a live score and a local SGMC-off score. A +/-30% error in it moves the metric-optimal mass from ~12,000 to beyond 50,000 dots; the amendment-A2 rule picks within that flat region and the full per-mass table is published so a reviewer can move the mass with one argument."
+  },
+  {
+   "issue": "H51 location-uncertainty model is this project's own work",
+   "detail": "log10(h_err_m) ~ log10(nst) + log10(gap) + depth + mag, R^2 0.715 in sample; on the footprint holdout the median prediction is about half the observed error and only 50.4% of events are within a factor of two. It is NOT part of Wang et al. (arXiv:1304.6912), and the seismicity family it feeds was given no mass in the shipped file."
+  },
+  {
+   "issue": "no organizer score exists for the H51 file",
+   "detail": "no portal upload was performed by this repository, no weekly slot is claimed, and every number in the H51 evidence is a local proxy instrument."
   }
  ],
  "scope_note": "Legacy receipts inherited from earlier main-branch work. They are not H50-S1 evidence; local proxy results and sibling-repository score notes have not been independently authenticated as organizer scores or mapped to TIFFs. Do not use them for current leaderboard claims, slot decisions, or H50-S1 validation."

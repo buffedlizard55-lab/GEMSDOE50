@@ -1,0 +1,197 @@
+{
+ "schema": "gems51.holdout-validation.v1",
+ "built_utc": "2026-10-06T23:36:14Z",
+ "candidate": "gems51-scarpradio-offcat-35000-20261006-ecf058ea",
+ "candidate_sha256": "8f8708d2872b66d71925707e0aede23eebcf217dfd2e57d6e61186f32e686f5d",
+ "frozen_split": {
+  "spec": "evidence/holdout-v1.json",
+  "split_sha256": "78b6692155c6c6d5f9f19ccee6d595167c2065f1f25eb8d08636d1d9b285ff16",
+  "macrofolds": [
+   "NW",
+   "NE",
+   "SW",
+   "SE"
+  ],
+  "subtiles": 11,
+  "rules": {
+   "macrofolds_are_half_open_pixel_bounds": true,
+   "heldout_core_erode_pixels": 100,
+   "heldout_core_erode_m": 10000,
+   "visible_training_label_buffer_pixels": 3,
+   "visible_training_label_buffer_m": 300,
+   "labels_in_heldout_core_are_scoring_truth_only": true,
+   "outside_valid_footprint_is_excluded": true,
+   "prediction_mass_total": 37612,
+   "mass_allocation": "proportional to valid eligible pixels per macrofold, largest-remainder rounding to exactly 37612"
+  }
+ },
+ "folds": [
+  {
+   "id": "NW",
+   "core_bounds": [
+    100,
+    1765,
+    100,
+    1546
+   ],
+   "candidate_dots_in_core": 12015,
+   "frozen_harness_truth": "provided catalogue labels inside the eroded core",
+   "frozen_harness_candidate_dti": 0.0,
+   "offcatalogue_truth_cells_in_core": 19101,
+   "candidate_credit_per_dot": 0.14940231138789012,
+   "random_control_credit_per_dot": 0.09740745822696875,
+   "candidate_minus_control": 0.05199485316092137
+  },
+  {
+   "id": "NE",
+   "core_bounds": [
+    100,
+    1765,
+    1746,
+    3192
+   ],
+   "candidate_dots_in_core": 6322,
+   "frozen_harness_truth": "provided catalogue labels inside the eroded core",
+   "frozen_harness_candidate_dti": 0.0,
+   "offcatalogue_truth_cells_in_core": 19576,
+   "candidate_credit_per_dot": 0.24943012993570057,
+   "random_control_credit_per_dot": 0.19085530104736806,
+   "candidate_minus_control": 0.058574828888332514
+  },
+  {
+   "id": "SW",
+   "core_bounds": [
+    1965,
+    3630,
+    100,
+    1546
+   ],
+   "candidate_dots_in_core": 2905,
+   "frozen_harness_truth": "provided catalogue labels inside the eroded core",
+   "frozen_harness_candidate_dti": 0.0,
+   "offcatalogue_truth_cells_in_core": 1188,
+   "candidate_credit_per_dot": 0.052513450535330984,
+   "random_control_credit_per_dot": 0.02859941989074797,
+   "candidate_minus_control": 0.023914030644583015
+  },
+  {
+   "id": "SE",
+   "core_bounds": [
+    1965,
+    3630,
+    1746,
+    3192
+   ],
+   "candidate_dots_in_core": 5484,
+   "frozen_harness_truth": "provided catalogue labels inside the eroded core",
+   "frozen_harness_candidate_dti": 0.0,
+   "offcatalogue_truth_cells_in_core": 11218,
+   "candidate_credit_per_dot": 0.28546899410956955,
+   "random_control_credit_per_dot": 0.188484053738993,
+   "candidate_minus_control": 0.09698494037057656
+  }
+ ],
+ "pooled_offcatalogue": {
+  "candidate": {
+   "dti": 0.11582196973039599,
+   "tp_weight": 6609.977055429728,
+   "fp_weight": 32084.767316124016,
+   "fn_weight": 55054.02294457027,
+   "truth_cells": 61664,
+   "prediction_cells": 35000,
+   "credit_per_dot": 0.2473238440256577,
+   "covered_fraction": 0.10719345250761754
+  },
+  "random_control": {
+   "dti": 0.05656213108626458,
+   "tp_weight": 3115.4321056196645,
+   "fp_weight": 25627.677315149012,
+   "fn_weight": 58548.567894380336,
+   "truth_cells": 61664,
+   "prediction_cells": 26726,
+   "credit_per_dot": 0.11656933718549968,
+   "covered_fraction": 0.05052270539730904
+  },
+  "mass": 26726
+ },
+ "subtile_bootstrap": {
+  "units": 11,
+  "paired_delta_mean": 0.05825411222345926,
+  "percentile_ci_95": [
+   0.04063435588099594,
+   0.07850941919485778
+  ],
+  "lower_bound_above_zero": true,
+  "table": [
+   {
+    "id": "NW-00",
+    "dots": 4870,
+    "candidate_credit_per_dot": 0.17229612418387466,
+    "control_credit_per_dot": 0.12013027007523809
+   },
+   {
+    "id": "NW-01",
+    "dots": 3596,
+    "candidate_credit_per_dot": 0.19060150729556144,
+    "control_credit_per_dot": 0.06750143500890655
+   },
+   {
+    "id": "NW-10",
+    "dots": 3167,
+    "candidate_credit_per_dot": 0.1915174479019464,
+    "control_credit_per_dot": 0.13787922176175954
+   },
+   {
+    "id": "NW-11",
+    "dots": 3253,
+    "candidate_credit_per_dot": 0.10797586754115476,
+    "control_credit_per_dot": 0.07643575667081531
+   },
+   {
+    "id": "NE-00",
+    "dots": 4264,
+    "candidate_credit_per_dot": 0.20379932291874406,
+    "control_credit_per_dot": 0.1405425936816831
+   },
+   {
+    "id": "NE-01",
+    "dots": 3627,
+    "candidate_credit_per_dot": 0.26936807977071664,
+    "control_credit_per_dot": 0.1959967438432935
+   },
+   {
+    "id": "NE-10",
+    "dots": 886,
+    "candidate_credit_per_dot": 0.10753740010253346,
+    "control_credit_per_dot": 0.0874145506801473
+   },
+   {
+    "id": "SW-01",
+    "dots": 3403,
+    "candidate_credit_per_dot": 0.07197951311079152,
+    "control_credit_per_dot": 0.026316149868602097
+   },
+   {
+    "id": "SW-11",
+    "dots": 1157,
+    "candidate_credit_per_dot": 0.09254018797884309,
+    "control_credit_per_dot": 0.06852638130612336
+   },
+   {
+    "id": "SE-00",
+    "dots": 1841,
+    "candidate_credit_per_dot": 0.11720125083697489,
+    "control_credit_per_dot": 0.07531878570714876
+   },
+   {
+    "id": "SE-10",
+    "dots": 4931,
+    "candidate_credit_per_dot": 0.32826027127548285,
+    "control_credit_per_dot": 0.21621984985485426
+   }
+  ]
+ },
+ "folds_positive": 4,
+ "folds_total": 4,
+ "honest_note": "The frozen H50-S1 harness scores held-out cores against the provided catalogue labels. H51 emits nothing within 300 m of those labels by design, so its frozen-harness DTI is ~0 by construction; that is a property of the harness's truth choice, not evidence about H51. The goal-aligned blocked test is the off-catalogue instrument below, where every fold must beat its matched random control for the candidate to be considered spatially stable."
+}

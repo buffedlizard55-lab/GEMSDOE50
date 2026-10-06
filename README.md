@@ -19,21 +19,69 @@
 
 ## Current evidence and decision (2026-10-06 UTC)
 
-- This research branch began from a minimal README-only commit. Since then, `origin/main` added an older GEMSDOE50 submission, research site, data, and workflows; these are preserved as repository history, not silently treated as H50-S1 evidence. The full standing charter, prior-work audit, and ranked hypotheses are maintained here.
-- The local ignored `.arena/cache/` bridge contains the competition feature, label, and template rasters. The assembled 19-band feature raster is 418,912,844 bytes with SHA-256 `4371c82e3b8339b807bdffcf4ef59a225520fe2988d521be208ae33743123bc5`; the label and example-submission rasters also match the bridge manifest. **Provenance caveat:** the bridge manifest points to the official data tab and public Dropbox mirrors, but this session did not authenticate to DrivenData and independently re-download the official bytes. Matching hashes establish consistency with the bridge manifest, not organizer provenance.
-- The ranked lead remains **H50-S1**, a research hypothesis about waveform-relocated Nevada hypocenter planes and plausible z=0 trace projections. The catalog is public, 2008–2023, 183,002 rows, 103,976 waveform-relocated in the paper, CC BY 4.0, and has Zenodo MD5 `38fa663f473378b61c74b597c53c416b` (13,833,354 bytes). It does not provide per-event location covariance. The data file has **not yet been downloaded into this sandbox**: direct Zenodo `curl` fails TLS here. A manually dispatched GitHub Actions workflow now provides a pinned, auditable acquisition path; it has not yet been run.
-- Four prior-work rasters are pinned for comparison only: H32-D, H47-S3, H48-DS, and the pre-existing `main`-branch GEMSDOE50 artifact `gems50-seislin-44709-20261006T2041Z-79e260ae.tif`. Their source commits/blob IDs and file hashes are pinned in the experiment code. The prior artifact's local claims are not an organizer score or verified score-to-TIFF mapping; no prior pixels are copied into the H50-S1 output.
-- The H50-S1 implementation includes a format-checked catalog parser, robust local 3-D plane/lineament geometry, frozen spatial-mask reconstruction, same-grid comparisons, translation/time-shuffle controls, and byte-level GeoTIFF validation. Its metric is transcribed from the official problem page's distance-weighted TP/FP/FN equations and tested against the published worked example and hand-calculated spatial cases. I reviewed the reference-solution notebook: it uses Tversky loss for model training but does not implement the official distance-weighted scoring evaluator, so it is not treated as metric authority. Its focused unit suite has **18 tests**; the complete repository suite passes **57 tests with 1 skipped**, including tests for the pre-existing `gems50` code. The real Nevada-catalog experiment has not run; **no H50-S1 DTI, result report, or new candidate TIFF, organizer score, portal upload, or weekly slot use is claimed**. The prior TIFF present on `main` is comparator-only.
-- Pre-DTI review caught and corrected two evaluation issues: selecting the best baseline by the holdout score would leak labels, and subtile false-positive weighting must use neighboring truth in the metric halo even when a subtile has no truth of its own. H50-prior is now selected chronologically as the fixed incumbent; other comparators are descriptive only. Regression tests enforce both fixes, and evaluation refuses to run without all 20 preregistered time shuffles.
-- The exact 3292 × 3730 four-macrofold split and 10 km/300 m mask rules are in [`evidence/holdout-v1.json`](evidence/holdout-v1.json). The realized valid, truth, and per-fold mask hashes are in [`evidence/holdout-realized-v1.json`](evidence/holdout-realized-v1.json). These were created and hash-pinned before any H50-S1 DTI computation. Split-spec SHA-256: `78b6692155c6c6d5f9f19ccee6d595167c2065f1f25eb8d08636d1d9b285ff16`; realized-mask report SHA-256: `981b42e6d0310bf77f79c7c7662a0569c8d2e79514ef4e4a3624a5b07583ae3f`.
-- The method remains unvalidated against the hidden expert-labeled set. Existing mapped fault labels are an imperfect spatial proxy; catalog location error may exceed the 300 m metric support. No submission slot will be used unless the preregistered gate passes and an owner manually reviews the data provenance, method, and downloaded TIFF bytes.
-- The inherited mixed-network ComCat extract under `data/external/` is not used by H50-S1; its source-specific rights and location uncertainty remain unresolved. The project also does not scrape, poll, or copy DrivenData leaderboard rows; a historical `0.3195` is not called the current lead and no score is mapped to a TIFF without verified provenance.
+- **The H51 deliverable exists and is verified.** `docs/downloads/gems51-scarpradio-offcat-35000-20261006-ecf058ea-nan.tif`
+  (35,000 predicted pixels, sha256 `8f8708d2872b66d71925707e0aede23eebcf217dfd2e57d6e61186f32e686f5d`) with an
+  all-finite twin and a one-file `.zip`. It is single band float32, EPSG:32611, 100 m, 3292 × 3730,
+  every finite value in `[0, 1]`, NaN only where the official template is NaN — re-read from the written
+  bytes by `scripts/verify_h51_raster.py` (`evidence/checks_h51_raster.json`, zero failed checks).
+- **What it is.** A corroborated lineament field: the measured-best blend of the scarp-focused 3DEP/LiDAR
+  topographic family and the airborne radiometric family (multi-scale structure tensor, 0.75/0.55 on
+  max-normalised families), greedily packed by expected marginal kernel credit with a 3 px suppression
+  radius, restricted to cells more than 300 m from every provided-catalogue pixel. The preregistration and
+  its three amendments are in [`docs/hypotheses-preregistered.md`](docs/hypotheses-preregistered.md); the
+  ranked untried candidates are in [`docs/h51-candidates.md`](docs/h51-candidates.md).
+- **What it measures.** On the off-catalogue SGMC instrument the file earns 0.189 credit per emitted dot
+  against 0.116–0.126 for 24 matched-mass random controls (±0.002 spread) — above every control seed at
+  every swept mass. On the frozen four-macrofold spatial holdout it beats its matched control in **4/4**
+  folds with a paired subtile bootstrap 95% CI of `[0.0406, 0.0785]`
+  ([`evidence/holdout_h51.json`](evidence/holdout_h51.json)).
+- **What it is *not*.** No organizer score exists for this file; no portal upload was performed; no weekly
+  slot is claimed. The 242-pixel Monte Cristo trend does **not** separate this file from random scatter at
+  these masses (71st percentile of 24 control seeds) and is reported as a weak guard, not as evidence
+  ([`evidence/mc_sensitivity_h51.json`](evidence/mc_sensitivity_h51.json)).
+- **The seismicity line (H51-B) is a recorded negative.** The event-geometry corridor field — declustered
+  with a space-time tetrahedron test, 1/σ²-weighted covariance axes, corridor width from a calibrated
+  location-uncertainty model — measured level with a matched random control on the off-catalogue instrument
+  and covered none of the Monte Cristo trend, so it received **no mass** in the shipped file. The
+  uncertainty model is this project's own construction (R² 0.715 in sample; footprint holdout within a
+  factor of two for 50.4 % of events) and is **not** from Wang et al. (arXiv:1304.6912).
+- **Uniqueness.** Worst-case block Jaccard against the 50 frozen prior artifacts is 0.66 at 32 px blocks —
+  *below* the median of the same statistic between genuinely independent prior artifacts (0.83), so the
+  block test is not informative at this scale. The audited statement is narrower: a new sha256, no prior
+  raster read into the belief field, and 2.7 % exact-pixel overlap with the only prior submission available
+  locally ([`evidence/uniqueness_h51.json`](evidence/uniqueness_h51.json)).
+- **H50-S1 remains blocked.** The waveform-relocated Nevada catalog has still not been fetched in this
+  sandbox (direct Zenodo egress fails TLS here), so the H50-S1 experiment has not run and no H50-S1 DTI is
+  claimed. The inherited mixed-network ComCat extract is used **only** as H51's own evidence line, with USGS
+  public-domain status recorded in [`registry/sources.json`](registry/sources.json).
+- **Score context stays honest.** The owner-quoted `0.3195` and sibling-repository leaderboard notes are
+  historical, not a live board. DrivenData's Terms of Use prohibit automated monitoring or copying; this
+  repository links to the official board but never polls, scrapes, or publishes a leaderboard snapshot, and
+  no score is mapped to a TIFF.
+- This session's Arena branch is `arena/fe65fa32-gemsdoe50`; the older
+  [`h50s1-research.yml`](.github/workflows/h50s1-research.yml) workflow is pinned to
+  `arena/c6060a3e-gemsdoe50` and is not used by H51.
 
 ## Executive summary and submission instructions
 
-Static site pages are generated at repository root by [`scripts/build_h50_site.py`](scripts/build_h50_site.py): [`index.html`](index.html), [`results.html`](results.html), [`methods.html`](methods.html), and [`submission.html`](submission.html). When the fixed branch is merged to `main`, the repository's existing GitHub Pages configuration serves the root site at [buffedlizard55-lab.github.io/GEMSDOE50](https://buffedlizard55-lab.github.io/GEMSDOE50/). The site labels the output **research-only** unless every gate passes, and even a local pass is only eligible for manual owner review—not an organizer score or upload receipt.
+The site is generated at repository root by [`scripts/build_h50_site.py`](scripts/build_h50_site.py) and
+serves [`index.html`](index.html), [`results.html`](results.html), [`methods.html`](methods.html) and
+[`submission.html`](submission.html). The **first thing on the executive-summary page is a one-click
+download band** for the H51 file (GeoTIFF, all-finite twin, and zip), next to the unique portal name and
+the optional note.
 
-If (and only if) the protocol passes and the owner approves the artifact, `submission.html` provides a numbered manual portal checklist. The planned unique filename is `gemsdoe50-h50s1-relocated-planes-20261006-research.tif`; the short optional note is “Relocated Nevada event-plane lineaments; 300 m known-fault exclusion; research proxy, not organizer-scored.” The name is only a plan until the verified run produces the TIFF. Re-check the current portal specification and the report's on-disk SHA-256 before any manual upload. No automated portal access is used.
+Numbered manual upload path (this repository never uploads for you and holds no portal credentials):
+
+1. Download the GeoTIFF — or the zip containing it — from the band at the top of the site.
+2. Optionally confirm the bytes against the SHA-256 shown next to the link.
+3. Sign in to DrivenData manually and open *DOE GEMS Prize Challenge → Submit*.
+4. Choose the downloaded `.tif`.
+5. Use the unique name `GEMSDOE50-H51-SCARPRADIO-OFFCAT` and the note
+   “GEMSDOE50 H51 | corroborated 3DEP-scarp + radiometric lineaments, all dots >300 m from the given
+   catalogue, metric-matched sparse emission; proxy-validated, NOT organizer-scored”.
+6. Submit, then record the returned score next to the file hash before making any claim about it.
+
+A local pass is a proxy result, not an organizer score, and it licenses a manual upload decision only.
 
 ## Verified project references
 
@@ -84,8 +132,18 @@ The manually dispatched [H50-S1 research workflow](.github/workflows/h50s1-resea
 
 ## Open gates / next actions
 
-1. Run the fixed-branch `H50-S1 preregistered research run` workflow to retrieve and verify the catalog and input rasters from public sources.
-2. Review the complete event-count, depth/magnitude irregularity, and spatial-coverage audit; stop if the relocated points do not overlap the valid footprint adequately.
-3. Compute the frozen fold-wise DTI, 16-block bootstrap, same-fold incumbent, and matched translation/year-shuffle controls. If the promotion gate fails, do not spend a slot.
-4. Re-open and byte-validate the generated unique GeoTIFF, update the static executive-summary/results/submission pages, and review licensing, attribution, limitations, and AI disclosure.
-5. Continue PR #6 from the fixed branch through full implementation/review passes; merge only if the report, artifact, site, evidence, and conflict resolution agree. No upload is performed by this repository.
+1. **Manual owner decision** on whether to spend one of the three weekly slots on the H51 file. Nothing is
+   uploaded by this repository.
+2. If a slot is spent, record the returned score and the portal receipt next to the pinned sha256; never
+   restate proxy numbers as official.
+3. **Top untried candidate (H52-A: scarp-profile matched filter with drainage-deflection corroboration)**
+   must pass its own preregistration and the same spatially blocked test
+   ([`scripts/validate_h51_holdout.py`](scripts/validate_h51_holdout.py)) before it can be considered for a
+   slot. The ranked list is in [`docs/h51-candidates.md`](docs/h51-candidates.md).
+4. **H50-S1 stays blocked** on egress to Zenodo; the dispatch-only workflow remains the auditable
+   acquisition route.
+5. Re-verify the large snapshot-excluded input stack (`/home/user/.arena/inputs/`) before any rebuild; the
+   build regenerates deterministically from those pinned bytes
+   (`python scripts/build_h51.py`, then `scripts/verify_h51_raster.py`, `scripts/uniqueness_h51.py`,
+   `scripts/mc_sensitivity_h51.py`, `scripts/validate_h51_holdout.py`,
+   `scripts/update_registries_h51.py`, `python scripts/build_h50_site.py`).
