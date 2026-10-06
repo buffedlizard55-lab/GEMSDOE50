@@ -37,8 +37,9 @@
   "official": 1
  },
  "notes": [
-  "Official USGS public-domain data; no licence restriction (USGS data are public domain, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits).",
+  "USGS ComCat is a mixed-contributor catalog; general USGS public-domain guidance does not establish rights for every source contribution in this exported record set. Rights/shareability for this extract are unresolved; do not reuse externally before a source-specific review.",
   "Rows with type in {explosion, quarry blast, mining explosion, anthropogenic event} are flagged, not silently deleted: the analysis removes them explicitly.",
-  "horizontalError is the catalogue's own 1-sigma epicentre uncertainty in km; it is used as the location-uncertainty weight (arXiv:1304.6912)."
- ]
+  "The optional horizontalError field does not supply a full event-location covariance; legacy H50-B imputation/weighting is not an uncertainty-aware ACLUD reproduction."
+ ],
+ "rights_review_status": "UNRESOLVED: the mixed-network ComCat export has not been cleared record-by-record for contributor rights or competition shareability; not an H50-S1 input."
 }

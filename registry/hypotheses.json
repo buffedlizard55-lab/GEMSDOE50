@@ -5,14 +5,14 @@
   {
    "id": "H50-1",
    "name": "seismicity lineation corridors (OADC on ComCat) + snap to 3DEP scarp ridge",
-   "status": "SHIPPED",
+   "status": "LEGACY IMPLEMENTATION; NOT NEW; NOT SLOT-ELIGIBLE",
    "layers": [
-    "USGS ComCat events",
+    "legacy mixed-network ComCat export (rights unresolved)",
     "USGS 3DEP 1 m DEM descriptors (placement)"
    ],
-   "transform": "decluster -> DBSCAN in (x,y,3 km/yr t) -> recursive 2-means split until minor-sigma <= 600 m -> lambda1/lambda2 >= 3 at p<0.01 -> thin axis + curved spine + 300 m gap bridges -> snap to scarp ridge",
+   "transform": "legacy covariance/lineation processing; triangle-area filter is called but its keep mask is not applied to the event arrays subsequently fitted; the builder does not call the separate nearest-neighbour declusterer",
    "why_missing_faults": "mapped-trace inventories are geometry; seismicity is process. Epineural lineaments sit 1-4 km off the mapped traces (median 32.7 px) and the catalogue shows 0.8x enrichment within 300 m of events, i.e. no enrichment.",
-   "difference": "no prior submission in the family contains any seismicity-derived mass; their ieq/deq bands are self-correlated at 3 km and the 'seismic lineaments vs Poisson null' arm is listed unimplemented",
+   "difference": "Superseded novelty claim: the 2-D seismicity-lineation family is already implemented in this repository and must not be presented as new. The legacy local proxy is not the frozen H50-S1 blocked holdout.",
    "measured": {
     "c_sgmc_off_at_45000": 0.2227,
     "incumbent_c_sgmc_off": 0.1434,
@@ -20,12 +20,14 @@
     "mc_covered_frac": 0.36,
     "predictive_pre2020_mc_frac": 0.024
    },
-   "cost": "low (already built)"
+   "cost": "low (already built)",
+   "eligibility": "Do not use externally until ComCat rights/shareability, declustering, mine/injection screening, uncertainty, matched smoothed-density controls, and frozen blocked-holdout provenance are resolved.",
+   "measurements_status": "Historical local proxies only; not an organizer score or authenticated score-to-TIFF mapping."
   },
   {
    "id": "H50-2",
    "name": "catalogue gap closure and splay continuation",
-   "status": "PARTLY SHIPPED (3 connectors + 37 spines)",
+   "status": "LEGACY PARTIAL IMPLEMENTATION; NOT AN INDEPENDENT NEW CANDIDATE",
    "layers": [
     "corridor axes",
     "catalogue endpoints"
@@ -33,7 +35,8 @@
    "transform": "bridge corridor endpoints within 1.5 km and <= 40 deg apart at one dot per 300 m",
    "why_missing_faults": "much of a hidden fault inventory is extension/splay of mapped structures",
    "difference": "the sibling H44 bridges with Euler depth clusters from gravity/magnetics; this bridges with epicentral spines",
-   "cost": "low"
+   "cost": "low",
+   "measurements_status": "Historical local project record; not an organizer score."
   },
   {
    "id": "H50-3",
@@ -56,7 +59,7 @@
   {
    "id": "H50-4",
    "name": "radiometric ridge lineaments (oriented matched filter on K/Th/U/TC)",
-   "status": "MEASURED, IN SHIPPED FILE at weight 0.55",
+   "status": "LEGACY COMPONENT; NOT A DISTINCT NEW CANDIDATE",
    "layers": [
     "GeoDAWN radiometrics"
    ],
@@ -72,7 +75,7 @@
   {
    "id": "H50-5",
    "name": "cross-strike swath profiling of the 1 m DEM",
-   "status": "NOT STARTED - blocked by raw DEM volume (~100 GB)",
+   "status": "NOT STARTED; PRIOR DEM/SWATH WORK REQUIRES AUDIT BEFORE CLAIMING NOVELTY",
    "layers": [
     "USGS 3DEP 1 m DEM tiles"
    ],
@@ -94,5 +97,6 @@
    "reason_rejected": "~40 mechanisms in the survey (M >= 3.5) versus tens of thousands of events consumed by the detector; each is a catalogue-fault event, biasing the prior toward mapped structures",
    "cost": "low but statistically powerless"
   }
- ]
+ ],
+ "audit_note": "2026-10-06 review: see docs/research/earthquake-geometry-review-20261006.md and docs/research/hypothesis-ranking-20261006.md. Historical metric fields are retained but are not current official score claims."
 }

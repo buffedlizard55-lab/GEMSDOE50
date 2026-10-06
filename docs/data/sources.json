@@ -36,9 +36,9 @@
   {
    "name": "USGS ANSS Comprehensive Earthquake Catalog (ComCat), FDSN event web service",
    "url": "https://earthquake.usgs.gov/fdsnws/event/1/",
-   "licence": "US public domain",
+   "licence": "Unresolved at record/contributor level; not cleared for external competition use",
    "read": "2026-10-06 (fetched by the GitHub Actions runner in .github/workflows/fetch-external-data.yml)",
-   "used_for": "222,939 events; 38,483 M>=2.0 depth<=30 km within the footprint; seismicity corridor layer"
+   "used_for": "Legacy H50-B only: mixed-network event extract. Not an H50-S1 input and not cleared for external reuse until source-specific rights and shareability are reviewed."
   },
   {
    "name": "USGS State Geologic Map Compilation (SGMC) faults, Nevada/California",
@@ -73,7 +73,7 @@
   {
    "name": "Seismicity lineament detection (H50-B)",
    "citation": "Ouillon, Ducorbier & Sornette (2008), Tectonophysics 456, 42; Ouillon & Sornette (2011), J. Geophys. Res. 116, B01303",
-   "used": "corridor orientation via 2-D inertia tensor; Poisson nearest-neighbour crossover r_c=1.61 km; the 2-D triangle-area analogue of the 3-D tetrahedron-volume statistic is this project's own adaptation and is unverified"
+   "used": "Legacy H50-B corridor orientation via 2-D inertia tensor and Poisson nearest-neighbour crossover. The 2-D triangle-area analogue of the 3-D tetrahedron statistic is an unverified project adaptation; the builder computes its keep mask but does not apply it to subsequent lineation inputs. This is not demonstrated effective declustering."
   },
   {
    "name": "Marginal-credit emission",
@@ -83,7 +83,9 @@
  ],
  "caveats": [
   "The private leaderboard is unknown to this project; no number here is a leaderboard score.",
-  "H50-B (seismicity corridors) failed its registered equal-budget test and is carried only at low weight.",
-  "Component 0.2778 attribution is owner-reported, not organizer-confirmed (GEMSDOE32/docs/research/why-d28-scored-026.md)."
+  "Legacy H50-B local equal-budget comparisons did not consistently beat smoothed density on both proxy frames; its prior artifact retained a low-weight component, which is not a current recommendation or an H50-S1 holdout result.",
+  "Component 0.2778 attribution is owner-reported, not organizer-confirmed (GEMSDOE32/docs/research/why-d28-scored-026.md).",
+  "ComCat public access does not settle contributor-specific rights for the mixed-network export; do not label the extract US public domain or use it as an external competition input without source-specific review.",
+  "Legacy H50-B local density comparisons are not the frozen H50-S1 four-macrofold evaluation, and the legacy method is not a current official score or a score-to-TIFF mapping."
  ]
 }

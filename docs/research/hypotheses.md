@@ -1,15 +1,10 @@
-# Five candidate hypotheses, ranked, with what each would need to be true
+# Legacy candidate hypotheses — historical proxy record, not current ranking
 
-Every hypothesis names the **layers**, the **physical signature**, **why it should catch
-a fault the USGS/INGENIOUS catalogue lacks**, and **how it differs from everything
-already implemented in this project's repositories**. Ranking is by *expected DTI gain
-per unit of implementation cost*. The top-ranked candidate was validated on the
-spatially blocked holdout **before** the submission file was built; the second was
-falsified there and is retained only as a diversity hedge.
+> **Audit correction (2026-10-06):** This is inherited H50-A–E research history. Its local metrics are not the frozen H50-S1 four-macrofold holdout, not organizer scores, and not authenticated score-to-TIFF mappings. H50-B's 2-D ComCat lineation work is already implemented and is not new; source-specific ComCat rights are unresolved, and its triangle-area `keep` mask is not applied by the legacy builder. H50-D depth-resolved lineations were already proposed. The current 3–5-hypothesis review and H50-S1 eligibility decision are in [`hypothesis-ranking-20261006.md`](hypothesis-ranking-20261006.md) and [`earthquake-geometry-review-20261006.md`](earthquake-geometry-review-20261006.md).
 
-Evidence classes: `[OFFICIAL]` official source, `[MEASURED]` computed from pinned bytes
-in this repository, `[FALSIFIED]` the registered test came out negative,
-`[PROPOSED]` not yet implemented.
+The material below is retained to audit what the repository previously proposed and measured. It must not be used as a current ranking or submission claim.
+
+Evidence classes such as `[OFFICIAL]`, `[MEASURED]`, and `[FALSIFIED]` describe the historical authors' labels only; they do not imply a current official score.
 
 ---
 
@@ -35,11 +30,11 @@ in this repository, `[FALSIFIED]` the registered test came out negative,
   **0.0043**; at 70,000 dots: **0.0490** vs 0.0266 (random at equal spread) and 0.0084
   (density). **Rank 1.** Cost: minutes, no new data.
 
-## H50-B — Seismicity-lineament corridors from the official USGS ComCat catalogue (rank 2 — implemented, FALSIFIED as a standalone predictor)
+## H50-B — Legacy seismicity-lineament corridors from mixed-network ComCat (already implemented; not new)
 
-* **Layers.** Official USGS FDSN/ComCat epicentres (222,939 events in and around the
-  footprint, fetched through a GitHub-hosted runner because this sandbox cannot reach
-  `earthquake.usgs.gov`; `data/external/usgs_comcat_earthquakes.csv.gz`), joined to the
+* **Layers.** A historical ComCat export with events from multiple contributing networks (222,939 rows in and around the
+  footprint; `data/external/usgs_comcat_earthquakes.csv.gz`). Contributor-specific rights and
+  competition shareability remain unresolved; this export is not cleared as an external competition input. Joined to the
   grid in EPSG:32611. The competition's own seismicity bands are unusable for this
   (`ieq_n100a15` has autocorrelation 0.9935 at 3 km: constant at the metric's scale).
 * **Signature.** Ouillon–Ducorbier–Sornette (2008): cluster epicentres, then use each
@@ -53,10 +48,9 @@ in this repository, `[FALSIFIED]` the registered test came out negative,
 * **Why off-catalogue.** Instrumental seismicity is a *dynamic* inventory: a blind,
   low-slip fault lights up seismically while leaving no scarp (the 2020 M6.5 Monte
   Cristo Range rupture is the regional example).
-* **Novelty.** It is the first *implementation* of this method in the project: earlier
-  repositories named H33-E and marked it data-blocked.
-* **[MEASURED] FALSIFICATION — the registered test came out negative.** At equal dot
-  budget on the catalogue-fold frame the corridors score 0.0014/0.0036/0.0036 at
+* **Novelty correction.** The historical claim that this was the first implementation is withdrawn: the same 2-D ComCat covariance/lineation family and triangle-area code are already present in the repository, and H50-D depth-resolved lineations were already proposed. This is not a new detector.
+* **Historical local proxy comparison (not the frozen H50-S1 holdout).** At equal dot
+  budget on the legacy catalogue-fold frame the corridors score 0.0014/0.0036/0.0036 at
   5,000/20,000/44,090 dots against the smoothed-density baseline's
   0.0001/0.0041/0.0112; on the off-catalogue frame 0.0015/0.0034/0.0034 against
   0.0016/0.0023/0.0043. The corridor predictor therefore **does not beat smoothed
@@ -65,9 +59,7 @@ in this repository, `[FALSIFIED]` the registered test came out negative,
   dominated by aftershock swarms, and (ii) the off-catalogue frame selects faults
   *far from the active catalogue*, which is precisely where instrumental seismicity is
   weakest — the frame is biased against this hypothesis by construction.
-  Because the hypothesis is not supported, the corridors are carried in the submission
-  only at low weight (0.25 of a field whose leading term is scarp), as a diversity
-  hedge for the Final-Round rescoring against an expanded label set.
+  The old artifact retained a low-weight corridor component (0.25) as a historical hedge. That choice is not a current recommendation, and the artifact is not a submission candidate.
 
 ## H50-C — Multi-physics oriented-lineament consensus (rank 3 — implemented, best on the catalogue frame)
 
@@ -134,8 +126,8 @@ in this repository, `[FALSIFIED]` the registered test came out negative,
 
 | rank | hypothesis | layers | signature | off-catalogue reason | novelty | cost | validation |
 | ---: | --- | --- | --- | --- | --- | --- | --- |
-| 1 | **H50-A** scarp-dipole chains | 12-ch scarp stack | dipole × 16-direction chain vote | sub-100 m strands invisible to regional mapping | chain vote on the dipole score | minutes | **validated** (2.2× random off-catalogue) |
-| 2 | **H50-B** seismicity corridors | USGS ComCat | 2-D inertia tensor + Poisson crossover | active blind faults are seismic | first implementation in the project | minutes | **[FALSIFIED]** vs density on both frames |
+| 1 | **H50-A** scarp-dipole chains | 12-ch scarp stack | dipole × 16-direction chain vote | sub-100 m strands invisible to regional mapping | chain vote on the dipole score | minutes | historical local proxy; not current holdout |
+| 2 | **H50-B** seismicity corridors | mixed-network ComCat, rights unresolved | 2-D inertia tensor + Poisson crossover | active blind faults are seismic | already implemented; not new | minutes | historical local density comparison; not frozen holdout |
 | 3 | **H50-C** multi-physics lineaments | 8 official bands | Hessian line × orientation order parameter | single-dataset mapping misses what only multiple fields agree on | orientation agreement across physics | minutes | validated on catalogue frame only |
 | 4 | **H50-D** depth-resolved lineations | ComCat + depth | 3-D inertia tensor plane test | kills the swarm confounder of H50-B | first use of hypocentral depth | minutes | pre-specified, not run |
 | 5 | **H50-E** fluid-path alignment | GDR thermal + basement | line fit through thermal points × basement ridge | faults are the permeability conduits | thermal points used as a point pattern | minutes | pre-specified, not run |
