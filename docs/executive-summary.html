@@ -1,90 +1,74 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>How to submit — GEMSDOE50</title>
+<meta name="description" content="GEMSDOE50 — a seismicity-first, format-legal submission for the DOE GEMS Prize (DrivenData #306).">
 <style>
- body{margin:0;font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:#111;background:#fff}
- header{border-bottom:1px solid #ddd;padding:18px 20px} main{max-width:900px;margin:0 auto;padding:0 20px 80px}
- h1{font-size:1.4rem;margin:0 0 6px} h2{font-size:1.1rem;margin:2em 0 .4em;border-bottom:1px solid #ddd;padding-bottom:.25em}
- table{border-collapse:collapse;width:100%;margin:.6em 0 1em;font-size:.93rem} th,td{border:1px solid #ddd;padding:7px 9px;vertical-align:top;text-align:left} th{background:#fafafa}
- code{font-family:ui-monospace,Menlo,monospace;font-size:.86em} .mut{color:#555}
- .ok{background:#eefaf1;border:1px solid #bfe6cc;border-radius:8px;padding:12px 14px}
- .warn{background:#fff8e6;border:1px solid #e8d9a0;border-radius:8px;padding:12px 14px}
- nav a{margin-right:14px}
+:root{--bg:#0d1117;--card:#161b22;--ink:#e6edf3;--dim:#9aa4b2;--line:#2a3038;--blue:#4493f8;--green:#3fb950;--amber:#d29922;--red:#f85149}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--blue)}a:hover{text-decoration:underline}
+.wrap{max-width:1000px;margin:0 auto;padding:28px 20px 80px}
+nav{display:flex;gap:18px;flex-wrap:wrap;padding:12px 0;border-bottom:1px solid var(--line);margin-bottom:28px;font-size:14px}
+nav a{color:var(--dim);text-decoration:none}nav a.on,nav a:hover{color:var(--ink)}
+h1{font-size:30px;margin:0 0 6px}h2{font-size:21px;margin:38px 0 10px}h3{font-size:16px;margin:18px 0 6px}
+p{margin:8px 0}.lead{color:var(--dim);font-size:17px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px;margin:14px 0}
+.dl{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin:18px 0}
+.btn{display:inline-block;background:var(--blue);color:#fff;text-decoration:none;font-weight:600;padding:14px 22px;border-radius:8px}
+.btn.alt{background:transparent;border:1px solid var(--line);color:var(--ink);font-weight:500;padding:11px 18px}
+.badge{display:inline-block;font-size:12px;padding:2px 8px;border-radius:20px;border:1px solid var(--line);color:var(--dim);margin-right:6px}
+.badge.ok{color:var(--green);border-color:#1f4d2b}.badge.warn{color:var(--amber);border-color:#4a3a12}.badge.bad{color:var(--red);border-color:#5c1f1c}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}
+th,td{text-align:left;padding:7px 9px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--dim);font-weight:600}
+code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px}
+pre{background:#0b0f14;border:1px solid var(--line);border-radius:8px;padding:12px;overflow:auto}
+.small{font-size:13px;color:var(--dim)}
+.hash{word-break:break-all;font-size:12px;color:var(--dim)}
+ul{margin:8px 0 8px 20px}li{margin:4px 0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:720px){.grid{grid-template-columns:1fr}}
+.num{font-size:26px;font-weight:700}
 </style></head>
-<body>
-<header><h1>How to submit, exactly</h1>
-<nav class="mut"><a href="index.html">Overview</a><a href="executive-summary.html">How to submit</a>
-<a href="hypotheses.html">Hypotheses</a><a href="analysis.html">Why 0.2778 / what beats it</a><a href="sources.html">Sources</a></nav></header>
-<main>
-
-<div class="ok"><p style="margin:0"><strong>The file to submit:</strong>
-<a href="downloads/gemsdoe50-seis-ridge-v1.tif" download>gemsdoe50-seis-ridge-v1.tif</a>
-(one click, 150,672 bytes, SHA-256 <code>5cad91ac…36d3c9</code>).
-Zip twin: <a href="downloads/gemsdoe50-seis-ridge-v1.zip">gemsdoe50-seis-ridge-v1.zip</a>.</p></div>
-
-<h2>1. Steps</h2>
+<body><div class="wrap"><nav><a href="index.html">Overview</a><a href="executive-summary.html" class="on">How to submit</a><a href="analysis.html">Analysis</a><a href="hypotheses.html">Hypotheses</a><a href="sources.html">Sources</a></nav>
+<h1>How to submit — exactly</h1>
+<p class="lead">Five steps. The file is already format-legal; nothing needs converting.</p>
+<div class="card">
 <ol>
-<li>Open <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">drivendata.org/competitions/306/competition-doe-gems/</a> and sign in.</li>
-<li>Click <em>Submit</em> (the submission form is on the competition page; the data page is separate).</li>
-<li>Choose <code>gemsdoe50-seis-ridge-v1.tif</code>. If the form rejects a bare GeoTIFF, upload
-    <code>gemsdoe50-seis-ridge-v1.zip</code> instead — it contains exactly one GeoTIFF, which is the
-    form the portal has accepted for this family before.</li>
-<li>Submission name: <code>GEMSDOE50-SEIS-RIDGE-V1-5CAD91AC</code></li>
-<li>Note (optional) — paste verbatim:
-<pre class="mut" style="white-space:pre-wrap;border:1px solid #ddd;border-radius:6px;padding:10px;background:#fff">GEMSDOE50 v1 | OADC lineation corridors from the official USGS ComCat catalogue (222,939 events, declustered) snapped to 3DEP lidar scarps; 45,000 dots, all off-catalogue; all cells finite in [0,1]</pre></li>
-<li>Submit. Wait for the score. Record it in <code>registry/submissions.json</code> (see §4).</li>
+  <li>Open the competition: <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/"
+      target="_blank" rel="noopener noreferrer">drivendata.org/competitions/306</a> and sign in (submissions require
+      an account; accounts are free).</li>
+  <li>Go to the <strong>Submit</strong> tab.</li>
+  <li>Upload <code>gemsdoe50-corridor-fusion-v1.tif</code> (download it above, or the .zip if you prefer — the zip
+      contains exactly the one file).</li>
+  <li>Paste the note text (it is in the top card of the <a href="index.html">overview</a>), then submit.
+      The portal accepts a single-band float32 GeoTIFF in EPSG:32611 at 100 m — this file is exactly that.</li>
+  <li>Record the returned score in this repository's registry so the next session can learn from it.</li>
 </ol>
+<p><span class="badge warn">quota</span> The rules allow <strong>three submissions per week</strong>. Two slots are
+free right now; keep one for the next candidate rather than burning all three on variations of the same file.</p>
+</div>
 
-<h2>2. What the organiser’s validator requires, and why this file cannot fail it</h2>
-<table>
-<tr><th>Requirement (competition page 967)</th><th>This file</th></tr>
-<tr><td>Single-band GeoTIFF</td><td>1 band</td></tr>
-<tr><td>Same grid as the sample submission: 3,730 rows × 3,292 columns, 100 m, EPSG:32611</td><td>identical; origin (243350, 4508550), transform (100, 0, 243350, 0, −100, 4508550)</td></tr>
-<tr><td>float32</td><td>float32</td></tr>
-<tr><td>Values in [0, 1]; content outside the survey may be null or NaN</td><td>every cell finite, min 0.0, max 1.0; <strong>no NaN, no nodata tag, no sentinel</strong></td></tr>
-<tr><td>No duplicate submissions of the same file</td><td>unique against 118 prior rasters (max |r| 0.033, max Jaccard 0.021)</td></tr>
-</table>
+<h2>The format error this file avoids</h2>
+<p>The portal error <code>Predicted values must be in range [0, 1]</code> came from the float32 nodata sentinel
+<code>-3.4028234663852886e+38</code> (and/or a NaN nodata tag) in earlier artifacts. This file writes
+<strong>0.0 outside the survey</strong> and 1.0 on the emitted cells: every one of the 12,279,160 cells is finite and
+inside [0, 1], and the nodata tag is absent. Receipt:
+<a href="downloads/checks-gemsdoe50-corridor-fusion-v1.tif.json">checks JSON</a>.</p>
 
-<div class="warn"><p style="margin:0"><strong>The portal error “Predicted values must be in range [0, 1]”.</strong>
-Two verified causes exist in this family of repositories: (a) the organisers’ <code>training_features.tif</code>
-carries the sentinel −3.4028235e+38 outside its valid area, so any raster assembled wholesale from it
-contains values near −10<sup>38</sup>; (b) NaN fails a numeric range test, because
-<code>0 &lt;= nan &lt;= 1</code> is false, so a validator that tests the whole array rejects the sample
-submission’s own NaN-outside encoding. This submission writes an explicit value in every cell of the grid:
-1.0 on the 45,000 emitted dots, 0.0 everywhere else. Neither cause can apply.</p></div>
-
-<h2>3. What “success” looks like, honestly</h2>
+<h2>What to expect honestly</h2>
 <ul>
-<li><strong>Verified here:</strong> format; uniqueness; the metric algebra (<code>tests/test_metric.py</code>);
-    the instruments; the predictive falsification test.</li>
-<li><strong>Not verified:</strong> any organiser score for this file. The expectation is “at or above the
-    incumbent operating range” because the file beats the incumbent by 1.55× in credit per emitted cell on
-    the only local instrument that ranks the 16 known live scores positively — but that instrument
-    explains only part of the variance (leave-one-out Spearman 0.705, below this family’s own 0.80 bar),
-    so a slot is a bet, not a certainty.</li>
-<li><strong>The one thing this file does that no prior file does:</strong> it puts mass on the 2020 Monte
-    Cristo Range rupture trend from an independent physical signal. Every prior submission in the family
-    covers ≈11 % of that trend with ≈0.0008 credit per cell; this file covers ≈36 % with 0.0022, and the
-    <em>predictive</em> version of the detector (pre-2020 seismicity only) still covers 2.4 % while the
-    smoothed-density controls cover nothing.</li>
+  <li>No organiser score exists for this file. The evidence that it is stronger than the 0.2778 file is a
+      <em>proxy</em>: on the USGS SGMC inventory minus the provided catalogue it earns 0.199 credit per emitted
+      pixel against 0.1236 for the family's 0.2600 file and 0.1434 for the 0.2778 file.</li>
+  <li>Two documented facts argue that the 100–400 m shell around the provided traces is where a large share of the
+      new truth sits; that allocation is a documented bet, not a measured one.</li>
+  <li>If a later candidate beats this one on the same instruments, submit that instead — the methodology, not this
+      file, is the asset.</li>
 </ul>
 
-<h2>4. After the score arrives</h2>
-<ol>
-<li>Append the score to <code>registry/submissions.json</code> (name, sha256, mass, score, date).</li>
-<li>Re-run <code>python3 scripts/build_submission.py --name seis-ridge-v2 --mass 60000</code> and
-    <code>--mass 37654</code> to bracket the mass decision, and validate both with
-    <code>scripts/validate_candidate.py</code>.</li>
-<li>Feed the new score into the ledger model on the <a href="analysis.html">analysis page</a>; the two
-    competing hidden-truth-size estimates (≈5,667 and ≈15,100 cells) are separated by exactly this kind
-    of observation.</li>
-</ol>
-
-</main>
-<footer style="border-top:1px solid #ddd;padding:16px 20px;color:#555;font-size:.88rem">
- Repository: <code>buffedlizard55-lab/GEMSDOE50</code>. Reproduce the file with
- <code>python3 scripts/build_submission.py --name seis-ridge-v1 --mass 45000</code>.
-</footer>
-</body></html>
+<p class="small" style="margin-top:46px">Built by an autonomous agent session for the competition owner. Every number on
+this site is reproduced from a receipt in the repository (<code>evidence/</code>, <code>registry/</code>); nothing here is
+scraped live. Leaderboard rows are human-read snapshots — DrivenData's Terms of Use forbid automated access.</p>
+</div></body></html>

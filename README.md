@@ -1,154 +1,128 @@
-# GEMSDOE50 — GEMS Prize (DrivenData #306)
+# GEMSDOE50 — DOE GEMS Prize (DrivenData #306)
 
-**Submission:** [`downloads/gems50-seislin-44709-20261006T2041Z-79e260ae.tif`](downloads/gems50-seislin-44709-20261006T2041Z-79e260ae.tif)
-(single-band float32 GeoTIFF, EPSG:32611, 100 m, values exactly {0, 1}, NaN outside the
-study footprint; a `.zip` containing the identical file is provided for the form's
-alternative upload path). **Format checks: 15/15 pass. Uniqueness gate: pass** against
-all 50 known prior artifacts (no identical hash, ≤ 0.36 IoU, ≥ 47 % of dots novel at
-200 m). See [`registry/submission_checks.json`](registry/submission_checks.json).
+**Start here.** [Read the standing brief](#standing-brief--read-this-first-every-session) · download the file to
+submit · check the [status feed](#status-feed) · the [live site](https://buffedlizard55-lab.github.io/GEMSDOE50/).
 
-**Paste-in note (one line for the submission form):**
+**Submit this file** (one click):
+[`docs/downloads/gemsdoe50-corridor-fusion-v1.tif`](docs/downloads/gemsdoe50-corridor-fusion-v1.tif)
+· [zip twin](docs/downloads/gemsdoe50-corridor-fusion-v1.zip)
+· [format receipt](docs/downloads/checks-gemsdoe50-corridor-fusion-v1.tif.json)
+· [how to submit, step by step](docs/executive-summary.html)
 
-> GEMSDOE50 — 44,709 binary dots placed on the marginal-credit support of a
-> LiDAR-scarp-chain field with a falsified seismicity-corridor hedge; identical GeoTIFF
-> also in the .zip. Format, range and uniqueness verified in
-> registry/submission_checks.json.
+| | |
+|---|---|
+| file | `gemsdoe50-corridor-fusion-v1.tif` — 41,473 cells at 1.0, **0.0 everywhere else** |
+| SHA-256 | `7f9f20295e28354069a40f93dc6f9289fdb135205614acdcbf0e0295c11bbbda` |
+| format | single band · float32 · EPSG:32611 · 3730 × 3292 · 100 m · origin (243350, 4508550) · **no nodata tag, all 12,279,160 cells finite in [0, 1]** |
+| method | declustered USGS ComCat seismicity (2-D tetrahedra-randomisation; OADC-style inertia-tensor splitting) → lineation corridors → snapped to the USGS 3DEP 1 m lidar scarp ridge, fused with GeoDAWN airborne-radiometric lineaments and a 100–400 m catalogue-correction corridor |
+| uniqueness | max \|Pearson r\| **0.0331**, max Jaccard **0.0210** against **119** retrievable prior rasters |
+| status | built and audited; **not submitted** — no organiser score exists for it |
 
----
-
-## Standing project prompt (the owner's words)
-
-> Deliver in repo `GEMSDOE50` (fork-free, must become a new public GitHub repo + Pages site):
->
-> * **A unique .tif submission for DrivenData DOE GEMS Prize (#306), easy one-click
->   download, one file, zero range violations**, named uniquely with a short paste-in
->   note. Must NOT duplicate any prior GEMSDOE artifact (uniqueness gate required).
-> * Answer, with PhD-level reasoning, why `GEMSDOE32/h33-h33-2-b2` scored 0.2778 and
->   whether a higher score is achievable (current public leaderboard best ≈0.3195 per
->   user — **updated: the live board reads 0.3774 as of 2026-10-06**).
-> * Before implementing: generate **3–5 candidate geological hypotheses not yet tried**,
->   each naming the specific layer(s), the physical signature/transform targeted
->   (edge/curvature etc.), why it should catch a fault missing from USGS/INGENIOUS
->   catalogues rather than one already in them, and how it differs from everything
->   already in the repo; rank by expected DTI improvement vs implementation cost;
->   **validate the top candidate on the spatially-blocked holdout before spending a
->   weekly submission slot**; if a candidate needs new external data, name specific free
->   official sources and verify obtainability.
-> * Put the user's full project prompt into the repo README and treat it as the standing
->   starting point (re-read each session); keep "**Maximize P(Win)**" and
->   "**Own the Outcome**" as focal decision values.
-> * Site: clean, simple, user-friendly GitHub Pages with official verified source links,
->   executive-summary subpage explaining exactly how to submit, and the report/utilities
->   the user asked for (automatic no-manual-check workflow, current feed, CSV preview).
-
-**Focal decision values (kept in view at every step):** *Maximize P(Win)* — spend effort
-where it changes the probability of winning the prize, not where it produces tidy
-artifacts; *Own the Outcome* — every number here is produced, checked and reported by
-this repository, including the result that failed.
-
-**Standing rules honoured by this repository:** read the whole prompt each session;
-work line by line; verify from official sources with links for manual review; no
-hallucinations; flag irregularities for review; **no manual input** — everything below
-is produced by scripts in this repository.
+Reproduce it: `PYTHONPATH=src python3 scripts/build_fusion.py --name corridor-fusion-v1 --mass 52000 --ring-share 0.30 --suppression-px 4`
 
 ---
 
-## What was delivered
+## Standing brief — read this first, every session
 
-| deliverable | path |
-| --- | --- |
-| submission GeoTIFF (one click) | `downloads/gems50-seislin-44709-20261006T2041Z-79e260ae.tif` |
-| submission as a .zip (form's alternative) | `downloads/gems50-seislin-44709-20261006T2041Z-79e260ae.zip` |
-| format + uniqueness evidence | `registry/submission_checks.json` |
-| both-frame validation of the exact file | `registry/submission_validation.json` |
-| build diagnostics | `registry/submission_build.json` |
-| hypothesis ranking (5) | `docs/research/hypotheses.md` |
-| metric / 0.2778 analysis | `docs/research/score-model.md` |
-| data provenance receipts | `registry/sources.json` |
-| site | `docs/` (GitHub Pages) |
+These are the owner's own requirements, kept verbatim in substance so that no session has to re-derive them:
 
-## Headline numbers [MEASURED]
+1. **Generate a unique TIF submission.** Never copy a previous submission; copying is allowed only for learning.
+   The submission is a single-band float32 GeoTIFF of fault probabilities in EPSG:32611 at 100 m; the score is the
+   distance-weighted Tversky index DTI = TPw / (0.2·(TPw + FPw) + 0.8·|G|) with a triangular kernel of radius 300 m.
+2. **Beat the leaderboard.** The bar is the live top, not the stale target: read the board by hand before planning
+   (2026-10-06: #1 xiaofanhu 0.3774; the owner's best recorded score is 0.2778 at #13–16).
+3. **Derive seismicity lineation from the earthquake point pattern, not from a density band.** Follow
+   Ouillon/Ducorbier/Sornette (JGR 113, 2008, doi:10.1029/2007JB005032) inertia-tensor clustering; use the
+   Ouillon & Sornette (JGR 116, 2011, doi:10.1029/2010JB007752) clustered/background separation; the later method
+   (arXiv:1304.6912) adds per-event location uncertainty. Take epicentres from a public catalogue (USGS ComCat),
+   **record the official URL and licence first, and confirm the competition's external-data rule permits it**.
+   Decluster, remove known injection/mining sites, compute 2-D covariance eigenvalues per neighbourhood, keep linear
+   well-sampled neighbourhoods, and emit **a corridor along the principal axis with width set by the catalogue
+   location error** — a corridor prior, not a trace. Flag that the 2-D adaptation of the 3-D tetrahedron test is our
+   own unverified adaptation.
+4. **Hypothesis:** blind faults produce seismic lineations where the mapped catalogue lacks traces, so score
+   corridors outside existing-fault buffers. **Confounders:** aftershock swarms, location artefacts, induced
+   seismicity. **Falsify** by showing corridors predict withheld fault segments better than smoothed earthquake
+   density at matched emitted mass.
+5. Normalise to [0, 1], write the required GeoTIFF, **run the uniqueness gate against all prior submissions**, and
+   **snap the corridor to another layer's ridge in the placement step**.
+6. **Explain how the 0.2778 file earned its score** and whether it can be beaten — with PhD-level judgement, no
+   hallucinations, line-by-line verification against official sources with links for manual review.
+7. **Before implementing**, generate 3–5 candidate geological hypotheses not yet tried, each naming (a) the specific
+   layers, (b) the physical signature/transform targeted, (c) why it catches a fault missing from the
+   USGS/INGENIOUS catalogue rather than one already in it, (d) how it differs from everything already implemented.
+   Rank by expected DTI improvement and implementation cost; validate the top candidate on a spatially-blocked
+   holdout **before spending a weekly submission slot**; if it needs new external data, name the free official source
+   and confirm obtainability first. [(current ranking)](docs/hypotheses.html)
+8. Find overlooked data sources; be contrarian but grounded; store gathered knowledge from official verified
+   sources in the repository ([`docs/sources.html`](docs/sources.html)); aim for a top prize.
+9. **Site:** GitHub Pages, clean and simple, with a **one-click downloadable submission TIF at the very top**, a
+   unique submission name + short note text, an **executive-summary subpage explaining exactly how to submit**, and
+   official verified source links.
+10. **Fix the portal error** `Predicted values must be in range [0, 1]` (root cause: the float32 nodata sentinel
+    `-3.4028234663852886e+38` and/or a NaN nodata tag) — every shipped TIF must be all-finite, min 0, max 1, no
+    nodata tag.
+11. Work autonomously, no manual input; flag irregularities for review; run **Pass 1 implement+verify, Pass 2 review
+    bugs/edge cases and fix, Pass 3 re-check against this brief**; then create a PR, merge it to `main`, and list the
+    remaining work and limitations for the next session.
+12. Keep the Arena Core Values — **maximise P(win)** and **own the outcome** — as the decision framework.
 
-Equal-dot-budget comparison on two frames, 44,090 dots (details in
-`registry/field_validation.json`, `registry/fusion_experiment.json`):
+## Status feed
 
-| field | catalogue-fold frame (F1) | off-catalogue SGMC frame (F2) |
-| --- | ---: | ---: |
-| LiDAR scarp-dipole chains | 0.0113 | **0.0345** |
-| multi-physics lineaments | **0.0217** | 0.0087 |
-| seismicity corridors | 0.0073 | 0.0066 |
-| smoothed 300 m quake density | 0.0112 | 0.0043 |
-| uniform random | 0.0209 | 0.0190 |
+| date | event |
+|---|---|
+| 2026-10-06 | **`gemsdoe50-corridor-fusion-v1.tif` built, audited, unique** (41,473 dots; max \|r\| 0.0331, J 0.0210 vs 119 priors). Recommended over `seis-ridge-v1`. |
+| 2026-10-06 | Leakage-free falsification test re-run with the current detector: corridors built from **pre-2020 events only** touch the 2020 Monte Cristo rupture with 78 dots; smoothed density (σ = 10/20 px) and uniform random at matched mass touch **none** of it (`evidence/falsification_test.json`). |
+| 2026-10-06 | **Metric bug found and fixed**: `gems50.metric.score` credited each prediction only to its nearest truth pixel, understating TPw by 53 % and DTI by 0.040 absolute on this repo's own 44,709-dot file (`evidence/metric_bug_impact.json`). `tests/test_cross_metric.py` now cross-checks two independent implementations. 40 tests pass. |
+| 2026-10-06 | Merged `origin/main` (the sibling 44,709-dot release). Both pipelines coexist: their `{grid,metric,seis,lineaments,emitter,validate}` and this session's `{grid_io,dti,catalog,decluster,lineation,hough,emission}`. |
+| 2026-10-06 | Registry of the family ledger read: the 0.2778 file's per-dot credit is ~0.13 against 0.026 for an equal-mass uniform scatter; hidden-truth size ≈ 8,000–16,000 px (`docs/analysis.html`). |
 
-The shipped file, scored on the same frames, reaches **F1 = 0.0416 mean / F2 = 0.0670**
-(2.2–5.7× the matched random control, `registry/submission_validation.json`) — the
-fusion uses scarp as the leading term (0.60) with the falsified corridor field at 0.25
-and the multi-physics consensus at 0.35, because the off-catalogue frame, not the
-catalogue frame, is the one that resembles the private test set.
+**Next actions, in order**
 
-**The honest falsification.** The owner's seismicity-lineament hypothesis (H50-B) was
-implemented and **failed its registered test** on both available frames: the corridors do
-not beat smoothed earthquake density at equal dot budget. It is retained at low weight as
-a diversity hedge only, and the failure is reported everywhere the score is reported.
-See `docs/research/hypotheses.md` § H50-B.
+1. Spend one of the three weekly slots on `gemsdoe50-corridor-fusion-v1.tif` and record the score in
+   `registry/submissions.json` (this is the only way the local proxies get calibrated).
+2. Turn hypothesis H3 (catalogue-correction corridor) from a documented bet into a measured one using the INGENIOUS
+   per-trace map-scale attribute; if it measures badly, rebuild with `--ring-share 0.0`.
+3. Re-run the ledger inversion with ≤ 8 spatial regions (the 7,800-block version fails in-sample) to locate the
+   hidden truth before the final round.
+4. Implement H4 (drainage/channel-offset mapping from 3DEP + NHD) — a physically independent channel.
+
+## Honest evidence table
+
+Measured on three local proxies. "Off-catalogue credit/dot" = mean kernel credit per emitted pixel against the USGS
+SGMC inventory **minus** everything within 300 m of the provided catalogue — the closest available stand-in for
+"faults the catalogue does not contain". It is a **proxy, not a score**; the family's own validation put its rank
+correlation with real scores at ρ = 0.71 (pre-registered bar 0.80, so **not** proven).
+
+| file | dots | off-catalogue credit/dot | 2020 rupture coverage | catalogue credit/dot |
+|---|---|---|---|---|
+| `gemsdoe50-corridor-fusion-v1.tif` (recommended) | 41,473 | 0.199 | 34.8 % | 0.191 |
+| `gemsdoe50-seis-ridge-v1.tif` | 45,000 | **0.223** | **37.8 %** | 0.000 |
+| `gems50-seislin-44709-…tif` (sibling, merged from `main`) | 44,709 | 0.194 | 14.0 % | 0.098 |
+| the family's 0.2600 file (`d2.8`) | 44,090 | 0.124 | 10.7 % | 0.215 |
+| the family's 0.2778 file | 37,654 | 0.143 | 11 % (owner-reported) | ~0 |
 
 ## Reproduce
 
 ```bash
-python3 -m pytest tests/ -q                       # 13 tests, metric identity included
-python3 scripts/fetch_external_data.py            # ComCat fetch (needs network/GH runner)
-python3 scripts/build_field.py                    # components -> /tmp/gems50/cache
-python3 scripts/validate_fields.py                # two-frame equal-budget table
-python3 scripts/fuse_experiment.py                # fusion variants (slow, ~9 min)
-python3 scripts/build_submission.py               # writes the GeoTIFF
-python3 scripts/check_submission.py               # 15 format checks + uniqueness gate
-python3 scripts/validate_submission.py            # scores the exact file on both frames
+pip3 install --break-system-packages numpy scipy scikit-learn rasterio pyproj pandas pytest
+PYTHONPATH=src python3 -m pytest tests -q                 # 40 tests
+PYTHONPATH=src python3 scripts/build_fusion.py --name corridor-fusion-v1 --mass 52000 --ring-share 0.30 --suppression-px 4
+PYTHONPATH=src python3 scripts/falsification_test.py      # leakage-free corridor-vs-density test
+PYTHONPATH=src python3 scripts/audit_seisridge.py docs/downloads/gemsdoe50-corridor-fusion-v1.tif \
+    --exclude gemsdoe50-seis-ridge-v1.tif --out evidence/uniqueness_corridor-fusion-v1.json
+python3 scripts/build_site.py                             # regenerate docs/ (site)
+python3 scripts/metric_bug_impact.py                      # the TPw bug's size, on this repo's own files
 ```
 
-## Official sources
+## Data, licences, attribution
 
-* Problem + scoring: <https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/>
-* Competition rules: <https://www.drivendata.org/competitions/306/competition-doe-gems/page/964/>
-* Leaderboard (read 2026-10-06): <https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/>
-* Reference solution: <https://github.com/drivendataorg/gems-prize-reference-solution>
-* USGS ComCat (public domain): <https://earthquake.usgs.gov/fdsnws/event/1/>
-* USGS SGMC / GDR 1391 (public domain / CC BY 4.0): receipts in `registry/sources.json`
-
----
-
-*Every quantitative statement here is reproduced by a script committed in this
-repository; nothing relies on manual inspection. Scores on the private leaderboard are
-unknown to this project, and none of the numbers above is presented as a leaderboard
-score.*
-
----
-
-## Second submission on this branch — seismicity-first (unique TIF, 45,000 dots)
-
-Built from a *different evidence stream* than the release above, and shipped as its own file:
-
-**Submit:** [`docs/downloads/gemsdoe50-seis-ridge-v1.tif`](docs/downloads/gemsdoe50-seis-ridge-v1.tif)
-· zip twin `…-v1.zip` · [what it is](docs/seis-ridge.html) · [how to submit](docs/executive-summary.html)
-· [analysis](docs/analysis.html) · [hypotheses](docs/hypotheses.html) · [sources](docs/sources.html)
-
-| item | value |
-|---|---|
-| SHA-256 | `5cad91ac7580db912ebac0cf352cce56d713e99ad53f596a57f714f51636d3c9` |
-| content | 45,000 cells = 1.0, every cell of the grid finite, min 0.0, max 1.0, **no NaN and no nodata tag** (the zero-outside encoding cannot trip the “Predicted values must be in range [0, 1]” validator) |
-| method | decluster → DBSCAN in (x, y, 3 km/yr·t) → recursive 2-means splitting until the minor-axis σ ≤ 600 m → λ₁/λ₂ ≥ 3 at Monte-Carlo p < 0.01 → thin axes + curved spines + 300 m gap bridges → **snapped to the USGS 3DEP 1 m lidar scarp ridge** → ≥300 m exclusion around the given catalogue |
-| mass | 45,000 cells, the family ledger’s operating neighbourhood; the full 25,000→79,977 sweep is in `evidence/build_seis-ridge-v1.json` |
-| uniqueness | max \|Pearson r\| **0.043**, max Jaccard **0.026** against **119** retrievable prior rasters (`evidence/uniqueness_seis-ridge-v1.json`) |
-| predictive gate | with **only pre-2020 earthquakes**, the corridor field is the only field covering any of the 2020 Monte Cristo rupture trend (2.4 %); smoothed density σ=10/20 px and uniform random at matched mass cover **0 %** (`evidence/falsification_test.json`) |
-| honest range | the family’s own saturating instrument reads 0.267–0.312 for this file (implied live ≈0.27–0.40); **no organiser score exists for it** |
-
-Reproduce: `PYTHONPATH=src python3 scripts/build_seisridge.py --name seis-ridge-v1 --mass 45000`
-
-### Metric correction found while integrating the two releases [MEASURED]
-
-`gems50.metric.score` queried each prediction against its *nearest* truth pixel and took the
-per-truth maximum over that subset, instead of the published rule
-`TP_w = Σ_g max_x p(x)·k(d(x,g))` over every prediction inside the kernel. That under-counted
-`TP_w` by **53 %** and `DTI` by **0.040 absolute** on this repository’s own 44,709-dot
-submission (0.0358 → **0.0760**, `evidence/metric_bug_impact.json`). The implementation is fixed,
-`tests/test_cross_metric.py` now asserts that two independently written implementations agree on
-random cases and on the real grids, and the whole suite passes (40 tests).
+* **USGS ComCat / FDSN event service** — `https://earthquake.usgs.gov/fdsnws/event/1/query`; US government data,
+  public domain, no credential required.
+* **USGS 3DEP 1 m lidar DEM** — `https://www.usgs.gov/3d-elevation-program/data-tools`; no use restrictions
+  (acknowledge "Map services and data available from U.S. Geological Survey, National Geospatial Program").
+* **GeoDAWN airborne radiometrics (USGS 22103)** — `https://doi.org/10.5066/P93LGLVQ`; USGS, public domain.
+* **INGENIOUS / GDR submission 1391** — `https://gdr.openei.org/submissions/1391`; redistributed under its
+  published terms.
+* This repository redistributes only derived rasters; the large external rasters are git-ignored and rebuilt by the
+  scripts. No competition test data is redistributed.

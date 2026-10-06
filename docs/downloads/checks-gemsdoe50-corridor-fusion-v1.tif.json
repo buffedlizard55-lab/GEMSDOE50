@@ -1,0 +1,35 @@
+{
+ "path": "gemsdoe50-corridor-fusion-v1.tif",
+ "bytes": 151034,
+ "sha256": "7f9f20295e28354069a40f93dc6f9289fdb135205614acdcbf0e0295c11bbbda",
+ "driver": "GTiff",
+ "count": 1,
+ "dtype": "float32",
+ "crs": "EPSG:32611",
+ "width": 3292,
+ "height": 3730,
+ "transform": [
+  100.0,
+  0.0,
+  243350.0,
+  0.0,
+  -100.0,
+  4508550.0
+ ],
+ "nodata_tag": null,
+ "res": [
+  100.0,
+  100.0
+ ],
+ "cells_total": 12279160,
+ "cells_finite": 12279160,
+ "cells_nan": 0,
+ "min": 0.0,
+ "max": 1.0,
+ "nonzero": 41473,
+ "outside_0_1": 0,
+ "all_finite": true,
+ "values_in_unit_interval": true,
+ "single_band": true,
+ "legal": true
+}

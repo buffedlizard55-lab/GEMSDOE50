@@ -145,5 +145,18 @@
   },
   "budget_dots": 44090,
   "source": "registry/field_validation.json"
+ },
+ "repository_status": {
+  "primary_candidate": "docs/downloads/gemsdoe50-corridor-fusion-v1.tif",
+  "sha256": "7f9f20295e28354069a40f93dc6f9289fdb135205614acdcbf0e0295c11bbbda",
+  "mass": 41473,
+  "organizer_score": null,
+  "submitted": false,
+  "alternatives": [
+   "docs/downloads/gemsdoe50-seis-ridge-v1.tif",
+   "docs/downloads/gems50-seislin-44709-20261006T2041Z-79e260ae.tif"
+  ],
+  "tests_passing": 40,
+  "metric_fix": "TPw understated by 53% before 2026-10-06"
  }
 }

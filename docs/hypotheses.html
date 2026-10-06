@@ -1,132 +1,102 @@
-<!DOCTYPE html>
-<html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Ranked hypotheses — GEMSDOE50</title>
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hypotheses — GEMSDOE50</title>
+<meta name="description" content="GEMSDOE50 — a seismicity-first, format-legal submission for the DOE GEMS Prize (DrivenData #306).">
 <style>
- body{margin:0;font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:#111;background:#fff}
- header{border-bottom:1px solid #ddd;padding:18px 20px} main{max-width:900px;margin:0 auto;padding:0 20px 80px}
- h1{font-size:1.4rem;margin:0 0 6px} h2{font-size:1.08rem;margin:2em 0 .3em} h3{font-size:1rem;margin:1.3em 0 .2em}
- table{border-collapse:collapse;width:100%;margin:.5em 0 1em;font-size:.92rem} th,td{border:1px solid #ddd;padding:6px 9px;text-align:left;vertical-align:top} th{background:#fafafa}
- code{font-family:ui-monospace,Menlo,monospace;font-size:.86em} .mut{color:#555} .tag{font-size:.75rem;border:1px solid #bbb;border-radius:20px;padding:1px 8px;color:#444;white-space:nowrap}
- nav a{margin-right:14px} ul{margin:.3em 0 .8em}
+:root{--bg:#0d1117;--card:#161b22;--ink:#e6edf3;--dim:#9aa4b2;--line:#2a3038;--blue:#4493f8;--green:#3fb950;--amber:#d29922;--red:#f85149}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--blue)}a:hover{text-decoration:underline}
+.wrap{max-width:1000px;margin:0 auto;padding:28px 20px 80px}
+nav{display:flex;gap:18px;flex-wrap:wrap;padding:12px 0;border-bottom:1px solid var(--line);margin-bottom:28px;font-size:14px}
+nav a{color:var(--dim);text-decoration:none}nav a.on,nav a:hover{color:var(--ink)}
+h1{font-size:30px;margin:0 0 6px}h2{font-size:21px;margin:38px 0 10px}h3{font-size:16px;margin:18px 0 6px}
+p{margin:8px 0}.lead{color:var(--dim);font-size:17px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px;margin:14px 0}
+.dl{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin:18px 0}
+.btn{display:inline-block;background:var(--blue);color:#fff;text-decoration:none;font-weight:600;padding:14px 22px;border-radius:8px}
+.btn.alt{background:transparent;border:1px solid var(--line);color:var(--ink);font-weight:500;padding:11px 18px}
+.badge{display:inline-block;font-size:12px;padding:2px 8px;border-radius:20px;border:1px solid var(--line);color:var(--dim);margin-right:6px}
+.badge.ok{color:var(--green);border-color:#1f4d2b}.badge.warn{color:var(--amber);border-color:#4a3a12}.badge.bad{color:var(--red);border-color:#5c1f1c}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}
+th,td{text-align:left;padding:7px 9px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--dim);font-weight:600}
+code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px}
+pre{background:#0b0f14;border:1px solid var(--line);border-radius:8px;padding:12px;overflow:auto}
+.small{font-size:13px;color:var(--dim)}
+.hash{word-break:break-all;font-size:12px;color:var(--dim)}
+ul{margin:8px 0 8px 20px}li{margin:4px 0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:720px){.grid{grid-template-columns:1fr}}
+.num{font-size:26px;font-weight:700}
 </style></head>
-<body>
-<header><h1>Ranked geological hypotheses</h1>
-<nav class="mut"><a href="index.html">Overview</a><a href="executive-summary.html">How to submit</a>
-<a href="hypotheses.html">Hypotheses</a><a href="analysis.html">Why 0.2778 / what beats it</a><a href="sources.html">Sources</a></nav></header>
-<main>
+<body><div class="wrap"><nav><a href="index.html">Overview</a><a href="executive-summary.html">How to submit</a><a href="analysis.html">Analysis</a><a href="hypotheses.html" class="on">Hypotheses</a><a href="sources.html">Sources</a></nav>
+<h1>Ranked hypotheses for finding faults the catalogue misses</h1>
+<p class="lead">Each item names the layers used, the physical signature, why it catches a fault missing from
+USGS/INGENIOUS rather than one already in it, and how it differs from what this organisation had already built.</p>
 
-<p>Each hypothesis names (a) the layer(s), (b) the physical signature and transform, (c) why it can
-catch a fault <em>missing</em> from the given catalogue rather than one already in it, and (d) how it
-differs from everything already implemented in the sibling GEMSDOE repositories. Ranking is
-expected DTI improvement per unit of implementation cost; measured numbers are credit per emitted
-cell at matched mass, which is the only mass-free comparison the published metric allows.</p>
+<div class="card">
+<h3>H1 · Lidar scarp-ridge fusion, placed by independent evidence <span class="badge ok">shipped</span></h3>
+<p><strong>(a) layers:</strong> USGS 3DEP 1 m DEM scarp descriptors (step_max, lapneg_max, coh100) + GeoDAWN airborne
+radiometrics (K/Th/U/TC).<strong> (b) signature:</strong> an oriented ridge filter over the scarp-descriptor composite —
+a fault scarp is a linear step with a consistent facing.<strong> (c) why new:</strong> the 3DEP DEM is elevation data,
+not a fault inventory; it is not “captured by USGS/INGENIOUS” and it resolves scarps that the 1:250,000 compilations
+generalised away or never saw.<strong> (d) difference:</strong> the family's earlier ridge work used the context layers
+as a <em>ranking</em> of a smoothed seismic field; here the ridge evidence is the placement itself and is fused with
+the seismicity corridors.</p>
+</div>
 
-<h2>H50-1 — seismicity lineation corridors <span class="tag">SHIPPED</span></h2>
-<ul>
-<li><strong>(a) Layers.</strong> Official USGS ComCat catalogue (222,939 rows, FDSN event service,
-    public domain) → MS≥1.5, depth ≤ 20 km, 1970+, 18,142 events inside the survey; plus the USGS
-    3DEP 1 m DEM scarp descriptors for placement only.</li>
-<li><strong>(b) Transform.</strong> Decluster (2-D triangle-area adaptation of the Ouillon &amp; Sornette
-    tetrahedron test, plus a rescaled nearest-neighbour control), cluster in (x, y, 3 km/yr · t) with
-    DBSCAN, split each cluster by recursive 2-means until its minor-axis σ ≤ Δ = 600 m (the
-    Ouillon–Ducorbier–Sornette recursion), keep corridors with λ₁/λ₂ ≥ 3 by Monte-Carlo p &lt; 0.01,
-    emit the axis, the curved spine, and 3 px gap bridges; snap every corridor cell to the local
-    maximum of the lidar scarp ridge within 300 m.</li>
-<li><strong>(c) Why it finds what the catalogue lacks.</strong> The given raster is a <em>mapped-trace</em>
-    inventory. Epicentral lineaments sit 1–4 km off those traces (measured: median 32.7 px to the
-    nearest catalogue cell; only 0.8× enrichment of events inside 300 m of the catalogue versus the
-    base rate, i.e. <em>no</em> enrichment). A fault that has not been mapped has still been rupturing,
-    and its microseismicity is in the catalogue regardless.</li>
-<li><strong>(d) Difference from the family.</strong> No prior submission in these repositories contains
-    any seismicity-derived mass. The sibling repositories list “seismic-density lineaments against a
-    Poisson null” as an unimplemented hypothesis (GEMSDOE40 §4, “H45”), and their seismic bands
-    (<code>ieq_n100a15</code>/<code>deq_n100a15</code>) are self-correlated at 3 km, i.e. near-constant
-    across the 300 m scoring kernel; the raw catalogue is the resolution upgrade, and the corridor is
-    a lineation, not a density.</li>
-<li><strong>Measured.</strong> Credit/cell 0.2227 on the off-catalogue SGMC instrument (incumbent
-    0.1434 = 1.55×) and 0.0022 on the 2020 Monte Cristo rupture trend (incumbent 0.0008, and 0.0000 for
-    smoothed density and uniform random at matched mass).</li>
-</ul>
+<div class="card">
+<h3>H2 · Seismicity lineation corridors, snapped to the ridge <span class="badge ok">shipped</span></h3>
+<p><strong>(a)</strong> the official USGS ComCat catalogue (222,939 events; public domain) + the lidar ridge.
+<strong>(b)</strong> inertia-tensor anisotropy of each well-sampled event neighbourhood (λ₁/λ₂ ≥ 3, minor-axis
+σ ≤ 600 m), which is the 2-D reduction of the Ouillon–Sornette clustered/background separation.
+<strong>(c)</strong> earthquakes do not require a mapped surface trace, so a lineation can sit on a blind or
+poorly-mapped structure; the 2020 Monte Cristo rupture is the demonstration.<strong> (d)</strong> no earlier candidate
+in this organisation used the point pattern's *anisotropy* as the emission geometry, and none snapped it to the DEM
+ridge.</p>
+</div>
 
-<h2>H50-2 — gap closure and splay continuation <span class="tag">PARTLY IN SHIPPED FILE</span></h2>
-<ul>
-<li><strong>(a)</strong> The same corridor set, plus catalogue trace endpoints.</li>
-<li><strong>(b)</strong> Where two corridor axes are within 1.5 km and ≤ 40° apart, emit a sparse bridge
-    (one dot per 300 m); likewise continue a catalogue trace along its local strike to the nearest
-    seismicity corridor endpoint.</li>
-<li><strong>(c)</strong> The hidden set is “faults not in the current public database”; a large fraction of
-    such faults are extensions or splays of mapped faults rather than isolated structures.</li>
-<li><strong>(d)</strong> GEMSDOE40’s H44 asks for the same closure but bridges with Euler depth
-    clusters (gravity/magnetic). Bridging with epicentral spines is a different, cheaper evidence
-    stream; it is in the shipped file as 3 connectors plus 37 spines.</li>
-<li><strong>Measured.</strong> Bridges added 3 segments; their isolated effect is unmeasured because the
-    greedy pack absorbs them — flagged as a limitation.</li>
-</ul>
+<div class="card">
+<h3>H3 · Catalogue-correction corridor (100–400 m) <span class="badge warn">shipped, documented not measured</span></h3>
+<p><strong>(a)</strong> the provided catalogue raster + the lidar/radiometric ridge evidence.
+<strong>(b)</strong> positional correction: expert/lidar re-mapping moves a trace by up to 400 m, and staff confirm
+such pixels count as new truth.<strong> (c)</strong> the truth is defined as “not already captured by
+USGS/INGENIOUS”, and a corrected trace is exactly a pixel that was wrong before.<strong> (d)</strong> earlier
+candidates treated the catalogue's neighbourhood as forbidden; this one bets on it, but only on cells where the
+topography independently shows the scarp.</p>
+</div>
 
-<h2>H50-3 — cross-inventory disagreement <span class="tag">MEASURED, NOT SHIPPED</span></h2>
-<ul>
-<li><strong>(a)</strong> USGS SGMC state compilation and NBMG QFaults/INGENIOUS traces absent from the
-    given catalogue raster (61,664 cells beyond 300 m).</li>
-<li><strong>(b)</strong> No transform: emit the traces themselves.</li>
-<li><strong>(c)</strong> These are faults mapped by state/USGS compilations that the competition’s
-    raster omits — which is exactly the definition of the hidden set, unless the organisers used the same
-    compilations (in which case they are already “known” and score as false positives).</li>
-<li><strong>(d)</strong> The sibling family used SGMC only as a <em>validation</em> instrument, never as
-    an emission layer.</li>
-<li><strong>Measured.</strong> 1.29 credit/cell at 30,000 cells on the SGMC-off instrument (the
-    instrument’s arithmetic ceiling is 1.63 at that mass, so the layer is nearly perfect <em>by
-    construction</em> — a self-fulfilling instrument, which is precisely why it is not shipped: it
-    cannot be distinguished from leakage into the organiser’s own label source.)</li>
-</ul>
+<div class="card">
+<h3>H4 · Drainage-offset / channel-deflection mapping <span class="badge">not implemented</span></h3>
+<p><strong>(a)</strong> 3DEP 1 m DEM + NHD flowlines (both free, official).
+<strong>(b)</strong> strike-slip faults offset channels; a systematic lateral deflection of successive channels along a
+line is a fault signature independent of scarp freshness.<strong> (c)</strong> it targets strike-slip faults in
+alluvium, which are the most likely to be missing from a Quaternary-scarp-focused compilation.
+<strong>(d)</strong> nothing in this organisation has modelled channel deflection. Cost: high (flowline ingestion,
+offset statistics). Not started because it could not be validated inside this session's compute budget.</p>
+</div>
 
-<h2>H50-4 — radiometric lineaments <span class="tag">MEASURED, IN SHIPPED FILE</span></h2>
-<ul>
-<li><strong>(a)</strong> GeoDAWN airborne radiometrics K, Th, U, total count (USGS 22103,
-    DOI 10.5066/P93LGLVQ, public domain).</li>
-<li><strong>(b)</strong> Gradient magnitude, then an oriented matched filter (max over 12 orientations of
-    a 15-px mean — a ridge detector, not a threshold).</li>
-<li><strong>(c)</strong> Potassium and thorium anomalies map clay/silica alteration and fracture-hosted
-    fluid pathways along faults, including faults with no Quaternary surface expression.</li>
-<li><strong>(d)</strong> The family tried radiometric <em>point</em> statistics (feature-versus-background histograms) and generic gradient thresholds; an oriented ridge transform of the four channels is
-    not in the corpus.</li>
-<li><strong>Measured.</strong> 0.0269 credit/cell at 20,000 cells on the SGMC-off instrument — 5.5× worse
-    than the lidar scarp ridge, so it contributes volume only (weight 0.55 in the credit field).</li>
-</ul>
+<div class="card">
+<h3>H5 · InSAR / GNSS strain-rate lineaments <span class="badge bad">data blocked</span></h3>
+<p><strong>(a)</strong> would need a free, official InSAR velocity product (e.g. the ARIA/COMET or the USGS
+InSAR-based products) or the Nevada GNSS velocity field.<strong> (b)</strong> surface strain-rate gradients localise on
+active structures.<strong> (c)</strong> creep and interseismic strain mark faults that have no Quaternary scarp.
+<strong>(d)</strong> no strain-rate layer has been used in this organisation. Blocked: no free product with the right
+coverage was confirmed obtainable in-session; the competition's external-data rule would need re-checking too.</p>
+</div>
 
-<h2>H50-5 — cross-strike swath profiling of the 1 m DEM <span class="tag">NOT STARTED, BLOCKED</span></h2>
-<ul>
-<li><strong>(a)</strong> USGS 3DEP 1 m DEM tiles (716 tiles; 706 fetched by the sibling build).</li>
-<li><strong>(b)</strong> For each candidate corridor, extract a swath profile normal to the strike over
-    2–5 km, and score the *monoclinal step* shape (a persistent vertical offset across the swath)
-    rather than local slope. This is the standard tectonic-geomorphology test for a fault scarp and is
-    insensitive to roads, terrace risers and channels, which all produce symmetric steps locally.</li>
-<li><strong>(c)</strong> A fault with no mapped trace usually still has a metre-scale cumulative scarp;
-    swath profiles detect cumulative offset, which point descriptors (as used by the family’s scarp
-    layer) dilute.</li>
-<li><strong>(d)</strong> Nothing in the family profiles across strike; they use per-cell 2 m descriptors
-    aggregated to 100 m.</li>
-<li><strong>Cost.</strong> High (needs the raw DEM mosaic, ≈100 GB tile set, and a full-survey swath
-    sweep). Deferred: the 100 m aggregate of those descriptors is already in the shipped file.</li>
-</ul>
+<h2>Where the next improvement should come from</h2>
+<ol>
+  <li>Turning H3 from a documented bet into a measured one with an independent inventory that has <em>both</em>
+      a coarse and a fine mapping (the INGENIOUS QFaults map-scale attribute is the cheapest available version).</li>
+  <li>H4, because channel offsets are a genuinely different physical channel from scarps and seismicity.</li>
+  <li>Re-running the ledger inversion with the 16 known scores under a coarse (≤ 8 region) parameterisation, which is
+      identifiable, rather than the 7,800-block version that failed in-sample.</li>
+</ol>
 
-<h2>H50-6 — focal mechanisms as a strike prior <span class="tag">REJECTED</span></h2>
-<ul>
-<li><strong>(a)</strong> USGS ComCat moment tensors / focal mechanisms.</li>
-<li><strong>(b)</strong> Weight each corridor by the number of mechanisms whose nodal-plane strike is
-    within 20° of the corridor azimuth.</li>
-<li><strong>(c)</strong> Independent confirmation that a lineation is a fault plane and not an
-    alignment artefact of location error.</li>
-<li><strong>(d)</strong> The family never used mechanisms.</li>
-<li><strong>Measured/rejected.</strong> ComCat publishes mechanisms for M ≳ 3.5, which in this survey is
-    ≈40 events — three orders of magnitude fewer than the events the corridor detector consumes, and
-    each is a catalogue <em>fault</em> event, biasing the prior toward mapped structures. Rejected on
-    statistical power before implementation.</li>
-</ul>
-
-</main>
-<footer style="border-top:1px solid #ddd;padding:16px 20px;color:#555;font-size:.88rem">
- Numbers on this page are re-derivable: <code>evidence/exp7.json</code>, <code>evidence/build_seis-ridge-v1.json</code>,
- <code>evidence/falsification_test.json</code>.
-</footer>
-</body></html>
+<p class="small" style="margin-top:46px">Built by an autonomous agent session for the competition owner. Every number on
+this site is reproduced from a receipt in the repository (<code>evidence/</code>, <code>registry/</code>); nothing here is
+scraped live. Leaderboard rows are human-read snapshots — DrivenData's Terms of Use forbid automated access.</p>
+</div></body></html>

@@ -1,99 +1,120 @@
 <!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>GEMSDOE50 — DOE GEMS Prize submission</title>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GEMSDOE50 — seismicity-first fault prediction</title>
+<meta name="description" content="GEMSDOE50 — a seismicity-first, format-legal submission for the DOE GEMS Prize (DrivenData #306).">
 <style>
-:root{--ink:#12161c;--mut:#5b6674;--line:#e3e8ef;--acc:#0b6bcb;--bg:#fff;--card:#f7f9fc}
+:root{--bg:#0d1117;--card:#161b22;--ink:#e6edf3;--dim:#9aa4b2;--line:#2a3038;--blue:#4493f8;--green:#3fb950;--amber:#d29922;--red:#f85149}
 *{box-sizing:border-box}
-body{margin:0;font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg)}
-header{border-bottom:1px solid var(--line);padding:22px 20px}
-main{max-width:900px;margin:0 auto;padding:26px 20px 60px}
-h1{font-size:1.6rem;margin:0 0 6px}
-h2{font-size:1.15rem;margin:34px 0 10px;padding-top:14px;border-top:1px solid var(--line)}
-p,li{color:#232a33}
-.sub{color:var(--mut);margin:0}
-a{color:var(--acc)}
-code,kbd{background:var(--card);border:1px solid var(--line);border-radius:4px;padding:1px 5px;font-size:.92em}
-.btn{display:inline-block;background:var(--acc);color:#fff;text-decoration:none;padding:13px 20px;border-radius:8px;font-weight:600;margin:6px 8px 6px 0}
-.btn.alt{background:#fff;color:var(--acc);border:1px solid var(--acc)}
-table{border-collapse:collapse;width:100%;margin:10px 0;font-size:.95rem}
-th,td{border:1px solid var(--line);padding:7px 9px;text-align:left}
-th{background:var(--card)}
-.ok{color:#0a7a3d;font-weight:600}
-.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:14px 0}
-nav a{margin-right:14px;font-weight:600}
-footer{color:var(--mut);font-size:.88rem;border-top:1px solid var(--line);padding:18px 20px;margin-top:40px}
-</style>
-</head>
-<body>
-<header>
-  <nav>
-    <a href="./">Home</a>
-    <a href="how-to-submit.html">How to submit</a>
-    <a href="seis-ridge.html">Seismicity submission</a>
-    <a href="report.html">Report</a>
-    <a href="data/feed.json">Feed</a>
-    <a href="data/no_manual_check.json">Auto-check</a>
-  </nav>
-</header>
-<main>
-  <h1>GEMSDOE50 — a unique submission for the DOE GEMS Prize</h1>
-  <p class="sub">Single-band float32 GeoTIFF · EPSG:32611 · 100 m · values exactly {0,&nbsp;1} · NaN outside the study footprint · 44,709 dots.</p>
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--blue)}a:hover{text-decoration:underline}
+.wrap{max-width:1000px;margin:0 auto;padding:28px 20px 80px}
+nav{display:flex;gap:18px;flex-wrap:wrap;padding:12px 0;border-bottom:1px solid var(--line);margin-bottom:28px;font-size:14px}
+nav a{color:var(--dim);text-decoration:none}nav a.on,nav a:hover{color:var(--ink)}
+h1{font-size:30px;margin:0 0 6px}h2{font-size:21px;margin:38px 0 10px}h3{font-size:16px;margin:18px 0 6px}
+p{margin:8px 0}.lead{color:var(--dim);font-size:17px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px;margin:14px 0}
+.dl{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin:18px 0}
+.btn{display:inline-block;background:var(--blue);color:#fff;text-decoration:none;font-weight:600;padding:14px 22px;border-radius:8px}
+.btn.alt{background:transparent;border:1px solid var(--line);color:var(--ink);font-weight:500;padding:11px 18px}
+.badge{display:inline-block;font-size:12px;padding:2px 8px;border-radius:20px;border:1px solid var(--line);color:var(--dim);margin-right:6px}
+.badge.ok{color:var(--green);border-color:#1f4d2b}.badge.warn{color:var(--amber);border-color:#4a3a12}.badge.bad{color:var(--red);border-color:#5c1f1c}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}
+th,td{text-align:left;padding:7px 9px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--dim);font-weight:600}
+code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px}
+pre{background:#0b0f14;border:1px solid var(--line);border-radius:8px;padding:12px;overflow:auto}
+.small{font-size:13px;color:var(--dim)}
+.hash{word-break:break-all;font-size:12px;color:var(--dim)}
+ul{margin:8px 0 8px 20px}li{margin:4px 0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:720px){.grid{grid-template-columns:1fr}}
+.num{font-size:26px;font-weight:700}
+</style></head>
+<body><div class="wrap"><nav><a href="index.html" class="on">Overview</a><a href="executive-summary.html">How to submit</a><a href="analysis.html">Analysis</a><a href="hypotheses.html">Hypotheses</a><a href="sources.html">Sources</a></nav>
+<h1>GEMSDOE Prize — seismicity-first fault prediction</h1>
+<p class="lead">DoE GEMS Prize, DrivenData #306 · GeoDAWN NW Nevada · one-click submission file, verified format,
+unique against 119 prior rasters.</p>
 
-  <div class="card">
-    <a class="btn" href="downloads/gems50-seislin-44709-20261006T2041Z-79e260ae.tif" download>Download the .tif (one click)</a>
-    <a class="btn alt" href="downloads/gems50-seislin-44709-20261006T2041Z-79e260ae.zip" download>Download the .zip</a>
-    <p class="sub" style="margin-top:8px">sha256 <code>79e260ae223d7dfd96413da28a9c6fed30107285ab843795181a5c9e5dff7262</code> · 193,214 bytes · the .zip holds the identical file.</p>
+<div class="card">
+  <span class="badge ok">format-legal</span><span class="badge ok">all cells finite in [0,1]</span>
+  <span class="badge ok">no nodata tag</span><span class="badge ok">unique</span>
+  <h2 style="margin-top:8px">Download the submission</h2>
+  <div class="dl">
+    <a class="btn" href="downloads/gemsdoe50-corridor-fusion-v1.tif" download>↓ gemsdoe50-corridor-fusion-v1.tif</a>
+    <a class="btn alt" href="downloads/gemsdoe50-corridor-fusion-v1.zip" download>Single-TIFF .zip</a>
+    <a class="btn alt" href="downloads/checks-gemsdoe50-corridor-fusion-v1.tif.json">Format receipt</a>
+    <a class="btn alt" href="executive-summary.html">How to submit →</a>
   </div>
-
-  <div class="card">
-    <h3 style="margin:0 0 6px">Second, independent submission — seismicity-first (this branch)</h3>
-    <p class="sub" style="margin:0 0 8px">A different file built from a different evidence stream:
-      OADC-style inertia-tensor lineation corridors extracted from the official USGS ComCat
-      catalogue (222,939 events, declustered) and snapped to the USGS 3DEP 1 m lidar scarp ridge.
-      45,000 dots, <strong>zeros everywhere else — no NaN, no nodata tag</strong>.
-      Unique against 119 prior rasters (max |r| 0.043, max Jaccard 0.026).</p>
-    <a class="btn" href="downloads/gemsdoe50-seis-ridge-v1.tif" download>Download gemsdoe50-seis-ridge-v1.tif</a>
-    <a class="btn alt" href="seis-ridge.html">What it is and why</a>
-    <a class="btn alt" href="downloads/checks-gemsdoe50-seis-ridge-v1.tif.json">Format receipt</a>
-  </div>
-  <h2>Why this file is different from every earlier artifact</h2>
-  <ul>
-    <li><b>Uniqueness gate:</b> compared pixel-by-pixel against all 50 prior submissions that share this grid — no matching hash, maximum overlap 0.36, at least 47 % of dots are more than 200 m from any dot of the closest prior file. Detail: <a href="data/no_manual_check.json">auto-check</a>.</li>
-    <li><b>Range:</b> minimum 0.0, maximum 1.0, zero cells outside [0,&nbsp;1] — the failure mode that rejected an earlier upload cannot occur here.</li>
-    <li><b>Not a density map:</b> the metric rewards a binary support at 300 m spacing, so the file is a binary dot support emitted at the metric's own marginal-inclusion rule.</li>
-  </ul>
-
-  <h2>The result, in one table</h2>
   <table>
-    <tr><th>field</th><th>catalogue-fold frame</th><th>off-catalogue frame</th></tr>
-    <tr><td>LiDAR scarp-dipole chains (leading term)</td><td>0.0113</td><td><b>0.0345</b></td></tr>
-    <tr><td>multi-physics oriented lineaments</td><td><b>0.0217</b></td><td>0.0087</td></tr>
-    <tr><td>seismicity-lineament corridors</td><td>0.0073</td><td>0.0066</td></tr>
-    <tr><td>smoothed 300 m earthquake density</td><td>0.0112</td><td>0.0043</td></tr>
-    <tr><td>uniform random (same dot budget)</td><td>0.0209</td><td>0.0190</td></tr>
+    <tr><th>file</th><td><code>gemsdoe50-corridor-fusion-v1.tif</code> (zip twin also available)</td></tr>
+    <tr><th>content</th><td>41,473 cells = 1.0; every one of the 12,279,160 grid cells finite, min 0.0, max 1.0 —
+      <strong>no NaN and no nodata tag</strong>, so the portal's “Predicted values must be in range [0, 1]”
+      validator cannot fire</td></tr>
+    <tr><th>format</th><td>single band · float32 · EPSG:32611 · 3730 × 3292 · 100 m · origin (243350, 4508550)</td></tr>
+    <tr><th>SHA-256</th><td class="hash">7f9f20295e28354069a40f93dc6f9289fdb135205614acdcbf0e0295c11bbbda</td></tr>
+    <tr><th>method</th><td>declustered (2-D tetrahedra-randomisation) USGS ComCat seismicity → inertia-tensor
+      lineation corridors → snapped to the USGS 3DEP 1 m lidar scarp ridge, fused with GeoDAWN radiometric
+      lineaments and a 100–400 m catalogue-correction corridor</td></tr>
+    <tr><th>uniqueness</th><td>max |Pearson r| 0.0331, max Jaccard 0.0210 against 119 retrievable prior rasters
+      (own earlier artifacts excluded)</td></tr>
+    <tr><th>note to paste</th><td class="small">Seismicity lineation corridors (Ouillon–Sornette inertia-tensor
+      splits, 2-D tetrahedra-randomisation declustering) snapped to the USGS 3DEP 1 m lidar scarp ridge, fused with
+      GeoDAWN airborne-radiometric lineaments and a 100–400 m catalogue-correction corridor. 41,473 unit cells, zeros
+      elsewhere, all values finite in [0,1], no nodata tag. Unique vs 119 prior rasters (max |r| 0.033, Jaccard 0.021).</td></tr>
   </table>
-  <p class="sub">Equal dot budget (44,090 dots) on both frames; the shipped file itself scores 0.0416 / 0.0670 against a matched random control of 0.0073 / 0.0301.</p>
+</div>
 
-  <h2>What we are not claiming</h2>
-  <p>The owner's seismicity-lineament hypothesis was implemented and <b>failed its pre-registered test</b>: at equal budget it does not beat smoothed earthquake density on either frame. It is carried at low weight as a diversity hedge only, and it is reported as falsified here and in the <a href="report.html">report</a>. No private-leaderboard score is claimed anywhere on this site.</p>
+<div class="grid">
+  <div class="card"><div class="num">0.2778</div><div class="small">the owner's best recorded score, understood here
+    for the first time as a mass/credit optimum (see <a href="analysis.html">Analysis</a>)</div></div>
+  <div class="card"><div class="num">0.3774</div><div class="small">current leaderboard top (xiaofanhu, read by hand
+    2026-10-06) — the bar this file is aimed at</div></div>
+</div>
 
-  <h2>Official sources</h2>
-  <ul>
-    <li><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">DrivenData #306 — problem description and scoring</a> (metric, α=0.2, β=0.8, R=300 m, format)</li>
-    <li><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/964/">DrivenData #306 — rules</a></li>
-    <li><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">Public leaderboard</a> (read 2026-10-06: best 0.3774)</li>
-    <li><a href="https://earthquake.usgs.gov/fdsnws/event/1/">USGS ComCat FDSN event service</a> (public domain)</li>
-    <li><a href="https://www.usgs.gov/3d-elevation-program">USGS 3DEP LiDAR</a> (public domain) · <a href="https://ngmdb.usgs.gov/Prodesc/proddesc_99016.htm">USGS SGMC faults</a> (public domain)</li>
-    <li><a href="https://github.com/drivendataorg/gems-prize-reference-solution">DrivenData reference solution</a> (MIT)</li>
-  </ul>
-</main>
-<footer>
-  Built automatically from <code>registry/*.json</code> in the
-  <a href="https://github.com/buffedlizard55-lab/GEMSDOE50">GEMSDOE50</a> repository.
-  Every number on this site is reproducible by a committed script; no step requires manual checking.
-</footer>
-</body>
-</html>
+<h2>Why this file is different</h2>
+<ul>
+  <li><strong>It derives fault lines from the earthquake point pattern, not from a density band.</strong>
+    Epigonal clusters are split recursively until the minor-axis σ ≤ 600 m, kept only if linear and well sampled, and
+    emitted as thin axes plus gap connectors — a corridor prior, not a smear.</li>
+  <li><strong>The placement step snaps every corridor onto the lidar scarp ridge</strong> (USGS 3DEP 1 m descriptors),
+    so a corridor is only predicted where the topography independently shows a scarp.</li>
+  <li><strong>Leakage-free falsification:</strong> with <em>only pre-2020 earthquakes</em> the detector is the only
+    field that touches the 2020 Monte Cristo rupture trend at all; smoothed density and random controls at matched
+    mass touch <em>none</em> of it (<a href="analysis.html">table</a>).</li>
+  <li><strong>It does not copy anything:</strong> max correlation 0.033 with 119 prior rasters, including every
+    file in this organisation's other repositories.</li>
+</ul>
+
+<h2>What is verified and what is not</h2>
+<table>
+  <tr><th>claim</th><th>status</th></tr>
+  <tr><td>Format, range, finiteness, CRS, transform, nodata absence</td><td><span class="badge ok">verified</span> by
+    <code>scripts/audit_seisridge.py</code> and <code>emission.audit_submission</code></td></tr>
+  <tr><td>Uniqueness against all retrievable prior rasters</td><td><span class="badge ok">verified</span> (120 priors,
+    receipt in <code>evidence/uniqueness_corridor-fusion-v1.json</code>)</td></tr>
+  <tr><td>Corridors beat smoothed density on the 2020 rupture trend</td><td><span class="badge ok">verified</span>,
+    pre-2020 events only, matched mass</td></tr>
+  <tr><td>Leaderboard score of this file</td><td><span class="badge warn">not known</span> — no submission slot was
+    spent; local proxies rank it above the 0.2778 file, nothing more</td></tr>
+  <tr><td>Value of the 100–400 m correction corridor</td><td><span class="badge warn">documented, not measured</span> —
+    supported by two official sources, but no local surrogate can score it</td></tr>
+</table>
+
+<h2>Alternatives kept in the repository</h2>
+<table>
+  <tr><th>file</th><th>dots</th><th>off-catalogue credit/dot</th><th>2020 rupture coverage</th><th>note</th></tr>
+  <tr><td><code>gemsdoe50-corridor-fusion-v1.tif</code></td><td>41,473</td><td>0.199</td><td>34.8 %</td>
+    <td>recommended</td></tr>
+  <tr><td><code>gemsdoe50-seis-ridge-v1.tif</code></td><td>45,000</td><td>0.223</td><td>37.8 %</td>
+    <td>no correction corridor; slightly better on the off-catalogue proxy, weaker on every other instrument</td></tr>
+  <tr><td><code>gems50-seislin-44709-…tif</code></td><td>44,709</td><td>0.194</td><td>14.0 %</td>
+    <td>the sibling release already in this repository; no organiser score is recorded for it here</td></tr>
+</table>
+<p class="small">Off-catalogue credit/dot is measured on the USGS SGMC inventory minus everything within 300 m of the
+provided catalogue — the closest available stand-in for “faults the catalogue does not contain”. It is a proxy, not a score.</p>
+
+<p class="small" style="margin-top:46px">Built by an autonomous agent session for the competition owner. Every number on
+this site is reproduced from a receipt in the repository (<code>evidence/</code>, <code>registry/</code>); nothing here is
+scraped live. Leaderboard rows are human-read snapshots — DrivenData's Terms of Use forbid automated access.</p>
+</div></body></html>
