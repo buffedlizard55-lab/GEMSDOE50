@@ -41,8 +41,13 @@ def test_agreement_on_the_real_grids():
 
     from gems50 import grid_io
 
-    tif = Path(__file__).resolve().parents[1] / "docs" / "downloads" / "gemsdoe50-seis-ridge-v1.tif"
-    if not tif.exists():
+    downloads = Path(__file__).resolve().parents[1] / "docs" / "downloads"
+    candidates = [
+        "gems51-scarpradio-offcat-35000-20261006-ecf058ea-nan.tif",
+        "gemsdoe50-seis-ridge-v1.tif",
+    ]
+    tif = next((downloads / name for name in candidates if (downloads / name).exists()), None)
+    if tif is None:
         pytest.skip("shipped submission not present")
     with rasterio.open(tif) as src:
         pred = src.read(1)
