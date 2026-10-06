@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GEMSDOE50 — DOE GEMS Prize submission</title>
+<style>
+:root{--ink:#12161c;--mut:#5b6674;--line:#e3e8ef;--acc:#0b6bcb;--bg:#fff;--card:#f7f9fc}
+*{box-sizing:border-box}
+body{margin:0;font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg)}
+header{border-bottom:1px solid var(--line);padding:22px 20px}
+main{max-width:900px;margin:0 auto;padding:26px 20px 60px}
+h1{font-size:1.6rem;margin:0 0 6px}
+h2{font-size:1.15rem;margin:34px 0 10px;padding-top:14px;border-top:1px solid var(--line)}
+p,li{color:#232a33}
+.sub{color:var(--mut);margin:0}
+a{color:var(--acc)}
+code,kbd{background:var(--card);border:1px solid var(--line);border-radius:4px;padding:1px 5px;font-size:.92em}
+.btn{display:inline-block;background:var(--acc);color:#fff;text-decoration:none;padding:13px 20px;border-radius:8px;font-weight:600;margin:6px 8px 6px 0}
+.btn.alt{background:#fff;color:var(--acc);border:1px solid var(--acc)}
+table{border-collapse:collapse;width:100%;margin:10px 0;font-size:.95rem}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left}
+th{background:var(--card)}
+.ok{color:#0a7a3d;font-weight:600}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:14px 0}
+nav a{margin-right:14px;font-weight:600}
+footer{color:var(--mut);font-size:.88rem;border-top:1px solid var(--line);padding:18px 20px;margin-top:40px}
+</style>
+</head>
+<body>
+<header>
+  <nav>
+    <a href="./">Home</a>
+    <a href="how-to-submit.html">How to submit</a>
+    <a href="report.html">Report</a>
+    <a href="data/feed.json">Feed</a>
+    <a href="data/no_manual_check.json">Auto-check</a>
+  </nav>
+</header>
+<main>
+  <h1>GEMSDOE50 — a unique submission for the DOE GEMS Prize</h1>
+  <p class="sub">Single-band float32 GeoTIFF · EPSG:32611 · 100 m · values exactly {0,&nbsp;1} · NaN outside the study footprint · 44,709 dots.</p>
+
+  <div class="card">
+    <a class="btn" href="downloads/gems50-seislin-44709-20261006T2041Z-79e260ae.tif" download>Download the .tif (one click)</a>
+    <a class="btn alt" href="downloads/gems50-seislin-44709-20261006T2041Z-79e260ae.zip" download>Download the .zip</a>
+    <p class="sub" style="margin-top:8px">sha256 <code>79e260ae223d7dfd96413da28a9c6fed30107285ab843795181a5c9e5dff7262</code> · 193,214 bytes · the .zip holds the identical file.</p>
+  </div>
+
+  <h2>Why this file is different from every earlier artifact</h2>
+  <ul>
+    <li><b>Uniqueness gate:</b> compared pixel-by-pixel against all 50 prior submissions that share this grid — no matching hash, maximum overlap 0.36, at least 47 % of dots are more than 200 m from any dot of the closest prior file. Detail: <a href="data/no_manual_check.json">auto-check</a>.</li>
+    <li><b>Range:</b> minimum 0.0, maximum 1.0, zero cells outside [0,&nbsp;1] — the failure mode that rejected an earlier upload cannot occur here.</li>
+    <li><b>Not a density map:</b> the metric rewards a binary support at 300 m spacing, so the file is a binary dot support emitted at the metric's own marginal-inclusion rule.</li>
+  </ul>
+
+  <h2>The result, in one table</h2>
+  <table>
+    <tr><th>field</th><th>catalogue-fold frame</th><th>off-catalogue frame</th></tr>
+    <tr><td>LiDAR scarp-dipole chains (leading term)</td><td>0.0113</td><td><b>0.0345</b></td></tr>
+    <tr><td>multi-physics oriented lineaments</td><td><b>0.0217</b></td><td>0.0087</td></tr>
+    <tr><td>seismicity-lineament corridors</td><td>0.0073</td><td>0.0066</td></tr>
+    <tr><td>smoothed 300 m earthquake density</td><td>0.0112</td><td>0.0043</td></tr>
+    <tr><td>uniform random (same dot budget)</td><td>0.0209</td><td>0.0190</td></tr>
+  </table>
+  <p class="sub">Equal dot budget (44,090 dots) on both frames; the shipped file itself scores 0.0416 / 0.0670 against a matched random control of 0.0073 / 0.0301.</p>
+
+  <h2>What we are not claiming</h2>
+  <p>The owner's seismicity-lineament hypothesis was implemented and <b>failed its pre-registered test</b>: at equal budget it does not beat smoothed earthquake density on either frame. It is carried at low weight as a diversity hedge only, and it is reported as falsified here and in the <a href="report.html">report</a>. No private-leaderboard score is claimed anywhere on this site.</p>
+
+  <h2>Official sources</h2>
+  <ul>
+    <li><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">DrivenData #306 — problem description and scoring</a> (metric, α=0.2, β=0.8, R=300 m, format)</li>
+    <li><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/964/">DrivenData #306 — rules</a></li>
+    <li><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">Public leaderboard</a> (read 2026-10-06: best 0.3774)</li>
+    <li><a href="https://earthquake.usgs.gov/fdsnws/event/1/">USGS ComCat FDSN event service</a> (public domain)</li>
+    <li><a href="https://www.usgs.gov/3d-elevation-program">USGS 3DEP LiDAR</a> (public domain) · <a href="https://ngmdb.usgs.gov/Prodesc/proddesc_99016.htm">USGS SGMC faults</a> (public domain)</li>
+    <li><a href="https://github.com/drivendataorg/gems-prize-reference-solution">DrivenData reference solution</a> (MIT)</li>
+  </ul>
+</main>
+<footer>
+  Built automatically from <code>registry/*.json</code> in the
+  <a href="https://github.com/buffedlizard55-lab/GEMSDOE50">GEMSDOE50</a> repository.
+  Every number on this site is reproducible by a committed script; no step requires manual checking.
+</footer>
+</body>
+</html>

@@ -1,0 +1,89 @@
+{
+ "generated_utc": "2026-10-06T20:43:11Z",
+ "submission": {
+  "file": "gems50-seislin-44709-20261006T2041Z-79e260ae.tif",
+  "bytes": 193214,
+  "sha256": "79e260ae223d7dfd96413da28a9c6fed30107285ab843795181a5c9e5dff7262",
+  "crs": "EPSG:32611",
+  "dtype": "float32",
+  "size": "3730x3292",
+  "res_m": 100,
+  "values": "{0, 1}",
+  "nodata": "NaN outside the study footprint"
+ },
+ "sources": [
+  {
+   "name": "DrivenData DOE GEMS Prize #306 \u2014 problem description and scoring",
+   "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/",
+   "licence": "competition terms",
+   "read": "2026-10-06",
+   "used_for": "metric definition, alpha=0.2 beta=0.8, R=300 m, format rules"
+  },
+  {
+   "name": "DrivenData DOE GEMS Prize #306 \u2014 rules",
+   "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/964/",
+   "licence": "competition terms",
+   "read": "2026-10-06",
+   "used_for": "submission cadence and eligibility"
+  },
+  {
+   "name": "DrivenData DOE GEMS Prize #306 \u2014 public leaderboard",
+   "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/",
+   "licence": "competition terms",
+   "read": "2026-10-06",
+   "used_for": "current best public score 0.3774; prior artifacts 0.2600/0.2708/0.2778"
+  },
+  {
+   "name": "USGS ANSS Comprehensive Earthquake Catalog (ComCat), FDSN event web service",
+   "url": "https://earthquake.usgs.gov/fdsnws/event/1/",
+   "licence": "US public domain",
+   "read": "2026-10-06 (fetched by the GitHub Actions runner in .github/workflows/fetch-external-data.yml)",
+   "used_for": "222,939 events; 38,483 M>=2.0 depth<=30 km within the footprint; seismicity corridor layer"
+  },
+  {
+   "name": "USGS State Geologic Map Compilation (SGMC) faults, Nevada/California",
+   "url": "https://ngmdb.usgs.gov/Prodesc/proddesc_99016.htm",
+   "licence": "US public domain",
+   "read": "2026-10-04 (owner-derived 100 m raster mirror)",
+   "used_for": "off-catalogue (F2) validation frame and concealment prior"
+  },
+  {
+   "name": "USGS 3DEP 1 m DEM (LiDAR) \u2014 scarp descriptor stack",
+   "url": "https://www.usgs.gov/3d-elevation-program",
+   "licence": "US public domain",
+   "read": "2026-10-04 (owner-derived 12-channel raster mirror)",
+   "used_for": "leading hypothesis H50-A: scarp dipole + chain vote"
+  },
+  {
+   "name": "GDR 1391 / Geothermal Prospector derived layers",
+   "url": "https://gdr.openei.org/submissions/1391",
+   "licence": "CC BY 4.0",
+   "read": "2026-10-04",
+   "used_for": "thermal/volcanic layers for proposed hypothesis H50-E"
+  },
+  {
+   "name": "gems-prize-reference-solution",
+   "url": "https://github.com/drivendataorg/gems-prize-reference-solution",
+   "licence": "MIT",
+   "read": "2026-10-06",
+   "used_for": "reference U-Net recipe and output-writing conventions; no score logic reused"
+  }
+ ],
+ "methods": [
+  {
+   "name": "Seismicity lineament detection (H50-B)",
+   "citation": "Ouillon, Ducorbier & Sornette (2008), Tectonophysics 456, 42; Ouillon & Sornette (2011), J. Geophys. Res. 116, B01303",
+   "used": "corridor orientation via 2-D inertia tensor; Poisson nearest-neighbour crossover r_c=1.61 km; the 2-D triangle-area analogue of the 3-D tetrahedron-volume statistic is this project's own adaptation and is unverified"
+  },
+  {
+   "name": "Marginal-credit emission",
+   "citation": "internal derivation, docs/research/score-model.md (identity TP_w + FN_w = |G|)",
+   "used": "a dot is emitted iff its kernel credit k exceeds 0.2*s; binary support dominates any graded map"
+  }
+ ],
+ "caveats": [
+  "The private leaderboard is unknown to this project; no number here is a leaderboard score.",
+  "H50-B (seismicity corridors) failed its registered equal-budget test and is carried only at low weight.",
+  "Component 0.2778 attribution is owner-reported, not organizer-confirmed (GEMSDOE32/docs/research/why-d28-scored-026.md)."
+ ]
+}
