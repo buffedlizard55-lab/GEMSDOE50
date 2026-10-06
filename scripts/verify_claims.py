@@ -61,6 +61,13 @@ def main() -> int:
     if u["max_iou"] >= 0.5:
         failures.append("max_iou")
 
+    ci = load("submission_checks_ci.json")
+    if ci:
+        expect("CI-level format checks pass", ci["format"]["all_checks_pass"], True)
+        expect("CI-level uniqueness verdict", bool(ci["uniqueness"].get("verdict_unique")), True)
+        expect("CI-level screen is below its threshold",
+               ci["uniqueness"]["max_iou_block8"] < ci["uniqueness"]["screen_threshold_block8"], True)
+
     # --- validation of the exact file ---------------------------------------
     expect("F2 beats the random control", validation["F2_dti"] > validation["controls"]["uniform_random_same_count"]["F2"], True)
     expect("F1 beats the random control", validation["F1_mean"] > validation["controls"]["uniform_random_same_count"]["F1_mean"], True)

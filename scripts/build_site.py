@@ -41,6 +41,7 @@ def main() -> int:
     sha = hashlib.sha256(sub.read_bytes()).hexdigest() if sub else None
 
     checks = read("submission_checks.json")
+    checks_ci = read("submission_checks_ci.json")
     validation = read("submission_validation.json")
     build = read("submission_build.json")
     sources = read("sources.json")
@@ -56,6 +57,14 @@ def main() -> int:
                     else "SKIPPED (prior-artifact corpus not present here)"
                     if checks["uniqueness"].get("verdict") == "SKIPPED" else "UNKNOWN") if checks else "UNKNOWN",
         "checked_by": "scripts/check_submission.py",
+        "uniqueness_at_ci_level": {k: v for k, v in (checks_ci.get("uniqueness") or {}).items()} if checks_ci else
+                                  "not yet recorded on this branch",
+        "levels": {
+            "full_pixel": "prior-artifact corpus present (development machine); "
+                          "fine-scale IoU and dot-novelty resolved",
+            "block_signature": "bare CI runner; 8x/32x block occupancy from "
+                               "registry/prior_artifact_signatures.npz",
+        },
     }, indent=1))
 
     (DATA / "validation.json").write_text(json.dumps({

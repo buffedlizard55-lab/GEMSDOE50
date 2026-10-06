@@ -19,7 +19,7 @@ jobs:
       - run: pip install numpy scipy rasterio
       - name: Run the automatic checks (no manual vetting)
         run: |
-          python3 scripts/check_submission.py --submission downloads/gems50-seislin-44709-20261006T2041Z-79e260ae.tif --out registry/submission_checks.json || true
+          python3 scripts/check_submission.py --submission downloads/gems50-seislin-44709-20261006T2041Z-79e260ae.tif --out registry/submission_checks_ci.json || true
       - name: Regenerate the site feeds
         run: python3 scripts/build_site.py
       - name: Commit the refreshed registry and feeds
