@@ -18,7 +18,7 @@
   ],
   "compression": "Compression.deflate",
   "nodata": NaN,
-  "footprint_source": "competition sample_submission.tif",
+  "footprint_source": "registry/footprint_mask.npz",
   "footprint_px": 5167373,
   "outside_footprint_all_nan": true,
   "all_checks_pass": true
