@@ -22,7 +22,7 @@ The official DrivenData problem page encourages external data only where the par
 
 > Trugman, D. T. (2024). *A High-Precision Earthquake Catalog for Nevada*. Seismological Research Letters 95(6), 3737–3745. https://doi.org/10.1785/0220240106. Dataset: *Relocated Earthquake Catalog for Nevada (2008–2023)*, Zenodo v2, https://doi.org/10.5281/zenodo.11167510, CC BY 4.0.
 
-**Unresolved scientific limitation:** `reloc=1` marks waveform relocation, but the downloadable table does not include each event's location-error PDF/covariance. The paper cautions that absolute accuracy remains tied to the velocity model; waveform relocation improves relative precision for a subset, and not every event can be waveform-relocated. Do not equate decimal coordinate precision with positional accuracy, and do not call the proposed method ACLUD. This is a 2-D adaptation inspired by the papers, not a reproduction of their validated 3-D uncertainty-aware algorithms.
+**Unresolved scientific limitation:** `reloc=1` marks waveform relocation, but the downloadable table does not include each event's location-error PDF/covariance. The paper cautions that absolute accuracy remains tied to the velocity model; waveform relocation improves relative precision for a subset, and not every event can be waveform-relocated. Do not equate decimal coordinate precision with positional accuracy, and do not call H50-S1 ACLUD: it is a 3-D plane-fitting hypothesis without event-specific covariance, not a reproduction of a validated 3-D uncertainty-aware algorithm. The separate legacy H50-B 2-D epicenter/triangle-area adaptation is also not ACLUD and remains unverified.
 
 ## Preregistered spatial-holdout and slot gate
 

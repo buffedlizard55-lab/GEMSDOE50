@@ -56,6 +56,10 @@ def test_static_site_builds_clear_no_slot_pages_from_report(tmp_path: Path):
                 "pooled_dti_q95": 0.08,
                 "scores": [{"id": "time-shuffle-01", "pooled_dti": 0.07}],
             },
+            "smoothed_density_controls": {
+                "pooled_dti": {"smoothed-density-1km": 0.10, "smoothed-density-2km": 0.09},
+                "candidate_beats_both": True,
+            },
         },
         "submission_artifact": {
             "unique_name": "candidate.tif",
@@ -85,6 +89,8 @@ def test_static_site_builds_clear_no_slot_pages_from_report(tmp_path: Path):
     results = (output / "results.html").read_text(encoding="utf-8")
     submission = (output / "submission.html").read_text(encoding="utf-8")
     assert "NO SLOT" in results
+    assert "smoothed-density-1km" in results
+    assert "smoothed-density-2km" in results
     assert "do not use a weekly submission slot" in submission
     assert "candidate.tif" in submission
 

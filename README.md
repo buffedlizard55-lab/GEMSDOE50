@@ -8,16 +8,17 @@
 
 1. **Deliver a new, unique GeoTIFF prediction.** Generate it from this repository's documented method and pinned inputs. Never copy a previous submission's prediction pixels; earlier artifacts may be inspected only for education, controls, or comparison. The intended download must be a single-band float32 GeoTIFF on the actual competition grid, EPSG:32611, 100 m resolution, with the official shape, transform, and bounds. Predictions must be finite and within `[0, 1]` wherever data are valid; outside-footprint handling must follow the official sample/template and be tested against the reported portal error `Predicted values must be in range [0, 1]`.
 2. **Make the artifact easy to find and download.** Put a one-click download and a concise executive summary at the top of the site. Include a clear, numbered “how to submit” page, a unique submission name, and a short distinguishing note for the competition's optional note field. Do not imply portal acceptance when no upload receipt exists.
-3. **Do the science before implementation.** Before writing a detector, list and rank 3–5 genuinely distinct geological hypotheses. Each must state the exact layers/data, physical signature, why it could detect a fault missing from USGS/INGENIOUS, how it differs from prior GEMSDOE work, expected DTI direction/impact, implementation cost, and data/license requirements. Preserve the ranking in [`docs/hypotheses-preregistered.md`](docs/hypotheses-preregistered.md); exact implementation choices and controls are frozen in [`docs/h50s1-protocol-addendum.md`](docs/h50s1-protocol-addendum.md).
-4. **Protect the weekly submission budget.** Validate the leading hypothesis on a spatially blocked holdout against a frozen, same-fold incumbent and appropriate controls before using any of the competition's three weekly scoring slots. A hypothesis that does not beat the holdout incumbent is not slot-eligible. A local proxy score is not an organizer score or a prediction of private-test performance.
+3. **Do the science before implementation.** Before writing a detector, list and rank 3–5 genuinely distinct geological hypotheses. Each must state the exact layers/data, physical signature, why it could detect a fault missing from USGS/INGENIOUS, how it differs from prior GEMSDOE work, expected DTI direction/impact, implementation cost, and data/license requirements. See the current audit in [`docs/research/hypothesis-ranking-20261006.md`](docs/research/hypothesis-ranking-20261006.md), the preregistered candidates in [`docs/hypotheses-preregistered.md`](docs/hypotheses-preregistered.md), and exact H50-S1 implementation choices/controls in [`docs/h50s1-protocol-addendum.md`](docs/h50s1-protocol-addendum.md). Re-check old work before calling any variant new.
+4. **Protect the weekly submission budget.** Validate the leading hypothesis on a spatially blocked holdout against a frozen, same-fold incumbent and appropriate controls before using any of the competition's three weekly scoring slots. H50-S1 must also beat both smoothed-density baselines and pass formal aftershock, mine/injection-site, and event-location-uncertainty gates. A hypothesis that fails any gate is not slot-eligible. A local proxy score is not an organizer score or a prediction of private-test performance.
 5. **Use compliant, traceable evidence.** Prefer official and peer-reviewed primary sources; link sources directly, state evidence and license status, pin file hashes, and disclose attribution/changes. External data may be used only where the competition permits it, the license permits commercial use, and the data can be shared with the organizers for independent verification. Do not use the scratch mixed-network USGS ComCat extract until its source-specific rights and location uncertainty are resolved.
-6. **Do not overstate the literature.** The project tests a 2-D raster adaptation of earthquake lineament methods cited by the user—Ouillon et al. (2008), Ouillon & Sornette (2011), and Wang et al. (2013, arXiv:1304.6912). These papers reconstruct 3-D fault networks from seismicity; the Nevada catalog lacks per-event location probability distributions. A 2-D adaptation is a hypothesis, not a validated transfer of those methods.
+6. **Do not overstate the literature.** H50-S1 is a 3-D local plane-fitting hypothesis on relocated Nevada events, but its catalog lacks per-event location covariance and it is not ACLUD. The already-implemented legacy H50-B method uses 2-D ComCat covariance/lineations; its 2-D triangle-area reduction of a 3-D tetrahedron statistic is explicitly **unverified**, and the builder does not apply the computed `keep` mask. Neither method is a validated transfer of the cited 3-D methods: [Ouillon et al. (2008)](https://doi.org/10.1029/2007JB005032), [Ouillon & Sornette (2011)](https://doi.org/10.1029/2010JB007752), and [Wang et al. (2013)](https://arxiv.org/abs/1304.6912).
 7. **Work autonomously and auditably.** Review rules, data, sources, prior attempts, and limitations; record every material decision and irregularity; run multiple implementation/review passes; fix defects found; and maintain a concise next-steps list. Do not ask the owner to do research or resolve issues the agent can verify independently.
 8. **Keep the score context honest.** The owner-quoted `0.3195` is historical, not the live leader. Prior sibling-repository notes contain conflicting historical leaderboard values and are not a fresh independent official check; do not repeat them as current official scores or map any score to a TIFF without organizer-verified provenance. DrivenData's Terms of Use prohibit automated monitoring/copying and manual monitoring/copying without prior written consent. This repository links to the official board but does not scrape, poll, or publish leaderboard snapshots.
 9. **Follow the prize rules.** The September 2026 NLR/DOE rules require an AI-use disclosure in the narrative, permit up to three feedback submissions per week, and require selection of one final submission for both prize rounds. Finalists must provide reproducible code/assets and documentation. The competition ends December 3, 2026 at 23:59 UTC (verify the official page before any deadline-dependent action).
-10. **Create and merge a PR when practical.** Keep all work on Arena's fixed branch `arena/c6060a3e-gemsdoe50`. Run tests and review the PR before merging. Do not switch branches or push elsewhere.
+10. **Create and merge a PR when practical.** Keep all work on Arena's fixed branch `arena/c4f4db48-gemsdoe50`. Run tests and review the PR before merging. Do not switch branches or push elsewhere.
 
 ## Current evidence and decision (2026-10-06 UTC)
+
 
 - **The H51 deliverable exists and is verified.** `docs/downloads/gems51-scarpradio-offcat-35000-20261006-ecf058ea-nan.tif`
   (35,000 predicted pixels, sha256 `8f8708d2872b66d71925707e0aede23eebcf217dfd2e57d6e61186f32e686f5d`) with an
@@ -57,10 +58,23 @@
 - **Score context stays honest.** The owner-quoted `0.3195` and sibling-repository leaderboard notes are
   historical, not a live board. DrivenData's Terms of Use prohibit automated monitoring or copying; this
   repository links to the official board but never polls, scrapes, or publishes a leaderboard snapshot, and
-  no score is mapped to a TIFF.
+  no score is mapped to a TIFF. One unintended automated request to the public leaderboard page occurred
+  during prior research; no rows/scores were saved or used, and no further automated access will be made.
 - This session's Arena branch is `arena/fe65fa32-gemsdoe50`; the older
   [`h50s1-research.yml`](.github/workflows/h50s1-research.yml) workflow is pinned to
   `arena/c6060a3e-gemsdoe50` and is not used by H51.
+- **Inherited H50-S1 status from `main` (still true).** The dispatch-only research workflow now returns
+  HTTP 403 `Resource not accessible by integration`, so no job ran and no data was fetched and the
+  experiment still has not run; the branch also carries two matched Gaussian-smoothed relocated-event density controls
+  (1 km and 2 km) as required comparators, plus the H50-prior fixed-incumbent rule. Inherited validation in
+  this checkout is now **75 tests passed, 1 skipped** (was 61/1 before H51), and the frozen split spec
+  (`78b6692155c6c6d5f9f19ccee6d595167c2065f1f25eb8d08636d1d9b285ff16`) plus the realized-mask report
+  (`981b42e6d0310bf77f79c7c7662a0569c8d2e79514ef4e4a3624a5b07583ae3f`) are unchanged.
+- **Inherited provenance caveat from `main` (still true).** The bridge manifest points at the official data
+  tab and public Dropbox mirrors, but no session has authenticated to DrivenData and re-downloaded the
+  official bytes; matching hashes establish consistency with the bridge manifest, not organizer provenance.
+
+
 
 ## Executive summary and submission instructions
 
@@ -128,10 +142,11 @@ python scripts/run_experiment.py \
 python scripts/build_h50_site.py
 ```
 
-The manually dispatched [H50-S1 research workflow](.github/workflows/h50s1-research.yml) runs on `arena/c6060a3e-gemsdoe50` only. It verifies tests and the already-frozen masks before scoring, downloads no hidden labels, does not use the feature stack for H50-S1, and commits only the result report/site/research-only TIFF back to this fixed branch. If sandbox egress is still blocked there, the workflow fails visibly and the limitation remains recorded; no raw data are committed.
+The manually dispatched [H50-S1 research workflow](.github/workflows/h50s1-research.yml) runs on `arena/c4f4db48-gemsdoe50` only. It verifies tests and the already-frozen masks before scoring, downloads no hidden labels, does not use the feature stack for H50-S1, and commits only the result report/site/research-only TIFF back to this fixed branch. A numerical score-gate pass cannot authorize a slot while the aftershock, mine/injection, and location-uncertainty gates remain open; no raw data are committed.
 
 ## Open gates / next actions
 
+<<<<<<< HEAD
 1. **Manual owner decision** on whether to spend one of the three weekly slots on the H51 file. Nothing is
    uploaded by this repository.
 2. If a slot is spent, record the returned score and the portal receipt next to the pinned sha256; never
@@ -147,3 +162,10 @@ The manually dispatched [H50-S1 research workflow](.github/workflows/h50s1-resea
    (`python scripts/build_h51.py`, then `scripts/verify_h51_raster.py`, `scripts/uniqueness_h51.py`,
    `scripts/mc_sensitivity_h51.py`, `scripts/validate_h51_holdout.py`,
    `scripts/update_registries_h51.py`, `python scripts/build_h50_site.py`).
+=======
+1. Dispatch the fixed-branch `H50-S1 preregistered research run` workflow to retrieve and verify the catalog, comparison rasters, and competition mirrors; raw inputs stay in ignored runner scratch.
+2. Review the event-count, depth/magnitude irregularity, input provenance, and spatial-coverage audit; stop if relocated points do not overlap the valid footprint adequately.
+3. Compute the frozen fold-wise DTI, 16-block bootstrap, fixed incumbent, both smoothed-density maps, and matched translation/year-shuffle controls. Regardless of numeric outcome, H50-S1 remains NO SLOT until formal aftershock declustering, mine/injection-site screening, and uncertainty-calibrated output width are resolved.
+4. Independently re-open and byte-validate any generated unique GeoTIFF, update the static executive-summary/results/submission pages, and review source licenses, attribution, limitations, and AI disclosure.
+5. Open/review a PR from the fixed Arena branch; merge only if the report, artifact, site, evidence, and source/confound controls agree. No upload is performed by this repository.
+>>>>>>> origin/main

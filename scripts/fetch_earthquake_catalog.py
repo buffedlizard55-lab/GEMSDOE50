@@ -1,22 +1,11 @@
 #!/usr/bin/env python3
-"""Fetch the official USGS earthquake catalogue for the GEMS footprint.
+"""Legacy fetcher for the USGS-hosted, mixed-network ComCat export.
 
-Why this exists
----------------
-The competition region's instrumentally recorded seismicity is the input to the
-seismicity-lineament method (Ouillon, Ducorbier & Sornette 2008; Ouillon &
-Sornette 2011).  The competition GeoTIFF ships only two seismicity bands
-(`ieq_n100a15`, `deq_n100a15`) and those are kernel densities with a ~100 km
-support, i.e. they are near-constant across the 300 m metric kernel and carry no
-fault-scale geometry.  The raw catalogue is therefore required.
-
-Source (official, free, public domain — USGS):
-  FDSN event web service, ANSS Comprehensive Earthquake Catalog (ComCat)
-  https://earthquake.usgs.gov/fdsnws/event/1/
-  Documentation: https://earthquake.usgs.gov/fdsnws/event/1/
-
-This script is designed to be runnable from a GitHub Actions runner (unrestricted
-egress).  It never touches any credential: the service is open.
+This was used by the legacy 2-D seismicity-lineament research. The ComCat API is
+official, but source-specific contributor rights and competition shareability for
+a mixed-network export are unresolved. The data are not cleared for external
+competition use and are not an H50-S1 input. This fetcher is retained only for
+audit; downloading does not confer redistribution rights.
 """
 
 from __future__ import annotations
@@ -162,12 +151,14 @@ def main() -> int:
         "event_types": dict(sorted(types.items(), key=lambda kv: -kv[1])),
         "networks": dict(sorted(nets.items(), key=lambda kv: -kv[1])[:15]),
         "notes": [
-            "Official USGS public-domain data; no licence restriction (USGS data are public domain, "
-            "https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits).",
+            "Mixed-network ComCat export: contributor-specific rights and competition shareability "
+            "are unresolved. General USGS public-domain guidance does not clear each contribution; "
+            "do not reuse this extract externally before source-specific review.",
             "Rows with type in {explosion, quarry blast, mining explosion, anthropogenic event} are "
             "flagged, not silently deleted: the analysis removes them explicitly.",
-            "horizontalError is the catalogue's own 1-sigma epicentre uncertainty in km; it is used "
-            "as the location-uncertainty weight (arXiv:1304.6912).",
+            "horizontalError is an optional scalar record field; it does not supply a full event-location "
+            "covariance. Legacy H50-B weighting/imputation is not a reproduction of an uncertainty-aware "
+            "3-D clustering method.",
         ],
     }
     (out / "usgs_comcat_earthquakes.summary.json").write_text(json.dumps(summary, indent=1))

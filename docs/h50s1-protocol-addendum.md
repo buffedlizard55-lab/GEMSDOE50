@@ -2,6 +2,8 @@
 
 **Frozen:** 2026-10-06 UTC, before any H50-S1 DTI calculation. The comparator policy was amended later the same day, still before any H50-S1 DTI, after code review found that selecting the highest-scoring baseline on the holdout would leak holdout labels; no H50-S1 holdout scores were viewed. This addendum makes the implementation choices and control counts executable and auditable; it does not revise the ranked scientific hypotheses or their promotion thresholds in [`hypotheses-preregistered.md`](hypotheses-preregistered.md).
 
+**Pre-run amendment v1.1 (2026-10-06 UTC):** Before the first DTI, add 1 km and 2 km Gaussian-smoothed relocated-event-density comparators and enforce additional scientific slot gates for aftershock declustering, mining/injection-site screening, and event-location uncertainty. This is stricter than the original numeric gate and cannot promote an otherwise failing candidate. H50-S1 may be run for research only while any additional gate is unresolved. The reason and source audit are recorded in [`research/earthquake-geometry-review-20261006.md`](research/earthquake-geometry-review-20261006.md); no scores were used to choose these additions.
+
 ## Fixed candidate construction
 
 | Parameter | Frozen value |
@@ -29,6 +31,13 @@ These are label-blind engineering constants, not optimized on the holdout. The m
 - Use 32 no-wrap translations of the candidate score field by randomly selected 5–20 km offsets (seed 505006), preserving line geometry while disrupting map alignment. Use 20 time-shuffle controls: permute origin-year labels among relocated in-grid events (seed 505011), then refit the identical candidate pipeline. Both control families use the same folds and prediction budget. The candidate must exceed the 95th percentile of each control family.
 - For uncertainty, compare candidate and frozen incumbent DTI in the 16 registered 2 × 2 macrofold subtiles, using a 3-pixel metric halo so cross-subtile matches are available without double-counting. Bootstrap the 16 paired subtile deltas 5,000 times (seed 505007), percentile 95% interval.
 - Promotion remains exactly as preregistered: pooled absolute improvement ≥0.005; positive deltas in ≥3/4 macrofolds; bootstrap lower bound >0; and superiority to both matched control families. A fail means **NO SLOT**.
+
+## Pre-run amendment v1.1 — added seismicity and scientific-safety gates
+
+- Add two baseline maps from the exact `reloc=1` catalog events used by H50-S1: isotropic Gaussian event-count surfaces with σ = **1,000 m** and **2,000 m** on the 100 m grid. Normalize each map to its own maximum after smoothing and set outside-template cells to zero. These are density-only controls, not new candidates and not a replacement for H50-prior.
+- Score each density map with the same four spatial macrofolds, 37,612 total-cell budget, equal-mass allocation, DTI kernel, and seeded tie-breaking as every other raster. H50-S1 must strictly beat **both** density controls in pooled held-out DTI. Their scores are descriptive controls and cannot be selected post hoc.
+- In addition to the numerical gate above, slot eligibility requires: (a) an explicit, reproducible aftershock/sequence-declustering screen; (b) documented mine/injection-site screening with source dates, licenses, buffers, and known coverage gaps; and (c) event-location uncertainty that informs emitted corridor width or is integrated into the predictions. The present catalog/run does not meet those three conditions, so a numerical pass alone remains **NO SLOT**. The 300 m visible-label buffer remains mandatory and does not substitute for any of these controls.
+- The density controls use the same relocated events as the candidate; they do **not** solve aftershock or induced-seismicity confounding. No event covariance is imputed from coordinate precision, and event-bootstrap orientation stability is not a location-uncertainty estimate.
 
 ## Inputs, permissions, and audit pins
 

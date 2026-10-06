@@ -13,9 +13,9 @@ Components (each label-free — none of them reads the fault catalogue):
            collinearity vote.  Roads/channels/terrace risers are the known
            confounders; the coherence channel and the dipole (face) requirement are
            what suppress them.
-  seis     seismicity-lineament corridors from the official USGS ComCat catalogue
-           (src/gems50/seis.py).  New this session, and the reason the catalogue was
-           fetched at all.
+  seis     legacy seismicity-lineament corridors from a mixed-network ComCat extract
+           (src/gems50/seis.py). Not new, not an H50-S1 input, and not cleared for
+           external competition use until contributor rights are reviewed.
   cont     along-strike continuation of mapped traces: fault systems continue beyond
            their mapped terminations, which is where "new geometry of an existing
            system" lives.
