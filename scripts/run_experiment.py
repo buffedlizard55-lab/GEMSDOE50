@@ -48,6 +48,12 @@ BASELINE_PINS = {
         "repo": "buffedlizard55-lab/GEMSDOE48",
         "commit": "d064aeeec467ce5de6cf0ecd86872af6561e509f",
     },
+    "H50-prior": {
+        "file": "h50prev.tif",
+        "sha256": "79e260ae223d7dfd96413da28a9c6fed30107285ab843795181a5c9e5dff7262",
+        "repo": "buffedlizard55-lab/GEMSDOE50",
+        "commit": "80d6186dee89ba0eacedd29dc0a7455c5fad4e47",
+    },
 }
 
 

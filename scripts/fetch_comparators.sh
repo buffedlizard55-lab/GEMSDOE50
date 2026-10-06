@@ -44,3 +44,10 @@ fetch_blob \
   'd064aeeec467ce5de6cf0ecd86872af6561e509f' \
   '211a4a69a4d49f12f0fe5f2265cde0c725063254' \
   'fe68ae6f57be013e26d20006551b43cd84bb5fe4a0b07d1d10ce4725c90fd16c'
+
+fetch_blob \
+  'h50prev' 'GEMSDOE50' \
+  'downloads/gems50-seislin-44709-20261006T2041Z-79e260ae.tif' \
+  '80d6186dee89ba0eacedd29dc0a7455c5fad4e47' \
+  'd014851c5c6221bbd00c24e5c252d84ae337352c' \
+  '79e260ae223d7dfd96413da28a9c6fed30107285ab843795181a5c9e5dff7262'

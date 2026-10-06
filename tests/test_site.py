@@ -64,7 +64,7 @@ def test_static_site_builds_clear_no_slot_pages_from_report(tmp_path: Path):
         },
     }
     report_path.write_text(json.dumps(report), encoding="utf-8")
-    script = Path(__file__).parents[1] / "scripts" / "build_site.py"
+    script = Path(__file__).parents[1] / "scripts" / "build_h50_site.py"
     subprocess.run(
         [
             sys.executable,

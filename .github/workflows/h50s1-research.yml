@@ -83,7 +83,7 @@ jobs:
             --time-shuffles 20
 
       - name: Build the executive-summary and submission-instructions pages
-        run: python scripts/build_site.py
+        run: python scripts/build_h50_site.py
 
       - name: Publish the auditable report, site, and generated research-only TIFF to this branch
         run: |
