@@ -1,0 +1,62 @@
+{
+ "file": "gemsdoe50-seis-ridge-v1.tif",
+ "format": {
+  "path": "gemsdoe50-seis-ridge-v1.tif",
+  "bytes": 150672,
+  "sha256": "5cad91ac7580db912ebac0cf352cce56d713e99ad53f596a57f714f51636d3c9",
+  "driver": "GTiff",
+  "count": 1,
+  "dtype": "float32",
+  "crs": "EPSG:32611",
+  "width": 3292,
+  "height": 3730,
+  "transform": [
+   100.0,
+   0.0,
+   243350.0,
+   0.0,
+   -100.0,
+   4508550.0
+  ],
+  "nodata_tag": null,
+  "res": [
+   100.0,
+   100.0
+  ],
+  "cells_total": 12279160,
+  "cells_finite": 12279160,
+  "cells_nan": 0,
+  "min": 0.0,
+  "max": 1.0,
+  "nonzero": 45000,
+  "outside_0_1": 0,
+  "all_finite": true,
+  "values_in_unit_interval": true,
+  "single_band": true,
+  "legal": true
+ },
+ "mass": 45000,
+ "uniqueness": {
+  "n_prior_rasters_compared": 118,
+  "max_abs_pearson": 0.03333738686694264,
+  "max_abs_pearson_file": "gems32-bayesopt-dilation-scarp-d28-20261004-nan.tif",
+  "max_jaccard": 0.021322953665982,
+  "max_jaccard_file": "gems32-bayesopt-dilation-scarp-d28-20261004-nan.tif",
+  "is_unique_by_correlation": true,
+  "is_unique_by_jaccard": true
+ },
+ "instruments": {
+  "catalogue": {
+   "credit_per_px": 0.0,
+   "tpw": 0.0,
+   "truth_px": 60988,
+   "covered_frac": 0.0
+  },
+  "sgmc_off_catalogue": {
+   "credit_per_px": 0.2227484743791322,
+   "tpw": 10023.681347060949,
+   "truth_px": 61664,
+   "covered_frac": 0.16255321333453795
+  }
+ }
+}

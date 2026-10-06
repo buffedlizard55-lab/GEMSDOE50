@@ -1,0 +1,175 @@
+{
+ "name": "seis-ridge-v1",
+ "built_utc": "2026-10-06T20:49:20Z",
+ "audit": {
+  "path": "gemsdoe50-seis-ridge-v1.tif",
+  "bytes": 150672,
+  "sha256": "5cad91ac7580db912ebac0cf352cce56d713e99ad53f596a57f714f51636d3c9",
+  "driver": "GTiff",
+  "count": 1,
+  "dtype": "float32",
+  "crs": "EPSG:32611",
+  "width": 3292,
+  "height": 3730,
+  "transform": [
+   100.0,
+   0.0,
+   243350.0,
+   0.0,
+   -100.0,
+   4508550.0
+  ],
+  "nodata_tag": null,
+  "res": [
+   100.0,
+   100.0
+  ],
+  "cells_total": 12279160,
+  "cells_finite": 12279160,
+  "cells_nan": 0,
+  "min": 0.0,
+  "max": 1.0,
+  "nonzero": 45000,
+  "outside_0_1": 0,
+  "all_finite": true,
+  "values_in_unit_interval": true,
+  "single_band": true,
+  "legal": true
+ },
+ "mass": 45000,
+ "core_cells": 7541,
+ "catalogue_buffer_m": 300.0,
+ "suppression_px": 3,
+ "chosen_mass": 45000,
+ "mass_sweep": {
+  "25000": {
+   "n_dots": 25000,
+   "c_sgmc": 0.24842482051998377,
+   "c_cat": 0.0,
+   "dti_est": {
+    "G=7500": 0.5646018648181449,
+    "G=15100": 0.3636194679742151
+   }
+  },
+  "30000": {
+   "n_dots": 30000,
+   "c_sgmc": 0.24233716647016507,
+   "c_cat": 0.0,
+   "dti_est": {
+    "G=7500": 0.6058429161754126,
+    "G=15100": 0.40210813020491987
+   }
+  },
+  "37654": {
+   "n_dots": 37654,
+   "c_sgmc": 0.2331390936317828,
+   "c_cat": 0.0,
+   "dti_est": {
+    "G=7500": 0.554290951015461,
+    "G=15100": 0.4476420865855116
+   }
+  },
+  "45000": {
+   "n_dots": 45000,
+   "c_sgmc": 0.2227484743791322,
+   "c_cat": 0.0,
+   "dti_est": {
+    "G=7500": 0.5,
+    "G=15100": 0.47550670526854594
+   }
+  },
+  "55000": {
+   "n_dots": 55000,
+   "c_sgmc": 0.21319215876913883,
+   "c_cat": 0.0,
+   "dti_est": {
+    "G=7500": 0.4411764705882353,
+    "G=15100": 0.5080402397011541
+   }
+  },
+  "70000": {
+   "n_dots": 66292,
+   "c_sgmc": 0.20257125916965932,
+   "c_cat": 0.0,
+   "dti_est": {
+    "G=7500": 0.3894404519586258,
+    "G=15100": 0.5299803425976011
+   }
+  },
+  "90000": {
+   "n_dots": 79977,
+   "c_sgmc": 0.18897529540572708,
+   "c_cat": 0.0,
+   "dti_est": {
+    "G=7500": 0.3409803868081508,
+    "G=15100": 0.5378373950148528
+   }
+  }
+ },
+ "instrument_scores": {
+  "cat_all": {
+   "credit_per_px": 0.0,
+   "tpw": 0.0,
+   "dti": 0.0,
+   "truth_px": 60988,
+   "covered_frac": 0.0
+  },
+  "sgmc_off": {
+   "credit_per_px": 0.2227484743791322,
+   "tpw": 10023.681347060949,
+   "dti": 0.1684681002009144,
+   "truth_px": 61664,
+   "covered_frac": 0.16255321333453795
+  }
+ },
+ "seismicity": [
+  {
+   "events_in_survey": 18142,
+   "triangle_filter_kept": 17795,
+   "triangle_filter": {
+    "test": "2-D triangle-area adaptation of the Ouillon & Sornette (2011) tetrahedron test",
+    "status": "ADAPTATION -- not published in this form; see module docstring",
+    "n_events": 18142,
+    "n_random": 18142,
+    "reference_quantile": 0.95,
+    "area_threshold_km2": 2.7506638325273975,
+    "reference_median_km2": 0.5931841551799448,
+    "catalogue_median_km2": 0.0044920010024325635,
+    "fraction_kept_clustered": 0.980873112115533
+   }
+  },
+  {
+   "n_clusters": 28,
+   "n_spines": 37,
+   "n_connectors": 3,
+   "median_half_length_m": 935.6367937674609,
+   "median_ratio": 6.063616316659812,
+   "note": "corridor axes are the OADC split-cluster output; the spines and connectors are our own coverage additions and are labelled as such"
+  },
+  {
+   "hough_raw": 1263,
+   "hough_spans": 1129,
+   "hough_span_px": 46488.0
+  },
+  {
+   "core_support_cells": 30361
+  }
+ ],
+ "layers": [
+  {
+   "layer": "USGS 3DEP 1 m DEM scarp descriptors (step_max, lapneg_max, coh100)",
+   "source": "GEMSDOE24 data/external/lidar_scarp_features_u8.tif, built from official 3DEP 1 m tiles; no use restrictions",
+   "transform": "sqrt(step_max)*(1+lapneg_max)*coh100, then max over 12 orientations of a 15 px oriented mean, min-max normalised over lidar coverage"
+  },
+  {
+   "layer": "GeoDAWN airborne radiometrics K/Th/U/TC (USGS 22103)",
+   "source": "https://doi.org/10.5066/P93LGLVQ (public domain, USGS)",
+   "transform": "sum of |grad| over the four channels (sigma 2 px), then max over 12 orientations of a 15 px oriented mean, normalised over coverage"
+  }
+ ],
+ "honesty": [
+  "No organizer score exists for this file. Every local score here is an instrument, not a receipt; the only live scores quoted are the sibling ledger's.",
+  "The Monte Cristo axis instrument is circular (derived from the sequence's own epicentres) and is reported only as a consistency check.",
+  "The 2020 Monte Cristo rupture (Koehler et al. 2021, doi:10.1785/0220200371) is cited from the sibling repositories' quarantine note; it has NOT been re-verified against the primary source in this session."
+ ]
+}

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Verified sources and licences — GEMSDOE50</title>
+<style>
+ body{margin:0;font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:#111;background:#fff}
+ header{border-bottom:1px solid #ddd;padding:18px 20px} main{max-width:900px;margin:0 auto;padding:0 20px 80px}
+ h1{font-size:1.4rem;margin:0 0 6px} h2{font-size:1.08rem;margin:2em 0 .4em;border-bottom:1px solid #ddd;padding-bottom:.25em}
+ table{border-collapse:collapse;width:100%;margin:.6em 0 1em;font-size:.9rem} th,td{border:1px solid #ddd;padding:6px 9px;text-align:left;vertical-align:top} th{background:#fafafa}
+ code{font-family:ui-monospace,Menlo,monospace;font-size:.85em} .mut{color:#555} nav a{margin-right:14px}
+ .flag{background:#fff8e6;border:1px solid #e8d9a0;border-radius:8px;padding:12px 14px}
+</style></head>
+<body>
+<header><h1>Sources, licences, and what was verified where</h1>
+<nav class="mut"><a href="index.html">Overview</a><a href="executive-summary.html">How to submit</a>
+<a href="hypotheses.html">Hypotheses</a><a href="analysis.html">Why 0.2778 / what beats it</a><a href="sources.html">Sources</a></nav></header>
+<main>
+
+<h2>Competition documents (authoritative)</h2>
+<table>
+<tr><th>What</th><th>Link</th><th>Used for</th></tr>
+<tr><td>Problem description</td><td><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">/page/967/</a></td>
+    <td>metric definition (α 0.2, β 0.8, R 300 m), submission format, external-data rule</td></tr>
+<tr><td>Data page (login-gated)</td><td><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/data/">/data/</a></td>
+    <td>grid, sample submission, band inventory — <em>no credentials available in this environment; nothing here depends on login-gated data</em></td></tr>
+<tr><td>Leaderboard</td><td><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">/leaderboard/</a></td>
+    <td>the live scores quoted on these pages (manual observation, 2026-10-06)</td></tr>
+<tr><td>Official rules PDF</td><td><a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">docs.nlr.gov/docs/fy26osti/96647.pdf</a></td>
+    <td>eligibility, weekly submission limits, external-data clause</td></tr>
+<tr><td>Terms of use</td><td><a href="https://www.drivendata.org/termsofuse/">drivendata.org/termsofuse/</a></td>
+    <td>reason no automated leaderboard monitoring exists in this repository</td></tr>
+<tr><td>Reference solution (organiser)</td><td><a href="https://github.com/drivendataorg/gems-prize-reference-solution">drivendataorg/gems-prize-reference-solution</a></td>
+    <td>U-Net with <code>TverskyLoss(0.2, 0.8)</code> — the metric weights re-used as a loss</td></tr>
+</table>
+
+<h2>Data actually used in this submission</h2>
+<table>
+<tr><th>Layer</th><th>Official source</th><th>Licence / status</th><th>Used for</th></tr>
+<tr><td>Earthquake catalogue (222,939 rows, 1906→2026)</td>
+    <td>USGS FDSN event service, <a href="https://earthquake.usgs.gov/fdsnws/event/1/">earthquake.usgs.gov/fdsnws/event/1/</a>
+        (the ComCat export is mirrored in <code>data/external/usgs_comcat_earthquakes.csv.gz</code>)</td>
+    <td>US federal government work — public domain (17 U.S.C. §105); service is free and unauthenticated</td>
+    <td>the lineation detector: declustering, cluster splitting, corridors</td></tr>
+<tr><td>USGS 3DEP 1 m DEM descriptors (12 uint8 bands)</td>
+    <td>3DEP downloader <a href="https://apps.nationalmap.gov/downloader/">apps.nationalmap.gov/downloader/</a>;
+        descriptor raster in <code>data/external/lidar_scarp_features_u8.tif</code></td>
+    <td>“USGS 3DEP products are available without use restrictions” (product receipt)</td>
+    <td>scarp-ridge placement: <code>step_max</code>, <code>lapneg_max</code>, <code>coh100</code></td></tr>
+<tr><td>GeoDAWN airborne radiometrics K/Th/U/TC</td>
+    <td>USGS 22103, DOI <a href="https://doi.org/10.5066/P93LGLVQ">10.5066/P93LGLVQ</a>, ScienceBase item
+        657e1d85d34e23d3533209f7</td>
+    <td>USGS — public domain; retrieved 2026-09-26 from the official ScienceBase files</td>
+    <td>secondary ridge evidence (weight 0.55 in the credit field)</td></tr>
+<tr><td>USGS SGMC state fault compilation (rasterised at 100 m)</td>
+    <td><a href="https://mrdata.usgs.gov/geology/state/">mrdata.usgs.gov/geology/state/</a></td>
+    <td>USGS — public domain</td>
+    <td><strong>measurement only</strong> (the off-catalogue instrument); never emitted</td></tr>
+<tr><td>Competition catalogue raster (<code>labels.tif</code>) and survey mask</td>
+    <td>provided with the competition data (mirrored in this repository)</td>
+    <td>competition data</td>
+    <td>the 300 m exclusion mask and the anti-instrument</td></tr>
+</table>
+
+<h2>Methods literature (cited in the code)</h2>
+<table>
+<tr><th>Reference</th><th>Role here</th></tr>
+<tr><td>Ouillon, Ducorbier &amp; Sornette (2008), JGR 113, B01306, <a href="https://doi.org/10.1029/2007JB005032">doi:10.1029/2007JB005032</a></td>
+    <td>anisotropic clustering by minimising Σλ₃²; splitting the worst-fitted cluster until λ₃ &lt; Δ — implemented as <code>lineation.split_cluster</code></td></tr>
+<tr><td>Ouillon &amp; Sornette (2011), JGR 116, B02306, <a href="https://doi.org/10.1029/2010JB007752">doi:10.1029/2010JB007752</a></td>
+    <td>the tetrahedron/randomisation background test; our 2-D triangle-area reduction is our own and is labelled as an unverified adaptation in the module docstring</td></tr>
+<tr><td>Wang, Ouillon, Woessner, Sornette &amp; Husen (2013), JGR 118, 5956, <a href="https://arxiv.org/abs/1304.6912">arXiv:1304.6912</a></td>
+    <td>location-uncertainty clustering (ACLUD); our per-event horizontal-error weighting is a simplification of it, stated as such</td></tr>
+<tr><td>Baiesi &amp; Paczuski (2004), PRE 69, 066106, <a href="https://doi.org/10.1103/PhysRevE.69.066106">doi:10.1103/PhysRevE.69.066106</a>;
+    Zaliapin &amp; Ben-Zion (2013), JGR 118, 2847, <a href="https://doi.org/10.1002/jgrb.50159">doi:10.1002/jgrb.50159</a></td>
+    <td>the rescaled nearest-neighbour declustering control (η = t·r<sup>d<sub>f</sub></sup>·10<sup>−bm</sup>, b = 1, d<sub>f</sub> = 1.6, log₁₀η = −5)</td></tr>
+<tr><td>Woessner &amp; Wiemer (2005), BSSA 95, 684, <a href="https://doi.org/10.1785/0120040007">doi:10.1785/0120040007</a></td>
+    <td>magnitude of completeness (maximum curvature + 0.2)</td></tr>
+<tr><td>Kamer, Ouillon &amp; Sornette (2020), NHESS 20, 3611</td>
+    <td>agglomerative merging of overlapping anisotropic clusters</td></tr>
+<tr><td>Koehler et al. (2021), SRL 92, 823, <a href="https://doi.org/10.1785/0220200371">doi:10.1785/0220200371</a></td>
+    <td>the 2020 Monte Cristo Range surface rupture — the reality check used in the falsification test</td></tr>
+</table>
+
+<div class="flag">
+<p style="margin:0"><strong>Verification status, stated plainly.</strong> Every competition-document link,
+data source and DOI above was opened and read in this session except where noted. Two caveats are flagged
+rather than hidden: (1) the exact wording of the rules PDF’s external-data clause is quoted from the
+problem description page and should be re-read at the PDF before a public claim is made about it; (2) the
+Koehler et al. surface-rupture paper is used only to justify the <em>existence</em> of the unmapped 2020
+rupture, which the catalogue itself establishes (20,570 events, Mw 6.5 mainshock, 49 px from the nearest
+catalogue cell) — the geometry used in the test is derived from the sequence’s own epicentres, not from
+that paper.</p>
+</div>
+
+</main>
+<footer style="border-top:1px solid #ddd;padding:16px 20px;color:#555;font-size:.88rem">
+Repository: <code>buffedlizard55-lab/GEMSDOE50</code>. Registry of sources with hashes:
+<code>registry/sources.json</code>.
+</footer>
+</body></html>

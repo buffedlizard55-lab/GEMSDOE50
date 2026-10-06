@@ -1,0 +1,31 @@
+name: ci
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install
+        run: pip install numpy scipy pandas pyproj rasterio scikit-learn pytest
+      - name: Metric, grid and format tests
+        run: PYTHONPATH=src python -m pytest tests -q
+      - name: External data hashes (informational; large rasters are not committed)
+        run: PYTHONPATH=src python scripts/prepare_data.py || true
+      - name: Audit the shipped submission shape without the large rasters
+        run: PYTHONPATH=src python - <<'PY'
+import json, sys, numpy as np, rasterio
+sys.path.insert(0, "src")
+from gems50 import emission
+a = emission.audit_submission("docs/downloads/gemsdoe50-seis-ridge-v1.tif")
+print(json.dumps(a, indent=1))
+assert a["legal"] and a["all_finite"] and a["values_in_unit_interval"] and a["count"] == 1
+print("shipped submission is format-legal")
+PY

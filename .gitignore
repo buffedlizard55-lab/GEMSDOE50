@@ -1,0 +1,9 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+# Large derived rasters (reproducible from official sources; see data/external/README.md).
+# They are deliberately kept out of git: 64 MB combined.
+data/external/lidar_scarp_features_u8.tif
+data/external/geodawn_rad_u8.tif
+# Raw unrestricted ComCat export (43 MB); the survey-footprint subset is committed instead.
+data/external/usgs_comcat_earthquakes.csv

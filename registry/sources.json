@@ -1,0 +1,117 @@
+{
+ "updated_utc": "2026-10-06",
+ "competition": {
+  "problem_description": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/",
+  "data_page_login_gated": "https://www.drivendata.org/competitions/306/competition-doe-gems/data/",
+  "leaderboard": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/",
+  "rules_pdf": "https://docs.nlr.gov/docs/fy26osti/96647.pdf",
+  "terms_of_use": "https://www.drivendata.org/termsofuse/",
+  "reference_solution": "https://github.com/drivendataorg/gems-prize-reference-solution",
+  "metric": {
+   "alpha_fp": 0.2,
+   "beta_fn": 0.8,
+   "R_m": 300.0,
+   "kernel": "triangular k(d)=max(1-d/R,0)",
+   "grid": {
+    "crs": "EPSG:32611",
+    "cell_m": 100,
+    "width": 3292,
+    "height": 3730,
+    "origin": [
+     243350.0,
+     4508550.0
+    ],
+    "dtype": "float32",
+    "bands": 1
+   }
+  }
+ },
+ "data": [
+  {
+   "name": "USGS ComCat earthquake catalogue",
+   "url": "https://earthquake.usgs.gov/fdsnws/event/1/query",
+   "docs": "https://earthquake.usgs.gov/fdsnws/event/1/",
+   "licence": "US federal government work, public domain (17 U.S.C. 105); free, unauthenticated",
+   "mirror": "data/external/usgs_comcat_earthquakes.csv.gz",
+   "mirror_sha256": "3de15b9f9cb3d2e9078b38a8c389877bafd691eed2133005fe2b6ea3ce8ee7b4",
+   "rows": 222939,
+   "role": "primary seismicity input"
+  },
+  {
+   "name": "USGS 3DEP 1 m DEM scarp descriptors (12 uint8 bands)",
+   "url": "https://apps.nationalmap.gov/downloader/",
+   "licence": "USGS 3DEP products available without use restrictions",
+   "mirror": "data/external/lidar_scarp_features_u8.tif",
+   "mirror_sha256": "d580bb8bdcdb941e32fefb8b38044bc5bf04e199bf2e83498c3576e6fc465568",
+   "role": "snap target and volume evidence"
+  },
+  {
+   "name": "GeoDAWN airborne radiometrics K/Th/U/TC (USGS 22103)",
+   "url": "https://doi.org/10.5066/P93LGLVQ",
+   "sciencebase": "657e1d85d34e23d3533209f7",
+   "licence": "USGS, public domain",
+   "mirror": "data/external/geodawn_rad_u8.tif",
+   "mirror_sha256": "c22420f75999030d7cc65c9e31e50d232ea6158423bca051613a18a8b20ba682",
+   "role": "secondary ridge evidence (weight 0.55)"
+  },
+  {
+   "name": "USGS SGMC state fault compilation, rasterised at 100 m",
+   "url": "https://mrdata.usgs.gov/geology/state/",
+   "licence": "USGS, public domain",
+   "mirror": "data/external/derived_sgmc_faults_100m_u8.tif",
+   "mirror_sha256": "26d142c4c93282cd94f6950ab96f22aeff59fbbea523d43d662e76fa1b161b5c",
+   "role": "MEASUREMENT ONLY (off-catalogue instrument); never emitted"
+  },
+  {
+   "name": "competition catalogue raster + survey mask",
+   "url": "provided with the competition data (mirrored)",
+   "role": "300 m exclusion mask and anti-instrument"
+  }
+ ],
+ "literature": [
+  {
+   "ref": "Ouillon, Ducorbier & Sornette 2008, JGR 113 B01306",
+   "doi": "10.1029/2007JB005032",
+   "role": "OADC lambda3^2 minimisation, split until lambda3 < delta"
+  },
+  {
+   "ref": "Ouillon & Sornette 2011, JGR 116 B02306",
+   "doi": "10.1029/2010JB007752",
+   "role": "tetrahedron randomisation background test; our 2-D reduction is our own adaptation"
+  },
+  {
+   "ref": "Wang, Ouillon, Woessner, Sornette & Husen 2013, JGR 118 5956",
+   "arxiv": "1304.6912",
+   "role": "ACLUD location-uncertainty clustering; our horizontal-error weighting is a simplification"
+  },
+  {
+   "ref": "Baiesi & Paczuski 2004, PRE 69 066106",
+   "doi": "10.1103/PhysRevE.69.066106",
+   "role": "rescaled nearest-neighbour declustering (control)"
+  },
+  {
+   "ref": "Zaliapin & Ben-Zion 2013, JGR 118 2847",
+   "doi": "10.1002/jgrb.50159",
+   "role": "eta = t r^d_f 10^-bm; b=1, d_f=1.6, log10 eta = -5"
+  },
+  {
+   "ref": "Woessner & Wiemer 2005, BSSA 95 684",
+   "doi": "10.1785/0120040007",
+   "role": "magnitude of completeness (maximum curvature + 0.2)"
+  },
+  {
+   "ref": "Kamer, Ouillon & Sornette 2020, NHESS 20 3611",
+   "role": "agglomerative merging of overlapping clusters"
+  },
+  {
+   "ref": "Koehler et al. 2021, SRL 92 823",
+   "doi": "10.1785/0220200371",
+   "role": "2020 Monte Cristo Range surface rupture (existence check for the falsification test)"
+  }
+ ],
+ "verification_notes": [
+  "All competition links and data sources were opened and read in the 2026-10-06 session.",
+  "The rules PDF external-data clause is quoted from the problem-description page; re-read at the PDF before a public licence claim.",
+  "The Koehler et al. geometry is NOT used; the test geometry comes from the sequence's own epicentres (circular, flagged)."
+ ]
+}

@@ -1,0 +1,95 @@
+{
+ "cutoff": "2020-05-15 00:00:00+00:00",
+ "events_before_cutoff": 74147,
+ "events_before_cutoff_within_40km": 1207,
+ "n_clusters": 69,
+ "n_spines": 127,
+ "monte_cristo_truth_px": 276,
+ "results": {
+  "corridors (this work)": {
+   "mass": 5243,
+   "mc_rupture_2020": {
+    "credit_per_px": 0.0012633358850441382,
+    "tpw": 6.623670045286417,
+    "truth_px": 276,
+    "covered_frac": 0.023998804511907307
+   },
+   "sgmc_off_catalogue": {
+    "credit_per_px": 0.002192943432069384,
+    "tpw": 11.49760241433978,
+    "truth_px": 61664,
+    "covered_frac": 0.00018645566966690096
+   },
+   "given_catalogue": {
+    "credit_per_px": 0.027272254710328868,
+    "tpw": 142.98843144625425,
+    "truth_px": 60988,
+    "covered_frac": 0.00234453386643691
+   }
+  },
+  "smoothed earthquake density (sigma=10 px), top 5243 px in survey": {
+   "mass": 5243,
+   "mc_rupture_2020": {
+    "credit_per_px": 0.0,
+    "tpw": 0.0,
+    "truth_px": 276,
+    "covered_frac": 0.0
+   },
+   "sgmc_off_catalogue": {
+    "credit_per_px": 0.0,
+    "tpw": 0.0,
+    "truth_px": 61664,
+    "covered_frac": 0.0
+   },
+   "given_catalogue": {
+    "credit_per_px": 0.03853964334737134,
+    "tpw": 202.06335007026792,
+    "truth_px": 60988,
+    "covered_frac": 0.003313165705880959
+   }
+  },
+  "smoothed earthquake density (sigma=20 px), top 5243 px in survey": {
+   "mass": 5243,
+   "mc_rupture_2020": {
+    "credit_per_px": 0.0,
+    "tpw": 0.0,
+    "truth_px": 276,
+    "covered_frac": 0.0
+   },
+   "sgmc_off_catalogue": {
+    "credit_per_px": 0.0028486563055860436,
+    "tpw": 14.935505010187626,
+    "truth_px": 61664,
+    "covered_frac": 0.00024220785239665975
+   },
+   "given_catalogue": {
+    "credit_per_px": 0.05214154250079977,
+    "tpw": 273.3781073316932,
+    "truth_px": 60988,
+    "covered_frac": 0.00448249011824774
+   }
+  },
+  "uniform random, matched mass": {
+   "mass": 5243,
+   "mc_rupture_2020": {
+    "credit_per_px": 0.0,
+    "tpw": 0.0,
+    "truth_px": 276,
+    "covered_frac": 0.0
+   },
+   "sgmc_off_catalogue": {
+    "credit_per_px": 0.10330651887507242,
+    "tpw": 541.6360784620047,
+    "truth_px": 61664,
+    "covered_frac": 0.008783667593117616
+   },
+   "given_catalogue": {
+    "credit_per_px": 0.10630820542943403,
+    "tpw": 557.3739210665226,
+    "truth_px": 60988,
+    "covered_frac": 0.009139075245401106
+   }
+  }
+ },
+ "note": "the detector sees only events before 2020-05-15; the 2020-2021 sequence supplies the truth trend, so this test cannot reward memorising the rupture"
+}
