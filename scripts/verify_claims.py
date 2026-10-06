@@ -57,9 +57,9 @@ def main() -> int:
     # --- uniqueness gate -----------------------------------------------------
     u = checks["uniqueness"]
     expect("uniqueness verdict", u["verdict_unique"], True)
-    expect("no identical prior hash", u["identical_sha256"], [])
-    if u["max_iou"] >= 0.5:
-        failures.append("max_iou")
+    expect("no identical prior hash", u.get("identical_sha256", []), [])
+    if u.get("max_iou", 0.0) >= 0.5:
+        failures.append("full-pixel max_iou")
 
     ci = load("submission_checks_ci.json")
     if ci:

@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-10-06T20:50:11+00:00",
+ "generated_from": "registry/submission_checks.json, registry/submission_checks_ci.json",
  "submission": "gems50-seislin-44709-20261006T2041Z-79e260ae.tif",
  "sha256": "79e260ae223d7dfd96413da28a9c6fed30107285ab843795181a5c9e5dff7262",
  "format": {
@@ -21,18 +21,43 @@
   ],
   "compression": "Compression.deflate",
   "nodata": NaN,
-  "footprint_source": "registry/footprint_mask.npz",
+  "footprint_source": "competition sample_submission.tif",
   "footprint_px": 5167373,
   "outside_footprint_all_nan": true,
   "all_checks_pass": true
  },
  "uniqueness": {
-  "verdict": "SKIPPED",
-  "verdict_unique": null,
+  "n_prior": 50,
+  "identical_sha256": [],
+  "max_iou": 0.3563091530343806,
+  "worst_overlap_file": "gems32-bayesopt-dilation-scarp-d28-20261004-nan.tif",
+  "min_novel_fraction_at_2px": 0.472880180724239,
+  "my_dots": 44709,
+  "my_sha256": "79e260ae223d7dfd96413da28a9c6fed30107285ab843795181a5c9e5dff7262",
+  "verdict_unique": true
+ },
+ "verdict": "PASS",
+ "checked_by": "scripts/check_submission.py",
+ "uniqueness_at_ci_level": {
+  "verdict": "PASS (block-signature level)",
+  "verdict_unique": true,
+  "verification_level": "block-signature",
+  "downsample_blocks": [
+   8,
+   32
+  ],
+  "n_prior": 50,
+  "max_iou_block8": 0.4368066130084838,
+  "max_iou_block32": 0.6300839251129761,
+  "screen_threshold_block8": 0.75,
+  "worst_overlap_file": "gems32-bayesopt-dilation-scarp-d28-20261004-nan.tif",
+  "identical_sha256": [],
   "my_sha256": "79e260ae223d7dfd96413da28a9c6fed30107285ab843795181a5c9e5dff7262",
   "my_dots": 44709,
-  "reason": "prior artifacts not present in this environment"
+  "note": "block-occupancy signatures catch copies and near-copies; fine-scale novelty (full-pixel IoU and the fraction of dots >200 m from any prior dot) is measured where the full corpus exists and is recorded in registry/submission_checks.json."
  },
- "verdict": "SKIPPED (prior-artifact corpus not present here)",
- "checked_by": "scripts/check_submission.py"
+ "levels": {
+  "full_pixel": "prior-artifact corpus present (development machine); fine-scale IoU and dot-novelty resolved",
+  "block_signature": "bare CI runner; 8x/32x block occupancy from registry/prior_artifact_signatures.npz"
+ }
 }

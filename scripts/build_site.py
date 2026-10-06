@@ -7,7 +7,6 @@ JSON receipts that the checks wrote.
 
 from __future__ import annotations
 
-import datetime
 import hashlib
 import json
 import shutil
@@ -47,7 +46,7 @@ def main() -> int:
     sources = read("sources.json")
 
     (DATA / "no_manual_check.json").write_text(json.dumps({
-        "generated_utc": datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds"),
+        "generated_from": "registry/submission_checks.json, registry/submission_checks_ci.json",
         "submission": sub.name if sub else None,
         "sha256": sha,
         "format": checks.get("format") if checks else None,
@@ -68,14 +67,15 @@ def main() -> int:
     }, indent=1))
 
     (DATA / "validation.json").write_text(json.dumps({
-        "generated_utc": datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds"),
+        "generated_from": "registry/submission_validation.json, registry/submission_build.json",
         "submission_scored_on_both_frames": validation,
         "build_diagnostics": build,
         "note": "F1 = catalogue-fold frame; F2 = SGMC off-catalogue frame. Proxies, not leaderboard scores.",
     }, indent=1))
 
     (DATA / "feed.json").write_text(json.dumps({
-        "generated_utc": datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds"),
+        "generated_from": "registry/*.json (committed receipts); no wall-clock stamp so that "
+                           "regenerating the site cannot create merge churn",
         "kind": "static snapshot — regenerated on every push, no third-party API required",
         "public_leaderboard_snapshot": {
             "fetched": "2026-10-06",
