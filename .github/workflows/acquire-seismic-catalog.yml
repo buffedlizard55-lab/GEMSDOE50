@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   acquire:
@@ -63,6 +63,51 @@ jobs:
               json.dumps(receipt, indent=2, sort_keys=True) + '\n'
           )
           PY
+
+      - name: Compress and record the pinned catalog
+        shell: bash
+        run: |
+          set -euo pipefail
+          gzip -9 -n -c catalog/nvreloc_catalog_newmag.txt \
+            > data/external/nvreloc_catalog_newmag.txt.gz
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+
+          receipt_path = Path('catalog/acquisition-receipt.json')
+          receipt = json.loads(receipt_path.read_text())
+          compressed = Path('data/external/nvreloc_catalog_newmag.txt.gz')
+          digest = hashlib.sha256(compressed.read_bytes()).hexdigest()
+          receipt['compressed_repository_copy'] = {
+              'path': str(compressed),
+              'bytes': compressed.stat().st_size,
+              'sha256': digest,
+              'compression': 'gzip -9 with timestamp and original filename omitted (-n)',
+              'content_identity_check': (
+                  'decompressed bytes must be 13,833,354 bytes and MD5 '
+                  '38fa663f473378b61c74b597c53c416b'
+              ),
+          }
+          Path('registry/nvreloc_catalog_receipt.json').write_text(
+              json.dumps(receipt, indent=2, sort_keys=True) + '\n'
+          )
+          PY
+
+      - name: Commit the reproducible, license-clean input to the fixed research branch
+        if: github.ref_name == 'arena/38c5cc42-gemsdoe50'
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/external/nvreloc_catalog_newmag.txt.gz registry/nvreloc_catalog_receipt.json
+          if git diff --cached --quiet; then
+            echo 'Pinned catalog bytes are already current.'
+          else
+            git commit -m 'data: pin CC BY 4.0 relocated Nevada catalog'
+            git push origin HEAD:arena/38c5cc42-gemsdoe50
+          fi
 
       - name: Upload verified transient research input
         uses: actions/upload-artifact@v4
