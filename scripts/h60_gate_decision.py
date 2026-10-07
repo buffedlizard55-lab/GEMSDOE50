@@ -73,6 +73,7 @@ def main() -> int:
     d2v, d2h = load("h60_validation-d2.json"), load("h60_holdout_offcat-d2.json")
     d2u = load("h60_uniqueness-d2.json")
     offv = load("h60_holdout_offcat-officialstack.json")
+    comp_gate, comp_f1 = load("h60_competitor_holdout.json"), load("h60_competitor_f1.json")
 
     cand = {}
     cand["H57-scarpstep-80000"] = {
@@ -123,6 +124,33 @@ def main() -> int:
     control["hidden_frame_models"] = modelled(
         control["artifact"], int(control["N"]), float(control["F1_c_per_dot"]), model)
 
+    competitor = {
+        "artifact": comp_f1["artifact"], "artifact_sha256": comp_f1["artifact_sha256"],
+        "N": comp_f1["candidate"]["dots"], "F1_pooled_dti": comp_f1["candidate"]["dti"],
+        "F1_lift_over_uniform": comp_f1["candidate"]["lift_over_uniform"],
+        "frozen_gate_pooled_dti": comp_gate["summary"]["pooled_dti_candidate"],
+        "frozen_gate_uniform": comp_gate["summary"]["pooled_dti_uniform"],
+        "frozen_gate_paired_ci95": comp_gate["summary"]["paired_ci95"],
+        "frozen_gate_folds_positive": comp_gate["summary"]["positive_macrofolds"],
+        "role": "the H59 topographic-scarp candidate published by the sibling session merged on main; "
+                "measured here on this repository's own instruments so the two candidates are "
+                "compared on identical frames",
+    }
+    prior_audit = {
+        "frozen_prior_union_cells": 1_405_451,
+        "note": "dot-by-dot count of cells that a prior submission had already marked positive; the "
+                "charter forbids reusing prior prediction pixels, so a non-zero count disqualifies "
+                "an artifact from being the recommendation",
+        "overlap": {
+            "H57-scarpstep-80000": 27_248,
+            "H56-scarpdisperse-90000": 27_914,
+            "H60-union-d0-75308": 0,
+            "H60 union maximal-novelty control": 0,
+            "main H59 sharpened-scarp-scatter-90k": 0,
+            "H58-seislineage-98598": 0,
+        },
+    }
+
     a, b = cand["H57-scarpstep-80000"], cand["H60-union-d0-75308"]
     inc, alt = a["frozen_gate_pooled_dti"], b["frozen_gate_pooled_dti"]
     verdict = {
@@ -145,13 +173,35 @@ def main() -> int:
         "reason": [],
     }
     beats = alt > inc and not verdict["gate_delta_inside_noise"]
-    verdict["decision"] = "PROMOTE-H60" if beats else "NO SLOT for H60; H57 stays the recommendation"
-    verdict["recommended_artifact"] = (
-        b["artifact"] if beats else a["artifact"])
+    ranking = sorted(
+        (("main H59 sharpened-scarp-scatter-90k", competitor["frozen_gate_pooled_dti"]),
+         ("H60-union-d0-75308", b["frozen_gate_pooled_dti"]),
+         ("H57-scarpstep-80000", a["frozen_gate_pooled_dti"])),
+        key=lambda kv: -kv[1],
+    )
+    verdict["ranking_on_frozen_gate"] = [{"artifact": k, "pooled_dti": v} for k, v in ranking]
+    verdict["recommended_artifact"] = ranking[0][0]
+    if beats:
+        verdict["decision"] = "PROMOTE-H60"
+    elif ranking[0][0] == "H60-union-d0-75308":
+        verdict["decision"] = ("NO PROMOTION NEEDED: H60-union already ranks first on the frozen "
+                               "gate; no earlier candidate exceeds it")
+    else:
+        verdict["decision"] = (f"NO SLOT for H60: {ranking[0][0]} ranks above it on the frozen gate "
+                               f"({ranking[0][1]:.4f} vs {b['frozen_gate_pooled_dti']:.4f})")
     if abs(alt - inc) < 0.01:
         verdict["reason"].append(
             f"the frozen-gate pooled DTI difference is {alt - inc:+.4f}, inside the gate's "
             "own run-to-run/mass noise")
+    verdict["beats_old_incumbent_H57_on_both_instruments"] = (
+        b["frozen_gate_pooled_dti"] > a["frozen_gate_pooled_dti"]
+        and b["F1_pooled_dti"] > a["F1_pooled_dti"])
+    if verdict["beats_old_incumbent_H57_on_both_instruments"]:
+        verdict["reason"].append(
+            f"H60-union does beat the older H57 on both instruments (frozen gate "
+            f"{b['frozen_gate_pooled_dti']:.4f} vs {a['frozen_gate_pooled_dti']:.4f}; pooled F1 "
+            f"{b['F1_pooled_dti']:.4f} vs {a['F1_pooled_dti']:.4f}), but the current candidate "
+            f"ranks higher still on the frozen gate")
     if all(v < 0 for v in verdict["hidden_model_directions"].values()):
         verdict["reason"].append("all three fitted hidden-frame models put H60 below H57")
     elif any(v < 0 for v in verdict["hidden_model_directions"].values()):
@@ -176,6 +226,8 @@ def main() -> int:
         },
         "candidates": cand,
         "negative_control_max_novelty": control,
+        "cross_session_competitor": competitor,
+        "prior_pixel_audit": prior_audit,
         "official_stack_arm": {
             "artifact": "docs/downloads/gemsdoe50-h60-officialstack-50000-20261007T2100Z-allfinite.tif",
             "N": 50_000,

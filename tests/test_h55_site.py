@@ -37,31 +37,19 @@ def test_h55_site_regeneration_is_deterministic_and_download_first():
         for name in ("index.html", "results.html", "methods.html", "submission.html", "site.css")
     ]
     before = {path: path.read_bytes() for path in tracked}
-    # The committed pages are produced by the two generators in sequence (the same
-    # order as the site workflow): build_h55_site.py regenerates from committed
-    # evidence, then build_h58_site.py reproduces the H57-scarpstep session's
-    # preserved band (docs/fragments/) and inserts this session's H58 band.
-    subprocess.run(
-        [sys.executable, str(ROOT / "scripts/build_h55_site.py")],
-        cwd=ROOT,
-        check=True,
-        capture_output=True,
-        text=True,
-    )
-    subprocess.run(
-        [sys.executable, str(ROOT / "scripts/build_h58_site.py")],
-        cwd=ROOT,
-        check=True,
-        capture_output=True,
-        text=True,
-    )
-    subprocess.run(
-        [sys.executable, str(ROOT / "scripts/build_h60_site.py")],
-        cwd=ROOT,
-        check=True,
-        capture_output=True,
-        text=True,
-    )
+    # The committed pages are produced by three generators in sequence, the same
+    # order as the site workflow: build_h55_site.py regenerates from committed
+    # evidence, build_h58_site.py reproduces the preserved H57-scarpstep band and
+    # inserts the H58 band, and build_h59_site.py adds this session's H59 banner.
+    for script in ("build_h55_site.py", "build_h58_site.py", "build_h59_site.py",
+                   "build_h60_site.py"):
+        subprocess.run(
+            [sys.executable, str(ROOT / "scripts" / script)],
+            cwd=ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
     assert {path: path.read_bytes() for path in tracked} == before
 
     index = (ROOT / "index.html").read_text(encoding="utf-8")
@@ -76,6 +64,10 @@ def test_h55_site_regeneration_is_deterministic_and_download_first():
     assert "GEMSDOE50-H58-SEISLINEAGE-98598-C4FF6DB9" in index
     assert first_download < index.index("Executive summary")
     assert index.index("Download portal-safe TIFF") > first_download
+    # this session's H59 band is the first thing on the page and must not have
+    # displaced the bands the earlier sessions contributed
+    assert "<!-- h59-banner -->" in index
+    assert index.index("<!-- h59-banner -->") < index.index("Download the current research candidate GeoTIFF (H57)")
     assert "NO SLOT" in index
     assert "0.019321" in index and "0.115822" in index
     assert "0.2778" in index and "UNSCORED" in index
@@ -83,40 +75,6 @@ def test_h55_site_regeneration_is_deterministic_and_download_first():
     assert "Draft optional note (use only after rights clearance)" in index
     assert "mixed-network ComCat-derived geometry" in index
     assert "H53-A probe/TMI experiment: NO-GO / NO SLOT" in index
-
-
-def test_h60_band_is_below_the_recommendation_and_says_what_to_submit():
-    index = (ROOT / "index.html").read_text(encoding="utf-8")
-    results = (ROOT / "results.html").read_text(encoding="utf-8")
-    assert "Alternative candidate (H60-union)" in index
-    assert "GEMSDOE50-H60-UNION-75308" in index
-    assert "Which file should you submit? H57, directly above." in index
-    assert "NO SLOT for H60" in index
-    # ordering: the recommendation band, then the H60 alternative, then the H56 comparator
-    assert (
-        index.index("Download the current research candidate GeoTIFF (H57)")
-        < index.index('id="h60"')
-        < index.index('id="h56"')
-    )
-    assert 'id="h60-decision"' in results
-
-    receipt = json.loads((ROOT / "evidence/h60_gate_decision.json").read_text(encoding="utf-8"))
-    verdict = receipt["verdict"]
-    assert verdict["decision"] == "NO SLOT for H60; H57 stays the recommendation"
-    assert verdict["recommended_artifact"].endswith("gemsdoe50-h57-scarpstep-80000-20261007T1830Z-allfinite.tif")
-    assert verdict["gate_delta_inside_noise"] is True
-    art = ROOT / "docs/downloads/gemsdoe50-h60-union-d0-75308-20261007T2250Z-allfinite.tif"
-    build = json.loads((ROOT / "evidence/build_h60-union-d0.json").read_text(encoding="utf-8"))
-    assert _sha256(art) == build["files"]["all_finite"]["sha256"]
-    assert build["dots_on_prior_union"] == 0
-    with rasterio.open(art) as ds:
-        values = ds.read(1)
-        assert ds.count == 1 and ds.dtypes[0] == "float32"
-        assert str(ds.crs) == "EPSG:32611" and ds.shape == (3730, 3292)
-        assert np.all(np.isfinite(values))
-        assert float(values.min()) == 0.0 and float(values.max()) == 1.0
-        assert set(np.unique(values)) == {0.0, 1.0}
-        assert int(np.count_nonzero(values)) == 75_308
 
 
 def test_h55_site_local_links_exist():
@@ -245,3 +203,43 @@ def test_h56_conditional_score_table_uses_the_documented_g_value():
     assert "30,000 | 5,956 | 48.7 % | **0.199**" in diagnosis
     assert "44,090 | 7,019 | 57.4 % | 0.159" in diagnosis
     assert "108,000 | 11,843 | 96.9 % | 0.110" in diagnosis
+
+
+def test_h60_band_is_an_alternative_below_the_current_candidate_and_says_what_to_submit():
+    index = (ROOT / "index.html").read_text(encoding="utf-8")
+    results = (ROOT / "results.html").read_text(encoding="utf-8")
+    assert "Alternative candidate (H60-union)" in index
+    assert "Charter compliance finding" in index
+    assert "GEMSDOE50-H60-UNION-75308" in index
+    assert "NO SLOT for H60" in index
+    assert "Which file should you submit?" in index
+    # the current-candidate banner stays first, then the H57 band, then the H60 alternative
+    assert (
+        index.index("<!-- h59-banner -->")
+        < index.index("Download the current research candidate GeoTIFF (H57)")
+        < index.index('id="h60"')
+        < index.index('id="h56"')
+    )
+    assert 'id="h60-decision"' in results
+
+    receipt = json.loads((ROOT / "evidence/h60_gate_decision.json").read_text(encoding="utf-8"))
+    verdict = receipt["verdict"]
+    assert verdict["decision"].startswith("NO SLOT for H60")
+    assert verdict["recommended_artifact"] == "main H59 sharpened-scarp-scatter-90k"
+    assert verdict["ranking_on_frozen_gate"][1]["artifact"] == "H60-union-d0-75308"
+    audit = receipt["prior_pixel_audit"]["overlap"]
+    assert audit["H57-scarpstep-80000"] > 0
+    assert audit["H60-union-d0-75308"] == 0
+    assert audit["main H59 sharpened-scarp-scatter-90k"] == 0
+    art = ROOT / "docs/downloads/gemsdoe50-h60-union-d0-75308-20261007T2250Z-allfinite.tif"
+    build = json.loads((ROOT / "evidence/build_h60-union-d0.json").read_text(encoding="utf-8"))
+    assert _sha256(art) == build["files"]["all_finite"]["sha256"]
+    assert build["dots_on_prior_union"] == 0
+    with rasterio.open(art) as ds:
+        values = ds.read(1)
+        assert ds.count == 1 and ds.dtypes[0] == "float32"
+        assert str(ds.crs) == "EPSG:32611" and ds.shape == (3730, 3292)
+        assert np.all(np.isfinite(values))
+        assert float(values.min()) == 0.0 and float(values.max()) == 1.0
+        assert set(np.unique(values)) == {0.0, 1.0}
+        assert int(np.count_nonzero(values)) == 75_308

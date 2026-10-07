@@ -1,0 +1,34 @@
+{
+ "frame": "S_matched",
+ "truth_px": 52219,
+ "mass": 90000,
+ "lattice_px": 3,
+ "rng_seed": 20261007,
+ "runs": {
+  "without_exclusion": {
+   "eligible_cells": 4930382,
+   "dti": 0.23184419832210734,
+   "uniform": 0.12589101979824074,
+   "lift": 1.8416261834535337,
+   "tp_w": 14182.99530516299,
+   "fp_w": 82814.4189921871,
+   "dots_on_prior_union": 28811
+  },
+  "with_exclusion": {
+   "eligible_cells": 3854609,
+   "dti": 0.22841676496459457,
+   "uniform": 0.12589101979824074,
+   "lift": 1.814400783556021,
+   "tp_w": 13973.948564761446,
+   "fp_w": 83037.15580184356,
+   "dots_on_prior_union": 0
+  }
+ },
+ "price": {
+  "dti_cost": 0.003427433357512777,
+  "relative_cost": 0.014783347533894086,
+  "dots_moved_off_prior_cells": 28811,
+  "truth_credit_lost": 209.0467404015435,
+  "reading": "the uniqueness guarantee is what moves those dots; the cost above is what it buys, measured on the frame that cannot see the hidden labels"
+ }
+}

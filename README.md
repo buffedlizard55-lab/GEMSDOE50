@@ -136,6 +136,94 @@ python scripts/h56_uniqueness.py --novel-threshold 0.45
 python scripts/h56_holdout.py --n-boot 200        # frozen macrofold split
 ```
 
+## H59 — the current candidate of this session: sharpened topographic-scarp scatter (this session)
+
+**Note on numbering.** This session's work was originally numbered H57, but unrelated H57 and H58
+series were merged to `main` from other Arena sessions while this branch was in flight, so the series
+was renumbered **H59** at merge time. The raster bytes were not changed by the rename; every hash in
+`evidence/h59_build.json` was re-verified against the renamed files afterwards, and the `.zip` was
+rebuilt so its internal entry name matches the delivered file.
+
+**Read first:** [`docs/hypotheses-20261007-h59.md`](docs/hypotheses-20261007-h59.md),
+[`docs/research/h59-preregistration.md`](docs/research/h59-preregistration.md) (the frozen protocol and
+its declared **Amendment 1**),
+[`docs/research/h59-final-analysis.md`](docs/research/h59-final-analysis.md),
+[`docs/research/h59-deviation-log.md`](docs/research/h59-deviation-log.md) (the three-pass record),
+[`docs/research/h59-proxy-gap.md`](docs/research/h59-proxy-gap.md), and
+[`docs/research/gems-official-clarifications.md`](docs/research/gems-official-clarifications.md)
+(official rulings and the source licence ledger).
+
+**One-click download, and it is the first thing on the site:**
+[`docs/downloads/gemsdoe50-h59-sharpened-scarp-scatter-90k-20261007T171954Z-allfinite.tif`](docs/downloads/gemsdoe50-h59-sharpened-scarp-scatter-90k-20261007T171954Z-allfinite.tif) — 90,000 predicted cells, values `0` / `1`,
+`float32`, EPSG:32611, 3730 × 3292, **every one of the 12,279,160 cells finite and inside `[0, 1]`**,
+SHA-256 `838f9502fd4a2720374559db0947fb3372f97629401a617e5c9c95c1b1ce8be5`. A `-nan.tif` sibling keeps NaN outside the study
+footprint to match the official sample, and a `.zip` carries the all-finite GeoTIFF. Portal entry name
+`GEMSDOE50-H59-SHARPENED-SCARP-SCATTER-90K`; the note is the `portal_note` field of
+[`evidence/h59_build.json`](evidence/h59_build.json).
+
+### What it is, and what changed after the first build
+
+The field is a **sharpened NaN-aware rank-mean** of two families: the official layer 19
+(detrended-elevation slope) *gradient magnitude*, a step-edge detector for a fault scarp, and the USGS
+3DEP 1 m LiDAR scarp descriptor stack. Sharpening exponent **^16**, 90,000 dots on a 3 px lattice, one
+per chosen block, on the strongest eligible cell of the block; never on a supplied catalogue cell and
+never on a registered prior-artifact cell.
+
+Two screens after the first frozen build changed the design; both are declared post-hoc in the
+preregistration because they were run **after** the first build's numbers were seen:
+
+1. **A rank mean was compressing the peaks.** Raising the blend to a power lifted the off-catalogue DTI
+   at 90,000 dots from **0.17142 to 0.23406** with emitter, seed, lattice and pool frozen (+37 %), and
+   the lift over a matched-mass uniform control from 1.33× to **1.84×**. The response is monotone to
+   ^8, ^16 is the frozen value, and it turns over by ^32.
+2. **The dot count was sized for the wrong frame.** Revision 1 spent 180,000 dots because the *proxy*
+   prefers ~250,000. The proxy's truth (52,219 px) is ~4× denser on the ground than the hidden target
+   (≈12,226 px), so it keeps repaying dots the hidden scoring would not. Under the repository's
+   calibrated per-dot credit transfer (0.887) the sharpened field saturates at **90,000**; the marginal
+   dot beyond it earns ~0.077 against a 0.2 false-positive charge. Proxy reading at 180,000 is 0.27864
+   against 0.23406 at 90,000 — that disagreement is published, with a sensitivity table from transfer
+   0.30 to 1.00.
+
+### Measured on the delivered bytes ([`evidence/h59_delivered_metrics.json`](evidence/h59_delivered_metrics.json))
+
+| frame | truth px | DTI | NW / NE / SW / SE |
+| --- | ---: | ---: | --- |
+| `S_matched` (geometry-matched off-catalogue proxy) | 52,219 | **0.23028** | 0.1455 / 0.1500 / 0.0273 / 0.1294 |
+| `S_raw` (unmodified proxy) | 61,664 | 0.24917 | — |
+| `L` (supplied catalogue — negative control) | 60,988 | 0.03892 | — |
+
+Controls at matched mass 90,000: whole-footprint uniform **0.12383** (lift **1.86×**),
+same-pool uniform **0.11134** (lift **2.07×**); paired 32 × 32 px block
+bootstrap **+0.1041**, 95 % interval **[+0.0948, +0.1141]**, positive
+in 100/400 replicates. Uniqueness: **0** cells shared with the
+61-artifact prior union, worst 800 m block IoU **0.0419** across 50 signature-pinned priors.
+
+### Where 0.3774 stands, measured rather than asserted
+
+The file earns **14,090** of truth-side credit at **27.0 %** coverage with
+**82,971** of false-positive mass. A prediction with *zero* false positives at this
+coverage would score **0.3160** — the file realises 73 % of its
+own ceiling — and 0.3774 with perfect precision needs **32.7 %**
+coverage. So on this frame the target is **not** reachable by precision alone: it needs roughly 3,000
+more truth pixels covered, i.e. a field that finds fault pixels this one misses. The transfer model,
+by contrast, puts the same bytes at **0.44** (saturated) at a transfer of 0.887 and 0.15 at 0.30.
+Both readings are published; neither is an organizer score, and no score is claimed.
+
+### Corrections this session
+
+1. A 24.7 % LiDAR **dead zone** in the first revision (strict intersection) cost 21 % of truth credit;
+   the NaN-aware mean fixed it (0.17990 → 0.21812 in that revision).
+2. A **rank mean flattens the top** — corrected by the exponent sweep, worth +37 % proxy DTI.
+3. **Dense emission is not better**: blobs and skeletonised 1 px lines lose to field-weighted spreading
+   at matched painted count.
+4. The **mass instrument was measuring specks**: random-pixel subsampling of the proxy truth severs
+   connectivity and inflates the curve by 33 %; whole-component selection replaces it.
+5. The **catalogue buffer is 1 px**, not 300 m, per staff rulings on the evaluation mask and on new
+   geometry of existing systems; the apparent 3 px win on the proxy is a frame selection artefact and is
+   labelled as one.
+6. The **seismicity point-pattern term is at chance** here: implemented, measured, reported as a
+   negative, and excluded from the artifact.
+
 ## H58 — the owner-mandated unique ComCat point-geometry artifact (this session)
 
 **H58-S1** is the unique submission generated as the session's mandated deliverable: **declustered
@@ -563,9 +651,14 @@ catalogue-holdout frame and the H52 register's INGENIOUS-holdout frame).
 
 **Question.** Does the organizer's own 19-band `training_features.tif` carry off-catalogue fault
 information that the owner-derived LiDAR/topographic-step families behind H57 do not — and can a
-*maximally* novel placement be built that still scores? **Answers: it carries information but no
-usable increment (the union arm ties H57), and maximal novelty is bought with score.** H59 is
-therefore a **NO SLOT** result and **H57 stays the recommended submission**.
+*maximally* novel placement be built that still scores? **Answers: yes it carries information — the
+union arm beats the older H57 on both instruments — and maximal novelty is bought with score.** H60
+is still a **NO SLOT** result, because the current candidate merged on main (the sibling session's
+H59 topographic-scarp scatter) ranks higher on the same frozen gate; it does **not** replace it.
+
+**Naming note.** This series was developed as "H59" and renamed **H60** during the merge, because
+the sibling session merged on main already owns the H59 label (`docs/research/h59-*.md`,
+`h59.html`).
 
 **Screen (measured, `evidence/h59_screen.json`).** 17 `tf` channels × {`raw`, `grad`, `ridge2`} at
 30,000 dots, scored on the off-catalogue F1 frame inside **five elevation strata** (the stratifier

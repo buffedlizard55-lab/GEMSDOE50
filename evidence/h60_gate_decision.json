@@ -1,9 +1,9 @@
 {
  "generated_utc": "20261007T2320Z",
- "hypothesis": "H59-S1 official-stack four-family structural belief field (arms: official stack, union with the H57 morphology field, and a maximal-novelty control)",
+ "hypothesis": "H60-S1 official-stack four-family structural belief field (arms: official stack, union with the H57 morphology field, and a maximal-novelty control)",
  "instruments": {
   "frozen_gate": "scripts/validate_h56.py --truth-mode sgmc_off (evidence/holdout-v1.json split, truth = USGS SGMC fault pixels >300 m from the given catalogue)",
-  "F1_frame": "scripts/h59_validate.py (pooled whole-map estimator on the same F1 truth, with matched-mass uniform and translation controls)",
+  "F1_frame": "scripts/h60_validate.py (pooled whole-map estimator on the same F1 truth, with matched-mass uniform and translation controls)",
   "hidden_frame": "the three models fitted on 21 artifacts with recorded scores in evidence/h57_hidden_model.json; model-implied values are indicative, not scores"
  },
  "candidates": {
@@ -62,7 +62,7 @@
     }
    }
   },
-  "H59-union-d0-75308": {
+  "H60-union-d0-75308": {
    "artifact": "gemsdoe50-h59-union-d0-75308-20261007T2250Z-allfinite.tif",
    "artifact_sha256": "143bae71968c5fc2b70b2de579e6a33f61d9d3e07beac13f20272760758b3bda",
    "N": 75308,
@@ -80,7 +80,7 @@
    "uniqueness_min_novel_fraction_at_2px": 0.43707175864449993,
    "uniqueness_verdict_at_0.5": false,
    "hidden_frame_models": {
-    "candidate": "H59-union-d0-75308",
+    "candidate": "H60-union-d0-75308",
     "N": 75308,
     "F1_c_per_dot": 0.08705731535411244,
     "G": 14088.75,
@@ -176,13 +176,40 @@
    }
   }
  },
+ "cross_session_competitor": {
+  "artifact": "gemsdoe50-h59-sharpened-scarp-scatter-90k-20261007T171954Z-allfinite.tif",
+  "artifact_sha256": "838f9502fd4a2720374559db0947fb3372f97629401a617e5c9c95c1b1ce8be5",
+  "N": 85247,
+  "F1_pooled_dti": 0.1254659034887452,
+  "F1_lift_over_uniform": 2.3224966941051663,
+  "frozen_gate_pooled_dti": 0.21247218708664406,
+  "frozen_gate_uniform": 0.12864733790027197,
+  "frozen_gate_paired_ci95": [
+   0.055660890239037364,
+   0.11052428860219345
+  ],
+  "frozen_gate_folds_positive": 4,
+  "role": "the H59 topographic-scarp candidate published by the sibling session merged on main; measured here on this repository's own instruments so the two candidates are compared on identical frames"
+ },
+ "prior_pixel_audit": {
+  "frozen_prior_union_cells": 1405451,
+  "note": "dot-by-dot count of cells that a prior submission had already marked positive; the charter forbids reusing prior prediction pixels, so a non-zero count disqualifies an artifact from being the recommendation",
+  "overlap": {
+   "H57-scarpstep-80000": 27248,
+   "H56-scarpdisperse-90000": 27914,
+   "H60-union-d0-75308": 0,
+   "H60 union maximal-novelty control": 0,
+   "main H59 sharpened-scarp-scatter-90k": 0,
+   "H58-seislineage-98598": 0
+  }
+ },
  "official_stack_arm": {
-  "artifact": "docs/downloads/gemsdoe50-h59-officialstack-50000-20261007T2100Z-allfinite.tif",
+  "artifact": "docs/downloads/gemsdoe50-h60-officialstack-50000-20261007T2100Z-allfinite.tif",
   "N": 50000,
   "F1_pooled_dti": null,
   "frozen_gate_pooled_dti": 0.12243108263617965,
   "frozen_gate_uniform": 0.074880128788047,
-  "note": "official-stack belief alone, no morphology field; kept as a documented arm of the preregistered H59 screen, not promoted (its frozen-gate value sits far below the incumbent)"
+  "note": "official-stack belief alone, no morphology field; kept as a documented arm of the preregistered H60 screen, not promoted (its frozen-gate value sits far below the incumbent)"
  },
  "verdict": {
   "rule": "A candidate is only ever preferred over the incumbent if it beats it on the repository's frozen spatially blocked gate (truth mode sgmc_off) by more than the gate's own noise; otherwise the incumbent stays and the candidate is recorded NO SLOT.",
@@ -195,13 +222,29 @@
    "both": -0.004912833658407667
   },
   "novelty_fraction_delta": 0.12215925864449995,
-  "decision": "NO SLOT for H59; H57 stays the recommendation",
-  "recommended_artifact": "docs/downloads/gemsdoe50-h57-scarpstep-80000-20261007T1830Z-allfinite.tif",
+  "decision": "NO SLOT for H60: main H59 sharpened-scarp-scatter-90k ranks above it on the frozen gate (0.2125 vs 0.2033)",
+  "recommended_artifact": "main H59 sharpened-scarp-scatter-90k",
   "reason": [
    "the frozen-gate pooled DTI difference is +0.0008, inside the gate's own run-to-run/mass noise",
+   "H60-union does beat the older H57 on both instruments (frozen gate 0.2033 vs 0.2025; pooled F1 0.1018 vs 0.0914), but the current candidate ranks higher still on the frozen gate",
    "the fitted hidden-frame models disagree in sign, so no direction is established",
-   "H59-union still reuses zero prior positive cells (0 of 1,405,451) and is a valid unique portal-safe file, so it is documented as an alternative, not discarded"
-  ]
+   "H60-union still reuses zero prior positive cells (0 of 1,405,451) and is a valid unique portal-safe file, so it is documented as an alternative, not discarded"
+  ],
+  "ranking_on_frozen_gate": [
+   {
+    "artifact": "main H59 sharpened-scarp-scatter-90k",
+    "pooled_dti": 0.21247218708664406
+   },
+   {
+    "artifact": "H60-union-d0-75308",
+    "pooled_dti": 0.20331483087748906
+   },
+   {
+    "artifact": "H57-scarpstep-80000",
+    "pooled_dti": 0.20250216212197725
+   }
+  ],
+  "beats_old_incumbent_H57_on_both_instruments": true
  },
  "provenance": {
   "F1_or_hidden_scores_are_not_competition_scores": true,

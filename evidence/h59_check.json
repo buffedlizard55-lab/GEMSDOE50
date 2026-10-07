@@ -1,0 +1,39 @@
+{
+ "schema": "gemsdoe50.h59.check.v1",
+ "file": "docs/downloads/gemsdoe50-h59-sharpened-scarp-scatter-90k-20261007T171954Z-nan.tif",
+ "format": {
+  "driver": "GTiff",
+  "count_is_1": true,
+  "dtype_is_float32": true,
+  "crs_matches": true,
+  "shape_matches": true,
+  "transform_matches": true,
+  "finite_cells": 5167373,
+  "nan_cells": 7111787,
+  "min_finite": 0.0,
+  "max_finite": 1.0,
+  "outside_unit_interval": 0,
+  "plain_minmax_in_range": true,
+  "nan_only_outside_footprint": true
+ },
+ "positive_cells": 90000,
+ "dots_on_provided_catalogue": 0,
+ "nonzero_outside_footprint": 0,
+ "uniqueness": {
+  "schema": "exact-cell novelty against the registered prior-artifact support",
+  "n_priors_in_union": 61,
+  "prior_union_cells": 1405451,
+  "exact_overlap_cells": 0,
+  "overlap_within_2px_cells": 83054,
+  "novel_fraction_at_2px": 0.07717777777777779,
+  "self_sha256": "cf645d250f8788929884c4591d6aa61f51152d4f3413b4c3920fc6443e1df6e6",
+  "note": "the 2 px figure is a proximity statistic, not a novelty guarantee: the prior union's 2 px neighbourhood covers 85.2 % of the study footprint, so a uniform draw of the same mass would also be 'novel' only ~15 % of the time",
+  "n_compared": 50,
+  "method": "IoU on occupied block signatures, bit-unpacked from registry/prior_artifact_signatures.npz",
+  "worst_block8_iou": 0.041867607188272274,
+  "worst_block8_prior": "gemsdoe9-PLACEHOLDER-2314b599.tif",
+  "worst_block32_iou": 0.09891304347826087,
+  "worst_block32_prior": "gemsdoe9-PLACEHOLDER-2314b599.tif"
+ },
+ "all_checks_pass": true
+}
