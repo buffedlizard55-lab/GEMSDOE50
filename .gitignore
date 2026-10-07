@@ -31,3 +31,6 @@ data/external/geodawn_extensions_u8.tif
 *.ovr
 *.tfw
 *.tif.aux.xml
+
+# Reference-notebook pulls and sibling-repo notes (small, re-downloadable, never published)
+.arena-ref/

@@ -1,0 +1,80 @@
+{
+ "generated_utc": "20261007T2100Z",
+ "tag": "h60-officialstack",
+ "hypothesis": "H60-S1 official-stack four-family structural belief field",
+ "mass_requested": 50000,
+ "dots": 50000,
+ "min_chebyshev_spacing_px": 3,
+ "dots_within_300m_of_catalogue": 0,
+ "dots_on_prior_union": 0,
+ "prior_union_cells": 1405451,
+ "prior_exclusion_applied": true,
+ "written_min": 0.0,
+ "written_max": 1.0,
+ "written_all_finite": true,
+ "unique_positive_values": [
+  1.0
+ ],
+ "files": {
+  "all_finite": {
+   "path": "docs/downloads/gemsdoe50-h60-officialstack-50000-20261007T2100Z-allfinite.tif",
+   "sha256": "5a66ed4d96399f6a1dad1ba62e19cfa973ee2f8ae4e38e635262edec0466f000",
+   "bytes": 296076
+  },
+  "nan_outside": {
+   "path": "docs/downloads/gemsdoe50-h60-officialstack-50000-20261007T2100Z.tif",
+   "sha256": "7d5a83a326f9e3a951b88dbcf3db74228cfab0ab13271babbbf79f5679b69f5a",
+   "bytes": 338302
+  },
+  "zip": {
+   "path": "docs/downloads/gemsdoe50-h60-officialstack-50000-20261007T2100Z-allfinite.zip",
+   "sha256": "a5a958e2cf4beb90b21ad7d9d6bdbd8ed5d86486ea26c65e586cfec84071c02b",
+   "bytes": 189402
+  }
+ },
+ "provenance": {
+  "belief_cache": ".arena/h60_belief.npy",
+  "measured_stratified_lifts": {
+   "raw::det_elev": 2.193,
+   "raw::det_elev_slope": 2.198,
+   "grad::det_elev_slope": 2.064,
+   "ridge2::det_elev_slope": 1.877,
+   "grad::tc": 1.969,
+   "ridge2::tc": 1.491,
+   "raw::iso_grav_anom": 1.909,
+   "ridge2::geod_dilaterate": 1.887
+  }
+ },
+ "grid": {
+  "shape": [
+   3730,
+   3292
+  ],
+  "crs": "EPSG:32611",
+  "transform": [
+   100.0,
+   0.0,
+   243350.0,
+   0.0,
+   -100.0,
+   4508550.0
+  ],
+  "dtype": "float32"
+ },
+ "inputs": [
+  {
+   "name": "training_features.tif (19-band organizer stack)",
+   "sha256": "476cd297a595ad4a",
+   "source": "DrivenData DOE GEMS competition data tab (organizer-provided); restored here from the owner's pinned GitHub mirror and verified against scripts/restore_inputs.sh's recorded SHA-256"
+  },
+  {
+   "name": "data/grid/labels.tif (given catalogue)",
+   "source": "organizer-provided; byte-identical to the competition labels raster (60,988 positive cells)"
+  },
+  {
+   "name": "data/grid/sample_submission.tif (footprint template)",
+   "source": "organizer-provided"
+  }
+ ],
+ "seconds": 2.2
+}
