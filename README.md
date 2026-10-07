@@ -254,3 +254,50 @@ python scripts/update_registries_h51.py
 > filename, optional note, validation, sources, limitations, and manual submission steps. Work
 > autonomously, use trusted sources, run multiple review/test passes, append this request to the
 > README and reread it, and create and merge a PR when checks pass.
+
+## Generated site and one-click downloads
+
+The site is generated and CI-verified. Root pages come from
+[`scripts/build_h50_site.py`](scripts/build_h50_site.py) (`index.html`, `results.html`,
+`methods.html`, `submission.html`) and the data feed from [`scripts/build_site.py`](scripts/build_site.py)
+plus [`scripts/update_registries_h51.py`](scripts/update_registries_h51.py) and
+[`scripts/update_registries_h53.py`](scripts/update_registries_h53.py) (`docs/data/*.json`).
+`.github/workflows/site.yml` regenerates the four root pages on every push and pull request and fails
+the build if the committed bytes differ. `index.html` now opens with a **"three candidates, one
+shared frame"** table rendered from `evidence/h51_ship.json`, `evidence/build_h51.json`,
+`evidence/h51_candidate_frame_compare.json` and `evidence/h53_ship.json`, so the numbers on the
+site cannot drift from the evidence, and all three GeoTIFFs are one click away.
+
+**One-click downloads (top of the site):**
+
+| candidate | file | portal name | note for the optional field |
+|---|---|---|---|
+| A | `downloads/gemsdoe50-h51-corridor-consensus-mix-20261007T0200Z.tif` | `gemsdoe50-h51-corridor-consensus-mix-20261007T0200Z` | "Corridor evidence (seismicity lineaments + magnetic/radiometric ridges + thermal springs) fused with a validated score-consensus core; off-catalogue, 300 m-aware dot geometry; pixels and 200 m neighbourhoods novel against all 26 prior artifacts." |
+| B | `docs/downloads/gems51-scarpradio-offcat-35000-20261006-ecf058ea-nan.tif` | `GEMSDOE50-H51-SCARPRADIO-OFFCAT` | "GEMSDOE50 H51 \| corroborated 3DEP-scarp + radiometric lineaments, all dots >300 m from the given catalogue, metric-matched sparse emission; proxy-validated, NOT organizer-scored" |
+| C | `downloads/gemsdoe50-h53-tmiconj-20261007T0345Z.tif` | `GEMSDOE50-H53-TMICONJ-OFFCAT` | "GEMSDOE50 H53 \| TMI x K/U gradient-ridge conjunction, off-catalogue 300m-aware dots; proxy-validated vs uniform+translation, NOT organizer-scored" |
+
+A is `float32`, EPSG:32611, 3730×3292, values `0`/`1`, 30,000 predicted pixels, SHA-256
+`a26055834f8e6cc57cc33e96a4a5a26a1adeaafbeec490135af84c6ccd4d1da0`, 339,039 bytes, NaN outside the
+published footprint. B is the same grid and dtype with 35,000 predicted pixels, SHA-256
+`8f8708d2872b66d71925707e0aede23eebcf217dfd2e57d6e61186f32e686f5d`. C is the same grid and dtype
+with 23,598 predicted pixels, SHA-256
+`3c22da583d5358b2986189a4ed3322182f39f562bdde14809f3300aeb6bd37ea`, 159,966 bytes. Each has an `-allfinite.tif`
+sibling that writes `0.0` outside the footprint, for portals that reject non-finite values, so the
+historical error `Predicted values must be in range [0, 1]` cannot recur; each also has a one-file
+`.zip`.
+
+**How to submit (manual, by the owner, never by this repository — it holds no portal credentials
+and never uploads):**
+
+1. Download one GeoTIFF — or its zip — from the band at the top of the site.
+2. Confirm the bytes against the SHA-256 shown next to the link.
+3. Sign in to [the competition](https://www.drivendata.org/competitions/306/competition-doe-gems/)
+   manually and open *Submit*.
+4. Choose the downloaded `.tif` without re-saving, re-projecting or re-compressing it.
+5. Paste the unique name and the short note from the table above.
+6. Submit, then record the receipt next to the file hash in this repository before claiming any
+   score.
+
+`submission.html` carries the same checklist. **No organizer score exists for any of the three
+files and no weekly slot has been used by this repository.** Spending a slot is the owner's decision; the shared
+frame above says which file to spend it on first.

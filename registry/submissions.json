@@ -141,6 +141,38 @@
     "evidence/checks_h51_raster.json",
     "evidence/holdout_h51.json"
    ]
+  },
+  {
+   "name": "gemsdoe50-h53-tmiconj",
+   "portal_name": "GEMSDOE50-H53-TMICONJ-OFFCAT",
+   "file": "downloads/gemsdoe50-h53-tmiconj-20261007T0345Z.tif",
+   "bytes": 159966,
+   "sha256": "3c22da583d5358b2986189a4ed3322182f39f562bdde14809f3300aeb6bd37ea",
+   "all_finite_twin": "downloads/gemsdoe50-h53-tmiconj-20261007T0345Z-allfinite.tif",
+   "zip": "downloads/gemsdoe50-h53-tmiconj-20261007T0345Z.zip",
+   "zip_sha256": "cef30a9ee3905b583a08d078710de9622825f114bbd1de6df89b8bf18b038388",
+   "mass": 23598,
+   "format": {
+    "crs": "EPSG:32611",
+    "shape": [
+     3730,
+     3292
+    ],
+    "dtype": "float32",
+    "values_in_0_1": true,
+    "outside_footprint_all_nan": true,
+    "inside_footprint_all_finite": true
+   },
+   "status": "H53 deliverable; local proxy instruments only; no organizer score exists for this file and no portal upload was performed by this repository",
+   "organizer_score": null,
+   "submitted_utc": null,
+   "built_utc": "20261007T0345Z",
+   "portal_note": "GEMSDOE50 H53 | TMI x K/U gradient-ridge conjunction, off-catalogue 300m-aware dots; proxy-validated vs uniform+translation, NOT organizer-scored",
+   "evidence": [
+    "evidence/h53_ship.json",
+    "evidence/h53_check_submission.json",
+    "evidence/h53_validation_final.json"
+   ]
   }
  ]
 }
