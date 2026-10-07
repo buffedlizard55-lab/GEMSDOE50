@@ -1,0 +1,459 @@
+{
+  "artifact": "gemsdoe50-h58-seislineage-98598-20261007T180223Z-c4ff6db9",
+  "folds": {
+    "NE": {
+      "best_density": {
+        "alpha": 0.2,
+        "beta": 0.8,
+        "covered_fraction": 0.021157068978684395,
+        "credit_per_dot": 0.1898124575282886,
+        "fn_weight": 19161.829217673272,
+        "fp_weight": 1984.0286819283808,
+        "prediction_cells": 2182,
+        "radius_m": 300.0,
+        "score": 0.025660439559032466,
+        "tp_weight": 414.1707823267257,
+        "truth_cells": 19576
+      },
+      "candidate": {
+        "alpha": 0.2,
+        "beta": 0.8,
+        "covered_fraction": 0.011900843247188876,
+        "credit_per_dot": 0.09201062693798161,
+        "fn_weight": 19343.02909259303,
+        "fp_weight": 2386.3998020619943,
+        "prediction_cells": 2532,
+        "radius_m": 300.0,
+        "score": 0.014394538028041802,
+        "tp_weight": 232.97090740696945,
+        "truth_cells": 19576
+      },
+      "candidate_minus_density_credit_per_dot": -0.09780183059030699,
+      "candidate_minus_incumbent_credit_per_dot": -0.13658317459385966,
+      "incumbent": {
+        "alpha": 0.2,
+        "beta": 0.8,
+        "covered_fraction": 0.1455218611917555,
+        "credit_per_dot": 0.22859380153184125,
+        "fn_weight": 16727.264045310196,
+        "fp_weight": 11133.343764538888,
+        "prediction_cells": 12462,
+        "radius_m": 300.0,
+        "score": 0.15434266811184577,
+        "tp_weight": 2848.7359546898056,
+        "truth_cells": 19576
+      },
+      "uniform": {
+        "alpha": 0.2,
+        "beta": 0.8,
+        "covered_fraction": 0.5120682722947535,
+        "credit_per_dot": 0.1016678685008022,
+        "fn_weight": 9551.751501557908,
+        "fp_weight": 91853.07102553899,
+        "prediction_cells": 98598,
+        "radius_m": 300.0,
+        "score": 0.2781711368560504,
+        "tp_weight": 10024.248498442095,
+        "truth_cells": 19576
+      }
+    },
+    "NW": {
+      "best_density": {
+        "alpha": 0.2,
+        "beta": 0.8,
+        "covered_fraction": 0.1348280842525143,
+        "credit_per_dot": 0.08272360392224322,
+        "fn_weight": 16525.648762692726,
+        "fp_weight": 29810.25920664929,
+        "prediction_cells": 31132,
+        "radius_m": 300.0,
+        "score": 0.11836384130789125,
+        "tp_weight": 2575.351237307276,
+        "truth_cells": 19101
+      },
+      "candidate": {
+        "alpha": 0.2,
+        "beta": 0.8,
+        "covered_fraction": 0.11726065014348475,
+        "credit_per_dot": 0.08254572412437171,
+        "fn_weight": 16861.204321609297,
+        "fp_weight": 25732.198462012595,
+        "prediction_cells": 27134,
+        "radius_m": 300.0,
+        "score": 0.10729457941151162,
+        "tp_weight": 2239.795678390702,
+        "truth_cells": 19101
+      },
+      "candidate_minus_density_credit_per_dot": -0.00017787979787151076,
+      "candidate_minus_incumbent_credit_per_dot": -0.022158616053559177,
+      "incumbent": {
+        "alpha": 0.2,
+        "beta": 0.8,
+        "covered_fraction": 0.16991912134629084,
+        "credit_per_dot": 0.10470434017793089,
+        "fn_weight": 15855.3748631645,
+        "fp_weight": 29455.05149983061,
+        "prediction_cells": 30998,
+        "radius_m": 300.0,
+        "score": 0.1487390475315618,
+        "tp_weight": 3245.6251368355015,
+        "truth_cells": 19101
+      },
+      "uniform": {
+        "alpha": 0.2,
+        "beta": 0.8,
+        "covered_fraction": 0.33408358788415654,
+        "credit_per_dot": 0.06472069019833337,
+        "fn_weight": 12719.669387824724,
+        "fp_weight": 95349.2546473291,
+        "prediction_cells": 98598,
+        "radius_m": 300.0,
+        "score": 0.17911543125886664,
+        "tp_weight": 6381.330612175274,
+        "truth_cells": 19101
+      }
+    },
+    "SE": {
+      "best_density": {
+        "alpha": 0.2,
+        "beta": 0.8,
+        "covered_fraction": 0.21947963659909925,
+        "credit_per_dot": 0.13012645015425695,
+        "fn_weight": 8755.877436631305,
+        "fp_weight": 17773.817166575027,
+        "prediction_cells": 18921,
+        "radius_m": 300.0,
+        "score": 0.18908005487356516,
+        "tp_weight": 2462.1225633686954,
+        "truth_cells": 11218
+      },
+      "candidate": {
+        "alpha": 0.2,
+        "beta": 0.8,
+        "covered_fraction": 0.2374813270376478,
+        "credit_per_dot": 0.12135867013066386,
+        "fn_weight": 8553.934473291665,
+        "fp_weight": 20396.38652010799,
+        "prediction_cells": 21952,
+        "radius_m": 300.0,
+        "score": 0.1960819495277581,
+        "tp_weight": 2664.065526708333,
+        "truth_cells": 11218
+      },
+      "candidate_minus_density_credit_per_dot": -0.008767780023593089,
+      "candidate_minus_incumbent_credit_per_dot": -0.11803030874327126,
+      "incumbent": {
+        "alpha": 0.2,
+        "beta": 0.8,
+        "covered_fraction": 0.3294212575215668,
+        "credit_per_dot": 0.23938897887393512,
+        "fn_weight": 7522.552333123063,
+        "fp_weight": 13761.593585387553,
+        "prediction_cells": 15437,
+        "radius_m": 300.0,
+        "score": 0.2964466958444014,
+        "tp_weight": 3695.4476668769366,
+        "truth_cells": 11218
+      },
+      "uniform": {
+        "alpha": 0.2,
+        "beta": 0.8,
+        "covered_fraction": 0.6263145613164403,
+        "credit_per_dot": 0.071259018933932,
+        "fn_weight": 4192.003251152173,
+        "fp_weight": 92468.05826915668,
+        "prediction_cells": 98598,
+        "radius_m": 300.0,
+        "score": 0.24333963922375454,
+        "tp_weight": 7025.996748847827,
+        "truth_cells": 11218
+      }
+    },
+    "SW": {
+      "best_density": {
+        "alpha": 0.2,
+        "beta": 0.8,
+        "covered_fraction": 0.3696951303010687,
+        "credit_per_dot": 0.022817841583420078,
+        "fn_weight": 748.8021852023304,
+        "fp_weight": 18989.78550659433,
+        "prediction_cells": 19248,
+        "radius_m": 300.0,
+        "score": 0.09081471356233829,
+        "tp_weight": 439.19781479766965,
+        "truth_cells": 1188
+      },
+      "candidate": {
+        "alpha": 0.2,
+        "beta": 0.8,
+        "covered_fraction": 0.3298242255582799,
+        "credit_per_dot": 0.019422582530149526,
+        "fn_weight": 796.1688200367635,
+        "fp_weight": 19905.25252930871,
+        "prediction_cells": 20174,
+        "radius_m": 300.0,
+        "score": 0.07821267726015095,
+        "tp_weight": 391.83117996323654,
+        "truth_cells": 1188
+      },
+      "candidate_minus_density_credit_per_dot": -0.0033952590532705523,
+      "candidate_minus_incumbent_credit_per_dot": -0.01487946392527369,
+      "incumbent": {
+        "alpha": 0.2,
+        "beta": 0.8,
+        "covered_fraction": 0.27744811817353676,
+        "credit_per_dot": 0.034302046455423216,
+        "fn_weight": 858.3916356098383,
+        "fp_weight": 9439.606529481902,
+        "prediction_cells": 9609,
+        "radius_m": 300.0,
+        "score": 0.11349200697014082,
+        "tp_weight": 329.6083643901617,
+        "truth_cells": 1188
+      },
+      "uniform": {
+        "alpha": 0.2,
+        "beta": 0.8,
+        "covered_fraction": 0.7285674420993394,
+        "credit_per_dot": 0.00877845515339069,
+        "fn_weight": 322.4618787859847,
+        "fp_weight": 97404.28280262541,
+        "prediction_cells": 98598,
+        "radius_m": 300.0,
+        "score": 0.04200751420681238,
+        "tp_weight": 865.5381212140153,
+        "truth_cells": 1188
+      }
+    }
+  },
+  "instrument_crosscheck": {
+    "agree": true,
+    "distance_weighted_tversky_pooled": 0.09967813868292948,
+    "score_dots_pooled": 0.09967813868292948
+  },
+  "n_dots": 98598,
+  "paired_subtile_bootstrap": {
+    "paired_mean_credit_per_dot": -0.061161608567185444,
+    "percentile_ci_95": [
+      -0.11068833821454727,
+      -0.024991099991227474
+    ],
+    "replicates": 5000,
+    "seed": 55007,
+    "subtiles": [
+      {
+        "candidate_credit_per_dot": 0.0815718238293171,
+        "id": "NW-00",
+        "incumbent_credit_per_dot": 0.0888386716869872,
+        "paired_delta_credit_per_dot": -0.0072668478576700946
+      },
+      {
+        "candidate_credit_per_dot": 0.01293831014950232,
+        "id": "NW-01",
+        "incumbent_credit_per_dot": 0.0999994052179686,
+        "paired_delta_credit_per_dot": -0.08706109506846628
+      },
+      {
+        "candidate_credit_per_dot": 0.09451602389208205,
+        "id": "NW-10",
+        "incumbent_credit_per_dot": 0.13171963511017581,
+        "paired_delta_credit_per_dot": -0.03720361121809376
+      },
+      {
+        "candidate_credit_per_dot": 0.04482437242940437,
+        "id": "NW-11",
+        "incumbent_credit_per_dot": 0.12488522748810722,
+        "paired_delta_credit_per_dot": -0.08006085505870286
+      },
+      {
+        "candidate_credit_per_dot": 0.09201062693798162,
+        "id": "NE-00",
+        "incumbent_credit_per_dot": 0.21186027231492846,
+        "paired_delta_credit_per_dot": -0.11984964537694684
+      },
+      {
+        "candidate_credit_per_dot": 0.0,
+        "id": "NE-01",
+        "incumbent_credit_per_dot": 0.36392463526064706,
+        "paired_delta_credit_per_dot": -0.36392463526064706
+      },
+      {
+        "candidate_credit_per_dot": 0.045270706860567556,
+        "id": "NE-10",
+        "incumbent_credit_per_dot": 0.08096385270741467,
+        "paired_delta_credit_per_dot": -0.035693145846847116
+      },
+      {
+        "candidate_credit_per_dot": 0.0,
+        "id": "NE-11",
+        "incumbent_credit_per_dot": 0.0,
+        "paired_delta_credit_per_dot": 0.0
+      },
+      {
+        "candidate_credit_per_dot": 0.0,
+        "id": "SW-00",
+        "incumbent_credit_per_dot": 0.0,
+        "paired_delta_credit_per_dot": 0.0
+      },
+      {
+        "candidate_credit_per_dot": 0.022439148560149183,
+        "id": "SW-01",
+        "incumbent_credit_per_dot": 0.044694296807860495,
+        "paired_delta_credit_per_dot": -0.022255148247711312
+      },
+      {
+        "candidate_credit_per_dot": 0.0,
+        "id": "SW-10",
+        "incumbent_credit_per_dot": 0.0,
+        "paired_delta_credit_per_dot": 0.0
+      },
+      {
+        "candidate_credit_per_dot": 0.04000093955218506,
+        "id": "SW-11",
+        "incumbent_credit_per_dot": 0.06277493896749141,
+        "paired_delta_credit_per_dot": -0.022773999415306348
+      },
+      {
+        "candidate_credit_per_dot": 0.047023232476789516,
+        "id": "SE-00",
+        "incumbent_credit_per_dot": 0.11227659309928423,
+        "paired_delta_credit_per_dot": -0.0652533606224947
+      },
+      {
+        "candidate_credit_per_dot": 0.0,
+        "id": "SE-01",
+        "incumbent_credit_per_dot": 0.0,
+        "paired_delta_credit_per_dot": 0.0
+      },
+      {
+        "candidate_credit_per_dot": 0.14011669697995555,
+        "id": "SE-10",
+        "incumbent_credit_per_dot": 0.27736009008203627,
+        "paired_delta_credit_per_dot": -0.13724339310208072
+      },
+      {
+        "candidate_credit_per_dot": 0.0,
+        "id": "SE-11",
+        "incumbent_credit_per_dot": 0.0,
+        "paired_delta_credit_per_dot": 0.0
+      }
+    ],
+    "units": "sixteen frozen spatial subtiles"
+  },
+  "pooled": {
+    "best_density_control": {
+      "coverage": 0.12197394475351647,
+      "credit_per_dot": 0.0762835080760344,
+      "dti": 0.10775549636505108,
+      "fn": 54142.598670719155,
+      "fp": 94825.73925298403,
+      "g": 61664.0,
+      "n": 98598,
+      "tp": 7521.4013292808395
+    },
+    "candidate": {
+      "coverage": 0.11248734344239229,
+      "credit_per_dot": 0.07035050960497859,
+      "dti": 0.09967813868292948,
+      "fn": 54727.580453968316,
+      "fp": 94348.44480417138,
+      "g": 61664.0,
+      "n": 98598,
+      "tp": 6936.419546031679
+    },
+    "density_controls": {
+      "density-1000m": {
+        "coverage": 0.11083503687113018,
+        "credit_per_dot": 0.06931714348791428,
+        "dti": 0.09811897232793695,
+        "fn": 54829.46828637863,
+        "fp": 94787.25552097386,
+        "g": 61664.0,
+        "n": 98598,
+        "tp": 6834.531713621372
+      },
+      "density-2000m": {
+        "coverage": 0.12197394475351647,
+        "credit_per_dot": 0.0762835080760344,
+        "dti": 0.10775549636505108,
+        "fn": 54142.598670719155,
+        "fp": 94825.73925298403,
+        "g": 61664.0,
+        "n": 98598,
+        "tp": 7521.4013292808395
+      }
+    },
+    "enrichment_1px": {
+      "chance_fraction_within_1px": 0.03769741067327831,
+      "enrichment": 1.0320458030628386,
+      "median_dot_distance_px": 26.248809496813376,
+      "observed_fraction_within_1px": 0.038905454471693135
+    },
+    "incumbent_H56": {
+      "coverage": 0.20881805780378226,
+      "credit_per_dot": 0.14307285240458256,
+      "dti": 0.18744576350960163,
+      "fn": 48787.44328358757,
+      "fp": 83941.64284192164,
+      "g": 61664.0,
+      "n": 90000,
+      "tp": 12876.55671641243
+    },
+    "matched_random": {
+      "coverage": 0.15128299101502546,
+      "credit_per_dot": 0.09461362662478479,
+      "dti": 0.13291342226109232,
+      "fn": 52335.285642049465,
+      "fp": 94947.27577714907,
+      "g": 61664.0,
+      "n": 98598,
+      "tp": 9328.71435795053
+    },
+    "translations": [
+      {
+        "col_shift_px": 0,
+        "mass": 65102,
+        "row_shift_px": -100,
+        "score": 0.07018046949874884,
+        "shift_m": [
+          -10000,
+          0
+        ]
+      },
+      {
+        "col_shift_px": 0,
+        "mass": 61290,
+        "row_shift_px": 100,
+        "score": 0.07393876215269933,
+        "shift_m": [
+          10000,
+          0
+        ]
+      },
+      {
+        "col_shift_px": -100,
+        "mass": 58228,
+        "row_shift_px": 0,
+        "score": 0.06210093234951732,
+        "shift_m": [
+          0,
+          -10000
+        ]
+      },
+      {
+        "col_shift_px": 100,
+        "mass": 66787,
+        "row_shift_px": 0,
+        "score": 0.07948834057741659,
+        "shift_m": [
+          0,
+          10000
+        ]
+      }
+    ]
+  },
+  "sha256_allfinite": "7d2576f844636b7a1a440a8cd2b3babab523837d4b052d60e5842ca59d4b3365",
+  "split_spec": "evidence/holdout-v1.json",
+  "split_spec_sha256": "78b6692155c6c6d5f9f19ccee6d595167c2065f1f25eb8d08636d1d9b285ff16",
+  "truth": "SGMC off-catalogue proxy inside the frozen macrofold cores"
+}

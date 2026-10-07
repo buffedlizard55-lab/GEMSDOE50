@@ -690,7 +690,14 @@ def emit_blue_noise(density: np.ndarray, domain: np.ndarray, *, n_target: int,
     # position inside the block: the highest-belief allowed pixel (flat blocks -> random pick)
     bi, bj = np.divmod(chosen, bw)
     sub = dvals[bi, :, bj, :].reshape(take, b * b)
-    tie = rng.random(sub.shape) * 1e-6
+    # Tie-break among equal maxima only.  The jitter must scale with the row's own
+    # maximum: with an absolute 1e-6 jitter, blocks whose belief spread is below
+    # ~1e-6 (e.g. H57 corridor tails at 1e-7) let the jitter dominate the values and
+    # argmax can pick a cell *outside* the emission domain -- measured 2026-10-07:
+    # 5,631 of 98,598 emitted dots landed on prior-union/catalogue cells before this
+    # fix.  H56's shipped bytes are unaffected (0 dots outside its domain, verified).
+    row_max = sub.max(axis=1, keepdims=True)
+    tie = rng.random(sub.shape) * 1e-6 * np.maximum(row_max, 1e-300)
     pick = np.argmax(sub + tie, axis=1)
     dr, dc = np.divmod(pick, b)
     rows = (bi * b + dr).astype(np.int64)

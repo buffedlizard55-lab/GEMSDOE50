@@ -65,6 +65,24 @@ def test_emit_blue_noise_never_leaves_the_domain():
     assert dom[em.rows, em.cols].all()
 
 
+def test_emit_blue_noise_never_leaves_the_domain_with_tiny_belief():
+    """Regression test for the absolute-tie-breaker bug measured on H57 (2026-10-07).
+
+    With belief spreads below ~1e-6 the old absolute ``1e-6`` jitter dominated the
+    values and ``argmax`` could pick a cell outside the emission domain.  The jitter
+    is now scaled by each block's own maximum, so a max-belief (in-domain) cell always
+    wins.
+    """
+    rng = np.random.default_rng(11)
+    dens = np.zeros((90, 90))
+    dens[10:80, 10:80] = rng.random((70, 70)) * 1e-7  # tiny corridor-tail values
+    dom = np.zeros((90, 90), dtype=bool)
+    dom[10:80, 10:80] = True
+    em = h56.emit_blue_noise(dens, dom, n_target=200, min_sep_px=3.0, seed=5)
+    assert em.rows.size > 0
+    assert dom[em.rows, em.cols].all()
+
+
 def test_emit_blue_noise_prefers_high_belief():
     dens = np.zeros((90, 90))
     dens[:, 40:50] = 1.0
@@ -88,7 +106,7 @@ def test_emit_coverage_beats_naive_top_n_on_a_planted_density():
 def test_dedupe_removes_repeated_pixels():
     rows = np.array([1, 1, 2])
     cols = np.array([1, 1, 2])
-    r, c = h56.dedupe(rows, cols)
+    r, _c = h56.dedupe(rows, cols)
     assert r.size == 2
 
 

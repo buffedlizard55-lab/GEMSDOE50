@@ -1,0 +1,44 @@
+{
+ "format": {
+  "driver": "GTiff",
+  "count_is_1": true,
+  "dtype_is_float32": true,
+  "crs_is_epsg32611": true,
+  "same_shape": true,
+  "same_transform": true,
+  "same_bounds": true,
+  "min": 0.0,
+  "max": 1.0,
+  "nan_count": 0,
+  "values_in_0_1": true,
+  "nan_only_outside_footprint": false,
+  "positive_px": 98598,
+  "unique_positive_values": [
+   1.0
+  ],
+  "compression": "Compression.deflate",
+  "nodata": null,
+  "footprint_source": "registry/footprint_mask.npz",
+  "footprint_px": 5167373,
+  "outside_footprint_all_nan": false,
+  "all_checks_pass": false
+ },
+ "uniqueness": {
+  "verdict": "PASS (block-signature level)",
+  "verdict_unique": true,
+  "verification_level": "block-signature",
+  "downsample_blocks": [
+   8,
+   32
+  ],
+  "n_prior": 50,
+  "max_iou_block8": 0.20044229507399935,
+  "max_iou_block32": 0.28492899679340356,
+  "screen_threshold_block8": 0.75,
+  "worst_overlap_file": "gemsdoe30-sgmc-hedge-d10-85k-20261003-ac08b41e-zeros.tif",
+  "identical_sha256": [],
+  "my_sha256": "7d2576f844636b7a1a440a8cd2b3babab523837d4b052d60e5842ca59d4b3365",
+  "my_dots": 98598,
+  "note": "block-occupancy signatures catch copies and near-copies; fine-scale novelty (full-pixel IoU and the fraction of dots >200 m from any prior dot) is measured where the full corpus exists and is recorded in registry/submission_checks.json."
+ }
+}

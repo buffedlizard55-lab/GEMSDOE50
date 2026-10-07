@@ -37,8 +37,18 @@ def test_h55_site_regeneration_is_deterministic_and_download_first():
         for name in ("index.html", "results.html", "methods.html", "submission.html", "site.css")
     ]
     before = {path: path.read_bytes() for path in tracked}
+    # The committed pages are produced by the two generators in sequence (the same
+    # order as the site workflow): build_h55_site.py regenerates from committed
+    # evidence, then build_h57_site.py inserts this session's H57 band.
     subprocess.run(
         [sys.executable, str(ROOT / "scripts/build_h55_site.py")],
+        cwd=ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    subprocess.run(
+        [sys.executable, str(ROOT / "scripts/build_h57_site.py")],
         cwd=ROOT,
         check=True,
         capture_output=True,
