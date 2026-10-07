@@ -283,8 +283,102 @@
    "status": "H52-C deliverable (branch arena/685c6059-gemsdoe50); local proxy instruments only; no organizer score exists for this file and no portal upload was performed by this repository.",
    "submitted_utc": null,
    "organizer_score": null
+  },
+  {
+   "name": "GEMSDOE50-H57-SHARPENED-SCARP-SCATTER-90K-20261007T171954Z",
+   "portal_name": "GEMSDOE50-H57-SHARPENED-SCARP-SCATTER-90K",
+   "file": "docs/downloads/gemsdoe50-h57-sharpened-scarp-scatter-90k-20261007T171954Z-nan.tif",
+   "bytes": 458802,
+   "sha256": "cf645d250f8788929884c4591d6aa61f51152d4f3413b4c3920fc6443e1df6e6",
+   "all_finite_twin": "docs/downloads/gemsdoe50-h57-sharpened-scarp-scatter-90k-20261007T171954Z-allfinite.tif",
+   "all_finite_twin_sha256": "838f9502fd4a2720374559db0947fb3372f97629401a617e5c9c95c1b1ce8be5",
+   "zip": "docs/downloads/gemsdoe50-h57-sharpened-scarp-scatter-90k-20261007T171954Z-allfinite.zip",
+   "zip_sha256": "4585ecf5185728bb6489cc3e3289f9ca1881785ec0afd7223dae0dccd11437d3",
+   "mass": 90000,
+   "format": {
+    "crs": "EPSG:32611",
+    "shape": [
+     3730,
+     3292
+    ],
+    "dtype": "float32",
+    "count": 1,
+    "transform": [
+     100.0,
+     0.0,
+     243350.0,
+     0.0,
+     -100.0,
+     4508550.0
+    ],
+    "cells_finite": 12279160,
+    "cells_nan": 0,
+    "outside_unit_interval": 0,
+    "outside_footprint_nonzero": 0,
+    "min": 0.0,
+    "max": 1.0,
+    "nodata_sentinel": null
+   },
+   "receipts": {
+    "build": "evidence/h57_build.json",
+    "validation": "evidence/h57_validation.json",
+    "check": "evidence/h57_check.json",
+    "delivered_metrics": "evidence/h57_delivered_metrics.json",
+    "novelty_price": "evidence/h57_novelty_price.json",
+    "field_screen": "evidence/h57_field_power_screen.json",
+    "exponent_sweep": "evidence/h57_sharpen_sweep.json",
+    "exponent_mass_grid": "evidence/h57_sharpen_ext.json"
+   },
+   "provenance": "Built by scripts/build_h57.py from the competition's own 19-band stack and public-domain USGS 3DEP LiDAR products. The field is a sharpened (^16) NaN-aware rank-mean of the official band-19 slope-edge map and the LiDAR scarp family; every dot is drawn from a pool that excludes the registered 61-artifact prior union and the 1 px catalogue neighbourhood. No prior submission's pixels are read or reused.",
+   "status": "H57 revision 2 - the CURRENT candidate (branch arena/9df7242d-gemsdoe50). Frozen, format- and novelty-gated, no organizer score exists for this file and no portal upload was performed by this repository. Delivered-file measurement on the geometry-matched off-catalogue frame: DTI 0.23028, coverage 27.0 %, 14090 truth credit against a matched-mass uniform control of 0.12383.",
+   "submitted_utc": null,
+   "organizer_score": null
+  },
+  {
+   "name": "gemsdoe50-h57-topo-lineament-scatter-180k-20261007T170212Z-SUPERSEDED",
+   "portal_name": "GEMSDOE50-H57-TOPO-LINEAMENT-SCATTER-180K",
+   "file": "docs/downloads/gemsdoe50-h57-topo-lineament-scatter-180k-20261007T170212Z-nan.tif",
+   "bytes": 639652,
+   "sha256": "0c7d00e879e7f54e3019de185b252e5faad2983c754c9030273ad333688acb69",
+   "all_finite_twin": "docs/downloads/gemsdoe50-h57-topo-lineament-scatter-180k-20261007T170212Z-allfinite.tif",
+   "all_finite_twin_sha256": "ad9750be86acf6b8c253dcd8f1ee6487c2ea8327a582a8c9e6a765d16037d319",
+   "zip": "docs/downloads/gemsdoe50-h57-topo-lineament-scatter-180k-20261007T170212Z-allfinite.zip",
+   "zip_sha256": "f9fd94d1d920a8d07bad6e3fab3b256cfb9c7cefb828323bafb7fbd6e62fb30f",
+   "mass": 180000,
+   "format": {
+    "crs": "EPSG:32611",
+    "shape": [
+     3730,
+     3292
+    ],
+    "dtype": "float32",
+    "count": 1,
+    "transform": [
+     100.0,
+     0.0,
+     243350.0,
+     0.0,
+     -100.0,
+     4508550.0
+    ],
+    "cells_finite": 12279160,
+    "cells_nan": 0,
+    "outside_unit_interval": 0,
+    "outside_footprint_nonzero": 0,
+    "min": 0.0,
+    "max": 1.0,
+    "nodata_sentinel": null
+   },
+   "receipts": {
+    "build": "evidence/h57_build.json (overwritten by revision 2)",
+    "validation_history": "docs/research/h57-final-analysis.md"
+   },
+   "provenance": "Superseded first revision of H57, built by scripts/build_h57.py before the sharpening screen.",
+   "status": "SUPERSEDED by H57 revision 2 (same session, arena/9df7242d-gemsdoe50). Kept for comparison only; do not submit this file. Its field was the unsharpened rank-mean, which a later screen showed to be compressing the peaks (evidence/h57_sharpen_sweep.json), and its 180,000-dot mass was chosen before the transfer model was applied. Measured on the same frame: DTI 0.21812.",
+   "submitted_utc": null,
+   "organizer_score": null
   }
  ],
- "updated_utc": "2026-10-07T04:20:00Z",
+ "updated_utc": "2026-10-07T18:00:00Z",
  "policy": "No entry may claim an organizer score without a recorded portal receipt. An artifact is 'submitted' only when the owner says so. Every entry must be linked from the published pages or be flagged here as superseded/legacy."
 }

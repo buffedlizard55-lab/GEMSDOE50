@@ -1,0 +1,126 @@
+{
+ "raster": "docs/downloads/gemsdoe50-h57-sharpened-scarp-scatter-90k-20261007T171954Z-allfinite.tif",
+ "positive_cells": 90000,
+ "frames": {
+  "S_matched": {
+   "truth_px": 52219,
+   "dti": 0.23028191003766868,
+   "folds": [
+    {
+     "fold": "NW",
+     "truth_px": 19975,
+     "dti": 0.2071630910105004
+    },
+    {
+     "fold": "NE",
+     "truth_px": 17289,
+     "dti": 0.24501008388518994
+    },
+    {
+     "fold": "SW",
+     "truth_px": 2326,
+     "dti": 0.13937240068372064
+    },
+    {
+     "fold": "SE",
+     "truth_px": 12629,
+     "dti": 0.27623477224736265
+    }
+   ]
+  },
+  "S_raw": {
+   "truth_px": 61664,
+   "dti": 0.24917419755084955,
+   "folds": [
+    {
+     "fold": "NW",
+     "truth_px": 23093,
+     "dti": 0.22819436238978055
+    },
+    {
+     "fold": "NE",
+     "truth_px": 22774,
+     "dti": 0.27349744058836134
+    },
+    {
+     "fold": "SW",
+     "truth_px": 2326,
+     "dti": 0.13937240068372064
+    },
+    {
+     "fold": "SE",
+     "truth_px": 13471,
+     "dti": 0.27665938722404587
+    }
+   ]
+  },
+  "L": {
+   "truth_px": 60988,
+   "dti": 0.03892453994556949,
+   "folds": [
+    {
+     "fold": "NW",
+     "truth_px": 29305,
+     "dti": 0.03639601653685997
+    },
+    {
+     "fold": "NE",
+     "truth_px": 12610,
+     "dti": 0.036306621859686895
+    },
+    {
+     "fold": "SW",
+     "truth_px": 9447,
+     "dti": 0.04626987745171776
+    },
+    {
+     "fold": "SE",
+     "truth_px": 9626,
+     "dti": 0.043282056674637935
+    }
+   ]
+  }
+ },
+ "controls": {
+  "matched_mass_uniform_matched_frame": {
+   "values": [
+    0.1249,
+    0.12462,
+    0.12582,
+    0.12266,
+    0.12116
+   ],
+   "mean": 0.12383229814698504,
+   "lift_of_candidate": 1.8596272013326547
+  },
+  "matched_mass_uniform_frozen_pool": {
+   "eligible_cells": 3886785,
+   "values": [
+    0.11081,
+    0.11143,
+    0.1084,
+    0.1118,
+    0.11425
+   ],
+   "mean": 0.11133898119924934,
+   "lift_of_candidate": 2.0682954663071884
+  },
+  "translations": {
+   "dy3_dx0": 0.22702,
+   "dy-3_dx0": 0.23061,
+   "dy0_dx3": 0.22982,
+   "dy0_dx-3": 0.22806,
+   "dy7_dx7": 0.20762
+  },
+  "translation_max": 0.23061197168941128,
+  "paired_bootstrap_candidate_minus_uniform": {
+   "n": 400,
+   "mean": 0.10407231875186194,
+   "ci95": [
+    0.09481533834653388,
+    0.11409144295295595
+   ],
+   "positive_fraction": 1.0
+  }
+ }
+}

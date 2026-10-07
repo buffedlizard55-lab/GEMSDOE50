@@ -37,13 +37,14 @@ def test_h55_site_regeneration_is_deterministic_and_download_first():
         for name in ("index.html", "results.html", "methods.html", "submission.html", "site.css")
     ]
     before = {path: path.read_bytes() for path in tracked}
-    subprocess.run(
-        [sys.executable, str(ROOT / "scripts/build_h55_site.py")],
-        cwd=ROOT,
-        check=True,
-        capture_output=True,
-        text=True,
-    )
+    for script in ("build_h55_site.py", "build_h57_site.py"):
+        subprocess.run(
+            [sys.executable, str(ROOT / "scripts" / script)],
+            cwd=ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
     assert {path: path.read_bytes() for path in tracked} == before
 
     index = (ROOT / "index.html").read_text(encoding="utf-8")
@@ -54,6 +55,10 @@ def test_h55_site_regeneration_is_deterministic_and_download_first():
     first_download = index.index("Download the current research candidate GeoTIFF (H56)")
     assert first_download < index.index("Executive summary")
     assert index.index("Download portal-safe TIFF") > first_download
+    # the H57 session's band is the first element on the page; it must not have
+    # displaced the H55/H56 material it sits above
+    assert "<!-- h57-banner -->" in index
+    assert index.index("<!-- h57-banner -->") < first_download
     assert "NO SLOT" in index
     assert "0.019321" in index and "0.115822" in index
     assert "0.2778" in index and "UNSCORED" in index

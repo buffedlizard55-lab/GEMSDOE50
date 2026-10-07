@@ -1,4 +1,4 @@
-name: h55-site-and-checks
+name: site-and-checks
 
 on:
   push:
@@ -22,9 +22,14 @@ jobs:
       - name: Run the complete test suite and lint
         run: |
           python -m pytest -q
-          ruff check src/gemsdoe50 src/gems55 scripts/build_h50_site.py scripts/build_h55.py scripts/build_h55_site.py scripts/build_prior_union.py scripts/run_experiment.py scripts/freeze_holdout.py scripts/verify_claims.py tests/test_h50_*.py tests/test_h55.py tests/test_h55_site.py tests/test_site.py tests/test_raster.py tests/test_spatial.py tests/test_geometry.py tests/test_catalog.py
-      - name: Rebuild the H55 static pages from committed evidence
+          ruff check src/gemsdoe50 src/gems55 scripts/build_h50_site.py scripts/build_h55.py scripts/build_h55_site.py scripts/build_h57_site.py scripts/build_prior_union.py scripts/run_experiment.py scripts/freeze_holdout.py scripts/verify_claims.py tests/test_h50_*.py tests/test_h55.py tests/test_h55_site.py tests/test_h57.py tests/test_site.py tests/test_raster.py tests/test_spatial.py tests/test_geometry.py tests/test_catalog.py
+      - name: Rebuild every static page from committed evidence
         run: |
+          # index.html is produced by build_h55_site.py and then carries the H57
+          # banner injected by build_h57_site.py, so the two run in order and the
+          # diff check covers the pair's output.
           python scripts/build_h55_site.py
+          python scripts/build_h57_site.py
           git diff --check
-          git diff --exit-code -- index.html results.html methods.html submission.html site.css
+          git diff --exit-code -- index.html results.html methods.html submission.html site.css \
+                                 h57.html h57-how-to-submit.html
