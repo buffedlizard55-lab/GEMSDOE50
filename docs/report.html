@@ -55,7 +55,7 @@ DTI   = TP_w / (TP_w + 0.2·FP_w + 0.8·FN_w + ε)</pre>
 <tr><td>footprint within 300 m of a dot</td><td>17.19 %</td><td>—</td></tr>
 <tr><td>dots within 300 m of the catalogue</td><td>19.52 %</td><td>0 (by construction)</td></tr>
 </table>
-<p>So the winning artifact is a <b>binary dot lattice at the metric's own 300 m spacing</b> — not a density map and not a better model. Its 0.2778 variant differs from its 0.2708 predecessor by deleting 2,545 dots that lay within 200 m of the published catalogue: dots that, by the metric's test-set definition, had no hidden truth to earn credit from.</p>
+<p>In this archived owner-reported comparison, the artifact associated with the highest reported value is described as a <b>binary dot lattice at the metric's own 300 m spacing</b> — not a density map and not a better model. The 0.2778-to-0.2708 score/artifact association is unresolved; the archived report's interpretation is not an organizer-confirmed result and is not used by H50-S1.</p>
 
 <h2>3. A three-point model of the hidden truth [MODEL]</h2>
 <table>
@@ -64,7 +64,7 @@ DTI   = TP_w / (TP_w + 0.2·FP_w + 0.8·FN_w + ε)</pre>
 <tr><td>h27-4-r1-solo-d2-8</td><td>40,199</td><td>0.2708</td></tr>
 <tr><td>h33-h33-2-b2 (pruned 2 px)</td><td>37,654</td><td>0.2778</td></tr>
 </table>
-<p>Solving the metric identity with the first two scores reproduces the third: <code>G ≈ 13,800</code> hidden-truth pixels and <code>T ≈ 5,460</code> weighted credit, i.e. <b>≈40 % weighted coverage at ≈0.12 credit per emitted dot</b>. This is a model — the three scores are owner-reported and the artifacts are only nearly nested — but it explains why <em>removing</em> dots raised the score (121k→0.1922, 60k→0.2477, 44k→0.2600, 37.6k→0.2778 [PROJECT]) and it sets the emitter's belief scale (G<sub>est</sub> = 13,833), which is the only place it is used.</p>
+<p>Solving the metric identity with the first two scores reproduces the third: <code>G ≈ 13,800</code> hidden-truth pixels and <code>T ≈ 5,460</code> weighted credit, i.e. <b>≈40 % weighted coverage at ≈0.12 credit per emitted dot</b>. This is a model — the three values are owner-reported and the artifacts are only nearly nested. Under those assumptions, the sequence would imply that removing dots was associated with higher reported values (121k→0.1922, 60k→0.2477, 44k→0.2600, 37.6k→0.2778 [PROJECT]); it does not verify any organizer score or score-to-TIFF mapping. The historical estimate (G<sub>est</sub> = 13,833) is not used by H50-S1.</p>
 
 <h2>4. The shipped file, scored on both frames</h2>
 <p>The GEMSDOE50 submission itself (44,709 dots) was re-read from its bytes and scored on the same two frames, against a matched uniform-random control at the identical dot count [MEASURED, <code>registry/submission_validation.json</code>]:</p>
@@ -80,11 +80,11 @@ DTI   = TP_w / (TP_w + 0.2·FP_w + 0.8·FN_w + ε)</pre>
 
 <h2>6. The hypotheses, ranked</h2>
 <ol>
-<li><b>H50-A LiDAR scarp-dipole chains</b> — 12-channel 1 m-DEM scarp stack; signature <code>√(step·facing)·√(coherence)</code> with a 16-direction chain vote. Catches sub-100 m strands that regional mapping cannot see. <b>Validated: 0.0345 vs 0.0190 random off-catalogue at equal budget.</b></li>
-<li><b>H50-B seismicity-lineament corridors</b> — official USGS ComCat epicentres; 2-D inertia-tensor orientation with a Poisson nearest-neighbour crossover. <b>[FALSIFIED] at equal budget (0.0015–0.0034 vs 0.0016–0.0043 for smoothed density).</b> Retained at low weight as a hedge only.</li>
-<li><b>H50-C multi-physics oriented-lineament consensus</b> — Hessian line response × orientation order parameter across eight official physics bands. Best on the catalogue frame (0.0217), weak off-catalogue (0.0087).</li>
-<li><b>H50-D depth-resolved lineations</b> — <i>proposed</i>: the 3-D inertia-tensor plane test removes the swarm confounder that falsified H50-B. Data in hand; pre-specified test.</li>
-<li><b>H50-E fluid-path alignment</b> — <i>proposed</i>: chains of GDR thermal features aligned on a conductive-basement gradient ridge. Data in hand; pre-specified test.</li>
+<li><b>H50-A LiDAR scarp-dipole chains</b> — archived 12-channel 1 m-DEM-derived scarp stack and 16-direction chain vote. Earlier notes reported 0.0345 vs 0.0190 random off-catalogue at equal budget; this local proxy value has not been reproduced here, is not organizer-scored, and its derivative's reuse rights are unresolved. Excluded from current H50-S1.</li>
+<li><b>H50-B mixed-source ComCat seismicity corridors</b> — historical 2-D inertia-tensor orientation with a Poisson nearest-neighbour comparison. Old notes reported 0.0015–0.0034 vs 0.0016–0.0043 for smoothed density on one frame; not independently re-run. ComCat source rights and <code>horizontalError</code> semantics are unresolved; not used by current H50-S1.</li>
+<li><b>H50-C multi-physics orientation consensus</b> — old local notes reported 0.0217 on a catalogue frame and 0.0087 off-catalogue. These are not organizer scores and were not reproduced here; not part of the current H50-S1 candidate.</li>
+<li><b>H50-D depth-resolved lineations</b> — an archived proposal only. The idea does not by itself resolve swarm confounding; the legacy mixed-source ComCat data are not approved for reuse, and the test was not run under the current protocol.</li>
+<li><b>H50-E fluid-path alignment</b> — an archived proposal only. Availability and item-level reuse terms for the relevant GDR-derived products have not been re-audited; the proposed test has not been run under the current protocol.</li>
 </ol>
 <p>Full table with layers, novelty and falsification criteria: <code>docs/research/hypotheses.md</code>.</p>
 
@@ -96,7 +96,7 @@ DTI   = TP_w / (TP_w + 0.2·FP_w + 0.8·FN_w + ε)</pre>
 </ul>
 
 <h2>8. Reproducibility</h2>
-<p>Every number above is produced by a committed script: <code>build_field.py</code>, <code>validate_fields.py</code>, <code>fuse_experiment.py</code>, <code>build_submission.py</code>, <code>check_submission.py</code>, <code>validate_submission.py</code>; the JSON receipts are in <code>registry/</code>. The data mirror provenance (repositories, refs, sha256, licences) is in <code>registry/sources.json</code>.</p>
+<p>Historical local numbers were produced by archived scripts including <code>build_field.py</code> and <code>build_submission.py</code>; their command-line builders are now disabled because the source-data rights/semantics and score assumptions are not cleared for current use. Existing JSON receipts are historical records, not current validation. The source and rights caveats are in <code>registry/sources.json</code> and <a href="research/data-rights-audit-20261006.md">the current data-rights audit</a>.</p>
 <footer>Official sources: <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">problem and scoring</a> · <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">leaderboard</a> · <a href="https://earthquake.usgs.gov/fdsnws/event/1/">USGS ComCat</a> · <a href="https://github.com/drivendataorg/gems-prize-reference-solution">reference solution</a>.</footer>
 </main>
 </body>

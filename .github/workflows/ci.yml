@@ -22,7 +22,13 @@ jobs:
       - name: Test, lint, and compile all packages
         run: |
           python -m pytest -q
-          ruff check src/gemsdoe50 scripts/build_h50_site.py scripts/run_experiment.py scripts/freeze_holdout.py scripts/verify_claims.py tests/test_h50_*.py tests/test_site.py tests/test_raster.py tests/test_spatial.py tests/test_geometry.py tests/test_catalog.py
+          ruff check \
+            src/gemsdoe50 \
+            scripts/build_h50_site.py scripts/run_experiment.py scripts/download_3dep_dem.py \
+            scripts/freeze_holdout.py scripts/verify_claims.py \
+            tests/test_h50_*.py tests/test_site.py tests/test_build_h50_site.py \
+            tests/test_raster.py tests/test_spatial.py tests/test_geometry.py tests/test_catalog.py \
+            tests/test_controls.py tests/test_download_3dep_dem.py
           python -m compileall -q src scripts
       - name: Verify frozen evidence hashes and project guardrails
         run: |
