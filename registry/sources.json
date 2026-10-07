@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-10-06T23:47:19Z",
+ "generated_utc": "20261007T0345Z",
  "submission": {
   "file": "gems50-seislin-44709-20261006T2041Z-79e260ae.tif",
   "bytes": 193214,
@@ -13,21 +13,21 @@
  },
  "sources": [
   {
-   "name": "DrivenData DOE GEMS Prize #306 — problem description and scoring",
+   "name": "DrivenData DOE GEMS Prize #306 \u2014 problem description and scoring",
    "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/",
    "licence": "competition terms",
    "read": "2026-10-06",
    "used_for": "metric definition, alpha=0.2 beta=0.8, R=300 m, format rules"
   },
   {
-   "name": "DrivenData DOE GEMS Prize #306 — rules",
+   "name": "DrivenData DOE GEMS Prize #306 \u2014 rules",
    "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/964/",
    "licence": "competition terms",
    "read": "2026-10-06",
    "used_for": "submission cadence and eligibility"
   },
   {
-   "name": "DrivenData DOE GEMS Prize #306 — public leaderboard",
+   "name": "DrivenData DOE GEMS Prize #306 \u2014 public leaderboard",
    "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/",
    "licence": "competition terms",
    "read": "2026-10-06",
@@ -49,7 +49,7 @@
    "used_for": "off-catalogue (F2) validation frame and concealment prior"
   },
   {
-   "name": "USGS 3DEP 1 m DEM (LiDAR) — scarp descriptor stack",
+   "name": "USGS 3DEP 1 m DEM (LiDAR) \u2014 scarp descriptor stack",
    "url": "https://www.usgs.gov/3d-elevation-program",
    "licence": "Raw USGS 3DEP products are public domain; the mirrored 12-channel GEMSDOE24 derived scarp raster has no explicit reuse license and is not cleared for external use.",
    "read": "2026-10-04 (owner-derived 12-channel raster mirror)",
@@ -209,5 +209,40 @@
    "inherits the same unresolved rights: H52's mass is a pixel union of h51_submission and h52a_standalone, both of which carry unresolved derived-raster/ComCat licensing caveats above; H52 is not cleared for external competition upload until those are resolved"
   ]
  }
-}
+},
+"h53_submission": {
+  "file": "downloads/gemsdoe50-h53-tmiconj-20261007T0345Z.tif",
+  "sha256": "3c22da583d5358b2986189a4ed3322182f39f562bdde14809f3300aeb6bd37ea",
+  "bytes": 159966,
+  "mass": 23598,
+  "crs": "EPSG:32611",
+  "dtype": "float32",
+  "size": "3292x3730",
+  "nodata": "NaN outside the official template footprint (all-finite twin also written)",
+  "portal_name": "GEMSDOE50-H53-TMICONJ-OFFCAT",
+  "portal_note": "GEMSDOE50 H53 | TMI x K/U gradient-ridge conjunction, off-catalogue 300m-aware dots; proxy-validated vs uniform+translation, NOT organizer-scored",
+  "organizer_score": null,
+  "sources": [
+   {
+    "name": "Upward-continued total magnetic intensity grid (competition feature stack)",
+    "licence": "competition-provided input",
+    "used_for": "TMI ridge family"
+   },
+   {
+    "name": "Airborne radiometric K/U grids (competition feature stack)",
+    "licence": "competition-provided input",
+    "used_for": "K/U gradient-ridge family"
+   },
+   {
+    "name": "USGS State Geologic Map Compilation fault inventory",
+    "licence": "U.S. public domain (USGS)",
+    "url": "https://www.usgs.gov/",
+    "used_for": "off-catalogue scoring instrument only"
+   }
+  ],
+  "caveats": [
+   "no organizer score or upload receipt exists for this file",
+   "DTI numbers are local proxy instruments on the shared SGMC-off frame, not leaderboard predictions"
+  ]
+ }
 }

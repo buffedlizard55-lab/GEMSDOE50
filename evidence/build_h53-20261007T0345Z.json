@@ -1,0 +1,349 @@
+{
+ "name": "gemsdoe50-h53-tmiconj-20261007T0345Z",
+ "built_utc": "2026-10-07T02:48:43Z",
+ "audit": {
+  "path": "gemsdoe50-h53-tmiconj-20261007T0345Z.tif",
+  "bytes": 159966,
+  "sha256": "3c22da583d5358b2986189a4ed3322182f39f562bdde14809f3300aeb6bd37ea",
+  "driver": "GTiff",
+  "count": 1,
+  "dtype": "float32",
+  "crs": "EPSG:32611",
+  "width": 3292,
+  "height": 3730,
+  "transform": [
+   100.0,
+   0.0,
+   243350.0,
+   0.0,
+   -100.0,
+   4508550.0
+  ],
+  "nodata_tag": NaN,
+  "res": [
+   100.0,
+   100.0
+  ],
+  "cells_total": 12279160,
+  "cells_finite": 5167373,
+  "cells_nan": 7111787,
+  "min": 0.0,
+  "max": 1.0,
+  "nonzero": 23598,
+  "outside_0_1": 0,
+  "all_finite": false,
+  "values_in_unit_interval": true,
+  "single_band": true,
+  "legal": false
+ },
+ "twin_audit": {
+  "path": "gemsdoe50-h53-tmiconj-20261007T0345Z-allfinite.tif",
+  "bytes": 120130,
+  "sha256": "90026224ed74698bd623cae53c5d6f5fe3cb263cdae7d145060d813ea50ef0c4",
+  "driver": "GTiff",
+  "count": 1,
+  "dtype": "float32",
+  "crs": "EPSG:32611",
+  "width": 3292,
+  "height": 3730,
+  "transform": [
+   100.0,
+   0.0,
+   243350.0,
+   0.0,
+   -100.0,
+   4508550.0
+  ],
+  "nodata_tag": null,
+  "res": [
+   100.0,
+   100.0
+  ],
+  "cells_total": 12279160,
+  "cells_finite": 12279160,
+  "cells_nan": 0,
+  "min": 0.0,
+  "max": 1.0,
+  "nonzero": 23598,
+  "outside_0_1": 0,
+  "all_finite": true,
+  "values_in_unit_interval": true,
+  "single_band": true,
+  "legal": true
+ },
+ "mass": 23598,
+ "chosen_mass": 25000,
+ "mass_sweep": {
+  "25000": {
+   "n_dots": 23598,
+   "c_sgmc": 0.13031380942573825,
+   "dti_est": 0.2120731341775793
+  },
+  "30000": {
+   "n_dots": 23598,
+   "c_sgmc": 0.13031380942573825,
+   "dti_est": 0.2120731341775793
+  },
+  "37654": {
+   "n_dots": 23598,
+   "c_sgmc": 0.13031380942573825,
+   "dti_est": 0.2120731341775793
+  },
+  "45000": {
+   "n_dots": 23598,
+   "c_sgmc": 0.13031380942573825,
+   "dti_est": 0.2120731341775793
+  }
+ },
+ "components": {
+  "H53-B": {
+   "rows_total": 222939,
+   "rows_earthquake": 222400,
+   "rows_anthropogenic_removed": 539,
+   "anthropogenic_types": {
+    "explosion": 362,
+    "quarry blast": 88,
+    "nuclear explosion": 42,
+    "chemical explosion": 15,
+    "mining explosion": 10,
+    "mine collapse": 9,
+    "not reported": 5,
+    "quarry": 4,
+    "acoustic noise": 2,
+    "rockslide": 1,
+    "sonic boom": 1
+   },
+   "rows_after_cuts": 96960,
+   "events_in_survey": 18142,
+   "triangle_filter": {
+    "test": "2-D triangle-area adaptation of the Ouillon & Sornette (2011) tetrahedron test",
+    "status": "ADAPTATION -- not published in this form; see module docstring",
+    "n_events": 18142,
+    "n_random": 18142,
+    "reference_quantile": 0.95,
+    "area_threshold_km2": 2.7506638325273975,
+    "reference_median_km2": 0.5931841551799448,
+    "catalogue_median_km2": 0.0044920010024325635,
+    "fraction_kept_clustered": 0.980873112115533
+   },
+   "triangle_kept": 17795,
+   "cell_dedup_kept": 13000,
+   "events_used": 13000,
+   "gk_kept_side": 4983,
+   "gk_agreement_with_triangle": 0.2598390475140558,
+   "nn_filter_agreement_with_triangle": 0.3801675669716679,
+   "nn_filter": {
+    "test": "rescaled nearest-neighbour distance (Baiesi & Paczuski 2004; Zaliapin & Ben-Zion 2013)",
+    "b_value": 1.0,
+    "d_f": 1.6,
+    "log_eta_threshold": -5.0,
+    "n_events": 18142,
+    "fraction_kept_clustered": 0.36104067908720094
+   },
+   "herr_median_m": 2800.0,
+   "herr_present_frac": 0.05484615384615384,
+   "corridor_halfwidth_rule": "per-cluster max(300 m, median member horizontalError); corridor prior, not a trace",
+   "oadc_route_clusters": 22,
+   "oadc_route": "rejected: spacetime fragmentation, offcat DTI 0.0002",
+   "per_seed_audit": {
+    "n_events": 13000,
+    "n_seeds": 4260,
+    "n_seeds_with_events": 500,
+    "n_corridors": 500
+   },
+   "corridor_field_px_pos": 465525,
+   "axis_cells": 331395,
+   "snapped_cells": 118730,
+   "corridor_halfwidth_m_used": 2800.0
+  },
+  "H53-C": {
+   "q_tmi": 0.10992835462093353,
+   "q_k": 0.1634889543056488,
+   "q_u": 0.20870456099510193,
+   "n_tmi": 413145,
+   "n_k": 413287,
+   "n_u": 413288,
+   "n_order2": 131526,
+   "n_support_valid": 131526
+  },
+  "H53-A": {
+   "skeleton_px": 59209,
+   "endpoints": 6938,
+   "pairs_within_gap": 42861,
+   "pairs_strike_compatible": 25351,
+   "bridge_cells_raw": 436769,
+   "singleton_tip_projections": 68,
+   "bridge_cells_snapped": 120598
+  }
+ },
+ "validation": [
+  {
+   "component": "H53-B-seismicity",
+   "n": 17928,
+   "dti": 0.03903567218063229,
+   "tp": 2075.304883774447,
+   "tp_per_dot": 0.11575774675225607,
+   "uniform_max": 0.04118779038223402,
+   "uniform_mean": 0.0389061484581258,
+   "translation_max": 0.03669207170118382,
+   "translation_mean": 0.029238368136660357,
+   "quadrant_folds": [
+    {
+     "id": "NW",
+     "dti": 0.033339971927131715,
+     "ctrl": 0.029521202485956233,
+     "delta": 0.003818769441175481
+    },
+    {
+     "id": "NE",
+     "dti": 0.0022360655001941545,
+     "ctrl": 0.003539991076575785,
+     "delta": -0.0013039255763816304
+    },
+    {
+     "id": "SW",
+     "dti": 0.059219672860933506,
+     "ctrl": 0.03728848539873963,
+     "delta": 0.021931187462193878
+    },
+    {
+     "id": "SE",
+     "dti": 0.10007065753857176,
+     "ctrl": 0.07744384726445681,
+     "delta": 0.02262681027411495
+    }
+   ],
+   "quadrant_positive": 3,
+   "gate": {
+    "beats_uniform": false,
+    "beats_translation": true,
+    "quadrants_ge3": true,
+    "beats_density": true,
+    "all_pass": false
+   },
+   "density_controls": {
+    "smoothed-density-1km": {
+     "dti": 0.014688040827056572,
+     "tp_per_dot": 0.045205958646502224
+    },
+    "smoothed-density-2km": {
+     "dti": 0.013492840926121727,
+     "tp_per_dot": 0.04155241933270775
+    }
+   }
+  },
+  {
+   "component": "H53-C-tmi-conjunction",
+   "n": 23961,
+   "dti": 0.05827304153609892,
+   "tp": 3176.973605259388,
+   "tp_per_dot": 0.13258935792577053,
+   "uniform_max": 0.052794162890934054,
+   "uniform_mean": 0.05044493084015859,
+   "translation_max": 0.03910025200899866,
+   "translation_mean": 0.03602779108861117,
+   "quadrant_folds": [
+    {
+     "id": "NW",
+     "dti": 0.06818188080582478,
+     "ctrl": 0.04423328578458369,
+     "delta": 0.023948595021241095
+    },
+    {
+     "id": "NE",
+     "dti": 0.04331308643106446,
+     "ctrl": 0.0319839065000901,
+     "delta": 0.011329179930974362
+    },
+    {
+     "id": "SW",
+     "dti": 0.05797139544795659,
+     "ctrl": 0.04227895802467154,
+     "delta": 0.01569243742328505
+    },
+    {
+     "id": "SE",
+     "dti": 0.06527286964915249,
+     "ctrl": 0.03595475946218861,
+     "delta": 0.029318110186963883
+    }
+   ],
+   "quadrant_positive": 4,
+   "gate": {
+    "beats_uniform": true,
+    "beats_translation": true,
+    "quadrants_ge3": true,
+    "all_pass": true
+   }
+  },
+  {
+   "component": "H53-A-tip-bridges",
+   "n": 20631,
+   "dti": 0.04405869535506893,
+   "tp": 2367.567297353128,
+   "tp_per_dot": 0.11475775761490613,
+   "uniform_max": 0.04531498771312229,
+   "uniform_mean": 0.044020631519999506,
+   "translation_max": 0.03545775564491777,
+   "translation_mean": 0.03245861424385761,
+   "quadrant_folds": [
+    {
+     "id": "NW",
+     "dti": 0.056003616291830344,
+     "ctrl": 0.03895114208249721,
+     "delta": 0.017052474209333132
+    },
+    {
+     "id": "NE",
+     "dti": 0.03793414795327679,
+     "ctrl": 0.022339879415046147,
+     "delta": 0.015594268538230645
+    },
+    {
+     "id": "SW",
+     "dti": 0.08252708818640493,
+     "ctrl": 0.02673356966031037,
+     "delta": 0.05579351852609456
+    },
+    {
+     "id": "SE",
+     "dti": 0.02399262568636271,
+     "ctrl": 0.015695312188530312,
+     "delta": 0.008297313497832397
+    }
+   ],
+   "quadrant_positive": 4,
+   "gate": {
+    "beats_uniform": false,
+    "beats_translation": true,
+    "quadrants_ge3": true,
+    "all_pass": false
+   }
+  }
+ ],
+ "passing": [
+  "H53-C-tmi-conjunction"
+ ],
+ "prior_exclusion": {
+  "n_prior_files": 27,
+  "prior_union_px": 225922,
+  "pack_domain_px": 4522699
+ },
+ "inputs": {
+  "sample_submission": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc",
+  "labels": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
+  "sgmc": "26d142c4c93282cd94f6950ab96f22aeff59fbbea523d43d662e76fa1b161b5c",
+  "comcat": "19e726c8d0640ad0bdf9c239ae4a855dc1fef18956cfcc7ec9f34b45eb314c82",
+  "geodawn_rad_u8.tif": "c22420f75999030d7cc65c9e31e50d232ea6158423bca051613a18a8b20ba682",
+  "lidar_scarp_features_u8.tif": "d580bb8bdcdb941e32fefb8b38044bc5bf04e199bf2e83498c3576e6fc465568",
+  "geodawn_extensions_u8.tif": "a35a9c6d2a14786f4dab85481ee59769213072f5dab5b2535ea82ae4d9bb7d9b",
+  "sibling_commit": "GEMSDOE24@07345ea0604953d7efb858d9cfbc21e20c7aca0b"
+ },
+ "honesty": [
+  "No organizer score exists for this file. Every local number is an instrument.",
+  "The 2-D triangle reduction of the 3-D tetrahedron test is unverified (H53-B).",
+  "H53-B is not ACLUD: scalar horizontalError, no covariances, no focal mechanisms.",
+  "Injection/mining removal is by ComCat type only; no site inventory was available.",
+  "Quadrant-holdout truth is the visible catalogue: it cannot reward new faults."
+ ]
+}
