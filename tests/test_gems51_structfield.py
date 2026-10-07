@@ -71,7 +71,7 @@ def test_concordance_counts_two_agreeing_families_but_not_perpendicular_ones():
         "a": {"strength": base[0], "angle": base[1], "coherence": base[2]},
         "b": {"strength": other[0], "angle": other[1], "coherence": other[2]},
     }
-    count_perp, _, info_perp = structfield.concordance(perpendicular, valid, strength_percentile=90.0)
+    _count_perp, _, info_perp = structfield.concordance(perpendicular, valid, strength_percentile=90.0)
     assert info_perp["cells_with_2plus_families"] < info["cells_with_2plus_families"]
 
 
@@ -81,7 +81,7 @@ def test_concordance_is_shape_agnostic_and_fuse_is_bounded():
     s, a, c = structfield.layer_lineament(np.where(layer > 0, layer, np.nan), valid)
     fams = {"a": {"strength": s, "angle": a, "coherence": c},
             "b": {"strength": s * 0.5, "angle": a, "coherence": c}}
-    count, best_angle, _ = structfield.concordance(fams, valid)
+    count, _best_angle, _ = structfield.concordance(fams, valid)
     assert count.shape == valid.shape
     belief = structfield.fuse(fams, count)
     assert belief.shape == valid.shape

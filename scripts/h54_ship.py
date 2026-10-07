@@ -249,7 +249,7 @@ def main() -> int:
 
     out = {
         "generated_utc": _dt.datetime.now(_dt.timezone.utc).isoformat(timespec="seconds"),
-        "submission_name": f"GEMSDOE50-H53-{args.tag.upper()}-{mass}",
+        "submission_name": f"GEMSDOE50-H54-{args.tag.upper()}-{mass}",
         "submission_note": (f"expected-DTI greedy emission ({prior_source.split(':')[0]} prior) on a "
                             f"label-free scarp+radiometric+geothermal belief field; every dot >"
                             f"{int(args.buffer_px * 100)} m from the provided catalogue and >"

@@ -34,4 +34,9 @@ printf 'catalog_bytes=%s\ncatalog_md5=%s\ncatalog_sha256=%s\n' \
   "$catalog_bytes" "$catalog_md5" "$(cut -d ' ' -f 1 "$OUT_DIR/catalog.sha256")" \
   | tee "$OUT_DIR/catalog-checks.txt"
 
-echo "Verified pinned input rasters and the CC BY 4.0 Nevada catalog in $OUT_DIR"
+PYTHON_BIN="${PYTHON:-python}"
+"$PYTHON_BIN" scripts/download_3dep_dem.py \
+  --template "$OUT_DIR/example_submission.tif" \
+  --output "$OUT_DIR/3dep_dem_100m.tif"
+
+echo "Verified pinned contest rasters, the CC BY 4.0 Nevada catalog, and a grid-matched USGS 3DEP DEM in $OUT_DIR"

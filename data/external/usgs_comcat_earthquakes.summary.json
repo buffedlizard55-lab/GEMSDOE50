@@ -38,8 +38,9 @@
  },
  "notes": [
   "USGS ComCat is a mixed-contributor catalog; general USGS public-domain guidance does not establish rights for every source contribution in this exported record set. Rights/shareability for this extract are unresolved; do not reuse externally before a source-specific review.",
-  "Rows with type in {explosion, quarry blast, mining explosion, anthropogenic event} are flagged, not silently deleted: the analysis removes them explicitly.",
-  "The optional horizontalError field does not supply a full event-location covariance; legacy H50-B imputation/weighting is not an uncertainty-aware ACLUD reproduction."
+  "The export retains the raw event type. Legacy parsing can exclude listed anthropogenic/explosion types, but that does not certify complete screening of induced seismicity, mines, quarries, or injection operations; H50-S1 does not use this file.",
+  "The optional horizontalError field does not provide a full event-location covariance. Its units/statistical meaning were not verified for each network; legacy imputation/weighting is not an uncertainty-aware ACLUD reproduction.",
+  "This extract is not approved as a current external competition input. See data/external/README.md and docs/research/data-rights-audit-20261006.md."
  ],
  "rights_review_status": "UNRESOLVED: the mixed-network ComCat export has not been cleared record-by-record for contributor rights or competition shareability; not an H50-S1 input."
 }

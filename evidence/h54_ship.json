@@ -1,6 +1,6 @@
 {
  "generated_utc": "2026-10-07T03:21:12+00:00",
- "submission_name": "GEMSDOE50-H53-CORPUSCAL-40000",
+ "submission_name": "GEMSDOE50-H54-CORPUSCAL-40000",
  "submission_note": "expected-DTI greedy emission (field prior) on a label-free scarp+radiometric+geothermal belief field; every dot >200 m from the provided catalogue and >600 m inside the data edge; mass and spacing solved from the metric's own break-even bar; not organizer-scored",
  "rejected_priors": [],
  "layout_ablation_off_catalogue_instrument": {
@@ -205,5 +205,6 @@
   "band_count": 1,
   "official_source": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/"
  },
- "seconds": 70.5
+ "seconds": 70.5,
+ "name_renamed_after_build": "the candidate was labelled H53 when this raster was written; main took the H53 label for the TMI x K/U conjunction, so the family was renumbered to H54 before merge. Only the two strings changed - the pixels, the hash and every check below are the ones the build actually produced, and the file stem already reads gems50-h54-corpuscal"
 }

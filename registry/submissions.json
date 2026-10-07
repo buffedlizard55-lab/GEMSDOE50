@@ -59,6 +59,92 @@
    ]
   },
   {
+   "name": "gems52a-scarpdrainage-offcat-10000-20261007T021452Z-5c377a13",
+   "portal_name": "GEMSDOE50-H52A-SCARPDRAINAGE-OFFCAT",
+   "file": "docs/downloads/gems52a-scarpdrainage-offcat-10000-20261007T021452Z-5c377a13-nan.tif",
+   "bytes": 253701,
+   "sha256": "150620f57160ee7f755fb2b2c77928bb36850b5b38547dfc4b77516346483efd",
+   "all_finite_twin": "docs/downloads/gems52a-scarpdrainage-offcat-10000-20261007T021452Z-5c377a13-allfinite.tif",
+   "zip": "docs/downloads/gems52a-scarpdrainage-offcat-10000-20261007T021452Z-5c377a13-nan.zip",
+   "zip_sha256": "7e27f0d555f6a5dcfc1f3a4d86ca05fa8ea07a11399b6cb9eb7fd651047a2cee",
+   "mass": 10000,
+   "format": {
+    "crs": "EPSG:32611",
+    "shape": [
+     3730,
+     3292
+    ],
+    "dtype": "float32",
+    "count": 1,
+    "transform": [
+     100.0,
+     0.0,
+     243350.0,
+     0.0,
+     -100.0,
+     4508550.0
+    ],
+    "cells_finite": 5167373,
+    "cells_nan": 7111787,
+    "outside_unit_interval": 0,
+    "outside_footprint_nonzero": 0
+   },
+   "status": "H52-A deliverable; genuinely new hypothesis (scarp-matched-filter x drainage-deflection corroboration), only 1.7% cell overlap with H51 -- the lowest of any candidate measured in this project; standalone SGMC-off DTI is lower than H51's because far fewer dots are emitted; local proxy instruments only; no organizer score exists and no portal upload was performed by this repository",
+   "organizer_score": null,
+   "submitted_utc": null,
+   "built_utc": "2026-10-07T02:14:52Z",
+   "portal_note": "GEMSDOE50 H52-A | scarp matched-filter corroborated by independent drainage-deflection test, all dots >300 m from the given catalogue; genuinely new method vs all prior GEMSDOE submissions; proxy-validated, NOT organizer-scored",
+   "evidence": [
+    "evidence/build_h52a.json",
+    "evidence/checks_h52a_raster.json",
+    "docs/h52a-protocol.md"
+   ]
+  },
+  {
+   "name": "gems52-union-h51-h52a-offcat-44828-20261007T021528Z-990213fd",
+   "portal_name": "GEMSDOE50-H52-UNION-OFFCAT",
+   "file": "docs/downloads/gems52-union-h51-h52a-offcat-44828-20261007T021528Z-990213fd-nan.tif",
+   "bytes": 355561,
+   "sha256": "15468475cc99b9106b9959c95add9966ad38678329435daa3a9cbf7e8ccc9a21",
+   "all_finite_twin": "docs/downloads/gems52-union-h51-h52a-offcat-44828-20261007T021528Z-990213fd-allfinite.tif",
+   "zip": "docs/downloads/gems52-union-h51-h52a-offcat-44828-20261007T021528Z-990213fd-nan.zip",
+   "zip_sha256": "abaf1485121bb81cfa58d003d25abc68f1b581ed5f19aededdb47200383f5eb4",
+   "mass": 44828,
+   "format": {
+    "crs": "EPSG:32611",
+    "shape": [
+     3730,
+     3292
+    ],
+    "dtype": "float32",
+    "count": 1,
+    "transform": [
+     100.0,
+     0.0,
+     243350.0,
+     0.0,
+     -100.0,
+     4508550.0
+    ],
+    "cells_finite": 5167373,
+    "cells_nan": 7111787,
+    "outside_unit_interval": 0,
+    "outside_footprint_nonzero": 0
+   },
+   "status": "H52 deliverable (H51 union H52-A); best-validated current candidate by every local proxy instrument and the only one to pass the full spatially blocked holdout gate; DISCLOSED CAVEAT: this file is a literal pixel superset of H51 -- ~78% of its 44,828 predicted pixels are H51's own prior output, only ~22% (9,828 pixels) are new from H52-A -- presented transparently as a fusion of this project's own prior work, never as an independently-derived new hypothesis; local proxy instruments only; no organizer score exists and no portal upload was performed by this repository",
+   "organizer_score": null,
+   "submitted_utc": null,
+   "built_utc": "2026-10-07T02:15:28Z",
+   "portal_note": "GEMSDOE50 H52 | H51 scarp+radiometric UNION H52-A scarp-matched-filter+drainage; disclosed fusion of this project's own validated prior work, not an independently new method; beats H51 in 3/4 spatial holdout macrofolds and 4/4 vs random control; proxy-validated, NOT organizer-scored",
+   "evidence": [
+    "evidence/build_h52.json",
+    "evidence/checks_h52_raster.json",
+    "evidence/holdout_h52.json",
+    "evidence/uniqueness_h52.json",
+    "docs/h52a-protocol.md"
+   ]
+  },
+  {
    "name": "gems51-scarpradio-offcat-35000-20261006-ecf058ea",
    "portal_name": "GEMSDOE50-H51-SCARPRADIO-OFFCAT",
    "file": "docs/downloads/gems51-scarpradio-offcat-35000-20261006-ecf058ea-nan.tif",
@@ -101,24 +187,81 @@
    ]
   },
   {
-   "name": "GEMSDOE50-SEISLIN-44709-79E260AE",
-   "file": "docs/downloads/gems50-seislin-44709-20261006T2041Z-79e260ae.tif",
-   "bytes": 193214,
-   "sha256": "79e260ae223d7dfd96413da28a9c6fed30107285ab843795181a5c9e5dff7262",
-   "zip": "docs/downloads/gems50-seislin-44709-20261006T2041Z-79e260ae.zip",
-   "mass": 44709,
+   "name": "gems51-scarpradio-offcat-35000-20261006-ecf058ea",
+   "portal_name": "GEMSDOE50-H51-SCARPRADIO-OFFCAT",
+   "file": "docs/downloads/gems51-scarpradio-offcat-35000-20261006-ecf058ea-nan.tif",
+   "bytes": 329192,
+   "sha256": "8f8708d2872b66d71925707e0aede23eebcf217dfd2e57d6e61186f32e686f5d",
+   "all_finite_twin": "docs/downloads/gems51-scarpradio-offcat-35000-20261006-ecf058ea-allfinite.tif",
+   "zip": "docs/downloads/gems51-scarpradio-offcat-35000-20261006-ecf058ea-nan.zip",
+   "zip_sha256": "21e12a57a2e4fd4cdfb89528449c15a4bac4b97d7ff8fa0ee9527ea426fc0b77",
+   "mass": 35000,
+   "format": {
+    "crs": "EPSG:32611",
+    "shape": [
+     3730,
+     3292
+    ],
+    "dtype": "float32",
+    "count": 1,
+    "transform": [
+     100.0,
+     0.0,
+     243350.0,
+     0.0,
+     -100.0,
+     4508550.0
+    ],
+    "cells_finite": 5167373,
+    "cells_nan": 7111787,
+    "outside_unit_interval": 0,
+    "outside_footprint_nonzero": 0
+   },
+   "status": "H51 deliverable; local proxy instruments only; no organizer score exists for this file and no portal upload was performed by this repository",
    "organizer_score": null,
    "submitted_utc": null,
-   "status": "prior H50 seismic-lineation build, kept for comparison only; superseded by GEMSDOE50-H53-STRAT12-40000 and NOT recommended for a slot (the frozen holdout showed the seismic lineation field alone loses to its own controls)",
+   "built_utc": "2026-10-06T23:47:19Z",
+   "portal_note": "GEMSDOE50 H51 | corroborated 3DEP-scarp + radiometric lineaments, all dots >300 m from the given catalogue, metric-matched sparse emission; proxy-validated, NOT organizer-scored",
    "evidence": [
-    "registry/submission_build.json",
+    "evidence/build_h51.json",
+    "evidence/checks_h51_raster.json",
     "evidence/holdout_h51.json"
-   ],
-   "built_utc": "2026-10-06T20:45:36Z",
-   "method": "gems50.build_submission (2-D ComCat lineations)"
+   ]
   },
   {
-   "name": "GEMSDOE50-H53-CORPUSCAL-40000",
+   "name": "gemsdoe50-h53-tmiconj",
+   "portal_name": "GEMSDOE50-H53-TMICONJ-OFFCAT",
+   "file": "downloads/gemsdoe50-h53-tmiconj-20261007T0345Z.tif",
+   "bytes": 159966,
+   "sha256": "3c22da583d5358b2986189a4ed3322182f39f562bdde14809f3300aeb6bd37ea",
+   "all_finite_twin": "downloads/gemsdoe50-h53-tmiconj-20261007T0345Z-allfinite.tif",
+   "zip": "downloads/gemsdoe50-h53-tmiconj-20261007T0345Z.zip",
+   "zip_sha256": "cef30a9ee3905b583a08d078710de9622825f114bbd1de6df89b8bf18b038388",
+   "mass": 23598,
+   "format": {
+    "crs": "EPSG:32611",
+    "shape": [
+     3730,
+     3292
+    ],
+    "dtype": "float32",
+    "values_in_0_1": true,
+    "outside_footprint_all_nan": true,
+    "inside_footprint_all_finite": true
+   },
+   "status": "H53 deliverable; local proxy instruments only; no organizer score exists for this file and no portal upload was performed by this repository",
+   "organizer_score": null,
+   "submitted_utc": null,
+   "built_utc": "20261007T0345Z",
+   "portal_note": "GEMSDOE50 H53 | TMI x K/U gradient-ridge conjunction, off-catalogue 300m-aware dots; proxy-validated vs uniform+translation, NOT organizer-scored",
+   "evidence": [
+    "evidence/h53_ship.json",
+    "evidence/h53_check_submission.json",
+    "evidence/h53_validation_final.json"
+   ]
+  },
+  {
+   "name": "GEMSDOE50-H54-CORPUSCAL-40000",
    "file": "docs/downloads/gems50-h54-corpuscal-40000-20261007T032111Z-nan.tif",
    "bytes": 200857,
    "sha256": "2cdf7e705c867008b0dc86d3e7481bf43aef44240508312d270c97ebd192c81b",
@@ -160,9 +303,25 @@
    ],
    "method": "gems54: label-free belief field (mask-aware smoothing, 6 px data-edge guard) + stratified expected-DTI emission; prior uncalibrated, see the fit status file",
    "built_utc": "2026-10-07T03:21:12+00:00",
-   "renamed_from": "GEMSDOE50-H53-STRAT12-40000 (same pixel support; main took the H53 label for a different candidate, so this family was renumbered before merge)"
+   "renamed_from": "GEMSDOE50-H53-STRAT12-40000 / GEMSDOE50-H53-CORPUSCAL-40000 (identical pixels; renumbered so this family and main's H53 TMI x K/U candidate cannot be confused)"
+  },
+  {
+   "name": "GEMSDOE50-SEISLIN-44709-79E260AE",
+   "file": "docs/downloads/gems50-seislin-44709-20261006T2041Z-79e260ae.tif",
+   "bytes": 193214,
+   "sha256": "79e260ae223d7dfd96413da28a9c6fed30107285ab843795181a5c9e5dff7262",
+   "zip": "docs/downloads/gems50-seislin-44709-20261006T2041Z-79e260ae.zip",
+   "mass": 44709,
+   "organizer_score": null,
+   "submitted_utc": null,
+   "status": "prior H50 seismic-lineation build, kept for comparison only; superseded; NOT recommended for a slot (the frozen holdout showed the seismic lineation field alone loses to its own controls)",
+   "evidence": [
+    "registry/submission_build.json",
+    "evidence/holdout_h51.json"
+   ],
+   "method": "gems50.build_submission (2-D ComCat lineations)"
   }
  ],
- "updated_utc": "2026-10-07T04:05:00Z",
- "policy": "No entry here may claim an organizer score without a recorded portal receipt. An artifact may be marked 'submitted' only by the owner."
+ "updated_utc": "2026-10-07T04:20:00Z",
+ "policy": "No entry may claim an organizer score without a recorded portal receipt. An artifact is 'submitted' only when the owner says so. Every entry must be linked from the published pages or be flagged here as superseded/legacy."
 }
