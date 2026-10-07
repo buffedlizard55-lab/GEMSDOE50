@@ -1,5 +1,5 @@
 {
- "artifact": "gemsdoe50-h52-scarpdisperse-90000-allfinite.tif",
+ "artifact": "gemsdoe50-h56-scarpdisperse-90000-allfinite.tif",
  "sha256": "c44e791702c50bc1189325b4febb6f6acd2cf6ca1338514df4b4b95dc31f4c53",
  "split_spec": "evidence/holdout-v1.json",
  "split_spec_sha256": "78b6692155c6c6d5f9f19ccee6d595167c2065f1f25eb8d08636d1d9b285ff16",

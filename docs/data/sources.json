@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-10-06T20:43:11Z",
+ "generated_utc": "2026-10-06T23:47:19Z",
  "submission": {
   "file": "gems50-seislin-44709-20261006T2041Z-79e260ae.tif",
   "bytes": 193214,
@@ -13,21 +13,21 @@
  },
  "sources": [
   {
-   "name": "DrivenData DOE GEMS Prize #306 \u2014 problem description and scoring",
+   "name": "DrivenData DOE GEMS Prize #306 — problem description and scoring",
    "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/",
    "licence": "competition terms",
    "read": "2026-10-06",
    "used_for": "metric definition, alpha=0.2 beta=0.8, R=300 m, format rules"
   },
   {
-   "name": "DrivenData DOE GEMS Prize #306 \u2014 rules",
+   "name": "DrivenData DOE GEMS Prize #306 — rules",
    "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/964/",
    "licence": "competition terms",
    "read": "2026-10-06",
    "used_for": "submission cadence and eligibility"
   },
   {
-   "name": "DrivenData DOE GEMS Prize #306 \u2014 public leaderboard",
+   "name": "DrivenData DOE GEMS Prize #306 — public leaderboard",
    "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/",
    "licence": "competition terms",
    "read": "2026-10-06",
@@ -38,7 +38,8 @@
    "url": "https://earthquake.usgs.gov/fdsnws/event/1/",
    "licence": "Unresolved at record/contributor level; not cleared for external competition use",
    "read": "2026-10-06 (fetched by the GitHub Actions runner in .github/workflows/fetch-external-data.yml)",
-   "used_for": "Legacy H50-B only: mixed-network event extract. Not an H50-S1 input and not cleared for external reuse until source-specific rights and shareability are reviewed."
+   "used_for": "Legacy H50-B and exploratory H51-B analysis only; not an H50-S1 input and not cleared for external reuse pending source-specific rights/shareability review.",
+   "caveat": "Mixed-network rows: the USGS net field does not establish rights for every contributor. horizontalError units/statistical meaning are not verified per source and it is not a full covariance."
   },
   {
    "name": "USGS State Geologic Map Compilation (SGMC) faults, Nevada/California",
@@ -48,18 +49,20 @@
    "used_for": "off-catalogue (F2) validation frame and concealment prior"
   },
   {
-   "name": "USGS 3DEP 1 m DEM (LiDAR) \u2014 scarp descriptor stack",
+   "name": "USGS 3DEP 1 m DEM (LiDAR) — scarp descriptor stack",
    "url": "https://www.usgs.gov/3d-elevation-program",
-   "licence": "US public domain",
+   "licence": "Raw USGS 3DEP products are public domain; the mirrored 12-channel GEMSDOE24 derived scarp raster has no explicit reuse license and is not cleared for external use.",
    "read": "2026-10-04 (owner-derived 12-channel raster mirror)",
-   "used_for": "leading hypothesis H50-A: scarp dipole + chain vote"
+   "used_for": "Legacy H50-A hypothesis only; derived raster excluded from current H50-S1 pending rights clarification.",
+   "caveat": "Public-domain status of raw 3DEP does not automatically license the third-party derived raster; the source repository has no explicit reuse license."
   },
   {
    "name": "GDR 1391 / Geothermal Prospector derived layers",
    "url": "https://gdr.openei.org/submissions/1391",
-   "licence": "CC BY 4.0",
+   "licence": "Inherited CC BY 4.0 claim; item-level terms were not revalidated for this project or external competition sharing.",
    "read": "2026-10-04",
-   "used_for": "thermal/volcanic layers for proposed hypothesis H50-E"
+   "used_for": "Legacy proposed H50-E only; not used by H50-S1.",
+   "caveat": "Verify item-level terms, attribution, and sponsor-sharing permissions before reuse."
   },
   {
    "name": "gems-prize-reference-solution",
@@ -67,6 +70,20 @@
    "licence": "MIT",
    "read": "2026-10-06",
    "used_for": "reference U-Net recipe and output-writing conventions; no score logic reused"
+  },
+  {
+   "name": "Trugman Nevada relocated earthquake catalog, Zenodo v2",
+   "url": "https://zenodo.org/records/11167510",
+   "licence": "CC BY 4.0",
+   "read": "2026-10-06",
+   "used_for": "Preregistered H50-S1 diagnostic input; lacks event-specific location covariance and event-type/source fields."
+  },
+  {
+   "name": "USGS National Map 3DEP dynamic elevation ImageServer",
+   "url": "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer",
+   "licence": "USGS states 3DEP products are public domain; per-pixel vertical datum of dynamic mosaic export is not verified.",
+   "read": "2026-10-06",
+   "used_for": "Diagnostic terrain intersection only; catalog mean-sea-level to DEM vertical transformation is unresolved."
   }
  ],
  "methods": [
@@ -84,11 +101,12 @@
  "caveats": [
   "The private leaderboard is unknown to this project; no number here is a leaderboard score.",
   "Legacy H50-B local equal-budget comparisons did not consistently beat smoothed density on both proxy frames; its prior artifact retained a low-weight component, which is not a current recommendation or an H50-S1 holdout result.",
-  "Component 0.2778 attribution is owner-reported, not organizer-confirmed (GEMSDOE32/docs/research/why-d28-scored-026.md).",
   "ComCat public access does not settle contributor-specific rights for the mixed-network export; do not label the extract US public domain or use it as an external competition input without source-specific review.",
   "Legacy H50-B local density comparisons are not the frozen H50-S1 four-macrofold evaluation, and the legacy method is not a current official score or a score-to-TIFF mapping.",
   "H51 emits nothing within 300 m of the provided catalogue by design, so the given-catalogue raster is an anti-instrument for H51 and its score there is not evidence about the method.",
-  "The H51 mass selection rests on a single measured SGMC-off-to-hidden transfer factor (0.28, from one owner file with both a live and a local score); the full per-mass table is published so the mass can be moved with one argument."
+  "An archived GEMSDOE50 report associates 0.2778 with H33-2-B2, but the current GEMSDOE32 owner site labels H33-2-B2 unscored and 0.2747 a model projection; the score-to-artifact association remains unresolved.",
+  "The owner-provided 0.3195 is historical context only; it is not independently verified, not a live-leader claim, and not mapped to a verified TIFF. No fresh leaderboard monitoring was performed.",
+  "The H51 scarp/radiometric candidate source audit has unresolved derived-raster reuse terms; the mixed-network ComCat source also has unresolved rights/shareability. Do not upload either artifact until its exact input rights are cleared."
  ],
  "h51_submission": {
   "file": "docs/downloads/gems51-scarpradio-offcat-35000-20261006-ecf058ea-nan.tif",
@@ -105,21 +123,21 @@
   "sources": [
    {
     "name": "3DEP / LiDAR scarp and topographic descriptors (competition feature stack)",
-    "licence": "U.S. public domain (USGS)",
+    "licence": "Raw USGS 3DEP products are public domain; the exact derived 12-band scarp raster has no documented reuse license and is not cleared for external competition use.",
     "url": "https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits",
-    "used_for": "scarp-focused topographic lineament family"
+    "used_for": "Topographic scarp lineament family; the candidate is research-only until the derived-raster rights and sponsor-sharing terms are clarified."
    },
    {
     "name": "Airborne radiometric K/Th/U and ratio grids (competition feature stack)",
-    "licence": "U.S. public domain (USGS)",
+    "licence": "USGS source products are generally public domain; provenance and reuse terms for the exact derived rasters were not independently audited here.",
     "url": "https://www.usgs.gov/",
-    "used_for": "radiometric lineament family"
+    "used_for": "Radiometric lineament family; verify exact inputs and sharing terms before external submission."
    },
    {
     "name": "USGS ANSS Comprehensive Earthquake Catalog (ComCat)",
-    "licence": "U.S. public domain (USGS)",
+    "licence": "UNRESOLVED at record/contributor level; mixed-network export not cleared for external competition use.",
     "url": "https://earthquake.usgs.gov/fdsnws/event/1/",
-    "used_for": "H51-B seismicity family evaluation only; not given mass in the shipped file"
+    "used_for": "Exploratory H51-B seismicity analysis only; not given mass in this file. Rights/shareability remain unresolved."
    },
    {
     "name": "USGS State Geologic Map Compilation fault inventory",
@@ -130,7 +148,8 @@
   ],
   "caveats": [
    "no organizer score or upload receipt exists for this file",
-   "the location-uncertainty model is this project's own construction, not from arXiv:1304.6912"
+   "the location-uncertainty model is this project's own construction, not from arXiv:1304.6912",
+   "No organizer score or upload receipt exists. The exact derived scarp raster has no documented reuse license; mixed-network ComCat rights/shareability are unresolved. This file is not cleared for external competition upload until the exact inputs and sponsor-sharing terms are reviewed."
   ]
  }
 }

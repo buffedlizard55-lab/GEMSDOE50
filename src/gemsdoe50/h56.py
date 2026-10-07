@@ -233,10 +233,10 @@ def gardner_knopoff_keep(spatial_km: np.ndarray, time_days: np.ndarray,
         for j in tree.query_ball_point(spatial_km[i], r_km):
             if j == i or not keep[j]:
                 continue
-            if abs(time_days[j] - time_days[i]) <= t_d and mag[j] <= mag[i]:
-                if mag[j] < mag[i] or time_days[j] > time_days[i]:
-                    keep[j] = False
-                    removed += 1
+            if (abs(time_days[j] - time_days[i]) <= t_d and mag[j] <= mag[i]
+                    and (mag[j] < mag[i] or time_days[j] > time_days[i])):
+                keep[j] = False
+                removed += 1
     diag = {"test": "Gardner & Knopoff (1974) space-time window declustering",
             "status": "FULLY PUBLISHED (2-D + time)", "n_events": int(n),
             "removed": int(removed), "kept": int(keep.sum()),

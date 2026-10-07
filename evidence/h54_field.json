@@ -1,0 +1,132 @@
+{
+ "built_utc": "2026-10-07T02:35:04+00:00",
+ "seconds": 222.0,
+ "inputs": {
+  "scarp": {
+   "path": "/home/user/.arena/inputs/lidar_scarp_features_u8.tif",
+   "crs": "EPSG:32611",
+   "transform": [
+    100.0,
+    0.0,
+    243350.0,
+    0.0,
+    -100.0,
+    4508550.0
+   ],
+   "bands": 12,
+   "dtype": "uint8"
+  },
+  "geodawn_rad": {
+   "path": "/home/user/.arena/inputs/geodawn_rad_u8.tif",
+   "crs": "EPSG:32611",
+   "transform": [
+    100.0,
+    0.0,
+    243350.0,
+    0.0,
+    -100.0,
+    4508550.0
+   ],
+   "bands": 4,
+   "dtype": "uint8"
+  },
+  "geodawn_extensions": {
+   "path": "/home/user/.arena/inputs/geodawn_extensions_u8.tif",
+   "crs": "EPSG:32611",
+   "transform": [
+    100.0,
+    0.0,
+    243350.0,
+    0.0,
+    -100.0,
+    4508550.0
+   ],
+   "bands": 4,
+   "dtype": "uint8"
+  },
+  "roads": {
+   "path": "/home/user/gemsdata/GEMSDOE24/data/external/audit_sources/tiger_road_distance_m.tif",
+   "units": "metres",
+   "nodata": "NaN"
+  },
+  "claims": {
+   "path": "/home/user/gemsdata/GEMSDOE24/data/external/audit_sources/blm_closed_claim_distance_m.tif",
+   "units": "metres",
+   "nodata": "NaN"
+  },
+  "wellsprings": {
+   "path": "/home/user/gemsdata/GEMSDOE24/data/external/gdr_wellspring_in_footprint.csv",
+   "records": 27092,
+   "hot_records": 1994
+  },
+  "vents": {
+   "path": "/home/user/gemsdata/GEMSDOE24/data/external/gdr_volcanic_vents_in_footprint.csv",
+   "records": 21
+  }
+ },
+ "components": {
+  "edge_guard": {
+   "edge_guard_px": 6.0,
+   "footprint_px": 5167373,
+   "guarded_px": 5092781
+  },
+  "scarp_bands": [
+   "step_max",
+   "lapneg_max",
+   "lappos_max",
+   "downface_max",
+   "upface_max",
+   "cross_max",
+   "ex_max",
+   "relief",
+   "coh100"
+  ],
+  "radio_bands": [
+   "K",
+   "Th",
+   "U",
+   "TC",
+   "ThK",
+   "UK",
+   "UTh",
+   "TMI_up150"
+  ],
+  "scarp_valid_fraction": 0.755369414078477,
+  "line_integral_p99": 0.9698014259338379,
+  "line_integral_weight": 0.3,
+  "thermal": {
+   "n_hot_springs": 1994,
+   "median_temp_c": 75.0,
+   "scale_m": 800.0,
+   "cap_m": 2500.0,
+   "cells_nonzero": 374043,
+   "vent_cells": 26218
+  },
+  "suppression": {
+   "cells_below_half": 3500885,
+   "road_inner_m": 100.0,
+   "road_outer_m": 500.0,
+   "claim_inner_m": 200.0,
+   "claim_outer_m": 900.0
+  },
+  "domain_cells": 4793684,
+  "domain_fraction_of_footprint": 0.9412703982362485
+ },
+ "buffer_px": 2.0,
+ "domain_cells": 4793684,
+ "belief_stats": {
+  "nonzero_in_domain": 4793684,
+  "p50": 0.12025018036365509,
+  "p90": 0.4433932900428772,
+  "p99": 0.761223554611206,
+  "max": 1.0
+ },
+ "top1pct_area_px": 47937,
+ "grid": {
+  "height": 3730,
+  "width": 3292,
+  "footprint_px": 5167373,
+  "catalogue_px": 60988,
+  "catalogue_distance_min_in_domain": 2.2360680103302
+ }
+}

@@ -1,0 +1,304 @@
+{
+ "schema": "gems52.build.v1",
+ "built_utc": "2026-10-07T02:15:28Z",
+ "builder": {
+  "script": "scripts/build_h52.py",
+  "sha256": "db534858ca71a11b54dd39d216e182523dd69f7ae374993806ac96653597dea8"
+ },
+ "protocol": "docs/h52a-protocol.md amendment B1 (2026-10-07)",
+ "name": "gems52-union-h51-h52a-offcat-44828-20261007T021528Z-990213fd",
+ "inputs": {
+  "h51_file": {
+   "path": "docs/downloads/gems51-scarpradio-offcat-35000-20261006-ecf058ea-nan.tif",
+   "sha256": "8f8708d2872b66d71925707e0aede23eebcf217dfd2e57d6e61186f32e686f5d",
+   "mass": 35000
+  },
+  "h52a_file": {
+   "path": "docs/downloads/gems52a-scarpdrainage-offcat-10000-20261007T021452Z-5c377a13-nan.tif",
+   "sha256": "150620f57160ee7f755fb2b2c77928bb36850b5b38547dfc4b77516346483efd",
+   "mass": 10000
+  }
+ },
+ "overlap_cells": 172,
+ "overlap_fraction_of_h52a": 0.0172,
+ "union_mass": 44828,
+ "runtime_seconds": 17.2,
+ "scores": {
+  "h51_alone": {
+   "catalogue": {
+    "dti": 0.0,
+    "tp_weight": 0.0,
+    "fp_weight": 35000.0,
+    "fn_weight": 60988.0,
+    "truth_cells": 60988,
+    "prediction_cells": 35000,
+    "credit_per_dot": 0.0,
+    "covered_fraction": 0.0
+   },
+   "sgmc_off": {
+    "dti": 0.11582196973039599,
+    "tp_weight": 6609.977055429728,
+    "fp_weight": 32084.767316124016,
+    "fn_weight": 55054.02294457027,
+    "truth_cells": 61664,
+    "prediction_cells": 35000,
+    "credit_per_dot": 0.18885648729799223,
+    "covered_fraction": 0.10719345250761754
+   },
+   "monte_cristo": {
+    "dti": 0.002630097708754347,
+    "tp_weight": 18.925278416510935,
+    "fp_weight": 34991.35483170075,
+    "fn_weight": 223.07472158348907,
+    "truth_cells": 242,
+    "prediction_cells": 35000,
+    "credit_per_dot": 0.000540722240471741,
+    "covered_fraction": 0.07820362982029312
+   }
+  },
+  "h52a_alone": {
+   "catalogue": {
+    "dti": 0.0,
+    "tp_weight": 0.0,
+    "fp_weight": 10000.0,
+    "fn_weight": 60988.0,
+    "truth_cells": 60988,
+    "prediction_cells": 10000,
+    "credit_per_dot": 0.0,
+    "covered_fraction": 0.0
+   },
+   "sgmc_off": {
+    "dti": 0.05504009355412683,
+    "tp_weight": 2843.9402454101664,
+    "fp_weight": 8851.750473770737,
+    "fn_weight": 58820.059754589834,
+    "truth_cells": 61664,
+    "prediction_cells": 10000,
+    "credit_per_dot": 0.28439402454101664,
+    "covered_fraction": 0.04611994430154006
+   },
+   "monte_cristo": {
+    "dti": 0.0018664150115226188,
+    "tp_weight": 4.0950744526270455,
+    "fp_weight": 9998.333333333332,
+    "fn_weight": 237.90492554737295,
+    "truth_cells": 242,
+    "prediction_cells": 10000,
+    "credit_per_dot": 0.00040950744526270456,
+    "covered_fraction": 0.016921795258789445
+   }
+  },
+  "union": {
+   "catalogue": {
+    "dti": 0.0,
+    "tp_weight": 0.0,
+    "fp_weight": 44828.0,
+    "fn_weight": 60988.0,
+    "truth_cells": 60988,
+    "prediction_cells": 44828,
+    "credit_per_dot": 0.0,
+    "covered_fraction": 0.0
+   },
+   "sgmc_off": {
+    "dti": 0.1517650155431227,
+    "tp_weight": 8997.939127820904,
+    "fp_weight": 40789.186964834764,
+    "fn_weight": 52666.06087217909,
+    "truth_cells": 61664,
+    "prediction_cells": 44828,
+    "credit_per_dot": 0.20072140465380797,
+    "covered_fraction": 0.145918836400832
+   },
+   "monte_cristo": {
+    "dti": 0.0024848807301274833,
+    "tp_weight": 22.76570886163791,
+    "fp_weight": 44817.68816503408,
+    "fn_weight": 219.2342911383621,
+    "truth_cells": 242,
+    "prediction_cells": 44828,
+    "credit_per_dot": 0.0005078457406450859,
+    "covered_fraction": 0.09407317711420625
+   }
+  },
+  "random_control_at_union_mass": {
+   "catalogue": {
+    "dti": 0.0,
+    "tp_weight": 0.0,
+    "fp_weight": 44828.0,
+    "fn_weight": 60988.0,
+    "truth_cells": 60988,
+    "prediction_cells": 44828,
+    "credit_per_dot": 0.0,
+    "covered_fraction": 0.0
+   },
+   "sgmc_off": {
+    "dti": 0.08952767028334324,
+    "tp_weight": 5279.776349633412,
+    "fp_weight": 42932.63321154071,
+    "fn_weight": 56384.223650366584,
+    "truth_cells": 61664,
+    "prediction_cells": 44828,
+    "credit_per_dot": 0.1177785390745385,
+    "covered_fraction": 0.08562169741880857
+   },
+   "monte_cristo": {
+    "dti": 0.0009254615702311327,
+    "tp_weight": 8.477563166341726,
+    "fp_weight": 44825.333333333336,
+    "fn_weight": 233.52243683365828,
+    "truth_cells": 242,
+    "prediction_cells": 44828,
+    "credit_per_dot": 0.00018911312497416183,
+    "covered_fraction": 0.03503125275347821
+   }
+  }
+ },
+ "uniqueness": {
+  "n_prior_artifacts": 50,
+  "max_jaccard": 0.731404958677686,
+  "max_jaccard_against": "gems16-h16-1-topo-geophys-baseline-ridges-20260930-df20f65e-nan.tif",
+  "max_overlap_of_mine": 0.9988091693956535,
+  "max_overlap_against": "13gems_20261001_r13-lattice-s5_v2_nan-outside.tif",
+  "unique_at_8px": false,
+  "unique_at_32px": false,
+  "table": [
+   {
+    "factor": 32,
+    "name": "gems16-h16-1-topo-geophys-baseline-ridges-20260930-df20f65e-nan.tif",
+    "jaccard": 0.731404958677686,
+    "overlap_fraction_of_mine": 0.8958023221196785
+   },
+   {
+    "factor": 32,
+    "name": "gems19-h19-4-multiline-corroborated-openness-thermal-pop-20260930-691e4dfa-nan.tif",
+    "jaccard": 0.730498177399757,
+    "overlap_fraction_of_mine": 0.8949091991664185
+   },
+   {
+    "factor": 32,
+    "name": "gemsdoe32-h32c-mt-claycap-breach-45890-20261004T183200Z-a5963d0a-nan.tif",
+    "jaccard": 0.7289448209099709,
+    "overlap_fraction_of_mine": 0.8966954450729384
+   },
+   {
+    "factor": 32,
+    "name": "gemsdoe32-h32c-mt-claycap-breach-45890-20261004T183200Z-a5963d0a-zeros.tif",
+    "jaccard": 0.7289448209099709,
+    "overlap_fraction_of_mine": 0.8966954450729384
+   },
+   {
+    "factor": 32,
+    "name": "gemsdoe32-h32b-transtensional-swarm-45890-20261004T183200Z-27b7c9e6-nan.tif",
+    "jaccard": 0.7284251584592881,
+    "overlap_fraction_of_mine": 0.8895504614468592
+   },
+   {
+    "factor": 32,
+    "name": "gemsdoe32-h32b-transtensional-swarm-45890-20261004T183200Z-27b7c9e6-zeros.tif",
+    "jaccard": 0.7284251584592881,
+    "overlap_fraction_of_mine": 0.8895504614468592
+   },
+   {
+    "factor": 32,
+    "name": "gemsdoe32-h32d-submodular-multipysics-46090-20261004T183200Z-4de30601-nan.tif",
+    "jaccard": 0.7253093909245328,
+    "overlap_fraction_of_mine": 0.8898481690979458
+   },
+   {
+    "factor": 32,
+    "name": "gemsdoe32-h32d-submodular-multipysics-46090-20261004T183200Z-4de30601-zeros.tif",
+    "jaccard": 0.7253093909245328,
+    "overlap_fraction_of_mine": 0.8898481690979458
+   },
+   {
+    "factor": 32,
+    "name": "gems19-h19-5-powerlaw-budget-multiline-corroborated-20260930-e27054cf-nan.tif",
+    "jaccard": 0.7240457087284221,
+    "overlap_fraction_of_mine": 0.8865733849359928
+   },
+   {
+    "factor": 32,
+    "name": "gemsdoe32-h32d-equalbudget-44090-20261004T183200Z-350cdc3f-nan.tif",
+    "jaccard": 0.7236009732360097,
+    "overlap_fraction_of_mine": 0.8853825543316464
+   }
+  ],
+  "passes_fixed_0.5_block_jaccard": false,
+  "interpretation": "A fixed 0.5 block-Jaccard threshold does not apply to lineament fields of this size. Among genuinely independent prior artifacts the pairwise Jaccard at 32 px blocks has median 0.8252 and maximum 1.0000; this file's worst case (0.7314 against gems16-h16-1-topo-geophys-baseline-ridges-20260930-df20f65e-nan.tif) is below that median. The audited uniqueness evidence is evidence/uniqueness_h52.json: a new sha256, no prior raster read into the belief field, and 2.7% exact-pixel overlap with the only prior submission available locally.",
+  "audited_evidence": "evidence/uniqueness_h52.json"
+ },
+ "outputs": {
+  "primary": {
+   "path": "docs/downloads/gems52-union-h51-h52a-offcat-44828-20261007T021528Z-990213fd-nan.tif",
+   "bytes": 355561,
+   "sha256": "15468475cc99b9106b9959c95add9966ad38678329435daa3a9cbf7e8ccc9a21",
+   "crs": "EPSG:32611",
+   "shape": [
+    3730,
+    3292
+   ],
+   "dtype": "float32",
+   "count": 1,
+   "nodata": NaN,
+   "transform": [
+    100.0,
+    0.0,
+    243350.0,
+    0.0,
+    -100.0,
+    4508550.0
+   ],
+   "cells_finite": 5167373,
+   "cells_nan": 7111787,
+   "min": 0.0,
+   "max": 1.0,
+   "outside_unit_interval": 0,
+   "outside_footprint_nonzero": 0,
+   "footprint_min": 0.0,
+   "footprint_max": 1.0,
+   "footprint_nonzero": 44828
+  },
+  "allfinite": {
+   "path": "docs/downloads/gems52-union-h51-h52a-offcat-44828-20261007T021528Z-990213fd-allfinite.tif",
+   "bytes": 301949,
+   "sha256": "f0d697490fc27e9aa1e0c440c69497240f3d8ea70329b398a99902097846feed",
+   "crs": "EPSG:32611",
+   "shape": [
+    3730,
+    3292
+   ],
+   "dtype": "float32",
+   "count": 1,
+   "nodata": null,
+   "transform": [
+    100.0,
+    0.0,
+    243350.0,
+    0.0,
+    -100.0,
+    4508550.0
+   ],
+   "cells_finite": 12279160,
+   "cells_nan": 0,
+   "min": 0.0,
+   "max": 1.0,
+   "outside_unit_interval": 0,
+   "outside_footprint_nonzero": 0,
+   "footprint_min": 0.0,
+   "footprint_max": 1.0,
+   "footprint_nonzero": 44828
+  },
+  "zip": {
+   "path": "docs/downloads/gems52-union-h51-h52a-offcat-44828-20261007T021528Z-990213fd-nan.zip",
+   "bytes": 277909,
+   "sha256": "abaf1485121bb81cfa58d003d25abc68f1b581ed5f19aededdb47200383f5eb4",
+   "contains": "gems52-union-h51-h52a-offcat-44828-20261007T021528Z-990213fd-nan.tif"
+  }
+ },
+ "honesty": [
+  "No organizer score exists for this file and none is claimed.",
+  "This is a pixelwise union of two already-frozen, independently built supports; no threshold in this script was chosen by looking at the resulting DTI.",
+  "H52-A alone has a lower pooled SGMC-off DTI than H51 alone because it emits far fewer dots (10,000 vs 35,000); its contribution is measured as an addition to H51, not as a replacement.",
+  "Monte Cristo is reported as a weak guard only, never as a selection criterion (H51 amendment A3)."
+ ]
+}

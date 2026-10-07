@@ -1,0 +1,118 @@
+name: acquire-pinned-seismic-catalog
+
+on:
+  push:
+    branches: ['arena/38c5cc42-gemsdoe50']
+    paths:
+      - '.github/workflows/acquire-seismic-catalog.yml'
+      - 'scripts/download_inputs.sh'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  acquire:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download the public CC BY 4.0 Nevada relocated catalog
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p catalog
+          curl --fail --location --retry 3 --retry-all-errors --connect-timeout 30 \
+            'https://zenodo.org/api/records/11167510/files/nvreloc_catalog_newmag.txt/content' \
+            -o catalog/nvreloc_catalog_newmag.txt
+          test "$(wc -c < catalog/nvreloc_catalog_newmag.txt | tr -d ' ')" = '13833354'
+          echo '38fa663f473378b61c74b597c53c416b  catalog/nvreloc_catalog_newmag.txt' \
+            | md5sum --check
+          sha256sum catalog/nvreloc_catalog_newmag.txt > catalog/SHA256SUMS
+          curl --fail --location --retry 3 --retry-all-errors --connect-timeout 30 \
+            'https://zenodo.org/api/records/11167510' -o catalog/zenodo-record-11167510.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          record = json.loads(Path('catalog/zenodo-record-11167510.json').read_text())
+          metadata = record.get('metadata', {})
+          license_meta = metadata.get('license', {})
+          rights = str(
+              license_meta.get('id', '') if isinstance(license_meta, dict) else license_meta
+          ).lower()
+          if rights != 'cc-by-4.0':
+              raise SystemExit(f'unexpected Zenodo license id: {rights!r}')
+          files = {f['key']: f for f in record.get('files', [])}
+          row = files.get('nvreloc_catalog_newmag.txt')
+          if not row:
+              raise SystemExit('catalog file absent from Zenodo record')
+          if int(row['size']) != 13_833_354:
+              raise SystemExit(f"unexpected API file size: {row['size']}")
+          receipt = {
+              'record_url': 'https://zenodo.org/records/11167510',
+              'record_api': 'https://zenodo.org/api/records/11167510',
+              'doi': metadata.get('doi'),
+              'title': metadata.get('title'),
+              'license_id': rights,
+              'file': row,
+              'changes': 'None; downloaded bytes are uploaded as a transient workflow artifact.',
+          }
+          Path('catalog/acquisition-receipt.json').write_text(
+              json.dumps(receipt, indent=2, sort_keys=True) + '\n'
+          )
+          PY
+
+      - name: Compress and record the pinned catalog
+        shell: bash
+        run: |
+          set -euo pipefail
+          gzip -9 -n -c catalog/nvreloc_catalog_newmag.txt \
+            > data/external/nvreloc_catalog_newmag.txt.gz
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+
+          receipt_path = Path('catalog/acquisition-receipt.json')
+          receipt = json.loads(receipt_path.read_text())
+          compressed = Path('data/external/nvreloc_catalog_newmag.txt.gz')
+          digest = hashlib.sha256(compressed.read_bytes()).hexdigest()
+          receipt['compressed_repository_copy'] = {
+              'path': str(compressed),
+              'bytes': compressed.stat().st_size,
+              'sha256': digest,
+              'compression': 'gzip -9 with timestamp and original filename omitted (-n)',
+              'content_identity_check': (
+                  'decompressed bytes must be 13,833,354 bytes and MD5 '
+                  '38fa663f473378b61c74b597c53c416b'
+              ),
+          }
+          Path('registry/nvreloc_catalog_receipt.json').write_text(
+              json.dumps(receipt, indent=2, sort_keys=True) + '\n'
+          )
+          PY
+
+      - name: Commit the reproducible, license-clean input to the fixed research branch
+        if: github.ref_name == 'arena/38c5cc42-gemsdoe50'
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/external/nvreloc_catalog_newmag.txt.gz registry/nvreloc_catalog_receipt.json
+          if git diff --cached --quiet; then
+            echo 'Pinned catalog bytes are already current.'
+          else
+            git commit -m 'data: pin CC BY 4.0 relocated Nevada catalog'
+            git push origin HEAD:arena/38c5cc42-gemsdoe50
+          fi
+
+      - name: Upload verified transient research input
+        uses: actions/upload-artifact@v4
+        with:
+          name: nvreloc-catalog-11167510
+          path: catalog/
+          if-no-files-found: error
+          retention-days: 3

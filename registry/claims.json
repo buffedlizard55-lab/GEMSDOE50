@@ -1,5 +1,5 @@
 {
- "updated_utc": "2026-10-06",
+ "updated_utc": "20261007T0",
  "rule": "claims are separated into what is verified on published bytes, what is an instrument, and what is flagged unresolved",
  "verified_on_published_bytes": [
   {
@@ -29,6 +29,18 @@
   {
    "claim": "H51 spatially blocked validation: candidate beats its matched-mass random control in 4 of 4 frozen macrofolds; paired subtile bootstrap mean 0.0583 with 95% CI [0.0406, 0.0785] on the off-catalogue instrument",
    "evidence": "evidence/holdout_h51.json"
+  },
+  {
+   "claim": "H53 format legal: single band float32 EPSG:32611 100 m 3292x3730, every in-footprint value in [0,1], NaN only where the official template is NaN, 23,598 predicted cells",
+   "evidence": "evidence/h53_check_submission.json"
+  },
+  {
+   "claim": "H53 uniqueness: 0 shared pixels vs 27 corpus artifacts; worst 2 px-proximity IoU 0.0767, below the 0.5 gate; unique",
+   "evidence": "evidence/h53_check_submission.json (uniqueness)"
+  },
+  {
+   "claim": "H53 shared-frame instrument: DTI 0.0565 (0.1303 credit/dot) on the SGMC-off frame vs mass-matched uniform max 0.0495 and translation max 0.0397; 4/4 quadrants positive",
+   "evidence": "evidence/h53_validation_final.json"
   }
  ],
  "instruments_with_named_bias": [

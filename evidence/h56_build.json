@@ -1,8 +1,8 @@
 {
- "name": "gemsdoe50-h52-scarpdisperse",
+ "name": "gemsdoe50-h56-scarpdisperse",
  "stamp": "20261007T031600Z",
  "stamp_source": "time.strftime(gmtime)",
- "claim_note": "H52 scarp-dispersion submission: a full-strength rank mean of five independent USGS 3DEP 1 m LiDAR terrain descriptors, corroborated multiplicatively by declustered USGS ComCat epicentre lineaments, emitted as dots at the metric's own 300 m separation with no quantile threshold and no footprint shrinkage. Validated on an independent fault population against matched uniform and translation controls. NOT organizer-scored; the modelled hidden score is a transfer-calibrated model, not a receipt.",
+ "claim_note": "H56 scarp-dispersion submission: a full-strength rank mean of five independent USGS 3DEP 1 m LiDAR terrain descriptors, corroborated multiplicatively by declustered USGS ComCat epicentre lineaments, emitted as dots at the metric's own 300 m separation with no quantile threshold and no footprint shrinkage. Validated on an independent fault population against matched uniform and translation controls. NOT organizer-scored; the modelled hidden score is a transfer-calibrated model, not a receipt.",
  "design": {
   "belief": "scarp**4.0 * (1 + 0.25 * seismicity_corridor_norm)",
   "scarp": {
@@ -328,7 +328,7 @@
   }
  },
  "checks": {
-  "name": "gemsdoe50-h52-scarpdisperse",
+  "name": "gemsdoe50-h56-scarpdisperse",
   "n_dots": 90000,
   "grid_matches_template": true,
   "all_finite_primary": true,
@@ -352,7 +352,7 @@
    "dti_modelled": 0.38597305382775066
   },
   "files": {
-   "gemsdoe50-h52-scarpdisperse-90000-nan.tif": {
+   "gemsdoe50-h56-scarpdisperse-90000-nan.tif": {
     "bytes": 1236284,
     "sha256": "c5179435bacc705d564e36af7466fe6374b6816875cbda2eab2da85ec12e9988",
     "nan_cells": 7111787,
@@ -383,7 +383,7 @@
      "compress": "LZW"
     }
    },
-   "gemsdoe50-h52-scarpdisperse-90000-allfinite.tif": {
+   "gemsdoe50-h56-scarpdisperse-90000-allfinite.tif": {
     "bytes": 672263,
     "sha256": "c44e791702c50bc1189325b4febb6f6acd2cf6ca1338514df4b4b95dc31f4c53",
     "nan_cells": 0,
@@ -414,7 +414,7 @@
      "compress": "LZW"
     }
    },
-   "gemsdoe50-h52-scarpdisperse-90000-allfinite.zip": {
+   "gemsdoe50-h56-scarpdisperse-90000-allfinite.zip": {
     "bytes": 295329,
     "sha256": "8c3175ab6f8bee9c9f26126ade301fe9a4e8b97d400dfe65538f3069f8f827fe"
    }
