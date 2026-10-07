@@ -106,9 +106,11 @@ lifts that ratio above 0.97. A corridor/H57 hybrid (0.2088) and wider H57 spacin
 **Corrections made this session:** the metric "reduces exactly" claim and the "3 px ⇒ no
 competition" claim are false (errata in `docs/research/h56-diagnosis.md`,
 `docs/research/h33-02778-study-20261007.md`, this README and the site); uniqueness was re-measured
-against the full corpus of 307 distinct rasters; `scripts/check_submission.py` now accepts
+against the full corpus of 309 distinct rasters; `scripts/check_submission.py` now accepts
 zero-outside files (the portal scored such files); the preserved H57 band no longer says "Yes,
-submit". Full working, flags F1–F9 and next steps:
+submit"; a third merge (PR #28, an "H60" ComCat seismicity-KDE file: frozen-frame DTI 0.0744, 14,392 reused prior pixels, a 0.54 score quoted from the retracted transfer
+model) had hand-edited the pages and broken `main`'s CI — its banner is removed, its files are labelled, and
+the checks pass again. Full working, flags F1–F13 and next steps:
 [`docs/research/h61-verdict-20261007.md`](docs/research/h61-verdict-20261007.md).
 
 ```bash

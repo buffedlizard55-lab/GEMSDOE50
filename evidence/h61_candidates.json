@@ -1,9 +1,9 @@
 {
  "schema": "gemsdoe50.h61-candidates.v1",
- "generated_utc": "2026-10-07T21:29:26Z",
+ "generated_utc": "2026-10-07T21:34:41Z",
  "frozen_gate_source": "evidence/h60_gate_decision.json",
  "rules": {
-  "eligibility": "zero dots on registry/prior_positive_union.npz (charter item 2: never copy prior prediction pixels)",
+  "eligibility": "zero dots on registry/prior_positive_union.npz (charter item 2: never copy prior prediction pixels) and no ComCat-derived input (contributor rights unresolved; charter item 13)",
   "ranking": "frozen gate pooled DTI (validate_h56.py --truth-mode sgmc_off, as recorded in the H60 receipt); H61 frame A reported alongside"
  },
  "candidates": {
@@ -36,6 +36,7 @@
     "F1_pooled_dti": 0.09143760585485954
    },
    "eligible_charter_item_2": false,
+   "eligible_rights": true,
    "bootstrap_vs_H59-sharpened-scarp-scatter-90k": {
     "mean": -0.012372801999883824,
     "ci95": [
@@ -77,6 +78,7 @@
     "F1_pooled_dti": 0.1254659034887452
    },
    "eligible_charter_item_2": true,
+   "eligible_rights": true,
    "bootstrap_vs_H57-scarpstep-80000": {
     "mean": 0.012372801999883824,
     "ci95": [
@@ -118,6 +120,7 @@
     "F1_pooled_dti": 0.10181436907057155
    },
    "eligible_charter_item_2": true,
+   "eligible_rights": true,
    "bootstrap_vs_H57-scarpstep-80000": {
     "mean": 0.0024121325129981327,
     "ci95": [
@@ -167,6 +170,7 @@
     "F1_pooled_dti": null
    },
    "eligible_charter_item_2": true,
+   "eligible_rights": true,
    "bootstrap_vs_H57-scarpstep-80000": {
     "mean": -0.05456891971372011,
     "ci95": [
@@ -183,6 +187,94 @@
     "ci95": [
      -0.10674840119248026,
      -0.03032996159402496
+    ],
+    "replicates": 5000,
+    "seed": 55007,
+    "units": 16
+   },
+   "fold_wins_vs_H59-sharpened-scarp-scatter-90k": 0
+  },
+  "H60-KDE-seiscombined-55000": {
+   "artifact": "docs/downloads/gemsdoe50-h60-combined-55000-20261007T212217Z-allfinite.tif",
+   "sha256": "a6486899cb9f1a170c2bbb5a27f81ea3f960bc496ab460f11a9d4d8ae04a30b4",
+   "bytes": 124313,
+   "dots": 55000,
+   "dots_on_prior_union": 14392,
+   "dots_on_catalogue_pixels": 0,
+   "dots_within_300m_of_catalogue": 0,
+   "uses_comcat": true,
+   "frame_a_full_pooled": 0.07440283997938417,
+   "frame_a_core_pooled": 0.07393337907957669,
+   "frame_a_credit_per_dot": 0.08209845738564361,
+   "frame_a_folds": {
+    "NW": 0.07609026441695388,
+    "NE": 0.004045513303638841,
+    "SW": 0.07622597725324766,
+    "SE": 0.16895564864107904
+   },
+   "frozen_gate": null,
+   "eligible_charter_item_2": false,
+   "eligible_rights": false,
+   "bootstrap_vs_H57-scarpstep-80000": {
+    "mean": -0.09268612761136816,
+    "ci95": [
+     -0.1420813962999486,
+     -0.046136331215481864
+    ],
+    "replicates": 5000,
+    "seed": 55007,
+    "units": 16
+   },
+   "fold_wins_vs_H57-scarpstep-80000": 0,
+   "bootstrap_vs_H59-sharpened-scarp-scatter-90k": {
+    "mean": -0.10505892961125199,
+    "ci95": [
+     -0.15281539015851142,
+     -0.059356736776478305
+    ],
+    "replicates": 5000,
+    "seed": 55007,
+    "units": 16
+   },
+   "fold_wins_vs_H59-sharpened-scarp-scatter-90k": 0
+  },
+  "H60-KDE-targeted-40000": {
+   "artifact": "docs/downloads/gemsdoe50-h60-targeted-40000-20261007T212429Z-allfinite.tif",
+   "sha256": "56bb722227c756618fa82bba8c112e326096d9f2e5ece063a72c82df1e75324c",
+   "bytes": 98110,
+   "dots": 40000,
+   "dots_on_prior_union": 10392,
+   "dots_on_catalogue_pixels": 0,
+   "dots_within_300m_of_catalogue": 0,
+   "uses_comcat": true,
+   "frame_a_full_pooled": 0.0427741697142048,
+   "frame_a_core_pooled": 0.035861491303024726,
+   "frame_a_credit_per_dot": 0.061508471083669074,
+   "frame_a_folds": {
+    "NW": 0.054949531322552564,
+    "NE": 0.010432750600780902,
+    "SW": 0.08052901744531164,
+    "SE": 0.030324453883221535
+   },
+   "frozen_gate": null,
+   "eligible_charter_item_2": false,
+   "eligible_rights": false,
+   "bootstrap_vs_H57-scarpstep-80000": {
+    "mean": -0.10081939540455899,
+    "ci95": [
+     -0.15378020203404555,
+     -0.05054441039805019
+    ],
+    "replicates": 5000,
+    "seed": 55007,
+    "units": 16
+   },
+   "fold_wins_vs_H57-scarpstep-80000": 0,
+   "bootstrap_vs_H59-sharpened-scarp-scatter-90k": {
+    "mean": -0.11319219740444282,
+    "ci95": [
+     -0.164427554058006,
+     -0.06104454681820084
     ],
     "replicates": 5000,
     "seed": 55007,
@@ -210,6 +302,7 @@
    },
    "frozen_gate": null,
    "eligible_charter_item_2": true,
+   "eligible_rights": true,
    "bootstrap_vs_H57-scarpstep-80000": {
     "mean": 0.0050587272386386955,
     "ci95": [
@@ -259,6 +352,7 @@
  "flags": [
   "H57 reuses prior prediction pixels and is therefore not eligible as the recommendation under charter item 2.",
   "The sibling's published portal note cites the retracted transfer model (hidden operating point 0.45); a corrected note is used here.",
+  "The two H60-KDE files (PR #28) are ComCat-derived (rights unresolved), report their own off-catalogue DTI as 0.0744, and quote a 'modelled hidden DTI 0.54' from the retracted transfer model; they carry no frozen-gate receipt.",
   "The recommended file places some dots within 300 m of the supplied catalogue (1-px buffer, per the sibling's reading of staff rulings); the GEMSDOE32 B2 result suggests such dots may cost false-positive weight on the hidden labels."
  ]
 }

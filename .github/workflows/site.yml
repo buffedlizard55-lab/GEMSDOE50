@@ -33,4 +33,4 @@ jobs:
           git diff --check
           git diff --exit-code -- index.html results.html methods.html submission.html site.css \
                                  h59.html h59-how-to-submit.html \
-                                 docs/how-to-submit.html docs/executive-summary.html docs/index.html
+                                 docs/how-to-submit.html docs/executive-summary.html docs/index.html docs/submission-h60.html

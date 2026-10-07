@@ -200,6 +200,7 @@ def start_band(ev: dict, prefix: str = "") -> str:
 <h3>Flags for manual review</h3>
 <ul class="list">
 <li><b>Two &ldquo;current candidates&rdquo; on main</b> (fixed here): after two parallel merges the page led with H57 while the H60 receipt recommended the sharpened-scarp file; the H57 band is now marked superseded.</li>
+<li><b>&ldquo;NEW: H60 seismicity KDE&rdquo; banner</b> (a third session, PR #28) was removed from the top: its files score {f4(ev['cands']['candidates']['H60-KDE-seiscombined-55000']['frame_a_full_pooled'])} and {f4(ev['cands']['candidates']['H60-KDE-targeted-40000']['frame_a_full_pooled'])} on the frozen-frame instrument, reuse {ev['cands']['candidates']['H60-KDE-seiscombined-55000']['dots_on_prior_union']:,} and {ev['cands']['candidates']['H60-KDE-targeted-40000']['dots_on_prior_union']:,} prior pixels, are ComCat-derived, and quote a 0.54 &ldquo;modelled&rdquo; score from the retracted transfer model. Its hand-edited pages also broke main&rsquo;s CI; fixed here. Its guide remains at <a href="{prefix}docs/submission-h60.html">docs/submission-h60.html</a> with a warning.</li>
 <li><b>Metric algebra:</b> earlier pages said the score &ldquo;reduces exactly&rdquo; to <code>T/(0.2N+0.8G)</code> and that dots 3&nbsp;px apart do not compete. Both are false (tested in <code>tests/test_h61.py</code>); errata added.</li>
 <li><b>Published note of the recommended file</b> cites the retracted transfer model (&ldquo;operating point at 0.45&rdquo;); use the corrected note above.</li>
 <li><b>Leaderboard coincidence:</b> five owner-reported corpus scores (0.2778, 0.2750, 0.2710, 0.2708, 0.2600) equal the public scores of five different leaderboard accounts. Please check this against <a href="{RULES_PDF}">rules &sect;3.4</a> (limits per participating entity).</li>
@@ -257,9 +258,16 @@ def adjudication_card(ev: dict) -> str:
         g = r["frozen_gate"]
         gate = f4(g["frozen_gate_pooled_dti"]) if g and g.get("frozen_gate_pooled_dti") is not None else "&ndash;"
         folds = " / ".join(f4(v) for v in r["frame_a_folds"].values())
+        links = f'<a href="{esc(r["artifact"])}" download>tif</a>'
+        nan = r["artifact"].replace("-allfinite.tif", "-nan.tif")
+        if nan != r["artifact"] and (ROOT / nan).exists():
+            links += f' &middot; <a href="{esc(nan)}" download>nan</a>'
+        elif (ROOT / r["artifact"].replace("-allfinite.tif", ".tif")).exists():
+            links += f' &middot; <a href="{esc(r["artifact"].replace("-allfinite.tif", ".tif"))}" download>nan</a>'
+        eligible = r["eligible_charter_item_2"] and r.get("eligible_rights", True)
         rows.append(
-            f"<tr><td>{esc(name)}</td><td>{r['dots']:,}</td><td>{r['dots_on_prior_union']:,}</td>"
-            f"<td>{'yes' if r['eligible_charter_item_2'] else 'no'}</td><td>{gate}</td>"
+            f"<tr><td>{esc(name)} ({links})</td><td>{r['dots']:,}</td><td>{r['dots_on_prior_union']:,}</td>"
+            f"<td>{'yes' if eligible else 'no'}{' (ComCat)' if r.get('uses_comcat') else ''}</td><td>{gate}</td>"
             f"<td>{f4(r['frame_a_full_pooled'])}</td><td>{f4(r['frame_a_core_pooled'])}</td><td>{folds}</td>"
             f"<td>{r['dots_within_300m_of_catalogue']:,}</td></tr>"
         )
@@ -336,7 +344,7 @@ def executive_summary(ev: dict) -> str:
 
 def docs_index(ev: dict) -> str:
     body = start_band(ev, prefix="../") + """<section class="main"><div class="shell"><div class="grid"><article class="card span-12"><h2>Archive</h2>
-<p>Everything else in this <code>docs/</code> folder is historical material from earlier sessions, kept for audit. Do not upload any other file from it: <a href="report.html">legacy report</a> &middot; <a href="research/">research notes</a> &middot; <a href="downloads/">all downloads</a>.</p>
+<p>Everything else in this <code>docs/</code> folder is historical material from earlier sessions, kept for audit. Do not upload any other file from it: <a href="report.html">legacy report</a> &middot; <a href="submission-h60.html">H60 seismicity-KDE guide (not recommended)</a> &middot; <a href="downloads/README.md">what every download is</a>.</p>
 </article></div></div></section>"""
     return _page("GEMSDOE50 documents", body)
 
@@ -424,6 +432,21 @@ def main() -> int:
         raise SystemExit("methods.html anchor missing")
     met.write_text(m.replace(METHODS_ANCHOR, methods_card(ev) + METHODS_ANCHOR, 1), encoding="utf-8")
 
+    h60k = ROOT / "docs/submission-h60.html"
+    if h60k.exists():
+        k = h60k.read_text(encoding="utf-8")
+        if "<!-- h61-warning -->" not in k and "<body" in k:
+            cut = k.index(">", k.index("<body")) + 1
+            n = numbers(ev)
+            warn = (
+                '<!-- h61-warning --><div style="margin:0;padding:14px 18px;background:#fde8e8;border-bottom:4px solid #b42318;'
+                'font:600 16px/1.5 system-ui,sans-serif;color:#3b0d0c">Not recommended &mdash; do not submit the file on this page. '
+                "It is ComCat-derived (contributor rights unresolved), reuses prior prediction pixels, scores far below the "
+                "recommended file on the repository&rsquo;s frozen frame, and its &ldquo;modelled hidden DTI 0.54&rdquo; uses a "
+                f'retracted transfer model. Submit <code>{esc(n["rec"]["entry_name"])}</code> instead: '
+                '<a href="how-to-submit.html">how to submit</a>.</div>'
+            )
+            h60k.write_text(k[:cut] + warn + k[cut:], encoding="utf-8")
     (ROOT / "docs/how-to-submit.html").write_text(how_to_submit(ev), encoding="utf-8")
     (ROOT / "docs/executive-summary.html").write_text(executive_summary(ev), encoding="utf-8")
     (ROOT / "docs/index.html").write_text(docs_index(ev), encoding="utf-8")

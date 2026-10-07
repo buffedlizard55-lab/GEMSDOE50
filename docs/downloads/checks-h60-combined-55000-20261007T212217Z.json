@@ -1,0 +1,168 @@
+{
+  "catalog": {
+    "decluster": {
+      "area_threshold_m2": 545207.1809377081,
+      "catalogue_median_m2": 1769.1459700692026,
+      "fraction_kept_clustered": 0.9676687887239978,
+      "n_events": 93934,
+      "n_random": 93934,
+      "reference_median_m2": 118661.84480435593,
+      "reference_quantile": 0.95,
+      "status": "ADAPTATION -- not published in this 2-D form",
+      "test": "2-D triangle-area adaptation of the Ouillon & Sornette (2011) tetrahedron test"
+    },
+    "n_bounds": 93934,
+    "n_declustered": 90897,
+    "n_depth": 97728,
+    "n_final": 93934,
+    "n_herr": 97099,
+    "n_mag": 98545,
+    "n_raw": 222939,
+    "n_tectonic": 222400
+  },
+  "emission": {
+    "n_emitted": 55000,
+    "n_target": 55000,
+    "seed": 602007
+  },
+  "git": "c15e15fedaac95a8edb388fe42c41a67dd34e9e9",
+  "hypothesis": "H60",
+  "limitations": [
+    "2-D covariance is UNVERIFIED adaptation of 3-D Ouillon-Sornette method",
+    "Transfer factor (2.5) is conservative guess for seismicity, not measured",
+    "SGMC proxy shows sub-unity lift (expected: seismicity targets young faults)",
+    "No LiDAR/radiometric ridge snap available"
+  ],
+  "lineations": 0,
+  "mass_sweep": {
+    "20000": {
+      "cpd": 0.08310109982788828,
+      "ctrl": 0.04373073578848663,
+      "dti": 0.031085805442069687,
+      "hdti": 0.3015104341833866,
+      "lift": 0.7108456988334945,
+      "n": 20000,
+      "tp": 1662.0219965577658
+    },
+    "25000": {
+      "cpd": 0.08440798261513935,
+      "ctrl": 0.05349371817606222,
+      "dti": 0.038716013361451515,
+      "hdti": 0.3569156550015026,
+      "lift": 0.7237487817546482,
+      "n": 25000,
+      "tp": 2110.199565378484
+    },
+    "30000": {
+      "cpd": 0.08452274977164764,
+      "ctrl": 0.06193693573050274,
+      "dti": 0.04565385394120663,
+      "hdti": 0.4017037306647047,
+      "lift": 0.7371022379901657,
+      "n": 30000,
+      "tp": 2535.6824931494293
+    },
+    "35000": {
+      "cpd": 0.08436053067371842,
+      "ctrl": 0.06987494576077946,
+      "dti": 0.05219226598856143,
+      "hdti": 0.43988048447930733,
+      "lift": 0.746938196807256,
+      "n": 35000,
+      "tp": 2952.6185735801446
+    },
+    "40000": {
+      "cpd": 0.08394576197539086,
+      "ctrl": 0.07811580907344472,
+      "dti": 0.058291979567439166,
+      "hdti": 0.4721146516207979,
+      "lift": 0.7462251272675532,
+      "n": 40000,
+      "tp": 3357.8304790156344
+    },
+    "45000": {
+      "cpd": 0.0840020249415115,
+      "ctrl": 0.08515733356809119,
+      "dti": 0.06446678407122429,
+      "hdti": 0.5031855834639655,
+      "lift": 0.7570315012232871,
+      "n": 45000,
+      "tp": 3780.0911223680173
+    },
+    "55000": {
+      "cpd": 0.08209845738564363,
+      "ctrl": 0.10045973495195465,
+      "dti": 0.0744028399793842,
+      "hdti": 0.5432196012918654,
+      "lift": 0.7406234947261976,
+      "n": 55000,
+      "tp": 4515.4151562104
+    },
+    "70000": {
+      "cpd": 0.08054268318979922,
+      "ctrl": 0.11854006628855557,
+      "dti": 0.08839912235032893,
+      "hdti": 0.5141122249882257,
+      "lift": 0.7457320138082579,
+      "n": 70000,
+      "tp": 5637.9878232859455
+    },
+    "90000": {
+      "cpd": 0.07857689421764788,
+      "ctrl": 0.14009399978759765,
+      "dti": 0.10416577817756784,
+      "hdti": 0.44008811841271667,
+      "lift": 0.7435420384563073,
+      "n": 90000,
+      "tp": 7071.920479588309
+    }
+  },
+  "method": "Anisotropic seismicity KDE \u00d7 distance-to-known-faults prior",
+  "outputs": {
+    "allfinite": {
+      "all_finite": true,
+      "bytes": 124313,
+      "max": 1.0,
+      "min": 0.0,
+      "path": "/home/user/GEMSDOE50/docs/downloads/gemsdoe50-h60-combined-55000-20261007T212217Z-allfinite.tif",
+      "positive": 55000,
+      "sha256": "a6486899cb9f1a170c2bbb5a27f81ea3f960bc496ab460f11a9d4d8ae04a30b4",
+      "shape": [
+        3730,
+        3292
+      ]
+    },
+    "nan": {
+      "all_finite": false,
+      "bytes": 265823,
+      "max": 1.0,
+      "min": 0.0,
+      "path": "/home/user/GEMSDOE50/docs/downloads/gemsdoe50-h60-combined-55000-20261007T212217Z-nan.tif",
+      "positive": 55000,
+      "sha256": "7379cd7f6d9e1cf9c84635fc4aa899dd584f820692287a522aaec2108339786f",
+      "shape": [
+        3730,
+        3292
+      ]
+    },
+    "zip": "/home/user/GEMSDOE50/docs/downloads/gemsdoe50-h60-combined-55000-20261007T212217Z-allfinite.zip"
+  },
+  "scores": {
+    "credit_per_dot": 0.08209845738564363,
+    "dti": 0.0744028399793842,
+    "fn": 57148.5848437896,
+    "fp": 52272.32149829585,
+    "pred_px": 55000,
+    "tp": 4515.4151562104,
+    "truth_px": 61664
+  },
+  "timestamp": "20261007T212217Z",
+  "transfer": {
+    "G": 12226,
+    "factor": 2.5,
+    "model_hdti": 0.5432196012918654
+  },
+  "uniqueness": {
+    "max_iou": 0.3478371178485348
+  }
+}

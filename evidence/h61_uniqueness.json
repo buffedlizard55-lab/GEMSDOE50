@@ -1,14 +1,14 @@
 {
  "schema": "gemsdoe50.h61-uniqueness.v1",
- "generated_utc": "2026-10-07T21:28:12Z",
+ "generated_utc": "2026-10-07T21:37:15Z",
  "corpus_dirs": [
   ".arena/prior_corpus",
   "docs/downloads",
   "downloads"
  ],
  "corpus_receipt": "evidence/h61_prior_corpus_receipt.json",
- "files_seen": 555,
- "distinct_submission_like_priors": 307,
+ "files_seen": 560,
+ "distinct_submission_like_priors": 309,
  "skipped": [
   {
    "file": ".arena/prior_corpus/12GEMSDOE__docs__downloads__12GEMSDOE_r5-nms3-trace_055e9aac96b8_allfinite.tif",
@@ -967,8 +967,16 @@
    "reason": "identical positive mask to docs/downloads/gemsdoe50-h59-topo-lineament-scatter-180k-20261007T170212Z-allfinite.tif"
   },
   {
+   "file": "docs/downloads/gemsdoe50-h60-combined-55000-20261007T212217Z-nan.tif",
+   "reason": "identical positive mask to docs/downloads/gemsdoe50-h60-combined-55000-20261007T212217Z-allfinite.tif"
+  },
+  {
    "file": "docs/downloads/gemsdoe50-h60-officialstack-50000-20261007T2100Z.tif",
    "reason": "identical positive mask to docs/downloads/gemsdoe50-h60-officialstack-50000-20261007T2100Z-allfinite.tif"
+  },
+  {
+   "file": "docs/downloads/gemsdoe50-h60-targeted-40000-20261007T212429Z-nan.tif",
+   "reason": "identical positive mask to docs/downloads/gemsdoe50-h60-targeted-40000-20261007T212429Z-allfinite.tif"
   },
   {
    "file": "docs/downloads/gemsdoe50-h60-union-d0-75308-20261007T2250Z.tif",
@@ -1001,12 +1009,16 @@
   {
    "file": "downloads/gemsdoe50-h53-tmiconj-20261007T0345Z.tif",
    "reason": "byte-identical to docs/downloads/gemsdoe50-h53-tmiconj-20261007T0345Z.tif"
+  },
+  {
+   "file": "downloads/gemsdoe50-h60-combined-55000-20261007T212217Z-allfinite.tif",
+   "reason": "byte-identical to docs/downloads/gemsdoe50-h60-combined-55000-20261007T212217Z-allfinite.tif"
   }
  ],
  "summary": {
   "docs/downloads/gemsdoe50-h61-updipseis-326-20261007T205554Z-cc1f44da-allfinite.tif": {
    "dots": 326,
-   "priors_compared": 306,
+   "priors_compared": 308,
    "exemptions": [],
    "max_jaccard": {
     "value": 0.001583303346527528,
@@ -1020,7 +1032,7 @@
     "value": 0.03553719008264463,
     "prior": "docs/downloads/gemsdoe50-h55-seisgeom-ridgesnap-13591-20261007-bcb60d89-nan.tif"
    },
-   "priors_sharing_any_exact_pixel": 195,
+   "priors_sharing_any_exact_pixel": 197,
    "gate": "max jaccard < 0.5 and min novel_2px > 0.5",
    "pass": false,
    "max_containment": {
@@ -1036,7 +1048,7 @@
   },
   "docs/downloads/gemsdoe50-h59-sharpened-scarp-scatter-90k-20261007T171954Z-allfinite.tif": {
    "dots": 90000,
-   "priors_compared": 306,
+   "priors_compared": 308,
    "exemptions": [],
    "max_jaccard": {
     "value": 0.18675058897992194,
@@ -1050,7 +1062,7 @@
     "value": 0.5938764643237486,
     "prior": "docs/downloads/gemsdoe50-h60-union-d0-75308-20261007T2250Z-allfinite.tif"
    },
-   "priors_sharing_any_exact_pixel": 241,
+   "priors_sharing_any_exact_pixel": 243,
    "gate": "max jaccard < 0.5 and min novel_2px > 0.5",
    "pass": false,
    "max_containment": {
@@ -1066,7 +1078,7 @@
   },
   "docs/downloads/gemsdoe50-h57-scarpstep-80000-20261007T1830Z-allfinite.tif": {
    "dots": 80000,
-   "priors_compared": 306,
+   "priors_compared": 308,
    "exemptions": [],
    "max_jaccard": {
     "value": 0.2040219860300331,
@@ -1080,7 +1092,7 @@
     "value": 0.7218509736293741,
     "prior": ".arena/prior_corpus/GEMSDOE23__docs__downloads__gemsdoe23-h30-arrangement-matched-habitat-20261002-0d4e02e8-allfinite.tif"
    },
-   "priors_sharing_any_exact_pixel": 299,
+   "priors_sharing_any_exact_pixel": 301,
    "gate": "max jaccard < 0.5 and min novel_2px > 0.5",
    "pass": false,
    "max_containment": {
@@ -1096,7 +1108,7 @@
   },
   "docs/downloads/gemsdoe50-h60-union-d0-75308-20261007T2250Z-allfinite.tif": {
    "dots": 75308,
-   "priors_compared": 306,
+   "priors_compared": 308,
    "exemptions": [],
    "max_jaccard": {
     "value": 0.37951230252655915,
@@ -1110,7 +1122,7 @@
     "value": 0.6341205615194054,
     "prior": "docs/downloads/gemsdoe50-h60-officialstack-50000-20261007T2100Z-allfinite.tif"
    },
-   "priors_sharing_any_exact_pixel": 242,
+   "priors_sharing_any_exact_pixel": 244,
    "gate": "max jaccard < 0.5 and min novel_2px > 0.5",
    "pass": false,
    "max_containment": {
@@ -14144,6 +14156,49 @@
    }
   },
   {
+   "file": "docs/downloads/gemsdoe50-h60-combined-55000-20261007T212217Z-allfinite.tif",
+   "prior_positive": 55000,
+   "chance_2px": 0.09660738338098739,
+   "per_candidate": {
+    "docs/downloads/gemsdoe50-h61-updipseis-326-20261007T205554Z-cc1f44da-allfinite.tif": {
+     "exact_shared": 5,
+     "jaccard": 9.038159107752933e-05,
+     "containment": 0.015337423312883436,
+     "novel_2px": 0.6533742331288344,
+     "excess_2px": 0.2767549555871768,
+     "block8_iou": 0.00953929539295393,
+     "block32_iou": 0.030798845043310877
+    },
+    "docs/downloads/gemsdoe50-h59-sharpened-scarp-scatter-90k-20261007T171954Z-allfinite.tif": {
+     "exact_shared": 1349,
+     "jaccard": 0.009390815239712915,
+     "containment": 0.014988888888888888,
+     "novel_2px": 0.8850111111111111,
+     "excess_2px": 0.020347194752039388,
+     "block8_iou": 0.11306695160700728,
+     "block32_iou": 0.19749543438559874
+    },
+    "docs/downloads/gemsdoe50-h57-scarpstep-80000-20261007T1830Z-allfinite.tif": {
+     "exact_shared": 1267,
+     "jaccard": 0.009474101381110123,
+     "containment": 0.0158375,
+     "novel_2px": 0.880775,
+     "excess_2px": 0.02503630891257453,
+     "block8_iou": 0.11821830531308765,
+     "block32_iou": 0.204473759678807
+    },
+    "docs/downloads/gemsdoe50-h60-union-d0-75308-20261007T2250Z-allfinite.tif": {
+     "exact_shared": 882,
+     "jaccard": 0.006814704927912475,
+     "containment": 0.011711903117862644,
+     "novel_2px": 0.9089074201944016,
+     "excess_2px": -0.006104547982723659,
+     "block8_iou": 0.0943503628860111,
+     "block32_iou": 0.1796116504854369
+    }
+   }
+  },
+  {
    "file": "docs/downloads/gemsdoe50-h60-officialstack-50000-20261007T2100Z-allfinite.tif",
    "prior_positive": 50000,
    "chance_2px": 0.1255606311720778,
@@ -14183,6 +14238,49 @@
      "excess_2px": 0.5382999646226059,
      "block8_iou": 0.6341205615194054,
      "block32_iou": 0.714201532115498
+    }
+   }
+  },
+  {
+   "file": "docs/downloads/gemsdoe50-h60-targeted-40000-20261007T212429Z-allfinite.tif",
+   "prior_positive": 40000,
+   "chance_2px": 0.0700678591083389,
+   "per_candidate": {
+    "docs/downloads/gemsdoe50-h61-updipseis-326-20261007T205554Z-cc1f44da-allfinite.tif": {
+     "exact_shared": 9,
+     "jaccard": 0.0002232308951558896,
+     "containment": 0.027607361963190184,
+     "novel_2px": 0.7239263803680982,
+     "excess_2px": 0.22152773462162012,
+     "block8_iou": 0.01145786220413086,
+     "block32_iou": 0.03935860058309038
+    },
+    "docs/downloads/gemsdoe50-h59-sharpened-scarp-scatter-90k-20261007T171954Z-allfinite.tif": {
+     "exact_shared": 920,
+     "jaccard": 0.007127362875735978,
+     "containment": 0.010222222222222223,
+     "novel_2px": 0.9169444444444445,
+     "excess_2px": 0.013966284071828568,
+     "block8_iou": 0.08538052889554167,
+     "block32_iou": 0.13610738255033558
+    },
+    "docs/downloads/gemsdoe50-h57-scarpstep-80000-20261007T1830Z-allfinite.tif": {
+     "exact_shared": 951,
+     "jaccard": 0.007988307335634907,
+     "containment": 0.0118875,
+     "novel_2px": 0.9129875,
+     "excess_2px": 0.01822137352453891,
+     "block8_iou": 0.0866405976421151,
+     "block32_iou": 0.1360141927853341
+    },
+    "docs/downloads/gemsdoe50-h60-union-d0-75308-20261007T2250Z-allfinite.tif": {
+     "exact_shared": 677,
+     "jaccard": 0.0059059067791435126,
+     "containment": 0.00898974876507144,
+     "novel_2px": 0.929569235672173,
+     "excess_2px": 0.00039024914134076126,
+     "block8_iou": 0.07458480724264045,
+     "block32_iou": 0.12714005051922536
     }
    }
   },

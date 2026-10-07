@@ -75,6 +75,22 @@ CANDIDATES = {
         "gate_key": "official_stack_arm",
         "uses_comcat": False,
     },
+    "H60-KDE-seiscombined-55000": {
+        "tif": DL + "gemsdoe50-h60-combined-55000-20261007T212217Z-allfinite.tif",
+        "zip": DL + "gemsdoe50-h60-combined-55000-20261007T212217Z-allfinite.zip",
+        "nan": DL + "gemsdoe50-h60-combined-55000-20261007T212217Z-nan.tif",
+        "entry_name": "GEMSDOE50-H60-SEISCOMBINED-55000",
+        "gate_key": None,
+        "uses_comcat": True,
+    },
+    "H60-KDE-targeted-40000": {
+        "tif": DL + "gemsdoe50-h60-targeted-40000-20261007T212429Z-allfinite.tif",
+        "zip": DL + "gemsdoe50-h60-targeted-40000-20261007T212429Z-allfinite.zip",
+        "nan": DL + "gemsdoe50-h60-targeted-40000-20261007T212429Z-nan.tif",
+        "entry_name": None,
+        "gate_key": None,
+        "uses_comcat": True,
+    },
     "H59-topo-lineament-scatter-180k": {
         "tif": DL + "gemsdoe50-h59-topo-lineament-scatter-180k-20261007T170212Z-allfinite.tif",
         "zip": None,
@@ -173,6 +189,7 @@ def main() -> int:
             "frozen_gate": _gate(receipt, c["gate_key"]),
         }
         rows[name]["eligible_charter_item_2"] = rows[name]["dots_on_prior_union"] == 0
+        rows[name]["eligible_rights"] = not c["uses_comcat"]
         print(f"[{time.time()-t0:5.1f}s] {name:<34} N={rows[name]['dots']:>7,} prior-reuse={rows[name]['dots_on_prior_union']:>6,} "
               f"full {full['score']:.4f} core {core['score']:.4f}", flush=True)
 
@@ -180,7 +197,8 @@ def main() -> int:
         g = rows[n]["frozen_gate"]
         return g["frozen_gate_pooled_dti"] if g and g.get("frozen_gate_pooled_dti") is not None else -1.0
 
-    eligible = [n for n in rows if rows[n]["eligible_charter_item_2"] and CANDIDATES[n]["entry_name"]]
+    eligible = [n for n in rows if rows[n]["eligible_charter_item_2"] and rows[n]["eligible_rights"]
+                and CANDIDATES[n]["entry_name"]]
     by_gate = sorted(eligible, key=gate_val, reverse=True)
     by_frame_a = sorted(eligible, key=lambda n: rows[n]["frame_a_core_pooled"], reverse=True)
     rec = by_gate[0]
@@ -199,7 +217,8 @@ def main() -> int:
         "generated_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "frozen_gate_source": str(receipt_path.relative_to(REPO)),
         "rules": {
-            "eligibility": "zero dots on registry/prior_positive_union.npz (charter item 2: never copy prior prediction pixels)",
+            "eligibility": ("zero dots on registry/prior_positive_union.npz (charter item 2: never copy prior "
+                            "prediction pixels) and no ComCat-derived input (contributor rights unresolved; charter item 13)"),
             "ranking": "frozen gate pooled DTI (validate_h56.py --truth-mode sgmc_off, as recorded in the H60 receipt); H61 frame A reported alongside",
         },
         "candidates": rows,
@@ -222,6 +241,7 @@ def main() -> int:
         "flags": [
             "H57 reuses prior prediction pixels and is therefore not eligible as the recommendation under charter item 2.",
             "The sibling's published portal note cites the retracted transfer model (hidden operating point 0.45); a corrected note is used here.",
+            "The two H60-KDE files (PR #28) are ComCat-derived (rights unresolved), report their own off-catalogue DTI as 0.0744, and quote a 'modelled hidden DTI 0.54' from the retracted transfer model; they carry no frozen-gate receipt.",
             "The recommended file places some dots within 300 m of the supplied catalogue (1-px buffer, per the sibling's reading of staff rulings); the GEMSDOE32 B2 result suggests such dots may cost false-positive weight on the hidden labels.",
         ],
     }
