@@ -1,0 +1,165 @@
+{
+ "schema": "gemsdoe50.h52.build.v1",
+ "built_utc": "2026-10-07T03:29:38.752217+00:00",
+ "budget": 80000,
+ "emitted": 80000,
+ "block_radius_px": 2,
+ "tau": 0.9,
+ "catalogue_buffer_m": 200.0,
+ "families": {
+  "D": [
+   1,
+   2,
+   3,
+   4
+  ],
+  "G": [
+   4,
+   7,
+   8,
+   17
+  ],
+  "L": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "P": [
+   1,
+   2,
+   3,
+   9,
+   11,
+   13,
+   14,
+   15,
+   18,
+   6,
+   5
+  ],
+  "Q": [
+   10,
+   16
+  ],
+  "R": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7
+  ],
+  "S": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9
+  ],
+  "T": [
+   12,
+   19
+  ]
+ },
+ "family_order": [
+  "D",
+  "G",
+  "L",
+  "P",
+  "Q",
+  "R",
+  "S",
+  "T"
+ ],
+ "agreement_composition": {
+  "4": 15346,
+  "5": 35149,
+  "6": 18387,
+  "7": 8028,
+  "8": 3090
+ },
+ "dots_on_catalogue": 0,
+ "dots_within_200m_of_catalogue": 0,
+ "min_distance_to_catalogue_m": 200.0,
+ "inputs": {
+  "training_features.tif": "4371c82e3b8339b807bdffcf4ef59a225520fe2988d521be208ae33743123bc5",
+  "topo_u8.tif": "a6398d9950965dec6aae6ccecdaa6ced48645d133eab222cbdd11def9bdabfa4",
+  "radiometric_u8.tif": "6cb051f70f941fd78028fe66a9f71e87204fcd8d9a85903df0b94993bad1ec4d",
+  "lidar_scarp_features_u8.tif": "d580bb8bdcdb941e32fefb8b38044bc5bf04e199bf2e83498c3576e6fc465568",
+  "geodawn_rad_u8.tif": "c22420f75999030d7cc65c9e31e50d232ea6158423bca051613a18a8b20ba682",
+  "example_submission.tif": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc",
+  "existing_faults.tif": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093"
+ },
+ "primary": {
+  "bytes": 376448,
+  "sha256": "a2ed87fac9fdb4b9604ab2850b5f750eefe51fa9795caa6a503fc4739de6475d",
+  "driver": "GTiff",
+  "count": 1,
+  "dtype": "float32",
+  "shape": [
+   3730,
+   3292
+  ],
+  "crs": "EPSG:32611",
+  "transform": [
+   100.0,
+   0.0,
+   243350.0,
+   0.0,
+   -100.0,
+   4508550.0
+  ],
+  "nodata": null,
+  "finite_cells": 12279160,
+  "nan_cells": 0,
+  "min": 0.0,
+  "max": 1.0,
+  "values_outside_0_1": 0,
+  "positive_cells": 80000,
+  "outside_footprint_nonzero": 0,
+  "path": ".arena/out/gems50-h52-coincidence8-80000-20261007T032938Z.tif"
+ },
+ "twin": {
+  "bytes": 417986,
+  "sha256": "c8292db9e2c6d16b99a32ceae3d1652eb15019c8faa6f9d8b6d8b052d15dd582",
+  "driver": "GTiff",
+  "count": 1,
+  "dtype": "float32",
+  "shape": [
+   3730,
+   3292
+  ],
+  "crs": "EPSG:32611",
+  "transform": [
+   100.0,
+   0.0,
+   243350.0,
+   0.0,
+   -100.0,
+   4508550.0
+  ],
+  "nodata": null,
+  "finite_cells": 5167373,
+  "nan_cells": 7111787,
+  "min": 0.0,
+  "max": 1.0,
+  "values_outside_0_1": 0,
+  "positive_cells": 80000,
+  "outside_footprint_nonzero": 0,
+  "path": ".arena/out/gems50-h52-coincidence8-80000-20261007T032938Z-nanoutside.tif"
+ }
+}

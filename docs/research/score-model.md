@@ -120,3 +120,33 @@ Under the stated legacy model assumptions (`G = 13,833`, perfect knowledge, and 
 every ≈3 px along hidden traces), `T ≈ 0.8G`, `F ≈ 4,200`, hence DTI ≈ 0.78. This
 is a model ceiling, not a forecast, current score, or independently verified leaderboard
 comparison. Any gap analysis is conditional on these owner-reported assumptions.
+
+## Closed-form use of the recorded scores (added 2026-10-07)
+
+Two owner-recorded organizer scores for a **nested** pair of submissions turn the metric into two
+equations in two unknowns. With `s = T / (alpha*n + beta*G)`, `alpha = 0.2`, `beta = 0.8`, and the
+child a strict pixel subset of the parent (so `T_child = T_parent`):
+
+```
+44,090 px @ 0.2600  and  37,654 px @ 0.2778   ->   G = 14,088.75 px,  T = 5,223.14 px
+```
+
+The solve is implemented and unit-tested in `scripts/h52_budget_curve.py` and
+`tests/test_h52_emission.py`. Two consequences are used in the H52 decision record
+(`docs/h52-decision.md`):
+
+* **the marginal-value rule** — at score `s` a further pixel pays for itself only if its expected
+  credit exceeds `bar * (1 - k)` with `bar = alpha*s/(1 - alpha*s)` (bar = 0.0588 at s = 0.2778), so a
+  fresh pixel must be within about 283 m of uncredited truth;
+* **the reachable-mass argument** — the 37,654-px artifact reaches only 5,223 of the 14,088.75 truth
+  pixels, so ~8,866 px of truth lie outside the 300 m reach of any of its dots. Off-catalogue
+  placement is therefore the only way to add credit; this is the quantitative reason the H52 artifact
+  looks different from the incumbent family.
+
+The same two constants anchor the single transfer constant `r = 0.851` used by the budget model. That
+model is an **extrapolation** from one anchor and is labelled as such everywhere it appears.
+
+Reconciliation with §6 above: the older ceiling model assumed `G = 13,833`; the closed-form solve of
+the recorded nested pair gives `G = 14,088.75`, which reproduces the sibling sessions' published
+`|G| = 14,088.7` to five significant figures. The closed-form value supersedes the assumed one and the
+ceiling in §6 is therefore about 2% low.

@@ -1,5 +1,5 @@
 {
- "note": "Legacy submission registry retained from earlier main-branch work. It contains no independently verified organizer score and no score-to-TIFF mapping.",
+ "note": "Legacy submission registry retained from earlier main-branch work, plus the H52 deliverable. It contains no independently verified organizer score and no score-to-TIFF mapping. Irregularity resolved 2026-10-07: the H51 entry was duplicated with two different zip SHA-256 values; the stale duplicate was removed and the recorded zip hash now matches the bytes in docs/downloads/.",
  "historical_leaderboard_context": {
   "status": "not independently verified; not a current score source",
   "score_rows_published": false,
@@ -15,48 +15,6 @@
    "status": "legacy prior-work record; not H50-S1 and not a deliverable",
    "organizer_score": null,
    "submitted_utc": null
-  },
-  {
-   "name": "gems51-scarpradio-offcat-35000-20261006-ecf058ea",
-   "portal_name": "GEMSDOE50-H51-SCARPRADIO-OFFCAT",
-   "file": "docs/downloads/gems51-scarpradio-offcat-35000-20261006-ecf058ea-nan.tif",
-   "bytes": 329192,
-   "sha256": "8f8708d2872b66d71925707e0aede23eebcf217dfd2e57d6e61186f32e686f5d",
-   "all_finite_twin": "docs/downloads/gems51-scarpradio-offcat-35000-20261006-ecf058ea-allfinite.tif",
-   "zip": "docs/downloads/gems51-scarpradio-offcat-35000-20261006-ecf058ea-nan.zip",
-   "zip_sha256": "5b19884c87bf2750f53293738fe5a1f331144595f2105cc3833af520eac48636",
-   "mass": 35000,
-   "format": {
-    "crs": "EPSG:32611",
-    "shape": [
-     3730,
-     3292
-    ],
-    "dtype": "float32",
-    "count": 1,
-    "transform": [
-     100.0,
-     0.0,
-     243350.0,
-     0.0,
-     -100.0,
-     4508550.0
-    ],
-    "cells_finite": 5167373,
-    "cells_nan": 7111787,
-    "outside_unit_interval": 0,
-    "outside_footprint_nonzero": 0
-   },
-   "status": "H51 deliverable; local proxy instruments only; no organizer score exists for this file and no portal upload was performed by this repository",
-   "organizer_score": null,
-   "submitted_utc": null,
-   "built_utc": "2026-10-06T23:36:14Z",
-   "portal_note": "GEMSDOE50 H51 | corroborated 3DEP-scarp + radiometric lineaments, all dots >300 m from the given catalogue, metric-matched sparse emission; proxy-validated, NOT organizer-scored",
-   "evidence": [
-    "evidence/build_h51.json",
-    "evidence/checks_h51_raster.json",
-    "evidence/holdout_h51.json"
-   ]
   },
   {
    "name": "gems51-scarpradio-offcat-35000-20261006-ecf058ea",
@@ -92,13 +50,60 @@
    "status": "H51 deliverable; local proxy instruments only; no organizer score exists for this file and no portal upload was performed by this repository",
    "organizer_score": null,
    "submitted_utc": null,
-   "built_utc": "2026-10-06T23:47:19Z",
+   "built_utc": "2026-10-06T23:36:14Z",
    "portal_note": "GEMSDOE50 H51 | corroborated 3DEP-scarp + radiometric lineaments, all dots >300 m from the given catalogue, metric-matched sparse emission; proxy-validated, NOT organizer-scored",
    "evidence": [
     "evidence/build_h51.json",
     "evidence/checks_h51_raster.json",
     "evidence/holdout_h51.json"
    ]
+  },
+  {
+   "name": "gems50-h52-coincidence8-80000-20261007T032938Z",
+   "portal_name": "GEMSDOE50-H52-COINCIDENCE8-OFFCAT-80000",
+   "file": "docs/downloads/gems50-h52-coincidence8-80000-20261007T032938Z-nanoutside.tif",
+   "bytes": 417986,
+   "sha256": "c8292db9e2c6d16b99a32ceae3d1652eb15019c8faa6f9d8b6d8b052d15dd582",
+   "all_finite_twin": "docs/downloads/gems50-h52-coincidence8-80000-20261007T032938Z.tif",
+   "all_finite_twin_sha256": "a2ed87fac9fdb4b9604ab2850b5f750eefe51fa9795caa6a503fc4739de6475d",
+   "zip": "docs/downloads/gems50-h52-coincidence8-80000-20261007T032938Z-nanoutside.zip",
+   "zip_sha256": "6dc41bd5598495748eee22f85fca2f82cb3c938afe6eaecf8c839e47768d498c",
+   "mass": 80000,
+   "format": {
+    "crs": "EPSG:32611",
+    "shape": [
+     3730,
+     3292
+    ],
+    "dtype": "float32",
+    "count": 1,
+    "transform": [
+     100.0,
+     0.0,
+     243350.0,
+     0.0,
+     -100.0,
+     4508550.0
+    ],
+    "cells_finite": 5167373,
+    "cells_nan": 7111787,
+    "outside_unit_interval": 0,
+    "outside_footprint_nonzero": 0,
+    "min": 0.0,
+    "max": 1.0,
+    "nodata_sentinel": null
+   },
+   "receipts": {
+    "build": "evidence/h52_build_80000.json",
+    "validation": "evidence/h52_validation_80k.json",
+    "uniqueness": "evidence/h52_uniqueness.json",
+    "budget_curve": "evidence/h52_budget_curve.json",
+    "decision_record": "docs/h52-decision.md"
+   },
+   "provenance": "Built by scripts/build_h52.py from inputs restored and hash-verified by scripts/restore_inputs.sh (seven input SHA-256s recorded in the build receipt). No prior submission's pixels are read by the builder; the prior corpus is used only as a novelty comparison in scripts/uniqueness_h52.py.",
+   "status": "H52 deliverable; local proxy instruments only; no organizer score exists for this file and no portal upload was performed by this repository. The emission budget was set by the curve in evidence/h52_budget_curve.json whose extrapolation is labelled as such in docs/h52-decision.md.",
+   "submitted_utc": null,
+   "organizer_score": null
   }
  ]
 }

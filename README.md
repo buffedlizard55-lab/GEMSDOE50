@@ -17,10 +17,44 @@
 9. **Follow the prize rules.** The September 2026 NLR/DOE rules require an AI-use disclosure in the narrative, permit up to three feedback submissions per week, and require selection of one final submission for both prize rounds. Finalists must provide reproducible code/assets and documentation. The competition ends December 3, 2026 at 23:59 UTC (verify the official page before any deadline-dependent action).
 10. **Create and merge a PR when practical.** Keep all work on Arena's fixed branch `arena/c4f4db48-gemsdoe50`. Run tests and review the PR before merging. Do not switch branches or push elsewhere.
 
-## Current evidence and decision (2026-10-06 UTC)
+## Current evidence and decision (2026-10-07 UTC)
 
 
-- **The H51 deliverable exists and is verified.** `docs/downloads/gems51-scarpradio-offcat-35000-20261006-ecf058ea-nan.tif`
+- **The H52 deliverable is the file offered first.** `docs/downloads/gems50-h52-coincidence8-80000-20261007T032938Z-nanoutside.tif`
+  (80,000 predicted pixels, sha256 `c8292db9e2c6d16b99a32ceae3d1652eb15019c8faa6f9d8b6d8b052d15dd582`) with an all-finite
+  twin (`a2ed87fac9fdb4b9604ab2850b5f750eefe51fa9795caa6a503fc4739de6475d`) and a single-file `.zip`. Single band
+  float32, EPSG:32611, 100 m, 3292 × 3730, values in `{0, 1}`, NaN outside the study footprint, no nodata sentinel;
+  every clause re-read from the written bytes by [`scripts/uniqueness_h52.py`](scripts/uniqueness_h52.py)
+  ([`evidence/h52_uniqueness.json`](evidence/h52_uniqueness.json), all format checks pass).
+- **What it is.** Eight evidence families — detrended elevation/slope, 10 m topographic descriptors, 3DEP-1 m lidar
+  scarp descriptors, airborne radiometrics from two independent mosaics, potential-field, geodetic-strain, and the
+  competition's own seismicity bands — each reduced to a within-family percentile rank by multi-scale
+  structure-tensor saliency, combined as `count of families ≥ 0.90 + 0.5 × mean normalised excess`, then emitted
+  greedily at ≥3 px separation with a 200 m buffer around the provided catalogue. Builder:
+  [`scripts/build_h52.py`](scripts/build_h52.py); inputs restored and hash-verified by
+  [`scripts/restore_inputs.sh`](scripts/restore_inputs.sh) (seven input SHA-256s in
+  [`evidence/h52_build_80000.json`](evidence/h52_build_80000.json)). Two independent builds produced byte-identical
+  output, so the artifact is reproducible from the pinned inputs.
+- **What it measures.** Instrument calibration reproduces the published ordering of known artifacts
+  (Spearman ρ = 0.805, p = 0.005, n = 10) on an independent off-catalogue USGS SGMC derivative scored with the
+  competition's own metric; H52 earns 0.1446 credit per dot, and **4/4** spatially blocked folds beat a
+  matched-mass random control (per-fold deltas `+0.0611, +0.0515, +0.0191, +0.0505`)
+  ([`evidence/h52_validation_80k.json`](evidence/h52_validation_80k.json)).
+- **What it is *not*.** No organizer score exists for this file, no slot is claimed, and the per-dot proxy quality
+  is below every incumbent-family artifact measured (0.1573–0.1704), so the file is an exploration of the truth
+  mass the incumbent family cannot reach, not an expected-score improvement. The instrument's own caveat is
+  recorded in the receipt: an SGMC-family submission scored 0.0512 on the hidden labels, i.e. below matched random.
+- **Novelty, stated narrowly.** Against 16 prior artifacts re-fetched and cell-count-verified before comparison,
+  the most similar prior covers 42.8% of H52's dots within 2 px, so 57.2% are ≥300 m from any prior dot and 87.8%
+  are outside the union of every prior support ([`evidence/h52_uniqueness.json`](evidence/h52_uniqueness.json),
+  provenance in [`registry/prior_artifact_sources.tsv`](registry/prior_artifact_sources.tsv)).
+- **The budget question is documented, not hidden.** Two owner-recorded organizer scores for a nested pair solve
+  the metric algebra exactly for truth mass `G = 14,088.75` px and weighted credit `T = 5,223.14` px; the same
+  algebra gives the marginal rule `bar = 0.0588` and a ≈283 m reach for a fresh pixel to pay for itself. The
+  ten-budget curve, the single transfer constant `r = 0.851`, the model optimum at 120k and the deliberate
+  choice of 80k inside the plateau are all in [`docs/h52-decision.md`](docs/h52-decision.md) and
+  [`evidence/h52_budget_curve.json`](evidence/h52_budget_curve.json).
+- **The H51 deliverable still exists and is verified.** `docs/downloads/gems51-scarpradio-offcat-35000-20261006-ecf058ea-nan.tif`
   (35,000 predicted pixels, sha256 `8f8708d2872b66d71925707e0aede23eebcf217dfd2e57d6e61186f32e686f5d`) with an
   all-finite twin and a one-file `.zip`. It is single band float32, EPSG:32611, 100 m, 3292 × 3730,
   every finite value in `[0, 1]`, NaN only where the official template is NaN — re-read from the written
@@ -67,7 +101,7 @@
   HTTP 403 `Resource not accessible by integration`, so no job ran and no data was fetched and the
   experiment still has not run; the branch also carries two matched Gaussian-smoothed relocated-event density controls
   (1 km and 2 km) as required comparators, plus the H50-prior fixed-incumbent rule. Inherited validation in
-  this checkout is now **75 tests passed, 1 skipped** (was 61/1 before H51), and the frozen split spec
+  this checkout is now **89 tests passed, 0 skipped** (75/1 before the H51 close-out, 80/0 before H52), and the frozen split spec
   (`78b6692155c6c6d5f9f19ccee6d595167c2065f1f25eb8d08636d1d9b285ff16`) plus the realized-mask report
   (`981b42e6d0310bf77f79c7c7662a0569c8d2e79514ef4e4a3624a5b07583ae3f`) are unchanged.
 - **Inherited provenance caveat from `main` (still true).** The bridge manifest points at the official data
@@ -86,8 +120,8 @@
 The site is generated at repository root by [`scripts/build_h50_site.py`](scripts/build_h50_site.py) and
 serves [`index.html`](index.html), [`results.html`](results.html), [`methods.html`](methods.html) and
 [`submission.html`](submission.html). The **first thing on the executive-summary page is a one-click
-download band** for the H51 file (GeoTIFF, all-finite twin, and zip), next to the unique portal name and
-the optional note.
+download band** for the H52 file (GeoTIFF, all-finite twin, and zip), next to the unique portal name and
+the optional note; the H51 band is retained below it as the previous deliverable.
 
 Numbered manual upload path (this repository never uploads for you and holds no portal credentials):
 
@@ -95,9 +129,9 @@ Numbered manual upload path (this repository never uploads for you and holds no 
 2. Optionally confirm the bytes against the SHA-256 shown next to the link.
 3. Sign in to DrivenData manually and open *DOE GEMS Prize Challenge → Submit*.
 4. Choose the downloaded `.tif`.
-5. Use the unique name `GEMSDOE50-H51-SCARPRADIO-OFFCAT` and the note
-   “GEMSDOE50 H51 | corroborated 3DEP-scarp + radiometric lineaments, all dots >300 m from the given
-   catalogue, metric-matched sparse emission; proxy-validated, NOT organizer-scored”.
+5. Use the unique name `GEMSDOE50-H52-COINCIDENCE8-OFFCAT-80000` and the note
+   “GEMSDOE50 H52 | eight-family lineament coincidence (topography, lidar scarp, radiometric, potential field); dots >200 m off-catalogue; proxy-validated, not organizer-scored” (172 characters; if the portal rejects NaN outside the study
+   area, upload the all-finite twin instead — same pixels, 0.0 elsewhere).
 6. Submit, then record the returned score next to the file hash before making any claim about it.
 
 A local pass is a proxy result, not an organizer score, and it licenses a manual upload decision only.
@@ -151,8 +185,10 @@ The manually dispatched [H50-S1 research workflow](.github/workflows/h50s1-resea
 
 ## Open gates / next actions
 
-1. **Manual owner decision** on whether to spend one of the three weekly slots on the H51 file. Nothing is
-   uploaded by this repository: H51 has an artifact and local proxy evidence, but no organizer score.
+1. **Manual owner decision** on whether to spend one of the three weekly slots on the H52 file. Nothing is
+   uploaded by this repository: H52 has an artifact, calibrated proxy evidence and a documented budget curve,
+   but no organizer score. The decision record, including what a returned score would and would not prove, is
+   [`docs/h52-decision.md`](docs/h52-decision.md).
 2. If a slot is spent, record the returned score and the portal receipt next to the pinned sha256; never
    restate proxy numbers as official.
 3. **Top untried candidate (H52-A: scarp-profile matched filter with drainage-deflection corroboration)**

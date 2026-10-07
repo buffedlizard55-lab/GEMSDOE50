@@ -1,0 +1,43 @@
+{
+ "schema": "gemsdoe50.h52.input_sources.v1",
+ "restored_utc": "2026-10-07",
+ "restore_command": "scripts/restore_inputs.sh .arena/inputs",
+ "verification": "Every file is checked against the SHA-256 recorded here and in evidence/h52_build_80000.json; the two competition rasters additionally match the pins in scripts/download_inputs.sh. A hash match proves the transport copy is byte-identical to the file this project has been building on; it does not independently authenticate it as an organizer original.",
+ "files": [
+  {
+   "name": "training_features.tif",
+   "sha256": "4371c82e3b8339b807bdffcf4ef59a225520fe2988d521be208ae33743123bc5",
+   "transport": "buffedlizard55-lab/5GEMSDOE data/bridge/gems-geodawn-numerical-features.tif.part-000..004 (five parts, concatenated in order)"
+  },
+  {
+   "name": "topo_u8.tif",
+   "sha256": "a6398d9950965dec6aae6ccecdaa6ced48645d133eab222cbdd11def9bdabfa4",
+   "transport": "buffedlizard55-lab/5GEMSDOE data/aux_bridge/topo/topo_u8.tif.part-000"
+  },
+  {
+   "name": "radiometric_u8.tif",
+   "sha256": "6cb051f70f941fd78028fe66a9f71e87204fcd8d9a85903df0b94993bad1ec4d",
+   "transport": "buffedlizard55-lab/5GEMSDOE data/aux_bridge/radiometric/radiometric_u8.tif.part-000"
+  },
+  {
+   "name": "lidar_scarp_features_u8.tif",
+   "sha256": "d580bb8bdcdb941e32fefb8b38044bc5bf04e199bf2e83498c3576e6fc465568",
+   "transport": "buffedlizard55-lab/7GEMSDOE external/dem/lidar_scarp_features_u8.tif"
+  },
+  {
+   "name": "geodawn_rad_u8.tif",
+   "sha256": "c22420f75999030d7cc65c9e31e50d232ea6158423bca051613a18a8b20ba682",
+   "transport": "buffedlizard55-lab/7GEMSDOE external/geodawn_rad/geodawn_rad_u8.tif"
+  },
+  {
+   "name": "example_submission.tif",
+   "sha256": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc",
+   "transport": "this repository data/grid/sample_submission.tif (competition template)"
+  },
+  {
+   "name": "existing_faults.tif",
+   "sha256": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
+   "transport": "this repository data/grid/labels.tif (competition catalogue)"
+  }
+ ]
+}

@@ -1,0 +1,18 @@
+# Prior submission artifacts used as the novelty corpus and as calibration anchors.
+# Fetched with: gh api -H 'Accept: application/vnd.github.raw' repos/buffedlizard55-lab/<repo>/contents/<path>
+# Every file was verified by positive-cell count before use (column 'positive_cells_verified').
+# Scores are owner-recorded organizer scores on the public leaderboard, not fetched by this project.
+local_name	repo	path	positive_cells_verified	owner_recorded_score
+h36_blind	GEMSDOE28	docs/downloads/gems28-h36-1-rung30-blind-r1-20261003-b531dae0a36f-nan.tif	37660	0.2710
+h274_solo	GEMSDOE31	docs/downloads/gemsdoe31-h27-4-solo-d28-20261004-8acb75e1-allfinite.tif	40199	0.2708
+g32_h33b2_02778	GEMSDOE48	data/raw/dotted_h33_2_b2_zeros.tif	37654	0.2778
+h33d_stepover	GEMSDOE48	data/raw/tip_h33d_stepover.tif	41865	0.2632
+h32_prethin	GEMSDOE28	docs/downloads/gems28-h32-1-prethin-tip-euler-d2-8-20261003-31e35eee884e-nan.tif	42294	0.2649
+anderson_pinn	GEMSDOE36	docs/downloads/gemsdoe36-anderson-geothermal-pinn-38854-20261004T230000Z-9b9ea4e6-nan.tif	38854	0.2750
+d28_poisson	GEMSDOE30	docs/downloads/gemsdoe30-d28-poisson300m-offcat-44090-20261003T233156Z-91eae1ca-nanoutside.tif	44090	0.2600
+g25_dotted_02600	GEMSDOE51	data/prior/g25_dotted_02600.tif	44090	0.2600
+g32_anchor_02708	GEMSDOE51	data/prior/g32_anchor_02708.tif	44090	0.2708
+d15_dotted	GEMSDOE24	docs/downloads/gems24-h25-1-dotted-h19-5-d1-5-20261002-989f59505db1-nan.tif	60069	0.2477
+h19_5	GEMSDOE22	assets/lb_anchors/lb_anchor_h19-5_0.1922.tif	121131	0.1922
+edge_hybrid80k	GEMSDOE37	docs/downloads/gemsdoe37-h6-physics-dotted-80k-20261005T055000Z-0bef9211631c.tif	80000	
+h33f_analog	GEMSDOE33	docs/downloads/gemsdoe33-h33f-analog-xfer-20261004-d042874b26ef-zeros.tif	44090	
