@@ -1,0 +1,24 @@
+{
+  "changes": "None; downloaded bytes are uploaded as a transient workflow artifact.",
+  "compressed_repository_copy": {
+    "bytes": 4175163,
+    "compression": "gzip -9 with timestamp and original filename omitted (-n)",
+    "content_identity_check": "decompressed bytes must be 13,833,354 bytes and MD5 38fa663f473378b61c74b597c53c416b",
+    "path": "data/external/nvreloc_catalog_newmag.txt.gz",
+    "sha256": "51a0c6cfdc248c3ca1ab170f0d925b000f9676f73180b32473436cd21df1b8a3"
+  },
+  "doi": "10.5281/zenodo.11167510",
+  "file": {
+    "checksum": "md5:38fa663f473378b61c74b597c53c416b",
+    "id": "b93fd122-c9ce-4926-b48d-b2ea5aeef7ed",
+    "key": "nvreloc_catalog_newmag.txt",
+    "links": {
+      "self": "https://zenodo.org/api/records/11167510/files/nvreloc_catalog_newmag.txt/content"
+    },
+    "size": 13833354
+  },
+  "license_id": "cc-by-4.0",
+  "record_api": "https://zenodo.org/api/records/11167510",
+  "record_url": "https://zenodo.org/records/11167510",
+  "title": "Relocated Earthquake Catalog for Nevada (2008 \u2014 2023)"
+}

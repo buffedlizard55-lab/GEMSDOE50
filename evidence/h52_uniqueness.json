@@ -1,0 +1,150 @@
+{
+ "schema": "gemsdoe50.h52.uniqueness.v1",
+ "raster": "docs/downloads/gems50-h52-coincidence8-80000-20261007T032938Z.tif",
+ "format": {
+  "driver": "GTiff",
+  "count_is_1": true,
+  "dtype_is_float32": true,
+  "same_shape": true,
+  "finite_cells": 12279160,
+  "nan_cells": 0,
+  "min_finite": 0.0,
+  "max_finite": 1.0,
+  "outside_unit_interval": 0,
+  "nan_only_outside_template_footprint": false,
+  "positive_cells": 80000,
+  "values_outside_footprint_nonzero": 0,
+  "nodata_is_large_negative_sentinel": false,
+  "dots_on_provided_catalogue": 0,
+  "all_format_checks_pass": true
+ },
+ "uniqueness": {
+  "n_priors_compared": 16,
+  "excluded_self_copies": [
+   "gems50-h52-coincidence8-80000-20261007T032938Z-nanoutside.tif (identical support)",
+   "gems50-h52-coincidence8-80000-20261007T032938Z.tif"
+  ],
+  "prior_union_cells": 310942,
+  "union_is_smaller_than_footprint": true,
+  "worst_prior_file": "gems51-scarpradio-offcat-35000-20261006-ecf058ea-allfinite.tif",
+  "worst_prior_exact_overlap_fraction": 0.034075,
+  "worst_prior_overlap_within_2px_fraction": 0.428175,
+  "min_novel_fraction_at_2px": 0.571825,
+  "reproduced_from_prior_union_fraction": 0.122112,
+  "self_sha256": "a2ed87fac9fdb4b9604ab2850b5f750eefe51fa9795caa6a503fc4739de6475d",
+  "priors": [
+   {
+    "file": "anderson_pinn.tif",
+    "prior_dots": 38854,
+    "exact_overlap_fraction": 0.013875,
+    "overlap_within_2px_fraction": 0.233325,
+    "novel_fraction_at_2px": 0.766675
+   },
+   {
+    "file": "d15_dotted.tif",
+    "prior_dots": 60069,
+    "exact_overlap_fraction": 0.0208,
+    "overlap_within_2px_fraction": 0.26865,
+    "novel_fraction_at_2px": 0.73135
+   },
+   {
+    "file": "d28_poisson.tif",
+    "prior_dots": 44090,
+    "exact_overlap_fraction": 0.01495,
+    "overlap_within_2px_fraction": 0.253875,
+    "novel_fraction_at_2px": 0.746125
+   },
+   {
+    "file": "edge_hybrid80k.tif",
+    "prior_dots": 80000,
+    "exact_overlap_fraction": 0.020312,
+    "overlap_within_2px_fraction": 0.343875,
+    "novel_fraction_at_2px": 0.656125
+   },
+   {
+    "file": "g25_dotted_02600.tif",
+    "prior_dots": 44090,
+    "exact_overlap_fraction": 0.01495,
+    "overlap_within_2px_fraction": 0.253875,
+    "novel_fraction_at_2px": 0.746125
+   },
+   {
+    "file": "g32_anchor_02708.tif",
+    "prior_dots": 44090,
+    "exact_overlap_fraction": 0.01495,
+    "overlap_within_2px_fraction": 0.253875,
+    "novel_fraction_at_2px": 0.746125
+   },
+   {
+    "file": "g32_h33b2_02778.tif",
+    "prior_dots": 37654,
+    "exact_overlap_fraction": 0.013312,
+    "overlap_within_2px_fraction": 0.227188,
+    "novel_fraction_at_2px": 0.772812
+   },
+   {
+    "file": "h19_5.tif",
+    "prior_dots": 121131,
+    "exact_overlap_fraction": 0.043988,
+    "overlap_within_2px_fraction": 0.2876,
+    "novel_fraction_at_2px": 0.7124
+   },
+   {
+    "file": "h274_solo.tif",
+    "prior_dots": 40199,
+    "exact_overlap_fraction": 0.01495,
+    "overlap_within_2px_fraction": 0.23885,
+    "novel_fraction_at_2px": 0.76115
+   },
+   {
+    "file": "h32_prethin.tif",
+    "prior_dots": 42294,
+    "exact_overlap_fraction": 0.015025,
+    "overlap_within_2px_fraction": 0.247112,
+    "novel_fraction_at_2px": 0.752887
+   },
+   {
+    "file": "h33d_stepover.tif",
+    "prior_dots": 41865,
+    "exact_overlap_fraction": 0.014738,
+    "overlap_within_2px_fraction": 0.244725,
+    "novel_fraction_at_2px": 0.755275
+   },
+   {
+    "file": "h33f_analog.tif",
+    "prior_dots": 44090,
+    "exact_overlap_fraction": 0.00925,
+    "overlap_within_2px_fraction": 0.15025,
+    "novel_fraction_at_2px": 0.84975
+   },
+   {
+    "file": "h36_blind.tif",
+    "prior_dots": 37660,
+    "exact_overlap_fraction": 0.013025,
+    "overlap_within_2px_fraction": 0.232975,
+    "novel_fraction_at_2px": 0.767025
+   },
+   {
+    "file": "gems50-seislin-44709-20261006T2041Z-79e260ae.tif",
+    "prior_dots": 44709,
+    "exact_overlap_fraction": 0.0234,
+    "overlap_within_2px_fraction": 0.3011,
+    "novel_fraction_at_2px": 0.6989
+   },
+   {
+    "file": "gems51-scarpradio-offcat-35000-20261006-ecf058ea-allfinite.tif",
+    "prior_dots": 35000,
+    "exact_overlap_fraction": 0.034075,
+    "overlap_within_2px_fraction": 0.428175,
+    "novel_fraction_at_2px": 0.571825
+   },
+   {
+    "file": "gems51-scarpradio-offcat-35000-20261006-ecf058ea-nan.tif",
+    "prior_dots": 35000,
+    "exact_overlap_fraction": 0.034075,
+    "overlap_within_2px_fraction": 0.428175,
+    "novel_fraction_at_2px": 0.571825
+   }
+  ]
+ }
+}

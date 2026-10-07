@@ -1,0 +1,66 @@
+{
+ "schema": "gems52a.data_access.v1",
+ "checked_utc": "2026-10-07T02:00:50Z",
+ "goal": "locate training_features.tif (418,912,844 bytes) and confirm topo_u8.tif / radiometric_u8.tif integrity for H52-A",
+ "direct_curl_tests": {
+  "earthquake.usgs.gov": "SSL_ERROR_SYSCALL (curl exit 35)",
+  "www.usgs.gov": "SSL_ERROR_SYSCALL (curl exit 35)",
+  "www.dropbox.com": "SSL_ERROR_SYSCALL (curl exit 35)",
+  "zenodo.org": "SSL_ERROR_SYSCALL (curl exit 35)",
+  "hydro.nationalmap.gov": "SSL_ERROR_SYSCALL (curl exit 35)",
+  "tnmaccess.nationalmap.gov": "SSL_ERROR_SYSCALL (curl exit 35)",
+  "waterservices.usgs.gov": "SSL_ERROR_SYSCALL (curl exit 35)",
+  "epsg.io": "SSL_ERROR_SYSCALL (curl exit 35)",
+  "api.github.com": "HTTP 200 (reachable)",
+  "codeload.github.com": "HTTP 301 (reachable)"
+ },
+ "fetch_page_tool_test": {
+  "url": "https://earthquake.usgs.gov/fdsnws/event/1/count?format=text",
+  "result": "success, returned '10647'",
+  "conclusion": "fetch_page can reach USGS over HTTPS (different network path than bash), but it renders text/markdown only and cannot write a binary GeoTIFF/shapefile to the workspace, so it cannot supply an NHD flowline download or training_features.tif."
+ },
+ "github_org_scan": {
+  "account": "buffedlizard55-lab",
+  "repos_listed": 135,
+  "gemsdoe_repos_scanned": 55,
+  "method": "gh api repos/{owner}/{repo}/git/trees/main?recursive=true, grepped for topo_u8|radiometric_u8|training_features|geodawn_extensions|numerical.features, and separately for any tracked blob > 100,000,000 bytes",
+  "training_features_tif_found": false,
+  "files_over_100mb_found_in_any_gemsdoe_repo": false,
+  "topo_u8_tif_found_in": "GEMSDOE40 (data/aux/topo_u8.tif, 32,523,329 bytes)",
+  "radiometric_u8_tif_found_in": "GEMSDOE40 (data/aux/radiometric_u8.tif, 25,475,158 bytes)",
+  "lidar_scarp_features_u8_tif_found_in": "GEMSDOE24 (data/external/lidar_scarp_features_u8.tif, 36,943,606 bytes)",
+  "geodawn_rad_u8_tif_found_in": "GEMSDOE24 (data/external/geodawn_rad_u8.tif, 26,612,970 bytes)",
+  "geodawn_extensions_u8_tif_found_in": "GEMSDOE24 (data/external/geodawn_extensions_u8.tif, 27,132,925 bytes)"
+ },
+ "fetched_and_hash_verified": [
+  {
+   "path": ".arena/run/inputs/geodawn_rad_u8.tif",
+   "bytes": 26612970,
+   "expected_sha256": "c22420f75999030d7cc65c9e31e50d232ea6158423bca051613a18a8b20ba682",
+   "actual_sha256": "c22420f75999030d7cc65c9e31e50d232ea6158423bca051613a18a8b20ba682",
+   "match": true
+  },
+  {
+   "path": ".arena/run/inputs/lidar_scarp_features_u8.tif",
+   "bytes": 36943606,
+   "expected_sha256": "d580bb8bdcdb941e32fefb8b38044bc5bf04e199bf2e83498c3576e6fc465568",
+   "actual_sha256": "d580bb8bdcdb941e32fefb8b38044bc5bf04e199bf2e83498c3576e6fc465568",
+   "match": true
+  },
+  {
+   "path": ".arena/run/inputs/radiometric_u8.tif",
+   "bytes": 25475158,
+   "expected_sha256": "6cb051f70f941fd78028fe66a9f71e87204fcd8d9a85903df0b94993bad1ec4d",
+   "actual_sha256": "6cb051f70f941fd78028fe66a9f71e87204fcd8d9a85903df0b94993bad1ec4d",
+   "match": true
+  },
+  {
+   "path": ".arena/run/inputs/topo_u8.tif",
+   "bytes": 32523329,
+   "expected_sha256": "a6398d9950965dec6aae6ccecdaa6ced48645d133eab222cbdd11def9bdabfa4",
+   "actual_sha256": "a6398d9950965dec6aae6ccecdaa6ced48645d133eab222cbdd11def9bdabfa4",
+   "match": true
+  }
+ ],
+ "conclusion": "training_features.tif cannot be re-acquired in this session by any available tool. H52-A is redefined to use only topo_u8.tif band 9 (dem_mean) as its elevation source, with a locally computed D8 flow-routing network (pysheds) standing in for NHD, both explicitly flagged as this project's own construction in docs/h52a-protocol.md."
+}

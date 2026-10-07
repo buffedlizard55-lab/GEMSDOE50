@@ -114,5 +114,24 @@
   "portal_upload": null,
   "weekly_slot_used": false
  },
- "generated_utc": "2026-10-06T23:47:19Z"
+ "generated_utc": "20261007T0345Z",
+ "h53": {
+  "status": "built, format-verified and proxy-validated; no organizer score claimed",
+  "file": "downloads/gemsdoe50-h53-tmiconj-20261007T0345Z.tif",
+  "sha256": "3c22da583d5358b2986189a4ed3322182f39f562bdde14809f3300aeb6bd37ea",
+  "mass": 23598,
+  "portal_name": "GEMSDOE50-H53-TMICONJ-OFFCAT",
+  "portal_note": "GEMSDOE50 H53 | TMI x K/U gradient-ridge conjunction, off-catalogue 300m-aware dots; proxy-validated vs uniform+translation, NOT organizer-scored",
+  "shared_frame_dti": 0.05649250281066043,
+  "credit_per_dot": 0.13031380942573825,
+  "uniform_dti_max": 0.04950116996259098,
+  "translation_dti_max": 0.03969236212021709,
+  "quadrants_positive": "4/4",
+  "uniform_draws": 5,
+  "translation_draws": 5,
+  "gate_all_pass": false,
+  "organizer_score": null,
+  "portal_upload": null,
+  "weekly_slot_used": false
+ }
 }

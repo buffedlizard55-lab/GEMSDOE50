@@ -17,6 +17,8 @@ dependencies = [
   "pyproj>=3.6,<4",
   "pyshp>=2.3,<4",
   "scikit-image>=0.22,<1",
+  "pandas>=2.0",
+  "pysheds>=0.4",
 ]
 
 [project.optional-dependencies]

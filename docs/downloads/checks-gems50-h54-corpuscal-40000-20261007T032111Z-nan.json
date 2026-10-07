@@ -1,0 +1,72 @@
+{
+ "file": "gems50-h54-corpuscal-40000-20261007T032111Z-nan.tif",
+ "sha256": "2cdf7e705c867008b0dc86d3e7481bf43aef44240508312d270c97ebd192c81b",
+ "format_checks_nan": {
+  "driver": "GTiff",
+  "count_is_1": true,
+  "dtype_is_float32": true,
+  "crs_is_epsg32611": true,
+  "same_shape": true,
+  "same_transform": true,
+  "same_bounds": true,
+  "min": 0.0,
+  "max": 1.0,
+  "nan_count": 7111787,
+  "values_in_0_1": true,
+  "nan_only_outside_footprint": true,
+  "positive_px": 40000,
+  "unique_positive_values": [
+   1.0
+  ],
+  "compression": "Compression.deflate",
+  "nodata": NaN,
+  "footprint_source": "registry/footprint_mask.npz",
+  "footprint_px": 5167373,
+  "outside_footprint_all_nan": true,
+  "all_checks_pass": true
+ },
+ "format_checks_zeros_twin": {
+  "driver": "GTiff",
+  "count_is_1": true,
+  "dtype_is_float32": true,
+  "crs_is_epsg32611": true,
+  "same_shape": true,
+  "same_transform": true,
+  "same_bounds": true,
+  "min": 0.0,
+  "max": 1.0,
+  "nan_count": 0,
+  "values_in_0_1": true,
+  "nan_only_outside_footprint": false,
+  "positive_px": 40000,
+  "unique_positive_values": [
+   1.0
+  ],
+  "compression": "Compression.deflate",
+  "nodata": null,
+  "footprint_source": "registry/footprint_mask.npz",
+  "footprint_px": 5167373,
+  "outside_footprint_all_nan": false,
+  "all_checks_pass": false
+ },
+ "uniqueness": {
+  "verdict": "PASS (block-signature level)",
+  "verdict_unique": true,
+  "verification_level": "block-signature",
+  "downsample_blocks": [
+   8,
+   32
+  ],
+  "n_prior": 50,
+  "max_iou_block8": 0.3784303809958435,
+  "max_iou_block32": 0.9860233582232434,
+  "screen_threshold_block8": 0.75,
+  "worst_overlap_file": "13gems_20261001_r13-lattice-s5_v2_nan-outside.tif",
+  "identical_sha256": [],
+  "my_sha256": "2cdf7e705c867008b0dc86d3e7481bf43aef44240508312d270c97ebd192c81b",
+  "my_dots": 40000,
+  "note": "block-occupancy signatures catch copies and near-copies; fine-scale novelty (full-pixel IoU and the fraction of dots >200 m from any prior dot) is measured where the full corpus exists and is recorded in registry/submission_checks.json."
+ },
+ "verified_utc": "2026-10-07T03:21:12+00:00",
+ "note": "every number read back from the bytes on disk"
+}

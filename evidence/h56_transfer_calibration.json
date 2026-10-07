@@ -1,0 +1,26 @@
+{
+ "purpose": "Calibrate the SGMC-off proxy frame against the hidden scored frame so a candidate's expected hidden credit-per-dot can be modelled instead of guessed.",
+ "method": "For every hash-pinned scored artifact that could be re-downloaded, compute (a) its hidden credit-per-dot T/N from its owner-quoted score and the calibrated hidden mass G=12226, and (b) its credit-per-dot on the SGMC-off frame measured here with identical code. The transfer factor is the ratio divided by the pure truth-density ratio G_hidden/G_sgmc_off.",
+ "formula": "transfer = (T_hidden / N) / ( (T_sgmc / N) * (G_hidden / G_sgmc_off) )",
+ "G_hidden_calibrated": 12226,
+ "G_sgmc_off": 61664,
+ "truth_density_ratio": 0.1982574,
+ "rows": [
+  {"label": "dotted-h19-5 d2.8", "score": 0.2600, "n": 44090, "hidden_credit_per_dot": 0.10968, "sgmc_credit_per_dot": 0.1236, "sgmc_dti": 0.0927, "transfer": 4.48},
+  {"label": "dotted-h19-5 d1.5", "score": 0.2477, "n": 60069, "hidden_credit_per_dot": 0.08987, "sgmc_credit_per_dot": 0.1014, "sgmc_dti": 0.0984, "transfer": 4.47},
+  {"label": "topo-gap-closure-t-v2 on d1.5", "score": 0.2449, "n": 61328, "hidden_credit_per_dot": 0.08804, "sgmc_credit_per_dot": 0.1010, "sgmc_dti": 0.0996, "transfer": 4.40},
+  {"label": "h19-5 mirror group-best", "score": 0.1922, "n": 121131, "hidden_credit_per_dot": 0.05396, "sgmc_credit_per_dot": 0.0592, "sgmc_dti": 0.0975, "transfer": 4.59},
+  {"label": "h19-4 multiline-corroborated", "score": 0.1894, "n": 123779, "hidden_credit_per_dot": 0.05285, "sgmc_credit_per_dot": 0.0620, "sgmc_dti": 0.1035, "transfer": 4.30},
+  {"label": "h16-1 topo-geophys ridges", "score": 0.1855, "n": 123939, "hidden_credit_per_dot": 0.05174, "sgmc_credit_per_dot": 0.0658, "sgmc_dti": 0.1098, "transfer": 3.97},
+  {"label": "lidarscarp-ridge-top2pct", "score": 0.1461, "n": 76859, "hidden_credit_per_dot": 0.04781, "sgmc_credit_per_dot": 0.0546, "sgmc_dti": 0.0647, "transfer": 4.41},
+  {"label": "blind lattice s5 (control)", "score": 0.0904, "n": 206895, "hidden_credit_per_dot": 0.02235, "sgmc_credit_per_dot": 0.1122, "sgmc_dti": 0.2478, "transfer": 1.00},
+  {"label": "7GEMSDOE submission.tif (dense)", "score": 0.1563, "n": 1828699, "hidden_credit_per_dot": 0.03210, "sgmc_credit_per_dot": 0.0120, "sgmc_dti": 0.0544, "transfer": 13.45}
+ ],
+ "structure_vs_uniform": {
+  "finding": "The one structureless artifact in the corpus (the blind 5 px lattice) transfers at exactly 1.00, which is the mathematical expectation for a detector with no information. Every structured artifact transfers at 3.97-4.59. The dense 1.8M-dot raster is an outlier at 13.45 because its SGMC credit has already saturated.",
+  "conservative_transfer_used": 4.2,
+  "band_used": [3.97, 4.59],
+  "caveat": "The factor is measured on the group's own detector family. Applying it to a NEW detector assumes that detector has comparable specificity for the hidden (young, topography-expressed) fault population as for the SGMC-off (largely older bedrock) population. That assumption is UNVERIFIED and is the single largest uncertainty in the number this build quotes."
+ },
+ "provenance": "Artifacts re-downloaded through the GitHub Contents API from buffedlizard55-lab/GEMSDOE24, GEMSDOE25, GEMSDOE27, GEMSDOE22, 16GEMSDOE, 7GEMSDOE, 13GEMSDOE; each matched by SHA-256 to registry/h51_score_corpus.json."
+}

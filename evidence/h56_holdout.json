@@ -1,0 +1,111 @@
+{
+ "artifact": "gemsdoe50-h56-scarpdisperse-90000-allfinite.tif",
+ "sha256": "c44e791702c50bc1189325b4febb6f6acd2cf6ca1338514df4b4b95dc31f4c53",
+ "split_spec": "evidence/holdout-v1.json",
+ "split_spec_sha256": "78b6692155c6c6d5f9f19ccee6d595167c2065f1f25eb8d08636d1d9b285ff16",
+ "instrument": "frozen four-macrofold spatial holdout; truth = held-out catalogue labels",
+ "note": "A detector that never places a dot inside a visible-catalogue pixel scores 0.0000 on this instrument by construction; that is a property of the split, not a result. The off-catalogue instrument is scripts/validate_h52.py --truth-mode sgmc_off.",
+ "folds": [
+  {
+   "fold": "NW",
+   "n_dots_in_fold": 30998,
+   "candidate_dti": 0.0,
+   "uniform_mean": 0.12105678789855638,
+   "uniform_draws": [
+    0.12070895642886174,
+    0.11847584623617344,
+    0.12398556103063395
+   ],
+   "uniform_max": 0.12398556103063395,
+   "translation_mean": 0.09194329367015609,
+   "paired_delta_mean": -0.08926631748968766,
+   "paired_ci95": [
+    -0.12307831324368004,
+    -0.057334190963182964
+   ],
+   "beats_uniform_mean": false,
+   "beats_uniform_max": false,
+   "beats_translation_mean": false,
+   "truth_px": 24672,
+   "eligible_px": 2075898
+  },
+  {
+   "fold": "NE",
+   "n_dots_in_fold": 12462,
+   "candidate_dti": 0.0,
+   "uniform_mean": 0.10030550134958098,
+   "uniform_draws": [
+    0.10124598633810844,
+    0.10065021882357335,
+    0.09902029888706117
+   ],
+   "uniform_max": 0.10124598633810844,
+   "translation_mean": 0.08968726507769383,
+   "paired_delta_mean": -0.0802850756965659,
+   "paired_ci95": [
+    -0.10615976072196141,
+    -0.0019073006229341483
+   ],
+   "beats_uniform_mean": false,
+   "beats_uniform_max": false,
+   "beats_translation_mean": false,
+   "truth_px": 9275,
+   "eligible_px": 987533
+  },
+  {
+   "fold": "SW",
+   "n_dots_in_fold": 9609,
+   "candidate_dti": 0.0,
+   "uniform_mean": 0.1872904991952126,
+   "uniform_draws": [
+    0.19063775922191156,
+    0.18487159798313868,
+    0.1863621403805876
+   ],
+   "uniform_max": 0.19063775922191156,
+   "translation_mean": 0.11869406484703965,
+   "paired_delta_mean": -0.15035360134951506,
+   "paired_ci95": [
+    -0.18778523411673284,
+    -0.10317129633024583
+   ],
+   "beats_uniform_mean": false,
+   "beats_uniform_max": false,
+   "beats_translation_mean": false,
+   "truth_px": 6514,
+   "eligible_px": 375029
+  },
+  {
+   "fold": "SE",
+   "n_dots_in_fold": 15437,
+   "candidate_dti": 0.0,
+   "uniform_mean": 0.1666616012397717,
+   "uniform_draws": [
+    0.16595779874145358,
+    0.17250856752476487,
+    0.1615184374530966
+   ],
+   "uniform_max": 0.17250856752476487,
+   "translation_mean": 0.0897862468666035,
+   "paired_delta_mean": -0.1254720387672316,
+   "paired_ci95": [
+    -0.15627520295694775,
+    -0.08128174181912033
+   ],
+   "beats_uniform_mean": false,
+   "beats_uniform_max": false,
+   "beats_translation_mean": false,
+   "truth_px": 6624,
+   "eligible_px": 600955
+  }
+ ],
+ "summary": {
+  "n_macrofolds": 4,
+  "positive_macrofolds": 0,
+  "pooled_candidate": 0.0,
+  "pooled_uniform": 0.1438285974207804,
+  "mean_paired_delta": -0.11134425832575004,
+  "beats_uniform_in_all_folds": false,
+  "beats_translation_in_all_folds": false
+ }
+}

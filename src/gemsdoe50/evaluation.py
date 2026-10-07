@@ -7,6 +7,7 @@ import numpy as np
 import rasterio
 
 from .common import sha256_array, sha256_file
+from .controls import SMOOTHED_DENSITY_CONTROL_NAMES
 from .holdout import SpatialBlock
 from .metric import DTIComponents, distance_weighted_tversky
 from .raster import check_same_grid
@@ -16,11 +17,6 @@ BOOTSTRAP_REPLICATES = 5000
 TRANSLATION_CONTROLS = 32
 TIME_SHUFFLE_CONTROLS = 20
 PRIMARY_INCUMBENT_NAME = "H50-prior"
-SMOOTHED_DENSITY_CONTROL_SIGMA_M = {
-    "smoothed-density-1km": 1000.0,
-    "smoothed-density-2km": 2000.0,
-}
-SMOOTHED_DENSITY_CONTROL_NAMES = tuple(SMOOTHED_DENSITY_CONTROL_SIGMA_M)
 
 
 def allocate_largest_remainder(total: int, weights: list[int]) -> list[int]:
@@ -365,7 +361,7 @@ def evaluate_hypothesis(
         "beats_95th_percentile_time_shuffle_control": bool(
             candidate["pooled"]["score"] > time_control_q95
         ),
-        "beats_both_smoothed_density_controls": bool(beats_density_controls),
+        "beats_all_smoothed_density_controls": bool(beats_density_controls),
     }
     gate_pass = all(pass_components.values())
 
@@ -401,7 +397,7 @@ def evaluate_hypothesis(
         "smoothed_density_controls": {
             "names": list(SMOOTHED_DENSITY_CONTROL_NAMES),
             "pooled_dti": density_control_scores,
-            "candidate_beats_both": bool(beats_density_controls),
+            "candidate_beats_all": bool(beats_density_controls),
             "interpretation": (
                 "Gaussian-smoothed counts from the same relocated events; controls spatial "
                 "density, not aftershock or mining/injection confounding."

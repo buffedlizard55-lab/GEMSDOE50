@@ -274,16 +274,18 @@ def main() -> int:
         "archive_note": archive_note,
         "organizer_score": None,
         "sources": [
-            {"name": "3DEP / LiDAR scarp and topographic descriptors (competition feature stack)",
-             "licence": "U.S. public domain (USGS)",
-             "url": "https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits",
-             "used_for": "topographic scarp lineament family"},
+            {"name": "USGS 3DEP-derived scarp descriptor raster (12-band sibling-repository derivative)",
+             "licence": "UNRESOLVED: raw USGS 3DEP is public domain, but the mirrored derived raster's reuse license is undocumented; not cleared for external competition use",
+             "url": "https://github.com/buffedlizard55-lab/GEMSDOE24/blob/main/data/external/lidar_scarp_features_u8.tif",
+             "used_for": "topographic scarp lineament family; do not upload/share until derivative rights are clarified"},
             {"name": "Airborne radiometric K/Th/U and ratio grids (competition feature stack)",
-             "licence": "U.S. public domain (USGS)", "url": "https://www.usgs.gov/", "used_for": "radiometric lineament family"},
+             "licence": "USGS source products are generally public domain; provenance and reuse terms for the exact derived rasters were not independently audited here",
+             "url": "https://www.usgs.gov/",
+             "used_for": "radiometric lineament family; verify exact inputs and sharing terms before external submission"},
             {"name": "USGS ANSS Comprehensive Earthquake Catalog (ComCat)",
-             "licence": "Unresolved at record/contributor level; not cleared for challenge use or sponsor sharing",
+             "licence": "UNRESOLVED at record/contributor level; mixed-network export is not cleared for external competition use",
              "url": "https://earthquake.usgs.gov/fdsnws/event/1/",
-             "used_for": "historical H51-B seismicity-family evaluation only; mixed-network source rights remain unresolved"},
+             "used_for": "legacy H51 seismicity-family analysis only; not given mass in this file; rights/shareability unresolved"},
             {"name": "USGS State Geologic Map Compilation fault inventory",
              "licence": "U.S. public domain (USGS)", "url": "https://www.usgs.gov/",
              "used_for": "off-catalogue scoring instrument only"},
@@ -291,6 +293,7 @@ def main() -> int:
         "caveats": [
             "no organizer score or upload receipt exists for this file",
             "the location-uncertainty model is this project's own construction, not from arXiv:1304.6912",
+            "the exact derived scarp raster has no documented reuse license; mixed-network ComCat rights/shareability are unresolved; this file is not cleared for external competition upload until both sources are reviewed",
         ],
     }
     h53_build_path = REPO / "evidence" / "h53-build-20261007.json"
