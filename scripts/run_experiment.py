@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run the frozen H50-S1 experiment and write an auditable research-only GeoTIFF."""
+"""Run H50-S1 with a terrain intersection and a statistical artifact-publication gate."""
 
 from __future__ import annotations
 
@@ -12,13 +12,13 @@ from pathlib import Path
 from typing import Any
 
 import numpy as np
-from scipy.ndimage import distance_transform_edt, gaussian_filter
+from scipy.ndimage import distance_transform_edt
 
-from gemsdoe50.catalog import CatalogEvents, read_nevada_catalog
+from gemsdoe50.catalog import read_nevada_catalog
 from gemsdoe50.common import jsonable, md5_file, sha256_array, sha256_file
+from gemsdoe50.controls import SMOOTHED_DENSITY_CONTROL_SIGMA_M, build_smoothed_density_control
 from gemsdoe50.evaluation import (
     PREDICTION_MASS,
-    SMOOTHED_DENSITY_CONTROL_SIGMA_M,
     TIME_SHUFFLE_CONTROLS,
     _top_n_prediction,
     evaluate_hypothesis,
@@ -109,44 +109,13 @@ def _verify_frozen_realization(
     return sha256_file(realization_path)
 
 
-def _smoothed_density_control(
-    events: CatalogEvents,
-    valid_mask: np.ndarray,
-    *,
-    pixel_size_m: float,
-    sigma_m: float,
-) -> np.ndarray:
-    """Build a normalized Gaussian event-count control from relocated events."""
-    valid = np.asarray(valid_mask, dtype=bool)
-    if pixel_size_m <= 0 or sigma_m <= 0:
-        raise ValueError("pixel_size_m and sigma_m must be positive")
-    relocated = np.asarray(events.relocated) == 1
-    rows = np.asarray(events.row)[relocated]
-    cols = np.asarray(events.col)[relocated]
-    if np.any((rows < 0) | (rows >= valid.shape[0]) | (cols < 0) | (cols >= valid.shape[1])):
-        raise ValueError("catalog event cell is outside the density-control grid")
-    if np.any(~valid[rows, cols]):
-        raise ValueError("catalog event falls outside the valid density-control footprint")
-    counts = np.zeros(valid.shape, dtype=np.float32)
-    np.add.at(counts, (rows, cols), 1.0)
-    density = gaussian_filter(
-        counts,
-        sigma=sigma_m / pixel_size_m,
-        mode="constant",
-        cval=0.0,
-    )
-    density[~valid] = 0.0
-    maximum = float(density.max()) if density.size else 0.0
-    if maximum > 0:
-        density /= maximum
-    return density.astype(np.float32, copy=False)
-
-
 def _write_outputs(
     *,
     catalog_path: Path,
     template_path: Path,
     labels_path: Path,
+    dem_path: Path,
+    dem_metadata_path: Path,
     split_path: Path,
     realization_path: Path,
     prior_dir: Path,
@@ -154,6 +123,10 @@ def _write_outputs(
     report_path: Path,
     shuffle_count: int,
 ) -> dict[str, Any]:
+    output_tiff = Path(output_tiff)
+    report_path = Path(report_path)
+    # Never leave a stale candidate available if this run later fails its statistical gate.
+    output_tiff.unlink(missing_ok=True)
     spec = load_split_spec(split_path)
     template_sha = sha256_file(template_path)
     labels_sha = sha256_file(labels_path)
@@ -168,6 +141,19 @@ def _write_outputs(
         raise ValueError(f"catalog MD5 mismatch: {catalog_md5}")
     catalog_sha = sha256_file(catalog_path)
     split_sha = sha256_file(split_path)
+    if not dem_path.is_file():
+        raise FileNotFoundError(f"3DEP DEM is missing: {dem_path}")
+    if not dem_metadata_path.is_file():
+        raise FileNotFoundError(
+            f"3DEP acquisition metadata is missing: {dem_metadata_path}; "
+            "download with scripts/download_3dep_dem.py before scoring"
+        )
+    surface_dem_sha = sha256_file(dem_path)
+    surface_dem_metadata = json.loads(dem_metadata_path.read_text(encoding="utf-8"))
+    if surface_dem_metadata.get("sha256") != surface_dem_sha:
+        raise ValueError("3DEP acquisition metadata SHA-256 does not match the DEM bytes")
+    if "3DEPElevation" not in str(surface_dem_metadata.get("service_url", "")):
+        raise ValueError("DEM acquisition sidecar does not identify the official USGS 3DEP service")
 
     _, valid_mask, _ = load_template(template_path)
     truth_mask, label_metadata = load_labels(labels_path, template_path, valid_mask)
@@ -199,7 +185,12 @@ def _write_outputs(
     )
 
     config = LineamentConfig()
-    candidate_result = extract_h50s1_lineaments(events, str(template_path), config)
+    candidate_result = extract_h50s1_lineaments(
+        events,
+        str(template_path),
+        str(dem_path),
+        config,
+    )
     candidate_scores = candidate_result.score
 
     time_shuffle_maps: dict[str, np.ndarray] = {}
@@ -220,6 +211,7 @@ def _write_outputs(
         shuffled_result = extract_h50s1_lineaments(
             shuffled_events,
             str(template_path),
+            str(dem_path),
             config,
         )
         name = f"time-shuffle-{replicate + 1:02d}"
@@ -242,33 +234,11 @@ def _write_outputs(
         "catalog": catalog_sha,
         "template": template_sha,
         "labels": labels_sha,
+        "surface_dem": surface_dem_sha,
+        "surface_dem_source_metadata": sha256_file(dem_metadata_path),
         "holdout_spec": split_sha,
         "holdout_realized": realized_sha,
     }
-    pixel_size_m = float(spec["grid"]["pixel_size_m"])
-    for name, sigma_m in SMOOTHED_DENSITY_CONTROL_SIGMA_M.items():
-        density_map = _smoothed_density_control(
-            events,
-            valid_mask,
-            pixel_size_m=pixel_size_m,
-            sigma_m=sigma_m,
-        )
-        density_sha = sha256_array(density_map)
-        baseline_maps[name] = density_map
-        baseline_metadata[name] = {
-            "kind": "derived Gaussian-smoothed relocated-event count control",
-            "catalog_sha256": catalog_sha,
-            "score_map_sha256": density_sha,
-            "sigma_m": sigma_m,
-            "pixel_size_m": pixel_size_m,
-            "relocated_event_count": int(np.count_nonzero(events.relocated == 1)),
-            "normalization": "divide by map maximum after smoothing; zero outside valid footprint",
-            "confound_limitations": [
-                "uses the same un-declustered catalog events as H50-S1",
-                "not screened for mining or injection sites",
-            ],
-        }
-        input_hashes[name] = density_sha
     for name, pin in BASELINE_PINS.items():
         path = prior_dir / pin["file"]
         actual_sha = sha256_file(path)
@@ -280,6 +250,16 @@ def _write_outputs(
         baseline_metadata[name] = metadata
         input_hashes[name] = actual_sha
 
+    density_control_metadata: dict[str, Any] = {}
+    for name, sigma_m in SMOOTHED_DENSITY_CONTROL_SIGMA_M.items():
+        density_map, density_metadata = build_smoothed_density_control(
+            events, template_path, sigma_m=sigma_m
+        )
+        baseline_maps[name] = density_map
+        baseline_metadata[name] = density_metadata
+        input_hashes[name] = density_metadata["score_map_sha256"]
+        density_control_metadata[name] = density_metadata
+
     evaluation = evaluate_hypothesis(
         candidate_scores,
         baseline_maps,
@@ -290,84 +270,109 @@ def _write_outputs(
     )
     evaluation["time_shuffle_run_metadata"] = time_shuffle_metadata
 
-    numeric_gate = evaluation["promotion_gate"]
-    numeric_pass = bool(numeric_gate["pass"])
+    # A downloadable raster is never emitted on a statistical holdout failure.
+    # This is not the full submission gate: separate scientific/provenance gates below
+    # still block weekly-slot use even if the holdout promotion criteria pass.
+    artifact_built = False
+    raster_validation: dict[str, Any] | None = None
+    prior_jaccard: dict[str, float] = {}
+    final_positive = 0
+    known_buffer_cells = 0
+    if evaluation["promotion_gate"]["pass"]:
+        # Final raster predicts candidate traces only, excludes the known-label
+        # catalogue buffered by 300 m, and uses a fixed binary 37,612-cell budget.
+        distance_to_known_m = distance_transform_edt(
+            ~truth_mask,
+            sampling=(spec["grid"]["pixel_size_m"], spec["grid"]["pixel_size_m"]),
+        )
+        known_buffer = distance_to_known_m <= spec["rules"]["visible_training_label_buffer_m"]
+        known_buffer_cells = int(np.count_nonzero(known_buffer & valid_mask))
+        final_eligible = valid_mask & ~known_buffer
+        final_predictions = _top_n_prediction(
+            candidate_scores,
+            final_eligible,
+            PREDICTION_MASS,
+            seed=5001,
+        )
+        final_positive = int(np.count_nonzero(final_predictions > 0))
+        if final_positive > 0:
+            if np.any((final_predictions > 0) & known_buffer):
+                raise ValueError("final prediction overlaps the known-fault 300 m exclusion buffer")
+            raster_validation = write_submission(
+                template_path,
+                output_tiff,
+                final_predictions,
+                valid_mask,
+            )
+            artifact_built = True
+            prior_jaccard = {
+                name: spatial_jaccard(final_predictions, baseline_maps[name], valid_mask)
+                for name in BASELINE_PINS
+            }
+    else:
+        print(
+            "Statistical holdout gate failed; no candidate GeoTIFF will be written.",
+            flush=True,
+        )
+
     scientific_gates = {
-        "aftershock_declustering_complete": {
-            "pass": False,
-            "detail": (
-                "H50-S1 applies one-event-per-250-m-cell-per-year deduplication, not a "
-                "formal space-time aftershock/sequence-declustering control."
-            ),
-        },
-        "mining_injection_screen_complete": {
-            "pass": False,
-            "detail": (
-                "NBMG screening layers were reviewed at metadata level but were not acquired "
-                "or applied; coverage and operational dates are incomplete."
-            ),
-        },
-        "event_location_uncertainty_informs_corridor": {
-            "pass": False,
-            "detail": (
-                "The catalog has no event-specific location covariance; bootstrap orientation "
-                "stability does not estimate absolute position error or justify corridor width."
-            ),
-        },
-        "visible_label_300m_buffer_enforced": {
-            "pass": True,
-            "detail": (
-                "Frozen holdout scoring excludes visible labels buffered by 300 m; the unique "
-                "output also excludes the full training-label mask buffered by 300 m."
-            ),
-        },
+        "statistical_holdout_promotion": bool(evaluation["promotion_gate"]["pass"]),
+        "external_data_license_and_sponsor_sharing": True,
+        "catalog_event_location_uncertainty_accounted": False,
+        "standard_declustering_and_sensitivity_analysis_completed": False,
+        "event_type_and_injection_induced_events_screened": False,
+        "injection_site_exclusions_validated": False,
+        "mine_quarry_and_terrain_false_positive_exclusions_validated": False,
+        "catalog_to_dem_vertical_datum_transformation_verified": False,
+        "competition_training_raster_origin_independently_authenticated": False,
+        "competition_format_tiff_built_and_byte_validated": bool(artifact_built),
     }
-    for gate_name, gate in scientific_gates.items():
-        numeric_gate["components"][gate_name] = bool(gate["pass"])
-    overall_pass = numeric_pass and all(bool(gate["pass"]) for gate in scientific_gates.values())
-    numeric_gate["numeric_pass"] = numeric_pass
-    numeric_gate["scientific_gates"] = scientific_gates
-    numeric_gate["pass"] = bool(overall_pass)
-    numeric_gate["decision"] = "ELIGIBLE_FOR_REVIEW_ONLY" if overall_pass else "NO_SLOT"
-    numeric_gate["note"] = (
-        "A score-only pass is insufficient. All scientific data/confound gates and local proxy "
-        "criteria must pass before review; no portal acceptance or private-test performance is implied."
-    )
-
-    # Final raster predicts candidate traces only, excludes the complete known
-    # catalogue buffered by 300 m, and uses a fixed, binary 37,612-pixel budget.
-    distance_to_known_m = distance_transform_edt(
-        ~truth_mask, sampling=(spec["grid"]["pixel_size_m"], spec["grid"]["pixel_size_m"])
-    )
-    known_buffer = distance_to_known_m <= spec["rules"]["visible_training_label_buffer_m"]
-    final_eligible = valid_mask & ~known_buffer
-    final_predictions = _top_n_prediction(
-        candidate_scores,
-        final_eligible,
-        PREDICTION_MASS,
-        seed=5001,
-    )
-    raster_validation = write_submission(
-        template_path,
-        output_tiff,
-        final_predictions,
-        valid_mask,
-    )
-    if np.any((final_predictions > 0) & known_buffer):
-        raise ValueError("final prediction overlaps the known-fault 300 m exclusion buffer")
-
-    prior_jaccard = {
-        name: spatial_jaccard(final_predictions, baseline_maps[name], valid_mask)
-        for name in BASELINE_PINS
+    slot_eligible = all(scientific_gates.values())
+    submission_eligibility = {
+        "pass": slot_eligible,
+        "decision": "ELIGIBLE_FOR_MANUAL_OWNER_REVIEW" if slot_eligible else "NO_SLOT",
+        "gates": scientific_gates,
+        "note": (
+            "A statistical holdout pass alone does not authorize a weekly slot. Current missing "
+            "location uncertainty, declustering, event/site exclusions, vertical-datum validation, "
+            "and independent competition-raster provenance keep this experiment research-only."
+        ),
     }
-    final_positive = int(np.count_nonzero(final_predictions > 0))
-
+    optional_note = (
+        "Terrain-intersected relocated Nevada event-plane lineaments; 300 m known-label exclusion; "
+        "research diagnostic, not organizer-scored."
+    )
+    artifact_record = {
+        "built": artifact_built,
+        "research_only": True,
+        "path": str(output_tiff) if artifact_built else None,
+        "unique_name": output_tiff.name,
+        "filename_status": "produced" if artifact_built else "planned only; no TIFF was written",
+        "optional_note": optional_note,
+        "sha256": raster_validation["sha256"] if raster_validation else None,
+        "bytes": raster_validation["bytes"] if raster_validation else None,
+        "known_fault_buffer_m": spec["rules"]["visible_training_label_buffer_m"],
+        "known_label_buffer_excluded_cells": known_buffer_cells,
+        "prediction_mass_budget": PREDICTION_MASS,
+        "positive_cells": final_positive,
+        "nonempty_candidate": bool(final_positive > 0),
+        "positive_mask_jaccard_vs_prior": prior_jaccard,
+        "exact_prediction_mask_match_vs_prior": {
+            name: bool(prior_jaccard[name] == 1.0) for name in prior_jaccard
+        },
+        "validation": raster_validation,
+        "build_rule": "A new GeoTIFF is written only when every preregistered statistical holdout component passes.",
+    }
     report = {
         "project": "GEMSDOE50",
-        "hypothesis": "H50-S1 — relocated Nevada hypocenter planes projected to z=0 lineaments",
-        "status": "RESEARCH_ONLY_NOT_SUBMITTED"
-        if final_positive
-        else "NO_CANDIDATE_PIXELS_NOT_SUBMITTED",
+        "hypothesis": "H50-S1 — relocated Nevada hypocenter planes intersected with terrain elevations",
+        "status": (
+            "RESEARCH_ONLY_STATISTICAL_HOLDOUT_PASS"
+            if artifact_built
+            else "STATISTICAL_HOLDOUT_FAILED"
+            if not evaluation["promotion_gate"]["pass"]
+            else "STATISTICAL_HOLDOUT_PASS_NO_NONEMPTY_ARTIFACT"
+        ),
         "created_utc": datetime.now(timezone.utc).isoformat(),
         "git_commit": _git_commit(),
         "registered_split": {
@@ -387,6 +392,16 @@ def _write_outputs(
         },
         "data": {
             "catalog": catalog_metadata,
+            "surface_dem": {
+                **surface_dem_metadata,
+                "path": str(dem_path),
+                "sha256": surface_dem_sha,
+                "bytes": dem_path.stat().st_size,
+                "vertical_datum_status": (
+                    "The 3DEP mosaic export is recorded, but a single source vertical datum and a "
+                    "catalog mean-sea-level conversion have not been verified."
+                ),
+            },
             "competition_training_rasters": {
                 "template_sha256": template_sha,
                 "labels_sha256": labels_sha,
@@ -398,46 +413,64 @@ def _write_outputs(
                     "the official originals."
                 ),
             },
-            "prior_artifacts": baseline_metadata,
+            "prior_artifacts": {
+                name: metadata for name, metadata in baseline_metadata.items()
+                if name in BASELINE_PINS
+            },
+            "smoothed_density_controls": density_control_metadata,
         },
         "candidate_extraction": candidate_result.metadata,
         "evaluation": evaluation,
-        "submission_artifact": {
-            **raster_validation,
-            "unique_name": output_tiff.name,
-            "optional_note": (
-                "Relocated Nevada event-plane lineaments; 300 m known-fault exclusion; "
-                "research proxy, not organizer-scored."
-            ),
-            "known_fault_buffer_m": spec["rules"]["visible_training_label_buffer_m"],
-            "prediction_mass_budget": PREDICTION_MASS,
-            "positive_cells": final_positive,
-            "nonempty_candidate": bool(final_positive > 0),
-            "positive_mask_jaccard_vs_prior": prior_jaccard,
-            "exact_prediction_mask_match_vs_prior": {
-                name: bool(prior_jaccard[name] == 1.0) for name in prior_jaccard
+        "score_context": {
+            "reported_0_2778": {
+                "status": "unresolved project-reported association; not independently verified as an organizer score",
+                "context": (
+                    "An archived GEMSDOE50 report associates 0.2778 with a legacy H33-2-B2 raster. "
+                    "The current GEMSDOE32 owner site describes H33-2-B2 as unscored and 0.2747 as a "
+                    "model projection, so the 0.2778 score-to-artifact association remains unresolved."
+                ),
+                "archive_url": "https://github.com/buffedlizard55-lab/GEMSDOE50/blob/main/docs/report.html",
+                "owner_context_url": "https://buffedlizard55-lab.github.io/GEMSDOE32/docs/index.html",
             },
+            "owner_reported_0_3195": {
+                "status": "owner-provided historical context; not independently verified and not current leaderboard status",
+                "context": "No portal receipt or verified score-to-artifact mapping is available in this experiment.",
+            },
+            "leaderboard_access": "No fresh monitoring, scraping, or snapshotting was performed; historical values are not mapped to this candidate.",
         },
+        "submission_artifact": artifact_record,
         "external_data_license": {
-            "catalog": "CC BY 4.0",
-            "catalog_doi": "10.5281/zenodo.11167510",
-            "commercial_use_permitted_by_license": True,
-            "shareable_with_organizers": True,
-            "attribution": "Trugman (2024), Relocated Earthquake Catalog for Nevada (2008–2023), Zenodo v2, https://doi.org/10.5281/zenodo.11167510, CC BY 4.0.",
+            "nevada_catalog": {
+                "license": "CC BY 4.0",
+                "doi": "10.5281/zenodo.11167510",
+                "commercial_use_permitted_by_license": True,
+                "shareable_with_organizers_subject_to_attribution": True,
+                "attribution": "Trugman (2024), Relocated Earthquake Catalog for Nevada (2008–2023), Zenodo v2, https://doi.org/10.5281/zenodo.11167510, CC BY 4.0.",
+            },
+            "usgs_3dep_dem": {
+                "license": "Public domain; USGS states all 3DEP products are public domain.",
+                "source": "https://data.usgs.gov/datacatalog/data/USGS:77ae0551-c61e-4979-aedd-d797abdcde0e",
+                "service": "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer",
+            },
             "competition_rule_source": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/",
-            "limitation": "The catalog does not provide event-specific location covariance; do not treat coordinate decimal precision as accuracy.",
+            "unlicensed_derived_rasters": "The GEMSDOE24 12-band scarp derivative was not used because its repository has no explicit license.",
         },
-        "decision": evaluation["promotion_gate"],
+        "submission_eligibility": submission_eligibility,
+        "decision": submission_eligibility,
         "submission_status": "No DrivenData upload or weekly slot was used.",
     }
     write_json(report_path, report)
     print(f"Report: {report_path}")
     print(f"Report SHA-256: {sha256_file(report_path)}")
-    print(f"GeoTIFF: {output_tiff}")
-    print(f"GeoTIFF SHA-256: {raster_validation['sha256']}")
+    if artifact_built and raster_validation:
+        print(f"Research-only GeoTIFF: {output_tiff}")
+        print(f"GeoTIFF SHA-256: {raster_validation['sha256']}")
+    else:
+        print("GeoTIFF: not written because the statistical holdout gate failed or yielded no pixels")
     print(f"Pooled DTI: {evaluation['method_results']['H50-S1']['pooled']['score']:.6f}")
     print(f"Incumbent: {evaluation['incumbent_method']}")
-    print(f"Gate: {evaluation['promotion_gate']['decision']}")
+    print(f"Holdout gate: {evaluation['promotion_gate']['decision']}")
+    print(f"Submission eligibility: {submission_eligibility['decision']}")
     return report
 
 
@@ -446,6 +479,12 @@ def main() -> None:
     parser.add_argument("--catalog", required=True)
     parser.add_argument("--template", required=True)
     parser.add_argument("--labels", required=True)
+    parser.add_argument("--dem", required=True, help="100 m USGS 3DEP DEM on the exact template grid")
+    parser.add_argument(
+        "--dem-metadata",
+        default=None,
+        help="acquisition JSON sidecar; defaults to --dem with a .json suffix",
+    )
     parser.add_argument("--split", default="evidence/holdout-v1.json")
     parser.add_argument("--realized", default="evidence/holdout-realized-v1.json")
     parser.add_argument("--prior-dir", default=".arena/run/prior")
@@ -463,6 +502,8 @@ def main() -> None:
         catalog_path=Path(args.catalog),
         template_path=Path(args.template),
         labels_path=Path(args.labels),
+        dem_path=Path(args.dem),
+        dem_metadata_path=Path(args.dem_metadata) if args.dem_metadata else Path(args.dem).with_suffix(".json"),
         split_path=Path(args.split),
         realization_path=Path(args.realized),
         prior_dir=Path(args.prior_dir),

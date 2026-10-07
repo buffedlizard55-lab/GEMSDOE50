@@ -1,4 +1,7 @@
-"""2-D anisotropic lineation extraction (the OADC idea, adapted from 3-D to epicentres).
+"""LEGACY 2-D anisotropic lineation prototype; not an H50-S1 candidate.
+
+Its ``horizontalError`` conversion/weighting is an unverified mixed-ComCat assumption.
+Do not describe this module as an uncertainty-aware or ACLUD implementation.
 
 Method, and exactly which part of it is published where
 -------------------------------------------------------
@@ -17,9 +20,10 @@ Method, and exactly which part of it is published where
 * Wang, Y., Ouillon, G., Woessner, J., Sornette, D. and Husen, S. (2013),
   "Automatic reconstruction of fault networks from seismicity catalogs including location
   uncertainty", JGR Solid Earth 118, 5956-5975, doi:10.1002/2013JB010164
-  (preprint arXiv:1304.6912).  Published content used here: each event carries its **own**
-  location uncertainty and the clustering must respect that heterogeneity.  That is
-  implemented here as uncertainty weighting and as a per-neighbourhood Δ.
+  (preprint arXiv:1304.6912). This legacy module assumed the inherited ComCat
+  ``horizontalError`` field was a per-event uncertainty in kilometres and applied weights
+  from it. That assumption was not verified for the mixed-source extract, is not a validated
+  reproduction of ACLUD, and is not used by H50-S1.
 
 What is *this project's own* adaptation (flagged, unverified against published results):
 
@@ -52,7 +56,7 @@ class Segments:
     uy: np.ndarray
     sigma1_m: np.ndarray  # major-axis standard deviation (m)
     sigma2_m: np.ndarray  # minor-axis standard deviation (m)
-    delta_m: np.ndarray  # local location uncertainty 1-sigma (m)
+    delta_m: np.ndarray  # legacy conversion of an unverified numeric source field; not calibrated sigma
     n_events: np.ndarray
     weight: np.ndarray  # linearity weight in (0, 1]
 
@@ -82,7 +86,8 @@ def neighbourhood_axes(
     Parameters
     ----------
     xy : (n, 2) projected metres.
-    h_err_m : (n,) epicentral 1-sigma uncertainty, metres.
+    h_err_m : (n,) legacy numeric values converted to metres under an unverified assumption;
+        not established as 1-sigma uncertainty and not suitable as calibrated errors.
     k, r_max_m : neighbourhood definition.
     min_events : a neighbourhood must contain at least this many events.
     linearity_min : ``1 - sigma2/sigma1`` must reach this (higher = more line-like).

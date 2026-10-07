@@ -79,6 +79,8 @@ jobs:
             --catalog .arena/run/inputs/nvreloc_catalog_newmag.txt \
             --template .arena/run/inputs/example_submission.tif \
             --labels .arena/run/inputs/existing_faults.tif \
+            --dem .arena/run/inputs/3dep_dem_100m.tif \
+            --dem-metadata .arena/run/inputs/3dep_dem_100m.json \
             --split evidence/holdout-v1.json \
             --realized evidence/holdout-realized-v1.json \
             --prior-dir .arena/run/prior \
@@ -87,12 +89,18 @@ jobs:
       - name: Build the executive-summary and submission-instructions pages
         run: python scripts/build_h50_site.py
 
-      - name: Publish the auditable report, site, and generated research-only TIFF to this branch
+      - name: Publish the auditable report and site; include a TIFF only if its holdout gate passes
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add evidence/results/h50s1-evaluation-20261006.json \
-            docs/downloads/gemsdoe50-h50s1-relocated-planes-20261006-research.tif \
             index.html results.html submission.html methods.html
+          TIFF='docs/downloads/gemsdoe50-h50s1-relocated-planes-20261006-research.tif'
+          # Stage both a newly validated TIFF and removal of any stale prior artifact.
+          git add -A -- "$TIFF"
+          if git diff --cached --quiet; then
+            echo 'No report/site changes to publish.'
+            exit 0
+          fi
           git commit -m 'experiment: report preregistered H50-S1 holdout results'
           git push origin HEAD:arena/38c5cc42-gemsdoe50

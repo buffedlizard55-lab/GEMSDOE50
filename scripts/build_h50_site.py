@@ -4,13 +4,18 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import html
 import json
 from pathlib import Path
 from typing import Any
 
+import numpy as np
+import rasterio
+
 REPORT_DEFAULT = Path("evidence/results/h50s1-evaluation-20261006.json")
 TIFF_DEFAULT = Path("docs/downloads/gemsdoe50-h50s1-relocated-planes-20261006-research.tif")
+PINNED_SPLIT_PATH = Path(__file__).resolve().parents[1] / "evidence/holdout-v1.json"
 
 STYLE = """
 :root{color-scheme:light;--ink:#172a33;--muted:#536970;--paper:#f5f2e9;--card:#fffdf7;--line:#d4ded8;--teal:#00685e;--teal2:#dcefe9;--gold:#a96519;--red:#8b382e;--redbg:#f8e8e3;--green:#145b48;--greenbg:#e1f1e8;--blue:#163e55;--shadow:0 14px 40px rgba(23,42,51,.08)}
@@ -97,16 +102,16 @@ def h51_download_band(h51: dict[str, Any]) -> str:
     finite = outputs["allfinite"]
     zip_info = outputs["zip"]
     return f"""<section style="background:#0d3b34;color:#f2f7f2;padding:26px 0;border-bottom:4px solid #d99a52"><div class="shell">
-<div class="eyebrow" style="color:#f0c58a">⬇ ONE-CLICK COMPETITION SUBMISSION FILE</div>
-<h2 style="color:#ffffff;margin:.2em 0 .3em;font-size:clamp(1.5rem,3.4vw,2.3rem)">Download, then upload this one file</h2>
-<p style="color:#d7e8e0;max-width:900px">Single band, float32, EPSG:32611, 100 m, 3292 × 3730, every in-footprint value in [0, 1]. Verified by re-reading the written bytes; no prior submission pixels are reused.</p>
-<p><a class="button" style="font-size:1.05rem" href="docs/downloads/{esc(primary['path'].split('/')[-1])}" download>⬇ Download {esc(primary['path'].split('/')[-1])}</a>
-<a class="button secondary" style="margin-left:10px" href="docs/downloads/{esc(finite['path'].split('/')[-1])}" download>all-finite twin (0.0 outside)</a>
+<div class="eyebrow" style="color:#f0c58a">⬇ RESEARCH-ONLY FILE — SOURCE-RIGHTS GATE OPEN</div>
+<h2 style="color:#ffffff;margin:.2em 0 .3em;font-size:clamp(1.5rem,3.4vw,2.3rem)">Download for review; do not upload yet</h2>
+<p style="color:#d7e8e0;max-width:900px">Single band, float32, EPSG:32611, 100 m, 3292 × 3730, every in-footprint value in [0, 1]. The bytes were re-read and format-checked. However, the exact derived scarp raster's reuse license is undocumented; the mixed-network ComCat source also has unresolved rights/shareability. Do not submit until exact input rights and sponsor-sharing permission are independently cleared.</p>
+<p><a class="button" style="font-size:1.05rem" href="docs/downloads/{esc(primary['path'].split('/')[-1])}" download>⬇ Download research-only {esc(primary['path'].split('/')[-1])}</a>
+<a class="button secondary" style="margin-left:10px" href="docs/downloads/{esc(finite['path'].split('/')[-1])}" download>all-finite research twin (0.0 outside)</a>
 <a class="button secondary" style="margin-left:10px" href="docs/downloads/{esc(zip_info['path'].split('/')[-1])}" download>.zip (single GeoTIFF inside)</a></p>
-<p class="small" style="color:#cfe3da">Unique submission name to paste in the portal: <code>GEMSDOE50-H51-SCARPRADIO-OFFCAT</code><br>
-Optional note: <q>{esc(H51_NOTE)}</q><br>
+<p class="small" style="color:#cfe3da">Reserved name for a future manual entry, only if all gates pass: <code>GEMSDOE50-H51-SCARPRADIO-OFFCAT</code><br>
+Optional note (not evidence of eligibility): <q>{esc(H51_NOTE)}</q><br>
 SHA-256 <span class="hash">{esc(primary['sha256'])}</span> · {int(primary['footprint_nonzero']):,} predicted pixels · {primary['bytes']:,} bytes</p>
-<p class="small" style="color:#f0c58a"><strong>Not organizer-scored.</strong> The numbers below are local proxy instruments measured on this grid, not the hidden expert labels. Confirm the current portal specification before uploading; this project never uploads for you.</p>
+<p class="small" style="color:#f0c58a"><strong>Not organizer-scored; no slot has been used.</strong> The numbers below are local proxy instruments, not hidden labels. This artifact is <strong>not cleared for external upload</strong> while the exact derived-raster license and mixed-network source rights remain unresolved. This project never uploads for you.</p>
 </div></section>"""
 
 
@@ -260,7 +265,7 @@ def h51_methods_block(h51: dict[str, Any]) -> str:
 <div class="wide"><table><tr><th>family</th><th>layers</th><th>evidence class</th></tr>{fam_rows}</table></div>
 <p><strong>Domain.</strong> Every emitted dot is more than 300 m from any provided-catalogue pixel. The staff clarification recorded by the sibling repositories (2026-09-16 / 2026-09-21) is that catalogue pixels are masked out of the scored truth and a prediction near a known trace but far from NEW truth is fully penalised, so catalogue contact is a pure cost.</p>
 <p><strong>Emission.</strong> Greedy packing by expected marginal credit with a 3-pixel suppression radius, because two dots closer than the metric's own 300 m kernel are nearly redundant while each still costs the 0.2 term.</p>
-<p><strong>Mass.</strong> The metric's own marginal condition (a dot pays iff its kernel credit exceeds 0.2 × DTI) applied through the only transfer that can be measured: the owner's one file with both a live score and a local SGMC-off score gives a marginal transfer of {h51['mass_rule']['marginal_transfer']}.</p>
+<p><strong>Mass.</strong> The metric's own marginal condition (a dot pays iff its kernel credit exceeds 0.2 × DTI) is applied through an owner-provided historical file with a reported score and a local SGMC-off score; this yields a marginal transfer estimate of {h51['mass_rule']['marginal_transfer']}, not a current official measurement.</p>
 </article>
 <article class="card span-4"><h2>Location uncertainty (measured)</h2>
 <p>Only <strong>{unc['documented_in_survey']:,}</strong> in-survey events publish ComCat's own <code>horizontalError</code>; the other <strong>{unc['modelled_in_survey']:,}</strong> are given the calibrated model below, fitted on <strong>{unc['calibration']['fit_population']:,}</strong> events that carry both the error and the quality metrics (R² = {fmt(unc['calibration']['fit_r2'], 3)}).</p>
@@ -280,14 +285,15 @@ def h51_methods_block(h51: dict[str, Any]) -> str:
 def h51_submission_block(h51: dict[str, Any]) -> str:
     primary = h51["outputs"]["primary"]
     return f"""<section class="main"><div class="shell"><div class="grid">
-<article class="card span-12"><h2>How to submit the H51 file (numbered, manual)</h2>
+<article class="card span-12"><h2>Manual H51 submission workflow (currently blocked)</h2>
+<div class="callout danger"><strong>NO SLOT.</strong> The exact derived scarp raster's reuse license is undocumented, and mixed-network ComCat rights/shareability are unresolved. Do not upload until the exact data inputs are rights-cleared for sponsor sharing and the owner approves.</div>
 <ol class="list">
-<li>Click <a href="docs/downloads/{esc(primary['path'].split('/')[-1])}" download>this download link</a> (the same single-band float32 GeoTIFF shown at the top of the site).</li>
+<li>Only after the source-rights and eligibility blockers above are formally resolved, click <a href="docs/downloads/{esc(primary['path'].split('/')[-1])}" download>this research-file link</a> (the single-band float32 GeoTIFF shown at the top of the site).</li>
 <li>Optionally confirm the bytes: SHA-256 <span class="hash">{esc(primary['sha256'])}</span>.</li>
 <li>Sign in to DrivenData manually and open <em>DOE GEMS Prize Challenge → Submit</em>.</li>
 <li>Choose the downloaded <code>.tif</code> (or the <code>.zip</code> containing it).</li>
 <li>Paste the unique name <code>GEMSDOE50-H51-SCARPRADIO-OFFCAT</code> and the note <q>{esc(H51_NOTE)}</q> into the optional note field so you can find the row again.</li>
-<li>Submit. This project performs no automated upload and holds no portal credentials.</li>
+<li>Do not submit until the exact input rights and sponsor-sharing permissions are documented and every required gate passes. No upload or organizer receipt is claimed.</li>
 <li>Record the returned score next to the file hash in this repository before making any claim about it.</li>
 </ol>
 <div class="callout"><strong>Format contract re-checked in the written file:</strong> single band, float32, EPSG:32611, 3292 × 3730, transform (100, 0, 243350, 0, -100, 4508550), {int(primary['footprint_nonzero']):,} predicted pixels, in-footprint minimum {fmt(primary['footprint_min'], 1)} and maximum {fmt(primary['footprint_max'], 1)}, {primary['outside_unit_interval']} values outside [0, 1], NaN outside the footprint (the official convention) with an all-finite twin offered as well.
@@ -347,7 +353,7 @@ H52_CANDIDATES = [
                        "no surface trace is a catalogue omission by definition",
         "difference": "H51-B used epicentre geometry only; nodal planes carry orientation information that "
                       "no epicentre pattern contains",
-        "source": "USGS ANSS ComCat, public domain - viability depends on mechanism coverage, must be measured first",
+        "source": "Mixed-network USGS ComCat; contributor rights and sponsor-sharing are unresolved. Mechanism coverage and source-specific terms must be checked before use.",
         "cost": "4/5", "gain": "unknown (measure coverage first)"},
 ]
 
@@ -386,6 +392,119 @@ def fmt(value: Any, digits: int = 4) -> str:
         return esc(value)
 
 
+def sha256_path(path: Path) -> str | None:
+    if not path.is_file():
+        return None
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for block in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def validation_record_matches_contract(
+    validation: dict[str, Any],
+    expected_sha: str | None,
+    report: dict[str, Any],
+    actual_bytes: int,
+) -> bool:
+    """Match the report's byte-validation record to the frozen grid and provenance."""
+    if not expected_sha or validation.get("sha256") != expected_sha:
+        return False
+    try:
+        positive_cells = int(validation.get("positive_cells", 0))
+        minimum = float(validation["minimum_valid_value"])
+        maximum = float(validation["maximum_valid_value"])
+        split = json.loads(PINNED_SPLIT_PATH.read_text(encoding="utf-8"))
+        grid = split["grid"]
+        registered = report.get("registered_split", {})
+        training = report.get("data", {}).get("competition_training_rasters", {})
+        if (
+            registered.get("spec_sha256") != sha256_path(PINNED_SPLIT_PATH)
+            or training.get("template_sha256") != grid.get("template_sha256")
+            or training.get("labels_sha256") != grid.get("official_label_raster_sha256")
+        ):
+            return False
+        transform = grid["transform"]
+        width, height = int(grid["width"]), int(grid["height"])
+        left, top = float(transform[2]), float(transform[5])
+        expected_bounds = [
+            left,
+            top + height * float(transform[4]),
+            left + width * float(transform[0]),
+            top,
+        ]
+        return (
+            validation.get("range_pass") is True
+            and validation.get("nodata_mask_matches_template") is True
+            and validation.get("band_count") == 1
+            and validation.get("dtype") == "float32"
+            and validation.get("crs") == grid.get("crs") == "EPSG:32611"
+            and validation.get("bytes") == actual_bytes
+            and positive_cells > 0
+            and 0.0 <= minimum <= maximum <= 1.0
+            and validation.get("width") == width
+            and validation.get("height") == height
+            and validation.get("transform") == transform
+            and validation.get("bounds") == expected_bounds
+        )
+    except (KeyError, TypeError, ValueError, OSError, json.JSONDecodeError):
+        return False
+
+
+def verify_h50_artifact(report: dict[str, Any] | None, tiff_path: Path) -> bool:
+    """Reopen the actual TIFF bytes; never trust a report-only download link."""
+    if not report or not tiff_path.is_file():
+        return False
+    artifact = report.get("submission_artifact", {})
+    evaluation = report.get("evaluation", {})
+    if (
+        artifact.get("built") is not True
+        or evaluation.get("promotion_gate", {}).get("pass") is not True
+        or artifact.get("unique_name") != tiff_path.name
+    ):
+        return False
+    actual_sha = sha256_path(tiff_path)
+    actual_bytes = tiff_path.stat().st_size
+    validation = artifact.get("validation") or {}
+    if (
+        actual_sha is None
+        or actual_sha != artifact.get("sha256")
+        or actual_bytes != artifact.get("bytes")
+        or not validation_record_matches_contract(validation, actual_sha, report, actual_bytes)
+    ):
+        return False
+    try:
+        split = json.loads(PINNED_SPLIT_PATH.read_text(encoding="utf-8"))
+        grid = split["grid"]
+        with rasterio.open(tiff_path) as ds:
+            if (
+                ds.count != 1
+                or ds.dtypes != ("float32",)
+                or ds.crs is None
+                or ds.crs.to_string() != grid["crs"]
+                or ds.width != grid["width"]
+                or ds.height != grid["height"]
+                or list(ds.transform) != grid["transform"]
+                or not np.isnan(ds.nodata)
+            ):
+                return False
+            values = ds.read(1)
+            finite = np.isfinite(values)
+            valid_values = values[finite]
+            if (
+                valid_values.size == 0
+                or not np.all((valid_values >= 0.0) & (valid_values <= 1.0))
+                or int(np.count_nonzero(valid_values > 0)) != validation["positive_cells"]
+                or float(valid_values.min()) != float(validation["minimum_valid_value"])
+                or float(valid_values.max()) != float(validation["maximum_valid_value"])
+            ):
+                return False
+    except (KeyError, TypeError, ValueError, OSError, rasterio.errors.RasterioError):
+        return False
+    return True
+
+
 def metric_cards(report: dict[str, Any] | None) -> str:
     if not report:
         return """<div class="metrics"><div class="metric"><strong>Preregistered</strong><span>Four spatial macrofolds</span></div><div class="metric"><strong>300 m</strong><span>Official triangular metric support</span></div><div class="metric"><strong>CC BY 4.0</strong><span>Open Nevada relocated catalog</span></div><div class="metric"><strong>0 slots used</strong><span>No portal access is automated</span></div></div>"""
@@ -394,9 +513,45 @@ def metric_cards(report: dict[str, Any] | None) -> str:
     incumbent_name = evaluation["incumbent_method"]
     incumbent = evaluation["method_results"][incumbent_name]["pooled"]["score"]
     gate = evaluation["promotion_gate"]
-    status = "PASS — REVIEW ONLY" if gate["pass"] else "NO SLOT"
+    status = "STATISTICAL PASS" if gate["pass"] else "STATISTICAL FAIL"
     status_class = "pass" if gate["pass"] else "fail"
-    return f"""<div class="metrics"><div class="metric"><strong>{fmt(candidate, 5)}</strong><span>H50-S1 pooled holdout DTI</span></div><div class="metric"><strong>{fmt(incumbent, 5)}</strong><span>{esc(incumbent_name)} pooled incumbent</span></div><div class="metric"><strong>{fmt(evaluation["candidate_minus_incumbent_pooled_dti"], 5)}</strong><span>Paired pooled delta</span></div><div class="metric"><strong><span class="status {status_class}">{esc(status)}</span></strong><span>Not an organizer score or upload receipt</span></div></div>"""
+    return f"""<div class="metrics"><div class="metric"><strong>{fmt(candidate, 5)}</strong><span>H50-S1 pooled holdout DTI</span></div><div class="metric"><strong>{fmt(incumbent, 5)}</strong><span>{esc(incumbent_name)} pooled incumbent</span></div><div class="metric"><strong>{fmt(evaluation["candidate_minus_incumbent_pooled_dti"], 5)}</strong><span>Paired pooled delta</span></div><div class="metric"><strong><span class="status {status_class}">{esc(status)}</span></strong><span>Statistical gate only; submission eligibility is separate</span></div></div>"""
+
+
+def h50_status_card(
+    report: dict[str, Any] | None,
+    tiff_path: Path,
+    *,
+    tiff_verified: bool,
+) -> str:
+    if not report:
+        return ""
+    evaluation = report.get("evaluation", {})
+    statistical_pass = evaluation.get("promotion_gate", {}).get("pass") is True
+    eligibility = report.get("submission_eligibility", {})
+    eligibility_pass = eligibility.get("pass") is True
+    artifact = report.get("submission_artifact", {})
+    download = (
+        f'<p><a class="button" href="{esc(tiff_path.as_posix())}" download>'
+        f'Download verified H50-S1 research TIFF</a></p>'
+        if tiff_verified
+        else '<p><span class="tag">No verified H50-S1 download available</span></p>'
+    )
+    gate_rows = "".join(
+        f"<li><strong>{esc(name.replace('_', ' '))}:</strong> "
+        f"{'PASS' if gate else 'FAIL'}</li>"
+        for name, gate in eligibility.get("gates", {}).items()
+    )
+    return f"""<article class="card span-12" id="h50-s1-run">
+<h2>H50-S1 relocated-plane / terrain-intersection experiment</h2>
+<p><strong>Statistical holdout:</strong> {'PASS — research review only' if statistical_pass else 'FAIL — no candidate TIFF is eligible for publication'}.
+<strong>Scientific and submission eligibility:</strong> {'PASS' if eligibility_pass else 'NO SLOT'}.</p>
+{download}
+<p class="sourced">{('SHA-256 ' + esc(artifact.get('sha256'))) if tiff_verified else 'The report or raster bytes did not pass the site-side integrity checks.'}
+{(' · ' + str(artifact.get('bytes')) + ' bytes') if tiff_verified else ''}. A verified local holdout artifact remains research-only unless every separate eligibility gate passes; no organizer score or portal receipt is implied.</p>
+<ul class="list">{gate_rows}</ul>
+<p>Historical 0.2778 score-to-artifact association remains unresolved; the owner-provided 0.3195 is not independently verified or a current-leader claim. No fresh leaderboard monitoring was performed.</p>
+</article>"""
 
 
 def h51_block(repo_dir: Path, ship_path: Path, check_path: Path) -> str:
@@ -415,24 +570,20 @@ def h51_block(repo_dir: Path, ship_path: Path, check_path: Path) -> str:
     return f"""
 <section class="main" id="h51-candidate"><div class="shell"><div class="grid">
 <article class="card span-12">
-<div class="eyebrow">Newest candidate · H51</div>
-<h2 style="margin-top:.2em">Download the H51 candidate submission</h2>
+<div class="eyebrow">Research candidate · H51</div>
+<h2 style="margin-top:.2em">Download the H51 research-only GeoTIFF</h2>
 <p><a class="button" href="{esc(ship['outputs']['tif'])}" download>Download {esc(ship['name'])}-{esc(ship['stamp'])}.tif</a>
 <a class="button secondary" style="color:#172a33;background:#dcefe9" href="{esc(ship['outputs']['zip'])}" download>Download .zip</a>
 <a class="button secondary" style="color:#172a33;background:#eceae1" href="submission.html">How to submit</a></p>
 <p class="sourced">SHA-256 <span class="hash">{esc(ship['outputs']['sha256'])}</span> · {ship['outputs']['bytes']:,} bytes · stamp {esc(ship['stamp'])}</p>
 <div class="metrics">
 <div class="metric"><strong>{ship['budgets']['n']:,}</strong><span>predicted pixels (values 0 / 1 only)</span></div>
-<div class="metric"><strong>{fmt(ship['predicted']['DTI'], 4)}</strong><span>expected leaderboard score (LOO instrument, MAE {fmt(inst['loo_mae'], 4)})</span></div>
+<div class="metric"><strong>{fmt(ship['predicted']['DTI'], 4)}</strong><span>consensus-instrument estimate, not an organizer score (LOO MAE {fmt(inst['loo_mae'], 4)})</span></div>
 <div class="metric"><strong>{fmt(gate['measured_iou2px_max'], 3)}</strong><span>worst 200 m-proximity IoU vs 26 prior artifacts (gate &lt; 0.5)</span></div>
 <div class="metric"><strong>0</strong><span>pixels shared with any prior artifact</span></div>
 </div>
-<div class="callout danger" style="margin-top:16px"><strong>Read this before uploading.</strong>
-The expected score of this candidate is roughly {fmt(ship['predicted']['DTI'], 2)} (leave-one-out RMSE {fmt(inst['loo_rmse'], 3)}),
-which is <strong>below</strong> the best artifact this repository has delivered and below the owner-quoted 0.3195 target.
-It passes the frozen format gate and the frozen uniqueness gate, but it <strong>fails the pre-registered
-proxy gate</strong> (that proxy cannot rank the 25 scored artifacts: Spearman +0.196, p = 0.35). Treat it as a
-measurement to be taken with one slot if the owner chooses, not as a predicted win.</div>
+<div class="callout danger" style="margin-top:16px"><strong>Research-only; do not upload yet.</strong>
+The displayed {fmt(ship['predicted']['DTI'], 2)} is a local consensus-instrument estimate (leave-one-out RMSE {fmt(inst['loo_rmse'], 3)}), not an organizer score. The often-repeated 0.2778 score-to-artifact association remains unresolved because the GEMSDOE32 owner site labels H33-2-B2 unscored and 0.2747 a model projection; 0.3195 is owner-provided historical context, not a verified current leader or like-for-like score. The exact derived scarp raster's reuse license and mixed-network ComCat rights/shareability are unresolved, so this file is not cleared for external competition upload. No slot or upload is claimed.</div>
 <p class="sourced">Format: {esc(fmtinfo['dtype'])}, {esc(fmtinfo['crs'])}, {fmtinfo['shape'][0]}×{fmtinfo['shape'][1]},
 values in [0, 1] = {esc(fmtinfo['values_in_0_1'])}, NaN only outside the published footprint = {esc(fmtinfo['outside_footprint_all_nan'])},
 all in-footprint values finite = {esc(fmtinfo['inside_footprint_all_finite'])}. Uniqueness verdict:
@@ -440,8 +591,8 @@ all in-footprint values finite = {esc(fmtinfo['inside_footprint_all_finite'])}. 
 </article>
 <article class="card span-7"><h2>What it is</h2>
 <p>{esc(ship['design'])}. The core ({ship['budgets']['k_core']:,} dots) follows the score-consensus posterior
-built from 25 hash-verified scored artifacts (leave-one-out Spearman {fmt(inst['loo_spearman'], 3)} against real
-public scores). The exploration dots ({ship['budgets']['k_far']:,}) sit more than 200 m from every prior dot and are
+built from 25 locally archived artifact/score records (leave-one-out Spearman {fmt(inst['loo_spearman'], 3)}
+within that corpus; score provenance is not independently authenticated). The exploration dots ({ship['budgets']['k_far']:,}) sit more than 200 m from every prior dot and are
 placed only by independent evidence: seismicity lineament corridors, TMI magnetic ridges, radiometric-K ridges,
 and thermal-spring alignment — the part of the map no prior submission has touched.</p>
 <p class="sourced">Evidence: <span class="hash">evidence/h51_ship.json</span>,
@@ -529,8 +680,10 @@ def two_candidates_card(ship: dict[str, Any] | None, h51: dict[str, Any] | None,
 pixels more than 300 m from the given catalogue{f", {truth_px:,} px" if truth_px else ""} — with the same
 code, so that column and the matched uniform control ({control}) are directly comparable. On this frame the
 parallel-session scarp + radiometric candidate is the stronger of the two new files, and the consensus-mix
-candidate scores below a matched uniform control. Neither file is organizer-scored: these are local
-proxy instruments, this repository never uploads anything, and the slot decision is the owner's.</p>
+candidate scores below a matched uniform control. Neither file is organizer-scored. Source review found
+unresolved reuse/shareability for the derived scarp raster and mixed-network ComCat; neither artifact is
+cleared for external competition upload until its exact inputs are rights-reviewed. These local proxy
+instruments do not override the no-slot rule or authorize an upload.</p>
 {inc_row}
 </article></div></section>"""
 
@@ -539,13 +692,17 @@ def build_pages(output_dir: Path, report_path: Path, tiff_path: Path,
                 evidence_dir: Path | None = None, h51_ship: Path | None = None,
                 h51_check: Path | None = None) -> list[Path]:
     report = load_report(report_path)
-    tiff_exists = tiff_path.exists()
     relative_tiff = tiff_path.as_posix()
+    tiff_verified = verify_h50_artifact(report, tiff_path)
+    h50_card = h50_status_card(report, tiff_path, tiff_verified=tiff_verified)
     if report:
-        status_text = "research-only candidate" if tiff_exists else "no raster artifact"
+        status_text = "verified research-only H50-S1 artifact" if tiff_verified else "no verified H50-S1 raster"
         candidate_sha = report.get("submission_artifact", {}).get("sha256", "not available")
-        candidate_hash = f'<div class="sourced">GeoTIFF SHA-256: <span class="hash">{esc(candidate_sha)}</span></div>'
-        _ = (relative_tiff, tiff_exists)  # the candidate download is rendered by the H51 panel
+        candidate_hash = (
+            f'<div class="sourced">H50-S1 GeoTIFF SHA-256 verified: '
+            f'<span class="hash">{esc(candidate_sha)}</span></div>'
+            if tiff_verified else '<div class="sourced">No H50-S1 TIFF is linked until byte and grid checks pass.</div>'
+        )
     else:
         status_text = "H50-S1 awaiting a verified run (the H51 candidates above are separate)"
         candidate_hash = ""
@@ -579,8 +736,9 @@ def build_pages(output_dir: Path, report_path: Path, tiff_path: Path,
     index_body = f"""
 <main><section class="hero"><div class="shell"><div class="eyebrow">DOE GEMS Prize Challenge · audit-first research</div><h1>Map what the catalogue missed.</h1><p>GEMSDOE50 tests whether waveform-relocated Nevada earthquake planes can point to plausible, previously unmapped fault traces—without copying a prior submission or spending a scoring slot before spatial validation.</p><div class="actions"><a class="button" href="{esc(h51_download)}" download>Download the H51 candidate GeoTIFF</a><a class="button secondary" href="submission.html">How to submit (5 steps)</a></div>{candidate_hash}</div></section>
 {h51_html}
+{h50_card}
 {secondary_card}
-<section class="main"><div class="shell"><div class="grid"><article class="card span-8"><h2>Executive summary</h2><p><strong>What the scores actually say:</strong> with binary dots the official distance-weighted Tversky index is exactly <code>DTI = T / (0.2&middot;N + 0.8&middot;G)</code>, with <code>N</code> the predicted pixel count, <code>T</code> the credit captured inside the 300 m kernel, and <code>G</code> the hidden truth mass. Inverting a pinned blind-lattice artifact fixes <code>G &asymp; 12,226 px</code> (0.24 % of the unmasked footprint).</p><p>All 25 hash-verified scored artifacts were inverted to credit pixels: the best converts 0.1097 credit per dot (owner-quoted 0.2600), and the best coverage of the hidden truth is 59.3 %, reached only with 183,642 dots. A 0.3195 submission needs 41.2 % coverage at 30,000 dots - reachable in principle, never reached in practice. Re-blending, re-spacing or pruning the existing corpus cannot get there; a new detector is required.</p>{metric_cards(report)}{index_note}<p class="sourced">Status: {esc(status_text)}. H51/H52: the consensus instrument predicts held-out scores at leave-one-out Spearman 0.973, but a trivial similarity predictor already reaches 0.905 and a block-grid truth-density inversion fails leave-one-out, so the score history constrains efficiency, not geography. Historical sibling-repository scores are not used as current official leaderboard claims or mapped to a TIFF.</p></article><aside class="card span-4"><h2>Decision rule</h2><ul class="list"><li>At least +0.005 absolute pooled DTI over the frozen incumbent</li><li>Positive delta in at least 3 of 4 macrofolds</li><li>95% spatial-block bootstrap lower bound above zero</li><li>Beat both matched translation and year-shuffle controls</li><li>Otherwise: <strong>no slot</strong></li></ul><a href="results.html">View full evidence →</a></aside><article class="card span-6"><h2>What this is—and is not</h2><p>This is a research proxy against existing mapped faults, not the hidden expert-labeled test set. A local pass is necessary for review but is not an organizer score or a promise of prize performance.</p><p>The Nevada catalog is CC BY 4.0, but it lacks event-specific location covariance. A precise-looking coordinate is not proof of a precise location; a hypocenter projection is not automatically a surface trace.</p></article><article class="card span-6"><h2>Project values</h2><p><span class="tag">Maximize P(Win)</span> Choose evidence that can improve the final result, not merely a public proxy.</p><p><span class="tag">Own the Outcome</span> Publish hashes, controls, limitations, and a clear no-go when a gate fails.</p><p><a href="methods.html">Read the protocol, sources, and limitations →</a></p></article>{candidates_card}<article class="card span-12"><h2>Verified primary links</h2><div class="grid"><div class="span-4"><strong>Competition specification</strong><br><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">Metric, inputs, and TIFF contract</a></div><div class="span-4"><strong>Nevada seismicity source</strong><br><a href="https://doi.org/10.5281/zenodo.11167510">Trugman (2024), Zenodo v2 · CC BY 4.0</a></div><div class="span-4"><strong>Official leaderboard</strong><br><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">Open manually; this project does not scrape it</a></div></div></article></div></div></section></main>
+<section class="main"><div class="shell"><div class="grid"><article class="card span-8"><h2>Executive summary</h2><p><strong>What the scores actually say:</strong> with binary dots the official distance-weighted Tversky index is exactly <code>DTI = T / (0.2&middot;N + 0.8&middot;G)</code>, with <code>N</code> the predicted pixel count, <code>T</code> the credit captured inside the 300 m kernel, and <code>G</code> the hidden truth mass. Inverting a pinned blind-lattice artifact fixes <code>G &asymp; 12,226 px</code> (0.24 % of the unmasked footprint).</p><p>The local archive contains 25 hash-verified artifact/score records, whose score provenance is not independently authenticated. Within that corpus the best converts 0.1097 credit per dot (with a separate owner-quoted 0.2600 claim), and best estimated coverage is 59.3 %, reached only with 183,642 dots. Conditional on the corpus-derived G estimate, a hypothetical DTI of 0.3195 at 30,000 dots corresponds to about 41.2 % estimated coverage; this does not verify the owner-provided historical 0.3195 or its provenance. Re-blending, re-spacing or pruning the existing corpus cannot establish improved geography; any new detector still needs independent validation.</p>{metric_cards(report)}{index_note}<p class="sourced">Status: {esc(status_text)}. H51/H52: the consensus instrument predicts held-out scores at leave-one-out Spearman 0.973, but a trivial similarity predictor already reaches 0.905 and a block-grid truth-density inversion fails leave-one-out, so the score history constrains efficiency, not geography. Historical sibling-repository scores are not used as current official leaderboard claims or mapped to a TIFF.</p></article><aside class="card span-4"><h2>Decision rule</h2><ul class="list"><li>At least +0.005 absolute pooled DTI over the frozen incumbent</li><li>Positive delta in at least 3 of 4 macrofolds</li><li>95% spatial-block bootstrap lower bound above zero</li><li>Beat both matched translation and year-shuffle controls</li><li>Otherwise: <strong>no slot</strong></li></ul><a href="results.html">View full evidence →</a></aside><article class="card span-6"><h2>What this is—and is not</h2><p>This is a research proxy against existing mapped faults, not the hidden expert-labeled test set. A local pass is necessary for review but is not an organizer score or a promise of prize performance.</p><p>The Nevada catalog is CC BY 4.0, but it lacks event-specific location covariance. A precise-looking coordinate is not proof of a precise location; a hypocenter projection is not automatically a surface trace.</p></article><article class="card span-6"><h2>Project values</h2><p><span class="tag">Maximize P(Win)</span> Choose evidence that can improve the final result, not merely a public proxy.</p><p><span class="tag">Own the Outcome</span> Publish hashes, controls, limitations, and a clear no-go when a gate fails.</p><p><a href="methods.html">Read the protocol, sources, and limitations →</a></p></article>{candidates_card}<article class="card span-12"><h2>Verified primary links</h2><div class="grid"><div class="span-4"><strong>Competition specification</strong><br><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">Metric, inputs, and TIFF contract</a></div><div class="span-4"><strong>Nevada seismicity source</strong><br><a href="https://doi.org/10.5281/zenodo.11167510">Trugman (2024), Zenodo v2 · CC BY 4.0</a></div><div class="span-4"><strong>Official leaderboard</strong><br><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">Open manually; this project does not scrape it</a></div></div></article></div></div></section></main>
 """
 
 
@@ -615,23 +773,28 @@ def build_pages(output_dir: Path, report_path: Path, tiff_path: Path,
             for name, score in density_scores.items()
         )
         ci = evaluation["subtile_bootstrap"]["percentile_ci_95"]
-        scientific_gates = evaluation["promotion_gate"].get("scientific_gates", {})
+        eligibility = report.get("submission_eligibility", {})
+        eligibility_gates = eligibility.get("gates", {})
+        eligibility_rows = "".join(
+            f'<tr><td>{esc(name.replace("_", " "))}</td>'
+            f'<td>{"PASS" if passed else "FAIL"}</td></tr>'
+            for name, passed in eligibility_gates.items()
+        )
         component_rows = []
         for name, passed in evaluation["promotion_gate"]["components"].items():
             label = name.replace("_", " ")
             result_text = "PASS" if passed else "FAIL"
-            detail = scientific_gates.get(name, {}).get("detail")
-            detail_html = f"<br><small>{esc(detail)}</small>" if detail else ""
             component_rows.append(
-                f'<tr><td>{esc(label)}</td><td>{result_text}{detail_html}</td></tr>'
+                f'<tr><td>{esc(label)}</td><td>{result_text}</td></tr>'
             )
         gate_rows_html = "".join(component_rows)
         score_summary = f"""
 <article class="card span-12"><h2>Metric and pooled components</h2><p>DTI uses the official 300 m triangular kernel, α=0.2, β=0.8; predictions are compared at equal binary probability mass. Local pooled holdout is not an official test score.</p><div class="wide"><table><thead><tr><th>Method</th><th>Pooled DTI</th><th>Truth cells</th><th>Predicted cells</th><th>TP weight</th><th>FP weight</th><th>FN weight</th></tr></thead><tbody>{"".join(method_rows)}</tbody></table></div><h3>Fold-wise paired scores</h3><div class="wide"><table><thead><tr><th>Macrofold</th><th>H50-S1</th><th>Incumbent ({esc(evaluation["incumbent_method"])})</th><th>Delta</th><th>Predictions</th><th>Truth</th></tr></thead><tbody>{"".join(fold_rows)}</tbody></table></div><p><strong>16-block bootstrap 95% interval:</strong> [{fmt(ci[0], 6)}, {fmt(ci[1], 6)}]. Candidate − incumbent pooled DTI = {fmt(evaluation["candidate_minus_incumbent_pooled_dti"], 6)}.</p></article>
 <article class="card span-6"><h2>Spatial translations</h2><p>32 no-wrap offsets at 5–20 km; 95th percentile DTI {fmt(controls["pooled_dti_q95"], 6)}. Candidate DTI {fmt(evaluation["method_results"]["H50-S1"]["pooled"]["score"], 6)}.</p><details><summary>Show individual controls</summary><div class="wide"><table><thead><tr><th>Control</th><th>Pooled DTI</th></tr></thead><tbody>{control_table}</tbody></table></div></details></article>
 <article class="card span-6"><h2>Origin-year shuffles</h2><p>{time_controls["count"]} refits with shuffled years; 95th percentile DTI {fmt(time_controls["pooled_dti_q95"], 6)}. Candidate DTI {fmt(evaluation["method_results"]["H50-S1"]["pooled"]["score"], 6)}.</p><details><summary>Show individual controls</summary><div class="wide"><table><thead><tr><th>Control</th><th>Pooled DTI</th></tr></thead><tbody>{time_table}</tbody></table></div></details></article>
-<article class="card span-12"><h2>Matched smoothed-density controls</h2><p>Gaussian-smoothed counts from the same relocated catalog events, scored at equal mass on the same blocked holdout. This controls spatial density only; it does not remove aftershocks or mine/injection confounding. Candidate must beat both scales.</p><div class="wide"><table><thead><tr><th>Density map</th><th>Pooled DTI</th></tr></thead><tbody>{density_table}</tbody></table></div></article>
-<article class="card span-12"><h2>Promotion-gate components</h2><div class="wide"><table><thead><tr><th>Criterion</th><th>Result</th></tr></thead><tbody>{gate_rows_html}</tbody></table></div><p><strong>Decision: {esc(evaluation["promotion_gate"]["decision"].replace("_", " "))}.</strong> A proxy pass authorizes review only; no portal slot is used automatically.</p><p><a href="{esc(report_path.as_posix())}">Open machine-readable report JSON</a> · Report SHA-256: <span class="hash">{esc(sha256_report(report_path))}</span></p></article>
+<article class="card span-12"><h2>Matched smoothed-density controls</h2><p>Gaussian-smoothed counts from the same relocated catalog events, scored at equal mass on the same blocked holdout. This controls spatial density only; it does not remove aftershocks or mine/injection confounding. Candidate must strictly beat all three scales (300 m, 1 km, and 2 km).</p><div class="wide"><table><thead><tr><th>Density map</th><th>Pooled DTI</th></tr></thead><tbody>{density_table}</tbody></table></div></article>
+<article class="card span-12"><h2>Statistical holdout gate</h2><div class="wide"><table><thead><tr><th>Criterion</th><th>Result</th></tr></thead><tbody>{gate_rows_html}</tbody></table></div><p><strong>Statistical decision: {esc(evaluation["promotion_gate"]["decision"].replace("_", " "))}.</strong> This is separate from submission eligibility; no portal slot is used automatically.</p><p><a href="{esc(report_path.as_posix())}">Open machine-readable report JSON</a> · Report SHA-256: <span class="hash">{esc(sha256_report(report_path))}</span></p></article>
+<article class="card span-12"><h2>Scientific and provenance eligibility</h2><p><strong>{esc(eligibility.get("decision", "NOT RECORDED"))}.</strong> A statistical pass alone does not authorize a slot.</p><div class="wide"><table><thead><tr><th>Eligibility gate</th><th>Result</th></tr></thead><tbody>{eligibility_rows}</tbody></table></div><p>{esc(eligibility.get("note", "Eligibility details not recorded."))}</p></article>
 """
     else:
         score_summary = '<article class="card span-12"><h2>Results pending</h2><p>No DTI has been computed. The holdout split and mask hashes are frozen before scoring.</p><p>Run instructions and protocol are in the repository; no submission slot has been used.</p></article>'
@@ -640,27 +803,35 @@ def build_pages(output_dir: Path, report_path: Path, tiff_path: Path,
 
     if report:
         gate = report["evaluation"]["promotion_gate"]
+        eligibility = report.get("submission_eligibility", {})
+        eligible = eligibility.get("pass") is True
         state = (
-            "Local gate PASS — owner review only; not portal-scored."
-            if gate["pass"]
-            else "Local gate failed — do not use a weekly submission slot."
+            "Statistical proxy PASS; separate scientific/provenance gates also pass — owner review only."
+            if gate.get("pass") is True and eligible
+            else "Statistical proxy PASS; separate eligibility gates fail — NO SLOT."
+            if gate.get("pass") is True
+            else "Statistical proxy failed — no candidate TIFF or weekly slot."
         )
-        artifact = report["submission_artifact"]
-        name = artifact["unique_name"]
-        note = artifact["optional_note"]
-        hash_html = f'<p>SHA-256: <span class="hash">{esc(artifact["sha256"])}</span></p>'
+        artifact = report.get("submission_artifact", {})
+        name = artifact.get("unique_name", tiff_path.name)
+        note = artifact.get("optional_note", "")
+        hash_html = (
+            f'<p>SHA-256 verified against the TIFF bytes: '
+            f'<span class="hash">{esc(artifact.get("sha256"))}</span></p>'
+            if tiff_verified else ""
+        )
         download_html = (
-            f'<p><a class="button" href="{esc(relative_tiff)}" download>Download {esc(name)}</a></p>'
-            if tiff_exists
-            else "<p>GeoTIFF not available.</p>"
+            f'<p><a class="button" href="{esc(relative_tiff)}" download>Download research-only {esc(name)}</a></p>'
+            if tiff_verified
+            else "<p>No verified, downloadable H50-S1 GeoTIFF is available.</p>"
         )
-        submit_card = f"""<div class="callout {"success" if gate["pass"] else "danger"}"><strong>{esc(state)}</strong> No upload was performed by this project.</div><h2>Current artifact</h2>{download_html}<p><strong>Unique filename:</strong> <code>{esc(name)}</code></p><p><strong>Optional note:</strong> <q>{esc(note)}</q></p>{hash_html}<p>Portal specification is subject to change. Re-check the official problem page and test the bytes downloaded from this site before any manual upload.</p>"""
+        submit_card = f"""<div class="callout {"success" if gate.get("pass") is True and eligible else "danger"}"><strong>{esc(state)}</strong> No upload was performed by this project.</div><h2>Current H50-S1 artifact</h2>{download_html}<p><strong>Planned unique filename:</strong> <code>{esc(name)}</code></p><p><strong>Optional note:</strong> <q>{esc(note)}</q></p>{hash_html}<p><strong>Submission status:</strong> {esc(eligibility.get("decision", "NO_SLOT"))}. Re-check the official specification and all data rights. A research download is not authorization to upload and is not an organizer receipt.</p>"""
     else:
         state = "Experiment not yet run. No submission slot has been used."
         submit_card = f"""<div class="callout"><strong>{esc(state)}</strong></div><p>There is no candidate GeoTIFF to upload. Do not use a weekly slot until the spatial holdout, matched controls, raster-byte validation, and owner review are complete.</p><p><strong>Planned unique filename, if a verified build is produced:</strong> <code>gemsdoe50-h50s1-relocated-planes-20261006-research.tif</code></p><p><strong>Planned optional note:</strong> <q>Relocated Nevada event-plane lineaments; 300 m known-fault exclusion; research proxy, not organizer-scored.</q></p>"""
     submission_body = f"""<main><section class="pagehead"><div class="shell"><div class="eyebrow">No automated portal access</div><h1>Submission instructions</h1><p class="muted">Use this page only if the local gate has passed and the owner independently approves the artifact.</p></div></section><section class="main"><div class="shell"><div class="grid"><article class="card span-12">{submit_card}</article><article class="card span-8"><h2>Manual checklist (only after PASS)</h2><ol class="list"><li>Download the GeoTIFF and independently verify its SHA-256 and the byte-validation report in <a href="results.html">Results</a>.</li><li>Re-read the current <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">official problem specification</a> and rules; confirm the external-data license and required AI-use disclosure in the final narrative.</li><li>Sign in to DrivenData manually, open the DOE GEMS competition, and choose a weekly feedback slot only if one remains and the owner approves.</li><li>Upload the single-band float32 GeoTIFF. Do not change its grid, nodata footprint, or prediction values after validation.</li><li>Use the unique filename and optional note shown above, then manually verify the portal receipt and record it in this repository before making any claim of acceptance.</li></ol><div class="callout danger"><strong>Do not upload on a failed gate.</strong> A local proxy pass is not a score guarantee and is not a portal receipt.</div></article><aside class="card span-4"><h2>Portal warning caught</h2><p>The previous portal error was: <code>Predicted values must be in range [0, 1]</code>.</p><p>This pipeline reopens the actual GeoTIFF bytes and checks finite in-footprint values, `[0,1]` range, one float32 band, grid alignment, and nodata-mask agreement with the sample template.</p><p><span class="tag">No slot used by code</span></p></aside></div></div></section></main>"""
 
-    methods_body = """<main><section class="pagehead"><div class="shell"><div class="eyebrow">Preregistered research</div><h1>Methods, sources & limitations</h1><p class="muted">The method was ranked before implementation; the exact spatial split and implementation constants were frozen before DTI calculation.</p></div></section><section class="main"><div class="shell"><div class="grid"><article class="card span-8"><h2>H50-S1: relocated event-plane geometry</h2><p>Use only waveform-relocated (`reloc=1`) Nevada catalog events inside the valid competition footprint. Fit compact local 3-D neighborhoods, require year support and stable horizontal strike, intersect plausible planes with z=0, and rasterize the surface-line proxy. Known mapped faults are masked by 300 m for the output; holdout labels are used only for scoring, never for line fitting.</p><p>Frozen parameters, folds, control design, and metric formula are documented in <a href="https://github.com/buffedlizard55-lab/GEMSDOE50/blob/main/docs/h50s1-protocol-addendum.md">the protocol addendum</a> and <a href="https://github.com/buffedlizard55-lab/GEMSDOE50/blob/main/docs/hypotheses-preregistered.md">the ranked preregistration</a>.</p><p>Prior-art and 3–5-hypothesis review: <a href="docs/research/earthquake-geometry-review-20261006.md">seismicity audit</a> and <a href="docs/research/hypothesis-ranking-20261006.md">candidate ranking</a>.</p><p><strong>Comparator policy:</strong> H50-prior is fixed as the primary comparator before holdout scoring. H32-D, H47-S3, and H48-DS are secondary context only; their holdout scores do not select the incumbent. Two 1 km / 2 km Gaussian-smoothed event-density maps are required matched controls. No prior prediction pixels are copied to the candidate artifact.</p><p><strong>Slot eligibility:</strong> formal aftershock declustering, mine/injection-site screening, and event-location uncertainty suitable for the raster width remain additional hard gates. Until they pass, any numeric result and unique TIFF are research-only and <strong>NO SLOT</strong>.</p></article><article class="card span-4"><h2>Data & permissions</h2><ul class="list"><li>Nevada catalog: <a href="https://doi.org/10.5281/zenodo.11167510">Zenodo v2</a>, CC BY 4.0; attribution and license link required.</li><li>Competition labels/template: SHA-pinned public Dropbox mirrors from a local source bridge manifest; provenance caveat is in the experiment report.</li><li>New H50-S1 raw data stays in ignored `.arena/`; the report records hashes and access links for verification.</li><li>Inherited ComCat/SGMC/LiDAR/radiometric files are not H50-S1 inputs. ComCat rights/shareability and location uncertainty remain unresolved; legacy refresh workflows are disabled.</li><li>Competition rules require external inputs to be licensed and shareable with the sponsor.</li></ul></article><article class="card span-6"><h2>Scientific limitations</h2><ul class="list"><li>Existing USGS/INGENIOUS labels are an imperfect proxy, not the hidden expert-labeled test set.</li><li>The catalog has no event-specific location covariance; model errors can exceed the 300 m scoring kernel, and orientation bootstrap is not a position-error estimate.</li><li>Formal aftershock declustering and mine/injection-site masks are not yet applied, so the density control alone does not clear those confounds.</li><li>Hypocenter planes are not guaranteed to intersect a mapped surface fault at the projected line.</li><li>Observed earthquakes are biased toward active faults, and waveform relocation is a subset of the full catalog.</li><li>A lineament or local DTI increase is not proof of geothermal productivity or a fault discovery.</li></ul></article><article class="card span-6"><h2>Leaderboard & AI disclosure</h2><p>DrivenData's Terms of Use restrict automated leaderboard monitoring and manual copying without written consent. This site links to the official board but does not poll, scrape, or publish a live snapshot.</p><p>Before any final competition entry, disclose AI assistance as required by the current NLR/DOE rules and describe human review. This repository does not submit on the user's behalf.</p></article></div></div></section></main>"""
+    methods_body = """<main><section class="pagehead"><div class="shell"><div class="eyebrow">Preregistered research</div><h1>Methods, sources & limitations</h1><p class="muted">The method was ranked before implementation; the exact spatial split and implementation constants were frozen before DTI calculation.</p></div></section><section class="main"><div class="shell"><div class="grid"><article class="card span-8"><h2>H50-S1: relocated event-plane geometry</h2><p>Use only waveform-relocated (`reloc=1`) Nevada catalog events inside the valid competition footprint. Fit compact local 3-D neighborhoods, require year support and stable horizontal strike, intersect plausible planes with the exact-grid USGS 3DEP terrain elevation surface, and rasterize the resulting diagnostic line proxy. Catalog/DEM vertical-datum reconciliation remains unresolved, so this is not a validated surface trace. Known mapped faults are masked by 300 m for the output; holdout labels are used only for scoring, never for line fitting.</p><p>Frozen parameters, folds, control design, and metric formula are documented in <a href="https://github.com/buffedlizard55-lab/GEMSDOE50/blob/main/docs/h50s1-protocol-addendum.md">the protocol addendum</a> and <a href="https://github.com/buffedlizard55-lab/GEMSDOE50/blob/main/docs/hypotheses-preregistered.md">the ranked preregistration</a>.</p><p>Prior-art and 3–5-hypothesis review: <a href="docs/research/earthquake-geometry-review-20261006.md">seismicity audit</a> and <a href="docs/research/hypothesis-ranking-20261006.md">candidate ranking</a>.</p><p><strong>Comparator policy:</strong> H50-prior is fixed as the primary comparator before holdout scoring. H32-D, H47-S3, and H48-DS are secondary context only; their holdout scores do not select the incumbent. Three same-event Gaussian-smoothed density maps (300 m, 1 km, and 2 km) are required matched controls. No prior prediction pixels are copied to the candidate artifact.</p><p><strong>Slot eligibility:</strong> formal aftershock declustering, mine/injection-site screening, and event-location uncertainty suitable for the raster width remain additional hard gates. Until they pass, any numeric result and unique TIFF are research-only and <strong>NO SLOT</strong>.</p></article><article class="card span-4"><h2>Data & permissions</h2><ul class="list"><li>Nevada catalog: <a href="https://doi.org/10.5281/zenodo.11167510">Zenodo v2</a>, CC BY 4.0; attribution and license link required.</li><li>Competition labels/template: SHA-pinned public Dropbox mirrors from a local source bridge manifest; provenance caveat is in the experiment report.</li><li>New H50-S1 raw data stays in ignored `.arena/`; the report records hashes and access links for verification.</li><li>Inherited ComCat/SGMC/LiDAR/radiometric files are not H50-S1 inputs. ComCat rights/shareability and location uncertainty remain unresolved; legacy refresh workflows are disabled.</li><li>Competition rules require external inputs to be licensed and shareable with the sponsor.</li></ul></article><article class="card span-6"><h2>Scientific limitations</h2><ul class="list"><li>Existing USGS/INGENIOUS labels are an imperfect proxy, not the hidden expert-labeled test set.</li><li>The catalog has no event-specific location covariance; model errors can exceed the 300 m scoring kernel, and orientation bootstrap is not a position-error estimate.</li><li>Formal aftershock declustering and mine/injection-site masks are not yet applied, so the density control alone does not clear those confounds.</li><li>Hypocenter planes are not guaranteed to intersect a mapped surface fault at the projected line.</li><li>Observed earthquakes are biased toward active faults, and waveform relocation is a subset of the full catalog.</li><li>A lineament or local DTI increase is not proof of geothermal productivity or a fault discovery.</li></ul></article><article class="card span-6"><h2>Leaderboard & AI disclosure</h2><p>DrivenData's Terms of Use restrict automated leaderboard monitoring and manual copying without written consent. This site links to the official board but does not poll, scrape, or publish a live snapshot.</p><p>Before any final competition entry, disclose AI assistance as required by the current NLR/DOE rules and describe human review. This repository does not submit on the user's behalf.</p></article></div></div></section></main>"""
 
     if h51:
         results_body = results_body + h51_results_block(h51, evidence_dir)
