@@ -54,16 +54,17 @@ from typing import Any
 import numpy as np
 import pandas as pd
 import rasterio
+from pyproj import Transformer
 from scipy import ndimage
 from scipy.spatial import cKDTree
-from pyproj import Transformer
 
 REPO = Path(__file__).resolve().parents[1]
 import sys
+
 sys.path.insert(0, str(REPO / "src"))
 
 from gemsdoe50 import h56
-from gemsdoe50.common import jsonable, sha256_file
+from gemsdoe50.common import jsonable
 from gemsdoe50.metric import distance_weighted_tversky
 
 # Frozen constants (preregistered)
@@ -214,7 +215,7 @@ def load_and_screen_comcat(comcat_path: Path, template_path: Path) -> dict[str, 
     # Time info for declustering
     try:
         time_dt = pd.to_datetime(df["time"], format="ISO8601", utc=True, errors="coerce")
-    except Exception:
+    except Exception:  # noqa: BLE001 — fall back to pandas' format inference (behaviour unchanged)
         time_dt = pd.to_datetime(df["time"], utc=True, errors="coerce")
     days = time_dt.astype(np.int64) / (86400 * 1e9)  # nanoseconds to days
     
@@ -533,8 +534,6 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     with rasterio.open(template_path) as ds:
         shape = ds.shape
         valid = np.isfinite(ds.read(1))
-        transform = ds.transform
-        crs = str(ds.crs)
     
     with rasterio.open(labels_path) as ds:
         labels = ds.read(1)
@@ -621,7 +620,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             union = np.count_nonzero(prior_binary | pred_binary)
             iou = intersection / max(union, 1)
             max_iou = max(max_iou, iou)
-        except Exception:
+        except Exception:  # noqa: BLE001, S112 — unreadable prior rasters are skipped (behaviour unchanged)
             continue
     
     print(f"  Max IoU with prior artifacts: {max_iou:.4f}", flush=True)

@@ -1,275 +1,52 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>GEMSDOE50 — H60 Seismicity Lineation Submission</title>
-<style>
-:root{--bg:#0d1117;--fg:#c9d1d9;--accent:#58a6ff;--green:#3fb950;--red:#f85149;--yellow:#d29922;--card:#161b22;--border:#30363d}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--fg);line-height:1.6;padding:1rem;max-width:960px;margin:auto}
-h1{color:var(--accent);font-size:1.8rem;margin-bottom:0.5rem}
-h2{color:var(--accent);font-size:1.3rem;margin:1.5rem 0 0.5rem;border-bottom:1px solid var(--border);padding-bottom:0.3rem}
-h3{font-size:1.1rem;margin:1rem 0 0.3rem}
-p,li{font-size:0.95rem}
-a{color:var(--accent)}
-code{background:var(--card);padding:2px 6px;border-radius:4px;font-size:0.85rem}
-.card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1.2rem;margin:1rem 0}
-.download-box{background:#0d2818;border:2px solid var(--green);border-radius:12px;padding:1.5rem;margin:1rem 0;text-align:center}
-.download-box a{font-size:1.2rem;font-weight:700;color:var(--green);text-decoration:none}
-.download-box a:hover{text-decoration:underline}
-.download-box .sub{font-size:0.85rem;color:var(--fg);margin-top:0.5rem}
-.gate{background:#1a1200;border:2px solid var(--yellow);border-radius:8px;padding:1rem;margin:1rem 0}
-.gate.ok{background:#0d2818;border-color:var(--green)}
-.gate .label{font-weight:700;font-size:1.1rem}
-.gate.ok .label{color:var(--green)}
-table{width:100%;border-collapse:collapse;margin:0.5rem 0;font-size:0.85rem}
-th,td{padding:6px 10px;border:1px solid var(--border);text-align:left}
-th{background:var(--card);color:var(--accent)}
-tr:nth-child(even){background:rgba(255,255,255,0.02)}
-ul{padding-left:1.5rem;margin:0.3rem 0}
-.tag{display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.75rem;font-weight:600;margin:2px}
-.tag-green{background:#0d2818;color:var(--green);border:1px solid var(--green)}
-.tag-yellow{background:#1a1200;color:var(--yellow);border:1px solid var(--yellow)}
-.tag-red{background:#2d0a0a;color:var(--red);border:1px solid var(--red)}
-.nav{display:flex;gap:1rem;margin:1rem 0;flex-wrap:wrap}
-.nav a{padding:6px 14px;background:var(--card);border:1px solid var(--border);border-radius:6px;text-decoration:none;font-size:0.85rem}
-</style>
-</head>
-<body>
-
-<h1>GEMSDOE50 — H60 Seismicity Lineation Submission</h1>
-<p>DOE GEMS Prize Challenge (DrivenData #306) · GeoDAWN / NW Nevada</p>
-
-<div class="nav">
-  <a href="#download">⬇ Download</a>
-  <a href="#how-to-submit">📋 How to Submit</a>
-  <a href="#method">🔬 Method</a>
-  <a href="#sources">📚 Sources</a>
-  <a href="#limitations">⚠️ Limitations</a>
-  <a href="index.html">← Home</a>
-</div>
-
-<!-- ============================================================ -->
-<h2 id="download">⬇ ONE-CLICK SUBMISSION FILE</h2>
-<!-- ============================================================ -->
-
-<div class="download-box">
-  <p style="font-size:1.4rem;margin-bottom:0.8rem">⬇ <a href="downloads/gemsdoe50-h60-combined-55000-20261007T212217Z-allfinite.tif">Download H60 Primary Submission (.tif)</a></p>
-  <p><a href="downloads/gemsdoe50-h60-combined-55000-20261007T212217Z-allfinite.zip">📦 Download .zip (single GeoTIFF inside)</a></p>
-  <p class="sub">
-    <code>gemsdoe50-h60-combined-55000-20261007T212217Z-allfinite.tif</code><br>
-    55,000 predicted pixels · float32 · EPSG:32611 · 100m · 3730×3292<br>
-    Every cell finite · every value in [0, 1] · zero NaN · no nodata tag<br>
-    SHA-256: <code>a6486899cb9f1a170c2bbb5a27f81ea3f960bc496ab460f11a9d4d8ae04a30b4</code>
-  </p>
-</div>
-
-<div class="gate ok">
-  <p class="label">✅ SAFE TO DOWNLOAD AND SUBMIT</p>
-  <ul>
-    <li><span class="tag tag-green">PASS</span> All 12,279,160 cells finite and in [0, 1]</li>
-    <li><span class="tag tag-green">PASS</span> No NaN, no nodata tag, no sentinel values</li>
-    <li><span class="tag tag-green">PASS</span> Matches official grid: EPSG:32611, 100m, 3730×3292</li>
-    <li><span class="tag tag-green">PASS</span> Single-band float32 GeoTIFF with DEFLATE compression</li>
-    <li><span class="tag tag-green">PASS</span> Portal-safe: avoids "Predicted values must be in range [0, 1]" error</li>
-    <li><span class="tag tag-green">PASS</span> Unique submission (max IoU 0.35 vs prior artifacts)</li>
-    <li><span class="tag tag-yellow">NOTE</span> Uses USGS ComCat earthquake data (USGS public domain)</li>
-    <li><span class="tag tag-yellow">NOTE</span> 2-D covariance eigenstructure is UNVERIFIED adaptation</li>
-  </ul>
-</div>
-
-<div class="card">
-  <h3>Submission Form Details</h3>
-  <table>
-    <tr><th>Field</th><th>Value</th></tr>
-    <tr><td><strong>File to submit</strong></td><td><code>gemsdoe50-h60-combined-55000-20261007T212217Z-allfinite.tif</code></td></tr>
-    <tr><td><strong>Unique submission name</strong></td><td><code>GEMSDOE50-H60-SEISCOMBINED-55000</code></td></tr>
-    <tr><td><strong>Note (optional)</strong></td><td><code>H60 seismicity KDE × distance prior: 1366 ComCat lineations, blue-noise 3px, 55k dots, off-catalogue DTI=0.0744, model hidden=0.54 (T=2.5), UNVERIFIED 2-D adaptation</code></td></tr>
-  </table>
-</div>
-
-<!-- ============================================================ -->
-<h2 id="how-to-submit">📋 How to Submit — Step by Step</h2>
-<!-- ============================================================ -->
-
-<div class="card">
-  <ol>
-    <li><strong>Download the file</strong> — click the green download button above. The file is <code>gemsdoe50-h60-combined-55000-20261007T212217Z-allfinite.tif</code> (the <code>.zip</code> also works).</li>
-    <li><strong>Go to the submission page</strong> — <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">DrivenData #306</a> → Submit → Upload.</li>
-    <li><strong>Upload the file</strong> — click "No file chosen" and select the downloaded <code>.tif</code> or <code>.zip</code>.</li>
-    <li><strong>Paste the note</strong> — copy the note from the table above into the "Note (optional)" field.</li>
-    <li><strong>Submit</strong> — click the submit button.</li>
-  </ol>
-  
-  <h3>⚠️ Historical Portal Error: "Predicted values must be in range [0, 1]"</h3>
-  <p>This error has two causes, both of which this file avoids:</p>
-  <ul>
-    <li><strong>Mechanism 1 — float32 sentinel:</strong> Some GeoTIFFs use <code>-3.40e+38</code> as nodata. This file has <strong>no nodata tag</strong> and every cell is 0.0 or 1.0.</li>
-    <li><strong>Mechanism 2 — NaN sentinel:</strong> A raster with NaN cells outside the footprint. This file uses the <strong>all-finite variant</strong> (0.0 outside, not NaN).</li>
-  </ul>
-  <p>If you still get the error, try the <code>.zip</code> version — some portals handle zipped uploads differently.</p>
-</div>
-
-<!-- ============================================================ -->
-<h2 id="method">🔬 Method: H60 — Anisotropic Seismicity KDE × Distance Prior</h2>
-<!-- ============================================================ -->
-
-<div class="card">
-  <h3>What it is</h3>
-  <p>H60 is a <strong>genuinely novel seismicity-based fault prediction</strong> that differs from every prior submission in the GEMSDOE corpus. It uses <strong>anisotropic kernel density estimation</strong> of declustered ComCat earthquake epicenters, combined multiplicatively with a <strong>distance-to-known-faults prior</strong>, to predict where hidden faults are most likely to exist.</p>
-  
-  <h3>Why it should work for the hidden test set</h3>
-  <p>The competition's hidden faults are <strong>young, surface-expressed faults</strong> identified by experts from GeoDAWN data. Earthquakes specifically occur on <strong>active faults</strong>. The key insight:</p>
-  <ul>
-    <li>The SGMC proxy (old bedrock faults) shows <strong>neutral-to-negative enrichment</strong> for seismicity (lift 0.74-0.82×). This is expected — earthquakes correlate with ACTIVE faults, not old inactive ones.</li>
-    <li>The measured transfer factor for structured detectors is <strong>4.4×</strong> (topographic detectors work 4.4× better on young faults than old faults).</li>
-    <li>If seismicity has even a <strong>2.0×</strong> transfer factor for young faults, the modelled hidden DTI is <strong>0.54</strong>.</li>
-    <li>Earthquake lineations specifically target fault segments at <strong>relay ramps, step-overs, and fault tips</strong> — exactly where hidden faults are most likely.</li>
-  </ul>
-
-  <h3>Pipeline</h3>
-  <ol>
-    <li><strong>Load USGS ComCat</strong> (222,939 events) → screen to tectonic events M≥1.5, depth<25km, h_err<10km → 93,934 events in study area.</li>
-    <li><strong>Remove anthropogenic events</strong> (3km buffer around blast/mine/quarry sites).</li>
-    <li><strong>Decluster</strong> using 2-D triangle-area test (unverified adaptation of Ouillon &amp; Sornette 2011 tetrahedron test) → 90,897 events kept.</li>
-    <li><strong>Compute lineations</strong>: for each event, 2-D covariance of k=10 nearest neighbors → eigendecomposition → keep linear neighborhoods (elongation≥3.0, sigma1≥800m) → 1,366 lineations.</li>
-    <li><strong>Render anisotropic KDE</strong>: each lineation contributes an oriented Gaussian (width=location error, length=cluster extent) → smooth at 2px → power-law sharpen (^8).</li>
-    <li><strong>Distance prior</strong>: Gaussian peaked at 3km from known faults (extensions are most likely at this distance) → combine multiplicatively with seismicity KDE.</li>
-    <li><strong>Blue-noise emission</strong> at 3px spacing (the metric's own 300m support) → mass sweep selects N=55,000 under transfer model.</li>
-    <li><strong>Write portal-safe GeoTIFF</strong> → verify all cells finite and in [0,1] → uniqueness check against prior artifacts.</li>
-  </ol>
-
-  <h3>How it differs from prior submissions</h3>
-  <table>
-    <tr><th>Feature</th><th>H60 (this)</th><th>H58 (prior)</th><th>H56 (prior)</th><th>H33-2-B2 (0.2778)</th></tr>
-    <tr><td>Primary field</td><td>Seismicity KDE</td><td>Seismicity corridors</td><td>LiDAR scarps</td><td>Topographic features</td></tr>
-    <tr><td>Rendering</td><td>Anisotropic KDE</td><td>Binary corridors</td><td>Ridge density</td><td>Dot-thinning</td></tr>
-    <tr><td>Distance prior</td><td>Yes (multiplicative)</td><td>No</td><td>No</td><td>No</td></tr>
-    <tr><td>Sharpening</td><td>Power ^8</td><td>None</td><td>Power ^4</td><td>None</td></tr>
-    <tr><td>External raster</td><td>None (ComCat only)</td><td>LiDAR + radio</td><td>LiDAR + radio</td><td>LiDAR</td></tr>
-    <tr><td>Submitted?</td><td>This file</td><td>Not submitted</td><td>Not submitted</td><td>0.2778</td></tr>
-  </table>
-</div>
-
-<!-- ============================================================ -->
-<h2 id="sources">📚 Sources &amp; Licenses</h2>
-<!-- ============================================================ -->
-
-<div class="card">
-  <table>
-    <tr><th>Source</th><th>URL</th><th>License</th><th>Status</th></tr>
-    <tr>
-      <td>USGS ANSS ComCat</td>
-      <td><a href="https://earthquake.usgs.gov/fdsnws/event/1/query">earthquake.usgs.gov/fdsnws/event/1/query</a></td>
-      <td>USGS public domain</td>
-      <td><span class="tag tag-green">VERIFIED</span></td>
-    </tr>
-    <tr>
-      <td>USGS Copyright Policy</td>
-      <td><a href="https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits">usgs.gov/information-policies-and-instructions/copyrights-and-credits</a></td>
-      <td>US-authored data = US public domain</td>
-      <td><span class="tag tag-green">VERIFIED</span></td>
-    </tr>
-    <tr>
-      <td>Ouillon et al. 2008</td>
-      <td><a href="https://doi.org/10.1029/2007JB005032">doi:10.1029/2007JB005032</a> (JGR 113)</td>
-      <td>Peer-reviewed journal</td>
-      <td><span class="tag tag-green">VERIFIED</span></td>
-    </tr>
-    <tr>
-      <td>Ouillon &amp; Sornette 2011</td>
-      <td><a href="https://doi.org/10.1029/2010JB007752">doi:10.1029/2010JB007752</a> (JGR 116)</td>
-      <td>Peer-reviewed journal</td>
-      <td><span class="tag tag-green">VERIFIED</span></td>
-    </tr>
-    <tr>
-      <td>Competition Rules</td>
-      <td><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">drivendata.org/competitions/306</a></td>
-      <td>External data permitted with appropriate license</td>
-      <td><span class="tag tag-green">VERIFIED</span></td>
-    </tr>
-    <tr>
-      <td>NLR/DOE Rules PDF</td>
-      <td><a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">docs.nlr.gov/docs/fy26osti/96647.pdf</a></td>
-      <td>Government document</td>
-      <td><span class="tag tag-green">VERIFIED</span></td>
-    </tr>
-    <tr>
-      <td>EPSG:32611</td>
-      <td><a href="https://epsg.io/32611">epsg.io/32611</a></td>
-      <td>UTM Zone 11N</td>
-      <td><span class="tag tag-green">VERIFIED</span></td>
-    </tr>
-  </table>
-</div>
-
-<!-- ============================================================ -->
-<h2 id="limitations">⚠️ Limitations &amp; Irregularities</h2>
-<!-- ============================================================ -->
-
-<div class="card">
-  <ol>
-    <li><strong>UNVERIFIED 2-D adaptation.</strong> The 2-D covariance eigenstructure is this project's adaptation of the 3-D tetrahedron test (Ouillon &amp; Sornette 2008, 2011). It has NOT been validated against published results or ACLUD (Wang et al. 2013, arXiv:1304.6912).</li>
-    <li><strong>Transfer factor uncertainty.</strong> The modelled hidden DTI (0.54) depends on a transfer factor of 2.5, which was measured on topographic detectors, not seismicity detectors. The actual transfer for seismicity is unknown.</li>
-    <li><strong>SGMC proxy shows sub-unity lift.</strong> Off-catalogue DTI (0.0744) is below uniform control (0.1005) at matched mass. This is EXPECTED (seismicity targets young faults, SGMC measures old faults) but means the proxy cannot validate the approach.</li>
-    <li><strong>ComCat contributor rights.</strong> The ComCat extract contains mixed contributors (nc 62.8%, nn 35.0%, ci 1.6%, us 0.5%). USGS-authored data is public domain, but contributor-specific rights are not fully resolved. A research submission that is not uploaded is permitted under either reading.</li>
-    <li><strong>No LiDAR/radiometric ridge snap.</strong> The placement step (snapping dots to independent geophysical ridges) is not available in this environment. Dots are placed at the belief field's argmax within each 3×3 block.</li>
-    <li><strong>No organizer score exists.</strong> All numbers here are computed locally. No weekly slot has been used. The modelled hidden DTI is a MODEL, not an organizer receipt.</li>
-  </ol>
-</div>
-
-<!-- ============================================================ -->
-<h2>📊 Measured Results</h2>
-<!-- ============================================================ -->
-
-<div class="card">
-  <table>
-    <tr><th>Metric</th><th>Value</th><th>Notes</th></tr>
-    <tr><td>Predicted pixels</td><td>55,000</td><td>Blue-noise at 3px spacing</td></tr>
-    <tr><td>Off-catalogue DTI (SGMC proxy)</td><td>0.0744</td><td>Below uniform (0.1005) — expected for seismicity vs old faults</td></tr>
-    <tr><td>Uniform control (matched mass)</td><td>0.1005</td><td>3-seed average</td></tr>
-    <tr><td>Lift over uniform</td><td>0.74×</td><td>Sub-unity = anti-correlated with SGMC proxy</td></tr>
-    <tr><td>Credit per dot</td><td>0.0821</td><td>Break-even bar: ~0.052</td></tr>
-    <tr><td>Modelled hidden DTI (transfer 2.5)</td><td>0.54</td><td>MODEL, not receipt; assumes seismicity transfer factor</td></tr>
-    <tr><td>Max IoU vs prior artifacts</td><td>0.35</td><td>Overlap is mostly from distance prior component</td></tr>
-    <tr><td>Lineations found</td><td>1,366</td><td>From 90,897 declustered events</td></tr>
-    <tr><td>Format gate</td><td>PASS</td><td>All 12,279,160 cells finite, in [0,1]</td></tr>
-  </table>
-</div>
-
-<!-- ============================================================ -->
-<h2>📄 NaN-Outside Variant</h2>
-<!-- ============================================================ -->
-
-<div class="card">
-  <p>A NaN-outside twin keeps NaN outside the study footprint (matching the official sample format). Values inside the footprint are identical to the all-finite primary:</p>
-  <p><a href="downloads/gemsdoe50-h60-combined-55000-20261007T212217Z-nan.tif">⬇ Download NaN-outside variant (.tif)</a></p>
-  <p class="sub">Use the all-finite variant for portal submission. The NaN variant is for local analysis.</p>
-</div>
-
-<!-- ============================================================ -->
-<h2>🔬 Secondary: Targeted Variant</h2>
-<!-- ============================================================ -->
-
-<div class="card">
-  <p>A more selective variant with stricter criteria (M≥2.0, depth<20km, elongation≥4.0) and fewer dots:</p>
-  <p><a href="downloads/gemsdoe50-h60-targeted-40000-20261007T212429Z-allfinite.tif">⬇ Download H60-Targeted (40,000 dots)</a></p>
-  <table>
-    <tr><th>Metric</th><th>H60 Primary</th><th>H60-Targeted</th></tr>
-    <tr><td>Dots</td><td>55,000</td><td>40,000</td></tr>
-    <tr><td>Off-cat DTI</td><td>0.0744</td><td>0.0428</td></tr>
-    <tr><td>Credit/dot</td><td>0.0821</td><td>0.0615</td></tr>
-    <tr><td>Max IoU</td><td>0.35</td><td>0.10</td></tr>
-    <tr><td>Model hidden (T=2.0)</td><td>—</td><td>0.28</td></tr>
-    <tr><td>Uniqueness</td><td>Moderate</td><td>High</td></tr>
-  </table>
-</div>
-
-<footer style="margin-top:2rem;padding-top:1rem;border-top:1px solid var(--border);font-size:0.8rem;color:#8b949e">
-  <p>GEMSDOE50 · DOE GEMS Prize Challenge · Generated by build_h60_final.py · 
-  Core Values: Maximize P(Win) · Own the Outcome</p>
-</footer>
-
-</body>
-</html>
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="H57 download, unique entry name and note, with the H56 comparator and H55 no-slot audit guides."><title>Submission guide · GEMSDOE50</title><link rel="stylesheet" href="site.css"></head>
+<body><a class="skip" href="#start">Skip to content</a><header class="site-head"><div class="shell"><nav class="nav" aria-label="Main navigation"><a class="brand" href="index.html">GEMSDOE50 / Research</a><div class="links"><a href="index.html">Overview</a><a href="results.html">Results</a><a href="methods.html">Methods & sources</a><a href="submission.html" aria-current="page">Submission guide</a></div></nav></div></header>
+<section class="main" id="start"><div class="shell"><div class="grid"><article class="card span-12" style="border-left:6px solid #0f6b5c">
+<h1 style="margin-top:0">Start here &mdash; the one file to submit</h1>
+<div class="hero" style="border-radius:10px;padding:18px 20px;margin-bottom:14px"><div class="actions"><a class="download" href="docs/downloads/gemsdoe50-h59-sharpened-scarp-scatter-90k-20261007T171954Z-allfinite.tif" download>Download the recommended GeoTIFF (portal-safe)</a><a class="download alt" href="docs/downloads/gemsdoe50-h59-sharpened-scarp-scatter-90k-20261007T171954Z-allfinite.zip" download>same file as .zip</a></div>
+<p class="fine" style="color:#d8e7e3">File <code>gemsdoe50-h59-sharpened-scarp-scatter-90k-20261007T171954Z-allfinite.tif</code> &middot; SHA-256 <span class="hash">838f9502fd4a2720374559db0947fb3372f97629401a617e5c9c95c1b1ce8be5</span> &middot; 448,942 bytes &middot; 90,000 predicted cells &middot; float32, EPSG:32611, 3,730 &times; 3,292, values exactly 0 or 1, no NaN anywhere.</p>
+<p class="fine" style="color:#d8e7e3"><b>Entry name:</b> <code>GEMSDOE50-H59-SHARPENED-SCARP-SCATTER-90K</code> &middot; <b>note to paste</b> (281 characters): <q>GEMSDOE50 H59 rev2: blue-noise scatter, 90,000 dots on a 3-px lattice, sampling a sharpened rank-mean of the official band-19 slope-edge map and USGS 3DEP LiDAR scarp descriptors; no dot on a supplied-catalogue pixel or any prior-artifact pixel. Research model; no organizer score.</q></p></div>
+<p><span class="tag">YES</span> <b>OK to download and submit</b> (it uses one of your weekly slots). This is the highest-ranked file that reuses <b>no</b> prior prediction pixel (charter item 2): on the repository&rsquo;s frozen spatially-blocked gate it scores <b>0.2125</b> (matched uniform 0.1286, positive in 4/4 macrofolds), ahead of H60-union and H57 (0.2025); this session&rsquo;s independent instrument agrees (0.2492 pooled, 0.2527 inside the fold cores, vs H57 0.2178 / 0.2118; folds NW 0.2256, NE 0.2806, SW 0.1093, SE 0.2855). It uses no earthquake catalogue. <a href="docs/how-to-submit.html"><b>Exactly how to submit, step by step &rarr;</b></a></p>
+<p class="warning"><b>Read before submitting.</b> (1) The lead over H57 is real on the pooled scores but not uniform: it wins 2 of 4 macrofolds against H57 and the paired 16-subtile interval is [-0.0225, +0.0539], which includes zero. (2) 4,753 of its dots lie within 300&nbsp;m of the supplied catalogue (0 on catalogue pixels); the GEMSDOE32 B2 result suggests such dots may cost false-positive weight on the hidden labels. (3) Every number here is a proxy (USGS SGMC faults away from the given catalogue), not the organizers&rsquo; expert labels; expect roughly the low 0.2s. Beating the public best 0.3774 would need about 10,500 hidden-truth credit at 80,000&ndash;90,000 dots under the corrected metric algebra. No organizer score exists for any GEMSDOE50 file.</p>
+<p><b>Uniqueness.</b> 0 of its dots sit on any of the 1,405,451 pixels of the 61 registered prior artifacts (the charter rule). Against the wider corpus of 309 distinct rasters from all 54 sibling repositories plus this one &mdash; which also holds archives and dense ensemble rasters never registered as submissions &mdash; it is not a copy of anything: largest exact-pixel Jaccard 0.1868 and largest share of its dots on one file 47&nbsp;%, both against <code>gemsdoe50-h59-topo-lineament-scatter-180k-20261007T170212Z-a</code> (the same session&rsquo;s never-submitted first revision). Its dots do sit close to earlier scarp-based files (chance-corrected 2-pixel proximity 0.6902 to the dense <code>13GEMSDOE__docs__downloads__archive__13gems-r8-e</code>); every scarp-based file does, and forcing 2-pixel novelty was measured by H60 to collapse the score below random. <b>Why not H57 any more:</b> 27,248 of H57&rsquo;s 80,000 dots (34&nbsp;%) reuse prior prediction pixels, and it now ranks third on the frozen gate. It stays published below for the record only.</p>
+<h3>Today&rsquo;s run (H61): the required seismic-lineation map &mdash; <span class="tag fail">NO SLOT</span></h3>
+<p>Built as specified: 63,081 screened USGS ComCat earthquakes, declustered with the Zaliapin&ndash;Ben-Zion nearest-neighbour method (12,450 background events kept), a 2-D triangle test (my unverified adaptation of the Ouillon&ndash;Sornette 3-D tetrahedron test), local 2-D covariance with location-error removal, corridors as wide as the catalogue location error plus up-dip copies, and dots snapped to the H57 ridge. Result: only 31 lineations and <b>326 dots</b>; holdout DTI <b>0.0002</b>, credit/dot 0.0232 versus 0.1267 for random dots. On withheld catalogue faults the corridors lose to smoothed density (0.0007 vs 0.0093). Within every H57-strength decile, the corridors hold <i>less</i> fault credit than the cells outside them (median ratio 0.065, 0/10 deciles above 1); loosening every screen (up to 1,034 lineations) never lifts that ratio above 0.97. A corridor/H57 hybrid (0.2088) and spacing H57&rsquo;s dots 4 or 5 px apart (0.1866, 0.1786) also lost. The H61 file is unique (Jaccard &le; 0.0016) and valid, but <b>do not submit it</b>: <a href="docs/downloads/gemsdoe50-h61-updipseis-326-20261007T205554Z-cc1f44da-allfinite.tif" download>H61 research file</a> (SHA-256 <span class="hash">009dd3d8dffae29d&hellip;</span>, entry name if ever used <code>GEMSDOE50-H61-UPDIPSEIS-326-CC1F44DA</code>).</p>
+<h3>Flags for manual review</h3>
+<ul class="list">
+<li><b>Two &ldquo;current candidates&rdquo; on main</b> (fixed here): after two parallel merges the page led with H57 while the H60 receipt recommended the sharpened-scarp file; the H57 band is now marked superseded.</li>
+<li><b>&ldquo;NEW: H60 seismicity KDE&rdquo; banner</b> (a third session, PR #28) was removed from the top: its files score 0.0744 and 0.0428 on the frozen-frame instrument, reuse 14,392 and 10,392 prior pixels, are ComCat-derived, and quote a 0.54 &ldquo;modelled&rdquo; score from the retracted transfer model. Its hand-edited pages also broke main&rsquo;s CI; fixed here. Its guide remains at <a href="docs/submission-h60.html">docs/submission-h60.html</a> with a warning.</li>
+<li><b>Metric algebra:</b> earlier pages said the score &ldquo;reduces exactly&rdquo; to <code>T/(0.2N+0.8G)</code> and that dots 3&nbsp;px apart do not compete. Both are false (tested in <code>tests/test_h61.py</code>); errata added.</li>
+<li><b>Published note of the recommended file</b> cites the retracted transfer model (&ldquo;operating point at 0.45&rdquo;); use the corrected note above.</li>
+<li><b>Leaderboard coincidence:</b> five owner-reported corpus scores (0.2778, 0.2750, 0.2710, 0.2708, 0.2600) equal the public scores of five different leaderboard accounts. Please check this against <a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">rules &sect;3.4</a> (limits per participating entity).</li>
+<li><b>Sample file:</b> the local <code>sample_submission.tif</code> holds 1.0 on exactly the 60,988 training-label cells, not &ldquo;total fault absence&rdquo;.</li>
+<li><b>Reference solution</b> writes float64; the <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">format page</a> asks for float32 (all files here are float32).</li>
+<li><b>ComCat</b> contributor rights are unresolved, and USGS&rsquo;s own <code>horizontalError</code> definition link now redirects; no catalogue-derived file (H56, H58, H61) can be cleared for a slot.</li>
+</ul>
+<p class="muted">Full working: <a href="docs/research/h61-verdict-20261007.md">H61 verdict</a> &middot; <a href="docs/research/h61-hypotheses-preregistered.md">preregistration</a> &middot; <a href="evidence/h61_candidates.json">candidate adjudication</a> &middot; <a href="evidence/h61_build.json">build evidence</a> &middot; <a href="evidence/h61_uniqueness.json">uniqueness</a> &middot; <a href="evidence/h61_sensitivity.json">sensitivity</a> &middot; <a href="docs/executive-summary.html">executive summary</a>. Older candidates follow below for the record; only the file above is recommended.</p>
+</article></div></div></section>
+<section class="main" id="h57"><div class="shell"><div class="grid"><article class="card span-12"><h2>Former candidate (H57) &mdash; superseded, do not submit</h2><div class="hero" style="border-radius:10px;padding:18px 20px;margin-bottom:14px"><div class="actions"><a class="download" href="docs/downloads/gemsdoe50-h57-scarpstep-80000-20261007T1830Z-allfinite.tif" download>Download ...-80000-20261007T1830Z-allfinite.tif</a><a class="download alt" href="docs/downloads/gemsdoe50-h57-scarpstep-80000-20261007T1830Z.tif" download>NaN-outside twin</a><a class="download alt" href="docs/downloads/gemsdoe50-h57-scarpstep-80000-20261007T1830Z-allfinite.zip" download>.zip</a></div><p class="fine" style="color:#d8e7e3">SHA-256 <span class="hash">8027c4e9fe0f789e2d7180a7ccc031abec90b391cf9e42ebcc125752af9fb696</span> &middot; 395,743 bytes &middot; 80,000 predicted cells</p><p class="fine" style="color:#d8e7e3"><b>Unique entry name:</b> <code>GEMSDOE50-H57-SCARPSTEP</code> &middot; <b>Short note:</b> <q>H57 stratified LiDAR-scarp + topographic-step dot emitter; every dot is &ge;300 m from the given catalogue and &ge;300 m from every other dot; research model, not organizer-scored.</q></p></div><p><b>Answer first: yes, it is fine to download and submit this file.</b> It is this project's own construction from public layers (USGS 3DEP 1 m LiDAR derivatives and open topographic composites; no earthquake catalogue), no prior submission pixel is copied (maximum full-pixel IoU 0.0248 against the 26 pinned prior artifacts), and the primary file is portal-safe &mdash; all 12,279,160 cells are finite and inside <code>[0,1]</code>, so the <code>Predicted values must be in range [0, 1]</code> rejection cannot recur.</p><h3>How to submit</h3><ol class="steps"><li><b>Download the file above unchanged</b> and, if you want certainty that the bytes are intact, verify <code>8027c4e9fe0f789e2d7180a7ccc031abec90b391cf9e42ebcc125752af9fb696</code>.</li><li><b>Open the <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">DOE GEMS competition page</a></b> and sign in. Check the current deadline and how many weekly slots remain; this page is dated 2026-10-07 and must not be relied on for live status.</li><li><b>Upload the GeoTIFF as downloaded.</b> Do not re-save, re-project, re-compress, re-scale, or convert it &mdash; every gate in this repository was run on exactly these bytes.</li><li><b>Use the unique name and the short note</b> printed above, so the entry is distinguishable from every prior submission, including this project's own.</li><li><b>Record the portal receipt</b> (submission id, hash, timestamp, portal response or score) in <a href="registry/submissions.json">registry/submissions.json</a> before any score is quoted anywhere.</li></ol><p class="warning"><b>What it is expected to be worth.</b> Frozen spatially-blocked gate: pooled DTI 0.2025 against a matched-mass uniform control of 0.1053 (1.92x), positive in 4/4 macrofolds, paired 95&nbsp;% CI [+0.0626, +0.1330] &mdash; the strongest result this repository has measured. Corpus-calibrated expectation for the competition's hidden labels: <b>&asymp;0.23</b> (indicative band 0.05&ndash;0.41), P(&gt;0.2778) &asymp; 29&nbsp;%, <b>P(&gt;0.3774) &asymp; 4&nbsp;%</b>. No page here claims it beats the public best. <a href="docs/research/h57-verdict-20261007.md">Read the verdict before spending a slot.</a></p></article></div></div></section>
+<section class="main" id="h56"><div class="shell"><div class="grid"><article class="card span-12"><h2>Download the current research candidate GeoTIFF (H56) &mdash; one click</h2><div class="hero" style="border-radius:10px;padding:18px 20px;margin-bottom:14px"><div class="actions"><a class="download" href="docs/downloads/gemsdoe50-h56-scarpdisperse-90000-allfinite.tif" download>Download gemsdoe50-h56-scarpdisperse-90000-allfinite.tif</a><a class="download alt" href="docs/downloads/gemsdoe50-h56-scarpdisperse-90000-nan.tif" download>NaN-outside twin</a><a class="download alt" href="docs/downloads/gemsdoe50-h56-scarpdisperse-90000-allfinite.zip" download>.zip</a></div><p class="fine" style="color:#d8e7e3">SHA-256 <span class="hash">c44e791702c50bc1189325b4febb6f6acd2cf6ca1338514df4b4b95dc31f4c53</span> &middot; 672,263 bytes &middot; 90,000 predicted cells &middot; unique entry name (draft) <code>GEMSDOE50-H56-SCARPDISPERSE</code></p><p class="fine" style="color:#d8e7e3"><b>Draft optional note (use only after rights clearance):</b> <q>H56 LiDAR scarp-dispersion candidate with declustered ComCat-lineation corroboration; research model, not organizer-scored.</q></p></div><p><b>Why this file cannot reproduce the portal error.</b> The portal once rejected an upload with <code>Predicted values must be in range [0, 1]</code>. A non-finite cell makes a plain <code>min()/max()</code> validator see <code>NaN</code>, and <code>NaN &lt;= 1</code> is false. This file writes <b>0.0 outside the study footprint</b>, so every one of the 12,279,160 cells is finite and inside <code>[0, 1]</code>. The <code>-nan.tif</code> twin keeps the official sample's convention for portals that accept it.</p><div class="metrics"><div class="metric"><b>0.187446</b><small>off-catalogue DTI</small></div><div class="metric"><b>1.338x</b><small>vs matched-mass uniform</small></div><div class="metric"><b>4/4</b><small>frozen holdout macrofolds positive</small></div><div class="metric"><b>0.186915</b><small>worst full-pixel IoU vs priors</small></div></div><h3>H56 executive summary</h3><p>With binary unit dots the official metric is <code>DTI = T / (0.2N + 0.8G + 0.2(T &minus; M))</code> with <code>M = &Sigma; K(dot)</code> (<b>erratum, H61:</b> this band originally said it &ldquo;reduces exactly to <code>T / (0.2N + 0.8G)</code>&rdquo;; that is exact only when T = M, and dots closer than 6 px do compete &mdash; <a href="docs/research/h61-verdict-20261007.md">H61 verdict &sect;4</a>), so every dot costs the same <b>0.2</b> in the denominator no matter what it earns. The corpus that came before this file plateaued between 0.15 and 0.28 because of that arithmetic, not because of its geology: selecting the top-<i>N</i> pixels of an evidence field piles dots a few pixels deep on the strongest feature, where the <code>max</code> in the numerator saturates and the cost does not. H56 emits instead <b>variable-density blue noise at exactly the metric's own 300 m support</b>, using the only evidence family that measured as informative about faults the given catalogue does not contain (USGS 3DEP 1 m LiDAR scarp descriptors: enrichment 1.21&ndash;1.42, against 1.02&ndash;1.09 for every magnetic and radiometric channel), corroborated multiplicatively by 1,466 declustered USGS ComCat epicentre lineaments. Full working: <a href="docs/research/h56-diagnosis.md">h56-diagnosis.md</a> &middot; <a href="docs/hypotheses-20261007-h56.md">five screened hypotheses</a>.</p><p class="muted">Format gate <code>all_checks_pass=True</code>. Uniqueness gate: worst full-pixel IoU <b>0.186915</b> against every prior artifact on disk, minimum novel fraction at 2 px proximity 0.480, no SHA match. Frozen blocked holdout paired block-bootstrap 95% CI [0.026135, 0.085392]. <b>Modelled</b> hidden DTI 0.386 &mdash; a model with a stated transfer assumption (factor 4.2, band [3.97, 4.59]), <b>not an organizer score</b>. It is numerically above the user-provided 0.3774 claim only under that transfer model; it does not establish an actual score above 0.3774. No page in this repository claims portal acceptance, because no upload receipt exists. <a href="docs/research/h33-score-review-20261007.md">Score-provenance caveats</a>.</p><p class="warning"><b>No weekly slot used; do not upload until eligibility is cleared.</b> H56 passed its local blocked holdout, but it uses mixed-network ComCat-derived geometry whose contributor-specific challenge-use and sponsor-sharing rights remain unresolved. The 0.386 model is not a score. Verify source permissions and current rules before any slot.</p><h3>How to submit &mdash; only after rights and slot gates pass</h3><ol class="list"><li><b>Download</b> the GeoTIFF above and verify the SHA-256 if you want to be certain the bytes are intact.</li><li><b>Open</b> the <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">DOE GEMS competition page</a> and sign in.</li><li><b>Upload the file as downloaded.</b> Do not re-save, re-project, re-compress, re-scale or convert it; the gates above were run on the exact bytes the link serves.</li><li><b>Use the unique submission name and the optional note</b> printed on <a href="submission.html">submission.html</a> so the entry is distinguishable from every prior one.</li><li><b>Record the portal receipt</b> in this repository before any score is quoted.</li></ol><p class="notice"><b>Separate H53-A probe/TMI experiment: NO-GO / NO SLOT.</b> Its all-zero TIFF is audit-only, not this H56 download. <a href="results.html#h53a-no-go">Read the negative result and do not upload it.</a></p></article></div></div></section><main id="main"><section class="pagehead"><div class="shell"><div class="eyebrow">Manual guide · no automated upload</div><h1>Submission guide</h1><p>The artifact is easy to download and technically valid. The frozen evidence says not to spend a slot on it.</p></div></section><section class="main"><div class="shell"><div class="grid">
+<article class="card span-12"><div class="warning"><b>Current decision: NO SLOT.</b> Use this page for audit or only after an explicit owner override. There is no portal receipt and no organizer score.</div></article>
+<article class="card span-7"><h2>If the owner overrides the gate</h2><ol class="steps"><li><b>Download unchanged.</b> <a href="docs/downloads/gemsdoe50-h55-seisgeom-ridgesnap-13591-20261007-bcb60d89-zeros.tif" download>All-finite portal-safe TIFF</a> (recommended for the historical range parser) or <a href="docs/downloads/gemsdoe50-h55-seisgeom-ridgesnap-13591-20261007-bcb60d89-nan.tif" download>NaN-outside twin</a> (sample semantics).</li><li><b>Verify SHA-256.</b> All-finite: <code>7a366b7bbe431533a9d4246cbcdde34eb379ebb34fa116a8667431916506498d</code>. NaN twin: <code>cd7f765a95ea9c71b22abffbf330434597c28057f8a80ed723b753cd0a32d3c6</code>.</li><li><b>Check current rules manually.</b> Sign in at <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">DrivenData</a>; confirm deadline, remaining weekly slots, external-data disclosures, and AI disclosure. Do not rely on this dated page for live status.</li><li><b>Upload one TIFF.</b> Do not re-save, reproject, rename bands, or alter nodata metadata.</li><li><b>Record the receipt.</b> Preserve submission ID, exact file hash, timestamp, portal response, and any returned error/score before making a score claim.</li></ol></article>
+<aside class="card span-5"><h2>Name and optional note</h2><p><b>Unique name</b><br><code>GEMSDOE50-H55-SEISGEOM-RIDGESNAP-13591-BCB60D89</code></p><p><b>Short note</b><br><q>H55-S1: space-time-thinned relocated-earthquake point geometry; recurrent 2-D covariance axes, width sensitivity, and cross-axis LiDAR/radiometric ridge snap; known-fault 300 m exclusion; 13,591 binary cells (35,000-cell target not reached under frozen spacing).</q></p><p class="fine">The note deliberately says the 35,000-cell target was not reached.</p></aside>
+<article class="card span-6"><h2>All-finite twin</h2><p><a class="download" href="docs/downloads/gemsdoe50-h55-seisgeom-ridgesnap-13591-20261007-bcb60d89-zeros.tif" download>Download gemsdoe50-h55-seisgeom-ridgesnap-13591-20261007-bcb60d89-zeros.tif</a></p><ul class="list"><li>103,444 bytes</li><li>13,591 positive cells</li><li>finite min/max 0/1</li><li>non-finite cells 0</li><li>nodata None</li></ul><p class="fine">Direct guard against <code>Predicted values must be in range [0, 1]</code>.</p></article>
+<article class="card span-6"><h2>NaN-outside twin</h2><p><a class="download" href="docs/downloads/gemsdoe50-h55-seisgeom-ridgesnap-13591-20261007-bcb60d89-nan.tif" download>Download gemsdoe50-h55-seisgeom-ridgesnap-13591-20261007-bcb60d89-nan.tif</a></p><ul class="list"><li>244,978 bytes</li><li>13,591 positive cells</li><li>finite values only 0/1</li><li>NaN only outside official footprint</li><li>local published-format checker PASS</li></ul><p class="fine">No receipt establishes which twin the current portal prefers; that irregularity is disclosed rather than guessed away.</p></article>
+<article class="card span-12"><h2>Integrated H54 artifact — also NO SLOT</h2><p>H54 is retained for audit and is not an alternative slot recommendation. <a href="docs/downloads/gems50-h54-corpuscal-40000-20261007T032111Z-nan.tif" download>NaN-outside TIFF</a> (SHA-256 <code>2cdf7e705c867008b0dc86d3e7481bf43aef44240508312d270c97ebd192c81b</code>) · <a href="docs/downloads/gems50-h54-corpuscal-40000-20261007T032111Z-zeros.tif" download>all-finite twin</a> (SHA-256 <code>c24a8e3ce7ef2c30c2a44fe33bd901c6795ff02eca7004e135e2b588cce81623</code>). See <a href="evidence/h54_validation.json">its failed frozen gate</a>.</p></article>
+<article class="card span-12"><h2>Required disclosure/access</h2><ul class="list"><li>Manual DrivenData account access and an available weekly feedback slot.</li><li>External-data attribution for Trugman (2024), Zenodo 11167510, CC BY 4.0.</li><li>Disclosure of 3DEP/radiometric/GDR inputs and the unresolved mixed-network ComCat exclusion mask.</li><li>AI-assistance disclosure as required by the current NLR/DOE rules.</li><li>Reproducible repository commit, environment, source receipts, and exact artifact hash.</li></ul></article>
+<article class="card span-12"><h2>This session's H52-C file — manual steps (no slot recommended)</h2>
+<p>Same no-automated-upload policy as the rest of this repository. H52-C passed its local gates but carries no organizer score, and its proxy quality is below the incumbent family, so the slot decision is the owner's.</p>
+<ol class="steps"><li><b>Download unchanged.</b> <a href="docs/downloads/gems50-h52-coincidence8-80000-20261007T032938Z-nanoutside.tif" download>NaN-outside H52-C TIFF</a> or, if the portal objects to NaN outside the study area, the <a href="docs/downloads/gems50-h52-coincidence8-80000-20261007T032938Z.tif" download>all-finite twin</a>.</li><li><b>Verify SHA-256.</b> NaN-outside <code>c8292db9e2c6d16b99a32ceae3d1652eb15019c8faa6f9d8b6d8b052d15dd582</code>; all-finite <code>a2ed87fac9fdb4b9604ab2850b5f750eefe51fa9795caa6a503fc4739de6475d</code>.</li><li><b>Manual sign-in.</b> Open the DOE GEMS competition on DrivenData yourself and check the current rules, deadline and remaining weekly slots.</li><li><b>Name and note.</b> Use <code>GEMSDOE50-H52-COINCIDENCE8-OFFCAT-80000</code> with the 172-character note <q>GEMSDOE50 H52 | eight-family lineament coincidence (topography, lidar scarp, radiometric, potential field); dots &gt;200 m off-catalogue; proxy-validated, not organizer-scored</q>.</li><li><b>Record the receipt.</b> Save the returned score next to the hash in <a href="registry/submissions.json">registry/submissions.json</a> before making any claim.</li></ol>
+<p class="fine">Decision record: <a href="docs/h52-decision.md">docs/h52-decision.md</a> — including the exact inversion of the recorded nested pair, the marginal-value rule, and everything that remains unproven.</p></article>
+</div></div></section></main><main><section class="main"><div class="shell"><div class="grid">
+<article class="card span-12"><h2>This session&rsquo;s H58-S1 file &mdash; manual steps (NO_SLOT)</h2>
+<p>Same no-automated-upload policy as the rest of this repository. H58-S1 is the generated unique competition-format artifact; its frozen gate result is <b>NO_SLOT</b>, so no slot is recommended and the owner&rsquo;s explicit override would be required before any upload.</p>
+<ol class="steps"><li><b>Download unchanged.</b> <a href="docs/downloads/gemsdoe50-h58-seislineage-98598-20261007T180223Z-c4ff6db9-allfinite.tif" download>All-finite portal-safe TIFF</a> (recommended: every cell finite, values in [0, 1], the direct guard against the historical range parser) or <a href="docs/downloads/gemsdoe50-h58-seislineage-98598-20261007T180223Z-c4ff6db9-nan.tif" download>NaN-outside twin</a> (sample semantics).</li>
+<li><b>Verify SHA-256.</b> All-finite: <code>7d2576f844636b7a1a440a8cd2b3babab523837d4b052d60e5842ca59d4b3365</code>. NaN twin: <code>21e2b81d736440103786bf7d0a868e319c4a6aea7bb397518067d1b859a9d719</code>.</li>
+<li><b>Check current rules manually.</b> Sign in at <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">DrivenData</a>; confirm deadline, remaining weekly slots, external-data disclosures, and AI disclosure. Do not rely on this dated page for live status.</li>
+<li><b>Upload one TIFF.</b> Do not re-save, reproject, rename bands, or alter nodata metadata.</li>
+<li><b>Record the receipt.</b> Preserve submission ID, exact file hash, timestamp, portal response, and any returned error/score before making any score claim.</li></ol>
+<p><b>Unique name</b><br><code>GEMSDOE50-H58-SEISLINEAGE-98598-C4FF6DB9</code></p>
+<p><b>Short note</b><br><q>H58-S1: declustered USGS ComCat epicentre point-geometry lineations (2-D covariance axes, catalogue-error corridor widths); known-fault 300 m exclusion; 98,598 binary cells; proxy-validated research artifact, not organizer-scored.</q></p>
+<p class="fine">Decision record: <a href="evidence/h58_build.json">evidence/h58_build.json</a> &mdash; including the mass sweep, the placement-step measurement, the falsification controls, and the frozen gate components.</p></article><article class="card span-12"><h2>H56 mass sweep and the calibrated proxy transfer</h2><p class="muted">Every row is measured with the official distance-weighted Tversky definition on the independent off-catalogue frame (USGS SGMC fault pixels more than 300 m from the given catalogue). "Modelled hidden" applies the transfer factor below to the measured credit per dot and caps the total at the calibrated hidden mass.</p><table><tr><th>requested dots</th><th>off-catalogue DTI</th><th>matched uniform</th><th>lift</th><th>credit / dot</th><th>modelled hidden DTI</th></tr><tr><td>30,000</td><td>0.0983</td><td>0.0619</td><td>1.59x</td><td>0.1835</td><td>0.291</td></tr><tr><td>45,000</td><td>0.1296</td><td>0.0852</td><td>1.52x</td><td>0.1707</td><td>0.341</td></tr><tr><td>60,000</td><td>0.1559</td><td>0.1072</td><td>1.45x</td><td>0.1623</td><td>0.372</td></tr><tr><td>75,000</td><td>0.1731</td><td>0.1240</td><td>1.40x</td><td>0.1514</td><td>0.381</td></tr><tr><td>90,000</td><td>0.1874</td><td>0.1401</td><td>1.34x</td><td>0.1431</td><td>0.386</td></tr><tr><td>110,000</td><td>0.2005</td><td>0.1586</td><td>1.26x</td><td>0.1327</td><td>0.382</td></tr><tr><td>130,000</td><td>0.2101</td><td>0.1730</td><td>1.21x</td><td>0.1242</td><td>0.342</td></tr><tr><td>160,000</td><td>0.2171</td><td>0.1910</td><td>1.14x</td><td>0.1125</td><td>0.293</td></tr><tr><td>220,000</td><td>0.2186</td><td>0.2130</td><td>1.03x</td><td>0.0943</td><td>0.227</td></tr></table><h3>Frozen blocked holdout, per macrofold</h3><table><tr><th>fold</th><th>candidate</th><th>uniform</th><th>translation</th><th>dots in fold</th></tr><tr><td>NW</td><td>0.1485</td><td>0.1096</td><td>0.1165</td><td>30,998</td><td>1.36x</td></tr><tr><td>NE</td><td>0.1542</td><td>0.1164</td><td>0.1197</td><td>12,462</td><td>1.32x</td></tr><tr><td>SW</td><td>0.1134</td><td>0.0811</td><td>0.0914</td><td>9,609</td><td>1.40x</td></tr><tr><td>SE</td><td>0.2961</td><td>0.1822</td><td>0.2200</td><td>15,437</td><td>1.63x</td></tr></table><p class="small">The transfer factor is measured on the group's own scored artifacts: the only structured artifacts available transfer at 3.97&ndash;4.59, and the one structureless artifact transfers at exactly 1.00, the mathematical expectation for a detector with no information. H56 uses the conservative 4.2. <b>This is the largest single uncertainty in the modelled number</b> and it is an assumption, not a measurement of H56.</p></article></div></div></section></main>
+<footer class="site-foot"><div class="shell"><b>Maximize P(Win) · Own the Outcome</b><br>Research artifact only. No portal upload, organizer score, or weekly slot is represented here. Built from <a href="evidence/results/h55s1-evaluation-20261007.json">machine-readable evidence</a>.</div></footer></body></html>

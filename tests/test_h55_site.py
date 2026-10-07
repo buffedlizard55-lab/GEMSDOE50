@@ -34,15 +34,19 @@ def _sha256(path: Path) -> str:
 def test_h55_site_regeneration_is_deterministic_and_download_first():
     tracked = [
         ROOT / name
-        for name in ("index.html", "results.html", "methods.html", "submission.html", "site.css")
+        for name in ("index.html", "results.html", "methods.html", "submission.html", "site.css",
+                     "docs/how-to-submit.html", "docs/executive-summary.html", "docs/index.html")
     ]
     before = {path: path.read_bytes() for path in tracked}
     # The committed pages are produced by three generators in sequence, the same
     # order as the site workflow: build_h55_site.py regenerates from committed
     # evidence, build_h58_site.py reproduces the preserved H57-scarpstep band and
     # inserts the H58 band, and build_h59_site.py adds this session's H59 banner.
+    # build_h61_site.py (last) adds the single start-here band with the evidence-backed
+    # recommendation (evidence/h61_candidates.json), marks the H57 band superseded, and
+    # regenerates the docs/ submission pages.
     for script in ("build_h55_site.py", "build_h58_site.py", "build_h59_site.py",
-                   "build_h60_site.py"):
+                   "build_h60_site.py", "build_h61_site.py"):
         subprocess.run(
             [sys.executable, str(ROOT / "scripts" / script)],
             cwd=ROOT,
@@ -59,15 +63,20 @@ def test_h55_site_regeneration_is_deterministic_and_download_first():
     # assertion is about ordering and presence, not about which session's artifact is first.
     # The current top band is the H57-scarpstep session's; the H56 band below it was reworded
     # to "Previous candidate (H56)" by that session, and this session's H58 band follows it.
-    first_download = index.index("Download the current research candidate GeoTIFF (H57)")
+    first_download = index.index("Download the recommended GeoTIFF (portal-safe)")
+    former_h57 = index.index("Former candidate (H57) &mdash; superseded, do not submit")
+    assert first_download < former_h57
+    assert "GEMSDOE50-H59-SHARPENED-SCARP-SCATTER-90K" in index[:former_h57]
+    assert "Yes &mdash; you may download this file and submit it as your entry." not in index
+    assert '<a class="skip" href="#start">' in index
+    assert "reduces exactly to <code>DTI = T / (0.2N + 0.8G)</code>" not in index
     assert "Previous candidate (H56)" in index
     assert "GEMSDOE50-H58-SEISLINEAGE-98598-C4FF6DB9" in index
     assert first_download < index.index("Executive summary")
     assert index.index("Download portal-safe TIFF") > first_download
-    # this session's H59 band is the first thing on the page and must not have
-    # displaced the bands the earlier sessions contributed
+    # the sibling H59 banner (same recommended file) stays above the H57 band
     assert "<!-- h59-banner -->" in index
-    assert index.index("<!-- h59-banner -->") < index.index("Download the current research candidate GeoTIFF (H57)")
+    assert index.index("<!-- h59-banner -->") < former_h57
     assert "NO SLOT" in index
     assert "0.019321" in index and "0.115822" in index
     assert "0.2778" in index and "UNSCORED" in index
@@ -213,10 +222,12 @@ def test_h60_band_is_an_alternative_below_the_current_candidate_and_says_what_to
     assert "GEMSDOE50-H60-UNION-75308" in index
     assert "NO SLOT for H60" in index
     assert "Which file should you submit?" in index
-    # the current-candidate banner stays first, then the H57 band, then the H60 alternative
+    # the current-candidate banner stays first, then the H61 start band (same recommended
+    # file), then the superseded H57 band, then the H60 alternative
     assert (
         index.index("<!-- h59-banner -->")
-        < index.index("Download the current research candidate GeoTIFF (H57)")
+        < index.index('<section class="main" id="start">')
+        < index.index("Former candidate (H57) &mdash; superseded, do not submit")
         < index.index('id="h60"')
         < index.index('id="h56"')
     )

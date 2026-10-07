@@ -1,0 +1,146 @@
+{
+ "base_rate_meanK_domain": 0.042066145688295364,
+ "variants": {
+  "frozen": {
+   "events": 2563,
+   "lineations": 31,
+   "corridor_union_cells_in_domain": 26072,
+   "snapped_dots": 324,
+   "meanK_at_dots": 0.015116116032004356,
+   "meanK_at_dots_by_kind": {
+    "epicentral": 0.017146535217761993,
+    "updip_left": 0.01567143388092518,
+    "updip_right": 0.012641130946576595
+   },
+   "enrichment_median_ratio": 0.1345323441292326,
+   "enrichment_strata_gt_1": 0,
+   "enrichment_top3": [
+    0.23522252359753404,
+    0.22162957580805454,
+    0.3824539405568411
+   ],
+   "lineation_report": {
+    "events": 2563,
+    "k": 12,
+    "radius_km": 5.0,
+    "min_events": 8,
+    "rules": "lambda2 <= 2.25 sigbar^2; sqrt(lambda1 - sigbar^2) >= 1 km; sqrt(lambda1/lambda2) >= 3",
+    "neighbourhoods_with_min_events": 2307,
+    "fail_thickness": 306,
+    "fail_length": 2008,
+    "fail_elongation": 2016,
+    "accepted_neighbourhoods": 74,
+    "merged_lineations": 31,
+    "median_sigma_loc_km": 0.3394106958089817,
+    "median_depth_km": 5.7835,
+    "median_half_length_km": 2.8534901248705578
+   }
+  },
+  "no_triangle": {
+   "events": 12450,
+   "lineations": 171,
+   "corridor_union_cells_in_domain": 141925,
+   "snapped_dots": 1697,
+   "meanK_at_dots": 0.052830539643764496,
+   "meanK_at_dots_by_kind": {
+    "epicentral": 0.042987845838069916,
+    "updip_left": 0.046160776168107986,
+    "updip_right": 0.07010228931903839
+   },
+   "enrichment_median_ratio": 0.8497901949429321,
+   "enrichment_strata_gt_1": 3,
+   "enrichment_top3": [
+    1.614229279847333,
+    1.31352741718543,
+    0.9137537321700098
+   ],
+   "lineation_report": {
+    "events": 12450,
+    "k": 12,
+    "radius_km": 5.0,
+    "min_events": 8,
+    "rules": "lambda2 <= 2.25 sigbar^2; sqrt(lambda1 - sigbar^2) >= 1 km; sqrt(lambda1/lambda2) >= 3",
+    "neighbourhoods_with_min_events": 10694,
+    "fail_thickness": 1660,
+    "fail_length": 8552,
+    "fail_elongation": 10077,
+    "accepted_neighbourhoods": 244,
+    "merged_lineations": 171,
+    "median_sigma_loc_km": 0.4654496100897849,
+    "median_depth_km": 6.208,
+    "median_half_length_km": 3.122342508335806
+   }
+  },
+  "no_decluster_no_triangle": {
+   "events": 63081,
+   "lineations": 228,
+   "corridor_union_cells_in_domain": 199251,
+   "snapped_dots": 2304,
+   "meanK_at_dots": 0.06116717308759689,
+   "meanK_at_dots_by_kind": {
+    "epicentral": 0.06297218799591064,
+    "updip_left": 0.04972564056515694,
+    "updip_right": 0.07290801405906677
+   },
+   "enrichment_median_ratio": 0.8603600456489748,
+   "enrichment_strata_gt_1": 4,
+   "enrichment_top3": [
+    1.3751159335845622,
+    1.2388734731270359,
+    1.0494530960469306
+   ],
+   "lineation_report": {
+    "events": 63081,
+    "k": 12,
+    "radius_km": 5.0,
+    "min_events": 8,
+    "rules": "lambda2 <= 2.25 sigbar^2; sqrt(lambda1 - sigbar^2) >= 1 km; sqrt(lambda1/lambda2) >= 3",
+    "neighbourhoods_with_min_events": 61531,
+    "fail_thickness": 839,
+    "fail_length": 59897,
+    "fail_elongation": 59452,
+    "accepted_neighbourhoods": 330,
+    "merged_lineations": 228,
+    "median_sigma_loc_km": 0.5207498710942102,
+    "median_depth_km": 6.0,
+    "median_half_length_km": 2.9157753134069124
+   }
+  },
+  "lenient_rules_no_triangle": {
+   "events": 12450,
+   "lineations": 1034,
+   "corridor_union_cells_in_domain": 501572,
+   "snapped_dots": 6643,
+   "meanK_at_dots": 0.055550467222929,
+   "meanK_at_dots_by_kind": {
+    "epicentral": 0.04809584841132164,
+    "updip_left": 0.056039877235889435,
+    "updip_right": 0.062165334820747375
+   },
+   "enrichment_median_ratio": 0.9737789886765036,
+   "enrichment_strata_gt_1": 4,
+   "enrichment_top3": [
+    1.0923371527858245,
+    0.9598282975959388,
+    0.801996249076613
+   ],
+   "lineation_report": {
+    "events": 12450,
+    "k": 12,
+    "radius_km": 5.0,
+    "min_events": 8,
+    "rules": "lambda2 <= 2.25 sigbar^2; sqrt(lambda1 - sigbar^2) >= 1 km; sqrt(lambda1/lambda2) >= 3",
+    "neighbourhoods_with_min_events": 10694,
+    "fail_thickness": 0,
+    "fail_length": 6457,
+    "fail_elongation": 7968,
+    "accepted_neighbourhoods": 1667,
+    "merged_lineations": 1034,
+    "median_sigma_loc_km": 0.41593717496897087,
+    "median_depth_km": 6.0,
+    "median_half_length_km": 2.45656433572243
+   }
+  }
+ },
+ "note": "Exploratory and post-hoc: relaxations chosen after seeing the frozen result. Snapped dots here use the off-catalogue domain without the uniqueness exclusions, so they are an upper bound on what the seismic corridors can place."
+}
