@@ -1,0 +1,97 @@
+{
+ "tif": "docs/downloads/gemsdoe50-h59-sharpened-scarp-scatter-90k-20261007T171954Z-allfinite.tif",
+ "positive_cells": 90000,
+ "frames": {
+  "S_matched": {
+   "truth_px": 52219,
+   "dti": 0.23028191003766868,
+   "tp_w": 14090.384801139908,
+   "fp_w": 82971.34167583458,
+   "fn_w": 38128.61519886009,
+   "coverage": 0.269832528411879,
+   "pred_side_credit": 82971.34167583458,
+   "folds": {
+    "NW": {
+     "dti": 0.14545722946966122,
+     "truth_px": 19975
+    },
+    "NE": {
+     "dti": 0.15002738898799947,
+     "truth_px": 17289
+    },
+    "SW": {
+     "dti": 0.02726593654727716,
+     "truth_px": 2326
+    },
+    "SE": {
+     "dti": 0.12936276346633147,
+     "truth_px": 12629
+    }
+   }
+  },
+  "S_raw": {
+   "truth_px": 61664,
+   "dti": 0.24917419755084955,
+   "tp_w": 17210.138479842644,
+   "fp_w": 81477.37318794407,
+   "fn_w": 44453.861520157356,
+   "coverage": 0.2790953956902349,
+   "pred_side_credit": 81477.37318794407,
+   "folds": {
+    "NW": {
+     "dti": 0.164987471567538,
+     "truth_px": 23093
+    },
+    "NE": {
+     "dti": 0.18068645306613568,
+     "truth_px": 22774
+    },
+    "SW": {
+     "dti": 0.02726593654727716,
+     "truth_px": 2326
+    },
+    "SE": {
+     "dti": 0.1330752186550614,
+     "truth_px": 13471
+    }
+   }
+  },
+  "L": {
+   "truth_px": 60988,
+   "dti": 0.03892453994556949,
+   "tp_w": 2609.58529999619,
+   "fp_w": 88649.22305449274,
+   "fn_w": 58378.41470000381,
+   "coverage": 0.042788504295864595,
+   "pred_side_credit": 88649.22305449274,
+   "folds": {
+    "NW": {
+     "dti": 0.027424358723685174,
+     "truth_px": 29305
+    },
+    "NE": {
+     "dti": 0.020124685370998898,
+     "truth_px": 12610
+    },
+    "SW": {
+     "dti": 0.017391304358485123,
+     "truth_px": 9447
+    },
+    "SE": {
+     "dti": 0.017806518055404875,
+     "truth_px": 9626
+    }
+   }
+  }
+ },
+ "required_coverage_for_target": {
+  "target": 0.3774,
+  "required_coverage": 0.32656946307272966,
+  "formula": "solve c/(0.8+0.2c) = target for the coverage a perfect-precision prediction would need"
+ },
+ "zero_false_positive_limit": {
+  "formula": "c/(0.8+0.2c) with c = coverage of the frame's truth; the score a prediction with no false-positive mass would earn at that coverage",
+  "value": 0.3159755407459042,
+  "reading": "the score this artifact would earn if none of its dots missed, on this frame"
+ }
+}

@@ -1,0 +1,72 @@
+{
+ "schema": "gemsdoe50.h59.build.v1",
+ "generated_utc": "20261007T171954Z",
+ "portal_name": "GEMSDOE50-H59-SHARPENED-SCARP-SCATTER-90K",
+ "portal_note": "H59 (revision 2): field-weighted blue-noise scatter on a 3-px lattice, 90,000 dots, sampling a sharpened NaN-aware rank-mean of the official band-19 slope-edge map and the USGS 3DEP LiDAR scarp family. No dot lies on a supplied catalogue pixel or on any registered prior-artifact pixel. Measured on the frozen off-catalogue proxy: 0.2341 against a matched-mass uniform scatter at 0.1276 (1.84x), positive in 4/4 spatial macrofolds; the repository's transfer model puts the hidden-score operating point at 0.45 with the same mass. Research model, not an organizer score.",
+ "frozen": {
+  "rng_seed": 20261007,
+  "lattice_px": 3,
+  "mass": 90000,
+  "catalogue_buffer_px": 1,
+  "floor_frac": 1e-06,
+  "field": "sharpen(rank-mean(o19_gradmag rank, lidar bands 02-08 NaN-aware rank-mean), 16)",
+  "sharpen_exponent": 16.0,
+  "stem": "gemsdoe50-h59-sharpened-scarp-scatter-90k-20261007T171954Z"
+ },
+ "files": {
+  "allfinite_tif": {
+   "path": "docs/downloads/gemsdoe50-h59-sharpened-scarp-scatter-90k-20261007T171954Z-allfinite.tif",
+   "bytes": 448942,
+   "sha256": "838f9502fd4a2720374559db0947fb3372f97629401a617e5c9c95c1b1ce8be5"
+  },
+  "nan_tif": {
+   "path": "docs/downloads/gemsdoe50-h59-sharpened-scarp-scatter-90k-20261007T171954Z-nan.tif",
+   "bytes": 458802,
+   "sha256": "cf645d250f8788929884c4591d6aa61f51152d4f3413b4c3920fc6443e1df6e6"
+  },
+  "zip": {
+   "path": "docs/downloads/gemsdoe50-h59-sharpened-scarp-scatter-90k-20261007T171954Z-allfinite.zip",
+   "bytes": 349070,
+   "sha256": "05a8a73aca13ffb00e3e515126936e2ee240953e7bff0e5f1085fae12a22b9f1"
+  }
+ },
+ "reread": {
+  "driver": "GTiff",
+  "count": 1,
+  "dtype": "float32",
+  "crs": "EPSG:32611",
+  "width": 3292,
+  "height": 3730,
+  "transform": [
+   100.0,
+   0.0,
+   243350.0,
+   0.0,
+   -100.0,
+   4508550.0
+  ],
+  "nodata": null,
+  "finite_cells": 12279160,
+  "nan_cells": 0,
+  "min_finite": 0.0,
+  "max_finite": 1.0,
+  "outside_unit_interval": 0,
+  "positive_cells": 90000,
+  "values": [
+   0.0,
+   1.0
+  ],
+  "in_range_check_plain_minmax": true,
+  "dots_on_provided_catalogue": 0,
+  "nonzero_outside_footprint": 0
+ },
+ "prior_union_cells": 1405451,
+ "eligible_cells": 3886785,
+ "dots_on_prior_union": 0,
+ "name_change": {
+  "reason": "the session's series was renumbered H57 -> H59 during the merge to main, because a different arena session had already merged an unrelated H57 (scarpstep) and H58 series under those numbers.",
+  "effect": "filenames and the portal name changed; the raster bytes did not. Every hash in this receipt was re-verified against the renamed files on disk after the rename, and the delivered cell set, format, mass and seed are unchanged.",
+  "portal_name_before": "GEMSDOE50-H57-SHARPENED-SCARP-SCATTER-90K",
+  "zip_rebuilt": "the .zip was rebuilt after the rename so its internal entry name matches the delivered file; the GeoTIFF bytes it carries are unchanged and match the receipt hash"
+ }
+}
