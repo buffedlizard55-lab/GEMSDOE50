@@ -1,0 +1,68 @@
+{
+ "primary": {
+  "path": "docs/downloads/gems51-scarpradio-offcat-35000-20261006-ecf058ea-nan.tif",
+  "bytes": 329192,
+  "sha256": "8f8708d2872b66d71925707e0aede23eebcf217dfd2e57d6e61186f32e686f5d",
+  "crs": "EPSG:32611",
+  "shape": [
+   3730,
+   3292
+  ],
+  "dtype": "float32",
+  "count": 1,
+  "nodata": NaN,
+  "transform": [
+   100.0,
+   0.0,
+   243350.0,
+   0.0,
+   -100.0,
+   4508550.0
+  ],
+  "cells_finite": 5167373,
+  "cells_nan": 7111787,
+  "min": 0.0,
+  "max": 1.0,
+  "outside_unit_interval": 0,
+  "outside_footprint_nonzero": 0,
+  "footprint_min": 0.0,
+  "footprint_max": 1.0,
+  "footprint_nonzero": 35000
+ },
+ "allfinite": {
+  "path": "docs/downloads/gems51-scarpradio-offcat-35000-20261006-ecf058ea-allfinite.tif",
+  "bytes": 275895,
+  "sha256": "d028ba16c9232c7f1bd3074a5891ef25cd5d7265d5c2a70e2f82bec9082da6e2",
+  "crs": "EPSG:32611",
+  "shape": [
+   3730,
+   3292
+  ],
+  "dtype": "float32",
+  "count": 1,
+  "nodata": null,
+  "transform": [
+   100.0,
+   0.0,
+   243350.0,
+   0.0,
+   -100.0,
+   4508550.0
+  ],
+  "cells_finite": 12279160,
+  "cells_nan": 0,
+  "min": 0.0,
+  "max": 1.0,
+  "outside_unit_interval": 0,
+  "outside_footprint_nonzero": 0,
+  "footprint_min": 0.0,
+  "footprint_max": 1.0,
+  "footprint_nonzero": 35000
+ },
+ "zip": {
+  "path": "docs/downloads/gems51-scarpradio-offcat-35000-20261006-ecf058ea-nan.zip",
+  "bytes": 247689,
+  "sha256": "21e12a57a2e4fd4cdfb89528449c15a4bac4b97d7ff8fa0ee9527ea426fc0b77",
+  "contains": "gems51-scarpradio-offcat-35000-20261006-ecf058ea-nan.tif"
+ }
+}

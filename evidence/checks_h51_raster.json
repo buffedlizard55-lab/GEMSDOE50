@@ -1,0 +1,65 @@
+{
+ "file": "docs/downloads/gems51-scarpradio-offcat-35000-20261006-ecf058ea-nan.tif",
+ "sha256": "8f8708d2872b66d71925707e0aede23eebcf217dfd2e57d6e61186f32e686f5d",
+ "checks": {
+  "single_band": true,
+  "float32": true,
+  "crs_matches_template": true,
+  "shape_matches_template": true,
+  "transform_matches_template": true,
+  "values_finite_in_range": true,
+  "nan_only_where_template_is_nan": true,
+  "nonzero_only_inside_template": true,
+  "has_predictions": true,
+  "sha256_matches_build_evidence": true
+ },
+ "errors": [],
+ "predicted_cells": 35000,
+ "finite_cells": 5167373,
+ "nan_cells": 7111787,
+ "profile": {
+  "crs": "EPSG:32611",
+  "transform": [
+   100.0,
+   0.0,
+   243350.0,
+   0.0,
+   -100.0,
+   4508550.0
+  ],
+  "height": 3730,
+  "width": 3292,
+  "dtype": "float32",
+  "count": 1,
+  "nodata": NaN
+ },
+ "template": {
+  "crs": "EPSG:32611",
+  "transform": [
+   100.0,
+   0.0,
+   243350.0,
+   0.0,
+   -100.0,
+   4508550.0
+  ],
+  "height": 3730,
+  "width": 3292,
+  "dtype": "float32",
+  "count": 1
+ },
+ "mass_matches_evidence": true,
+ "allfinite_twin": {
+  "file": "gems51-scarpradio-offcat-35000-20261006-ecf058ea-allfinite.tif",
+  "all_finite": true,
+  "outside_footprint_nonzero": 0
+ },
+ "zip": {
+  "entries": [
+   "gems51-scarpradio-offcat-35000-20261006-ecf058ea-nan.tif"
+  ],
+  "single_geotiff": true,
+  "bytes_match_tif": true,
+  "sha256": "21e12a57a2e4fd4cdfb89528449c15a4bac4b97d7ff8fa0ee9527ea426fc0b77"
+ }
+}

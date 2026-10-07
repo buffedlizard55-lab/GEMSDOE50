@@ -34,6 +34,8 @@ def test_incumbent_is_fixed_before_holdout_not_selected_by_best_score():
             "H32-D": stronger_secondary,
             "H47-S3": empty,
             "H48-DS": empty,
+            "smoothed-density-1km": empty,
+            "smoothed-density-2km": empty,
             PRIMARY_INCUMBENT_NAME: prior,
         },
         [_single_block()],
@@ -63,12 +65,50 @@ def test_evaluation_refuses_to_choose_an_incumbent_from_holdout_scores():
         )
 
 
+def test_evaluation_requires_both_smoothed_density_controls():
+    empty = np.zeros((8, 8), dtype=np.float32)
+    with pytest.raises(ValueError, match="smoothed-density controls are required"):
+        evaluate_hypothesis(
+            empty,
+            {PRIMARY_INCUMBENT_NAME: empty},
+            [_single_block()],
+            split_sha256="0" * 64,
+            input_hashes={},
+            time_shuffle_maps={f"time-shuffle-{index:02d}": empty for index in range(20)},
+        )
+
+
+def test_density_gate_requires_strictly_beating_both_smoothed_maps():
+    empty = np.zeros((8, 8), dtype=np.float32)
+    candidate = empty.copy()
+    candidate[4, 4] = 1.0
+    result = evaluate_hypothesis(
+        candidate,
+        {
+            PRIMARY_INCUMBENT_NAME: empty,
+            "smoothed-density-1km": candidate.copy(),
+            "smoothed-density-2km": empty,
+        },
+        [_single_block()],
+        split_sha256="0" * 64,
+        input_hashes={},
+        time_shuffle_maps={f"time-shuffle-{index:02d}": empty for index in range(20)},
+    )
+
+    assert result["smoothed_density_controls"]["candidate_beats_both"] is False
+    assert result["promotion_gate"]["components"]["beats_both_smoothed_density_controls"] is False
+
+
 def test_evaluation_requires_all_preregistered_time_shuffle_controls():
     empty = np.zeros((8, 8), dtype=np.float32)
     with pytest.raises(ValueError, match="exactly 20 time-shuffle controls"):
         evaluate_hypothesis(
             empty,
-            {PRIMARY_INCUMBENT_NAME: empty},
+            {
+                PRIMARY_INCUMBENT_NAME: empty,
+                "smoothed-density-1km": empty,
+                "smoothed-density-2km": empty,
+            },
             [_single_block()],
             split_sha256="0" * 64,
             input_hashes={},

@@ -11,7 +11,6 @@ from __future__ import annotations
 import hashlib
 import json
 import shutil
-import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -65,6 +64,15 @@ def main() -> int:
         "note": "F1 = catalogue-fold frame; F2 = SGMC off-catalogue frame. Proxies, not leaderboard scores.",
     }, indent=1))
 
+    compare_path = ROOT / "evidence" / "h51_candidate_frame_compare.json"
+    shared_frame = {"evidence": "evidence/h51_candidate_frame_compare.json"} if compare_path.exists() else None
+    if shared_frame:
+        cmp = json.loads(compare_path.read_text())
+        shared_frame["frame"] = cmp.get("frame")
+        shared_frame["truth_px"] = cmp.get("truth_px")
+        shared_frame["dti"] = {name: round(row["dti"], 6) for name, row in cmp.get("rows", {}).items()}
+        shared_frame["uniform_control"] = cmp.get("uniform_control")
+
     h51_ship = ROOT / "evidence" / "h51_ship.json"
     h51_check = ROOT / "evidence" / "h51_check_submission.json"
     h51_candidate = None
@@ -96,6 +104,7 @@ def main() -> int:
             "unique_name": Path(ship["outputs"]["tif"]).stem,
             "optional_note": ship["claim_note"],
             "how_to_submit": "submission.html",
+            "shared_frame_compare": shared_frame,
         }
     (DATA / "feed.json").write_text(json.dumps({
         "generated_from": "legacy receipts and H50-S1 project status; no third-party leaderboard data",

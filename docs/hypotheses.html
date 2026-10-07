@@ -24,13 +24,12 @@ differs from everything already implemented in the sibling GEMSDOE repositories.
 expected DTI improvement per unit of implementation cost; measured numbers are credit per emitted
 cell at matched mass, which is the only mass-free comparison the published metric allows.</p>
 
-<h2>H50-1 — seismicity lineation corridors <span class="tag">SHIPPED</span></h2>
+<h2>H50-1 — legacy 2-D seismicity lineation corridors <span class="tag">ALREADY IMPLEMENTED; NOT NEW; COMCAT RIGHTS UNRESOLVED</span></h2>
 <ul>
-<li><strong>(a) Layers.</strong> Official USGS ComCat catalogue (222,939 rows, FDSN event service,
-    public domain) → MS≥1.5, depth ≤ 20 km, 1970+, 18,142 events inside the survey; plus the USGS
+<li><strong>(a) Layers.</strong> Historical mixed-network ComCat export (222,939 rows, FDSN event service;
+    contributor-specific rights and competition shareability unresolved) → MS≥1.5, depth ≤ 20 km, 1970+, 18,142 events inside the survey; plus the USGS
     3DEP 1 m DEM scarp descriptors for placement only.</li>
-<li><strong>(b) Transform.</strong> Decluster (2-D triangle-area adaptation of the Ouillon &amp; Sornette
-    tetrahedron test, plus a rescaled nearest-neighbour control), cluster in (x, y, 3 km/yr · t) with
+<li><strong>(b) Transform (legacy code audit).</strong> The builder computes the project's unverified 2-D triangle-area adaptation of the Ouillon &amp; Sornette tetrahedron test, but does not apply its returned keep mask to subsequent lineation fits; the separate nearest-neighbour declustering function is not called by the builder. It then clusters in (x, y, 3 km/yr · t) with
     DBSCAN, split each cluster by recursive 2-means until its minor-axis σ ≤ Δ = 600 m (the
     Ouillon–Ducorbier–Sornette recursion), keep corridors with λ₁/λ₂ ≥ 3 by Monte-Carlo p &lt; 0.01,
     emit the axis, the curved spine, and 3 px gap bridges; snap every corridor cell to the local
@@ -40,8 +39,7 @@ cell at matched mass, which is the only mass-free comparison the published metri
     nearest catalogue cell; only 0.8× enrichment of events inside 300 m of the catalogue versus the
     base rate, i.e. <em>no</em> enrichment). A fault that has not been mapped has still been rupturing,
     and its microseismicity is in the catalogue regardless.</li>
-<li><strong>(d) Difference from the family.</strong> No prior submission in these repositories contains
-    any seismicity-derived mass. The sibling repositories list “seismic-density lineaments against a
+<li><strong>(d) Novelty correction.</strong> The old claim that no prior submission contained seismicity-derived mass is withdrawn: the 2-D covariance/lineation family is already implemented in this repository and is not new. The sibling repositories list “seismic-density lineaments against a
     Poisson null” as an unimplemented hypothesis (GEMSDOE40 §4, “H45”), and their seismic bands
     (<code>ieq_n100a15</code>/<code>deq_n100a15</code>) are self-correlated at 3 km, i.e. near-constant
     across the 300 m scoring kernel; the raw catalogue is the resolution upgrade, and the corridor is

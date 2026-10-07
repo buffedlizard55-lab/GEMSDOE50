@@ -11,11 +11,6 @@ from typing import Any
 
 REPORT_DEFAULT = Path("evidence/results/h50s1-evaluation-20261006.json")
 TIFF_DEFAULT = Path("docs/downloads/gemsdoe50-h50s1-relocated-planes-20261006-research.tif")
-#: The H51 candidate is the newest artifact: a gate-passing, pixel-novel GeoTIFF whose
-#: expected score comes from the leave-one-out validated score instrument. Its numbers are
-#: read from the machine-readable evidence so the page cannot drift from the artifact.
-H51_SHIP_DEFAULT = Path("evidence/h51_ship.json")
-H51_CHECK_DEFAULT = Path("evidence/h51_check_submission.json")
 
 STYLE = """
 :root{color-scheme:light;--ink:#172a33;--muted:#536970;--paper:#f5f2e9;--card:#fffdf7;--line:#d4ded8;--teal:#00685e;--teal2:#dcefe9;--gold:#a96519;--red:#8b382e;--redbg:#f8e8e3;--green:#145b48;--greenbg:#e1f1e8;--blue:#163e55;--shadow:0 14px 40px rgba(23,42,51,.08)}
@@ -55,6 +50,325 @@ def page(title: str, body: str, *, active: str = "") -> str:
 </body>
 </html>
 """
+
+
+H51_DEFAULT = Path("evidence/build_h51.json")
+H51_SHIP_DEFAULT = Path("evidence/h51_ship.json")
+H51_CHECK_DEFAULT = Path("evidence/h51_check_submission.json")
+H51_NOTE = ("GEMSDOE50 H51 | corroborated 3DEP-scarp + radiometric lineaments, all dots >300 m "
+            "from the given catalogue, metric-matched sparse emission; proxy-validated, NOT "
+            "organizer-scored")
+
+
+def load_h51(path: Path | None = None) -> dict[str, Any] | None:
+    path = H51_DEFAULT if path is None else path
+    if not path.exists():
+        return None
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def _pct(value: Any) -> str:
+    try:
+        return f"{100.0 * float(value):.2f}%"
+    except (TypeError, ValueError):
+        return "—"
+
+
+def candidates_short_html() -> str:
+    """Compact ranked list of the untried hypotheses, for the executive-summary page."""
+    rows = "".join(
+        f'<li><strong>#{item["rank"]} {esc(item["id"])}</strong> — {esc(item["name"])} '
+        f'<span class="tag">cost {esc(item["cost"])}</span> '
+        f'<span class="tag">expected gain {esc(item["gain"])}</span></li>'
+        for item in H52_CANDIDATES)
+    return (
+        '<article class="card span-12"><h2>Untried hypotheses, ranked by expected DTI gain / cost</h2>'
+        f'<ul class="list">{rows}</ul>'
+        '<p class="sourced">Every row names its layers, physical signature, why the given catalogue can miss '
+        'such a fault, and how it differs from work already implemented here. No candidate may use a weekly '
+        'submission slot before it passes the same spatially blocked holdout test the shipped file passed. '
+        '<a href="methods.html">Full table, sources and the slot rule →</a></p></article>')
+
+
+def h51_download_band(h51: dict[str, Any]) -> str:
+    """The one-click download band: first thing on the page."""
+    outputs = h51["outputs"]
+    primary = outputs["primary"]
+    finite = outputs["allfinite"]
+    zip_info = outputs["zip"]
+    return f"""<section style="background:#0d3b34;color:#f2f7f2;padding:26px 0;border-bottom:4px solid #d99a52"><div class="shell">
+<div class="eyebrow" style="color:#f0c58a">⬇ ONE-CLICK COMPETITION SUBMISSION FILE</div>
+<h2 style="color:#ffffff;margin:.2em 0 .3em;font-size:clamp(1.5rem,3.4vw,2.3rem)">Download, then upload this one file</h2>
+<p style="color:#d7e8e0;max-width:900px">Single band, float32, EPSG:32611, 100 m, 3292 × 3730, every in-footprint value in [0, 1]. Verified by re-reading the written bytes; no prior submission pixels are reused.</p>
+<p><a class="button" style="font-size:1.05rem" href="docs/downloads/{esc(primary['path'].split('/')[-1])}" download>⬇ Download {esc(primary['path'].split('/')[-1])}</a>
+<a class="button secondary" style="margin-left:10px" href="docs/downloads/{esc(finite['path'].split('/')[-1])}" download>all-finite twin (0.0 outside)</a>
+<a class="button secondary" style="margin-left:10px" href="docs/downloads/{esc(zip_info['path'].split('/')[-1])}" download>.zip (single GeoTIFF inside)</a></p>
+<p class="small" style="color:#cfe3da">Unique submission name to paste in the portal: <code>GEMSDOE50-H51-SCARPRADIO-OFFCAT</code><br>
+Optional note: <q>{esc(H51_NOTE)}</q><br>
+SHA-256 <span class="hash">{esc(primary['sha256'])}</span> · {int(primary['footprint_nonzero']):,} predicted pixels · {primary['bytes']:,} bytes</p>
+<p class="small" style="color:#f0c58a"><strong>Not organizer-scored.</strong> The numbers below are local proxy instruments measured on this grid, not the hidden expert labels. Confirm the current portal specification before uploading; this project never uploads for you.</p>
+</div></section>"""
+
+
+def h51_results_block(h51: dict[str, Any], evidence_dir: Path | None = None) -> str:
+    cand = h51["instruments"]["candidate"]
+    ctrl = h51["instruments"]["random_control"]
+    rows = []
+    for key, label in (("catalogue", "provided catalogue (anti-instrument)"),
+                       ("sgmc_off", "USGS SGMC faults &gt;300 m from the catalogue"),
+                       ("monte_cristo", "2020 Monte Cristo Range rupture trend")):
+        c = cand[key]
+        r = ctrl[key]
+        rows.append(
+            f"<tr><td>{label}</td><td>{fmt(c['dti'], 6)}</td><td>{fmt(c['credit_per_dot'], 6)}</td>"
+            f"<td>{fmt(r['credit_per_dot'], 6)}</td><td>{fmt(c['covered_fraction'], 6)}</td>"
+            f"<td>{c['truth_cells']:,}</td></tr>")
+    sweep_rows = "".join(
+        f"<tr><td>{int(mass):,}</td><td>{value['n_dots']:,}</td>"
+        f"<td>{fmt(value['instruments']['sgmc_off']['credit_per_dot'], 5)}</td>"
+        f"<td>{fmt(value['instruments']['monte_cristo']['tp_weight'], 2)}</td></tr>"
+        for mass, value in sorted(h51["mass_sweep"].items(), key=lambda kv: int(kv[0])))
+    rule_rows = "".join(
+        f"<tr><td>{row['mass']:,}</td><td>{fmt(row.get('sgmc_credit_per_dot'), 5)}</td>"
+        f"<td>{'yes' if row.get('within_10pct_of_best') else 'no'}</td>"
+        f"<td>{fmt(row.get('mc_tp_weight'), 1)}</td><td>{fmt(row.get('mc_random_control'), 1)}</td>"
+        f"<td>{'<strong>keep</strong>' if row.get('kept') else 'drop'}</td></tr>"
+        for row in h51["mass_rule"]["rows"])
+    blocked = load_json_optional("holdout_h51.json", evidence_dir)
+    blocked_html = ""
+    if blocked:
+        fold_rows = "".join(
+            f"<tr><td>{esc(f['id'])}</td><td>{int(f['candidate_dots_in_core']):,}</td>"
+            f"<td>{fmt(f['candidate_credit_per_dot'], 4)}</td>"
+            f"<td>{fmt(f['random_control_credit_per_dot'], 4)}</td>"
+            f"<td>{fmt(f['candidate_minus_control'], 4)}</td></tr>" for f in blocked["folds"])
+        blocked_html = (
+            "<h3>Spatially blocked validation on the frozen four-macrofold holdout</h3>"
+            "<div class=\"wide\"><table><tr><th>fold</th><th>dots in core</th>"
+            "<th>credit/dot</th><th>matched random control</th><th>delta</th></tr>"
+            f"{fold_rows}</table></div>"
+            f"<p>Positive in <strong>{blocked['folds_positive']}/{blocked['folds_total']}</strong> folds; "
+            f"paired subtile bootstrap mean {fmt(blocked['subtile_bootstrap']['paired_delta_mean'], 4)} "
+            f"with 95% CI [{fmt(blocked['subtile_bootstrap']['percentile_ci_95'][0], 4)}, "
+            f"{fmt(blocked['subtile_bootstrap']['percentile_ci_95'][1], 4)}] on the off-catalogue "
+            "instrument. The frozen harness's own truth is the supplied catalogue, which this file "
+            "avoids by construction, so its catalogue score is ~0 by design — documented, not hidden.</p>")
+    mc = load_json_optional("mc_sensitivity_h51.json", evidence_dir)
+    mc_html = ""
+    if mc:
+        rows = "".join(
+            f"<tr><td>{int(mass):,}</td><td>{fmt(v['candidate_mc_tp_weight'], 1)}</td>"
+            f"<td>{fmt(v['mc_control_mean'], 1)} ± {fmt(v['mc_control_sd'], 1)}</td>"
+            f"<td>{fmt(v['candidate_mc_percentile_vs_controls'] * 100, 0)}th</td>"
+            f"<td>{fmt(v['candidate_sgmc_credit_per_dot'], 4)}</td>"
+            f"<td>{fmt(v['sgmc_control_mean'], 4)} ± {fmt(v['sgmc_control_sd'], 4)}</td></tr>"
+            for mass, v in sorted(mc["masses"].items(), key=lambda kv: int(kv[0])))
+        mc_html = (
+            "<h3>Which instrument actually separates the candidate? (amendment A3)</h3>"
+            "<div class=\"wide\"><table><tr><th>mass</th><th>MC TP<sub>w</sub></th>"
+            "<th>MC control (mean ± sd, 24 seeds)</th><th>MC percentile</th>"
+            "<th>SGMC-off credit/dot</th><th>SGMC-off control</th></tr>"
+            f"{rows}</table></div>"
+            "<p>The off-catalogue instrument puts the candidate above <strong>every</strong> control "
+            "seed at every mass (control spread ±0.002). The 242-pixel Monte Cristo trend does not: "
+            "a random scatter of the same mass covers it about as well. It is reported as a weak "
+            "guard, and the shipped file is <strong>not</strong> claimed to beat random on it.</p>")
+    uniqueness = load_json_optional("uniqueness_h51.json", evidence_dir)
+    unique_html = ""
+    if uniqueness:
+        null32 = uniqueness["prior_vs_prior_null"]["32"]
+        unique_html = (
+            "<p>Block-level Jaccard against "
+            f"{build_unique_count(h51)} frozen prior artifacts: worst case "
+            f"{fmt(h51['uniqueness']['max_jaccard'], 4)} against "
+            f"<code>{esc(h51['uniqueness']['max_jaccard_against'])}</code>. That number is only "
+            "meaningful next to its null distribution — among genuinely independent prior artifacts "
+            f"the same statistic has median {fmt(null32['median'], 4)} and maximum "
+            f"{fmt(null32['max'], 4)}, and this file sits below that median. The audited statement "
+            "is narrower: a new sha256, no prior raster read into the belief field, and "
+            f"{fmt(uniqueness['exact_pixel_vs_local_priors'][0]['share_of_mine'] * 100, 2)}% exact-pixel "
+            "overlap with the only prior submission available locally "
+            "(<a href=\"evidence/uniqueness_h51.json\">evidence/uniqueness_h51.json</a>).</p>")
+    seis = h51.get("seismicity_solo_at_30k") or {}
+    seis_line = ""
+    if seis:
+        seis_line = (
+            f"<p><strong>Measured negative result (H51-B, seismicity event geometry):</strong> a "
+            f"seismicity-corridor-only emission at 30,000 dots scores an SGMC-off credit per dot of "
+            f"{fmt(seis['sgmc_off']['credit_per_dot'], 4)} against {fmt(ctrl['sgmc_off']['credit_per_dot'], 4)} "
+            f"for the matched random control, and the Monte Cristo trend is not improved when the "
+            f"corridors are added to the field. The hypothesis is therefore reported as unproven on "
+            f"the accessible instruments and the corridor layer was given no mass in the shipped file.</p>")
+    holdout = h51.get("holdout_vs_incumbent")
+    holdout_html = ""
+    if holdout and holdout.get("candidate_at_incumbent_mass"):
+        holdout_html = (
+            "<h3>Paired comparison with the frozen incumbent at its own mass</h3><table><tr><th>file</th>"
+            "<th>SGMC-off credit/dot</th><th>Monte Cristo TP<sub>w</sub></th></tr>"
+            f"<tr><td>frozen incumbent (gems50-seislin-44709)</td>"
+            f"<td>{fmt(holdout['incumbent']['instruments']['sgmc_off']['credit_per_dot'], 5)}</td>"
+            f"<td>{fmt(holdout['incumbent']['instruments']['monte_cristo']['tp_weight'], 2)}</td></tr>"
+            f"<tr><td>this candidate at the same mass</td>"
+            f"<td>{fmt(holdout['candidate_at_incumbent_mass']['sgmc_off']['credit_per_dot'], 5)}</td>"
+            f"<td>{fmt(holdout['candidate_at_incumbent_mass']['monte_cristo']['tp_weight'], 2)}</td></tr>"
+            "</table>")
+    return f"""<section class="main"><div class="shell"><div class="grid">
+<article class="card span-12"><h2>H51 measured results (local instruments, not the hidden labels)</h2>
+<div class="wide"><table><tr><th>instrument</th><th>DTI</th><th>credit per dot</th><th>random control</th><th>truth covered</th><th>truth pixels</th></tr>{''.join(rows)}</table></div>
+<p class="sourced">DTI is the official distance-weighted Tversky index (alpha 0.2, beta 0.8, 300 m triangular kernel). The catalogue instrument is an anti-instrument: the candidate is built to sit more than 300 m away from it, so a value near zero there is the design, not a failure.</p>
+<h3>Mass sweep and the preregistered stopping rule</h3>
+<div class="wide"><table><tr><th>swept mass</th><th>dots</th><th>SGMC-off credit/dot</th><th>Monte Cristo TP<sub>w</sub></th></tr>{sweep_rows}</table></div>
+<div class="wide"><table><tr><th>mass</th><th>SGMC-off credit/dot</th><th>within 10% of best</th><th>MC TP<sub>w</sub></th><th>MC control</th><th>decision (A2)</th></tr>{rule_rows}</table></div>
+<p>Chosen mass <strong>{h51['mass_rule']['chosen_mass']:,}</strong>. The bar is the metric's own marginal condition, 0.2 × target DTI ÷ the measured SGMC-off-to-hidden transfer of {h51['mass_rule']['marginal_transfer']}.</p>
+{seis_line}
+{holdout_html}
+{blocked_html}
+{mc_html}
+<h3>Uniqueness</h3>{unique_html}
+</article></div></div></section>"""
+
+
+def h51_methods_block(h51: dict[str, Any]) -> str:
+    fams = h51["field"]["families"]
+    fam_rows = "".join(
+        f"<tr><td>{esc(name)}</td><td>{info['n_layers']}</td><td>{esc(info['class'])}</td></tr>"
+        for name, info in sorted(fams.items()))
+    unc = seismicity_qc(h51)["uncertainty"]
+    candidate_rows = "".join(
+        f"<tr><td>{item['rank']}</td><td><strong>{esc(item['id'])}</strong><br>{esc(item['name'])}</td>"
+        f"<td>{esc(item['layers'])}</td><td>{esc(item['signature'])}</td><td>{esc(item['why_missing'])}</td>"
+        f"<td>{esc(item['difference'])}</td><td>{esc(item['source'])}</td><td>{esc(item['cost'])}</td>"
+        f"<td>{esc(item['gain'])}</td></tr>"
+        for item in H52_CANDIDATES)
+    candidates_html = (
+        '<article class="card span-12"><h2>Candidates not yet tried, ranked by expected DTI gain / cost</h2>'
+        '<p class="muted">Each row names the layers, the physical signature, why it can catch a fault the '
+        'given catalogue misses, how it differs from what this repository already implements, and the free '
+        'official source if new data would be needed. Full text: '
+        '<a href="docs/h51-candidates.md">docs/h51-candidates.md</a>.</p>'
+        '<div class="wide"><table><tr><th>#</th><th>candidate</th><th>layers</th><th>physical signature</th>'
+        '<th>why a missing fault</th><th>difference</th><th>source</th><th>cost</th><th>expected gain</th></tr>'
+        + candidate_rows + '</table></div>'
+        '<p><strong>Rule before spending a weekly slot:</strong> no candidate may go to the portal on instrument '
+        'scores alone. The top candidate must first pass the same spatially blocked test the shipped file passed: '
+        'positive against a matched-mass random control in every frozen macrofold, with the paired subtile '
+        'bootstrap lower bound above zero '
+        '(<a href="scripts/validate_h51_holdout.py">scripts/validate_h51_holdout.py</a>).</p></article>')
+    return f"""<section class="main"><div class="shell"><div class="grid">
+<article class="card span-8"><h2>H51 method, in one page</h2>
+<p><strong>Field.</strong> Two independent physical families, each reduced to an oriented lineament strength with a multi-scale structure tensor (gradient outer-product coherence × gradient magnitude, robust-normalised inside the footprint), then summed with equal weights. No single layer is allowed to carry the ranking on its own.</p>
+<div class="wide"><table><tr><th>family</th><th>layers</th><th>evidence class</th></tr>{fam_rows}</table></div>
+<p><strong>Domain.</strong> Every emitted dot is more than 300 m from any provided-catalogue pixel. The staff clarification recorded by the sibling repositories (2026-09-16 / 2026-09-21) is that catalogue pixels are masked out of the scored truth and a prediction near a known trace but far from NEW truth is fully penalised, so catalogue contact is a pure cost.</p>
+<p><strong>Emission.</strong> Greedy packing by expected marginal credit with a 3-pixel suppression radius, because two dots closer than the metric's own 300 m kernel are nearly redundant while each still costs the 0.2 term.</p>
+<p><strong>Mass.</strong> The metric's own marginal condition (a dot pays iff its kernel credit exceeds 0.2 × DTI) applied through the only transfer that can be measured: the owner's one file with both a live score and a local SGMC-off score gives a marginal transfer of {h51['mass_rule']['marginal_transfer']}.</p>
+</article>
+<article class="card span-4"><h2>Location uncertainty (measured)</h2>
+<p>Only <strong>{unc['documented_in_survey']:,}</strong> in-survey events publish ComCat's own <code>horizontalError</code>; the other <strong>{unc['modelled_in_survey']:,}</strong> are given the calibrated model below, fitted on <strong>{unc['calibration']['fit_population']:,}</strong> events that carry both the error and the quality metrics (R² = {fmt(unc['calibration']['fit_r2'], 3)}).</p>
+<p class="small"><code>{esc(unc['calibration']['model'])}</code></p>
+<p>Footprint holdout: median predicted {fmt(unc['calibration']['footprint_holdout']['median_predicted_m'], 0)} m against median observed {fmt(unc['calibration']['footprint_holdout']['median_observed_m'], 0)} m; within a factor of two for {_pct(unc['calibration']['footprint_holdout']['within_factor_2_fraction'])} of held-out events. This is this project's own construction, not part of the cited papers, and it is the weakest link in the seismicity layer.</p>
+<p><strong>Corridor width rule:</strong> {esc(h51['seismicity_family']['corridors']['width_rule'])}.</p>
+</article>
+<article class="card span-12"><h2>What was tested and rejected in this session (negative results are kept)</h2>
+<ul class="list">
+<li><strong>Seismicity event-geometry corridors</strong> - level with the matched random control on the off-catalogue instrument, no Monte Cristo gain. Not given mass.</li>
+<li><strong>Magnetic and gravity lineament families</strong> - SGMC-off credit per dot below the random control at matched mass. Not given mass.</li>
+<li><strong>Orientation-concordance gate across all families</strong> - lowered both the SGMC-off credit and Monte Cristo coverage, concentrating mass on the largest structures. Not applied.</li>
+<li><strong>Depth-dip surface projection</strong> - ComCat's median depth error in this footprint is about 1.5 km, so a dip-driven surface offset would be an order of magnitude larger than the 300 m scoring kernel. Deliberately not applied.</li>
+</ul></article>""" + candidates_html + """</div></div></section>"""
+
+
+def h51_submission_block(h51: dict[str, Any]) -> str:
+    primary = h51["outputs"]["primary"]
+    return f"""<section class="main"><div class="shell"><div class="grid">
+<article class="card span-12"><h2>How to submit the H51 file (numbered, manual)</h2>
+<ol class="list">
+<li>Click <a href="docs/downloads/{esc(primary['path'].split('/')[-1])}" download>this download link</a> (the same single-band float32 GeoTIFF shown at the top of the site).</li>
+<li>Optionally confirm the bytes: SHA-256 <span class="hash">{esc(primary['sha256'])}</span>.</li>
+<li>Sign in to DrivenData manually and open <em>DOE GEMS Prize Challenge → Submit</em>.</li>
+<li>Choose the downloaded <code>.tif</code> (or the <code>.zip</code> containing it).</li>
+<li>Paste the unique name <code>GEMSDOE50-H51-SCARPRADIO-OFFCAT</code> and the note <q>{esc(H51_NOTE)}</q> into the optional note field so you can find the row again.</li>
+<li>Submit. This project performs no automated upload and holds no portal credentials.</li>
+<li>Record the returned score next to the file hash in this repository before making any claim about it.</li>
+</ol>
+<div class="callout"><strong>Format contract re-checked in the written file:</strong> single band, float32, EPSG:32611, 3292 × 3730, transform (100, 0, 243350, 0, -100, 4508550), {int(primary['footprint_nonzero']):,} predicted pixels, in-footprint minimum {fmt(primary['footprint_min'], 1)} and maximum {fmt(primary['footprint_max'], 1)}, {primary['outside_unit_interval']} values outside [0, 1], NaN outside the footprint (the official convention) with an all-finite twin offered as well.
+</div></article></div></div></section>"""
+
+
+H52_CANDIDATES = [
+    {
+        "rank": 1, "id": "H52-A", "name": "Scarp-profile matched filter + drainage-deflection corroboration",
+        "layers": "lidar scarp 3/4/9; topo 2/5/6/8; det_elev 12, det_elev_slope 19 for the drainage test",
+        "signature": "signed azimuth-specific scarp template convolved with detrended elevation, AND an "
+                     "independent channel deflection / knickpoint at the same azimuth",
+        "why_missing": "the catalogue is dominated by LiDAR-scarp picks; a low-relief trace can fail a "
+                       "scarp threshold yet still deflect every channel crossing it",
+        "difference": "H51-A uses an orientation-agnostic structure tensor and takes a max over layers; this "
+                      "matches a scarp shape and requires a hydrologic agreement (an AND, not an OR)",
+        "source": "USGS 3DEP 1 m DEM + USGS NHD, public domain - both optional, the official 10 m stack suffices",
+        "cost": "4/5", "gain": "high"},
+    {
+        "rank": 2, "id": "H52-B", "name": "Basement-depth step (basin-margin) lineaments",
+        "layers": "depth_to_base_surf 15, cond_surf 17, iso_grav_anom 13 with 11/18",
+        "signature": "directional derivative of the modelled depth-to-basement surface, step >=150 m over "
+                     "<=1 km, corroborated by a gravity horizontal-gradient maximum",
+        "why_missing": "a fault with no Quaternary scarp still offsets the basin floor, which is what a "
+                       "depth-to-basement model images",
+        "difference": "H51-C tested anomaly edges; this uses a modelled physical interface and a slip-magnitude "
+                      "criterion, and only inside basins where scarp evidence is weakest",
+        "source": "none - all layers are in the official stack",
+        "cost": "2/5", "gain": "medium"},
+    {
+        "rank": 3, "id": "H52-C", "name": "Spring / well conduit segments (carried from H51-D)",
+        "layers": "GDR submission 1391 springs/wells, INGENIOUS temperature probes, cond_surf 17",
+        "signature": "straight conduit from each spring/well to the nearest mapped structure, kept where its "
+                     "azimuth agrees with a lineament and it is >300 m from the catalogue",
+        "why_missing": "springs prove a plumbing system exists; the unmapped part of the conduit is the best "
+                       "available guess at a concealed fault",
+        "difference": "H19-4/H19-5 used the thermal evidence as a favourability field; this inverts it into "
+                      "discrete conduit segments anchored on the nearest structure",
+        "source": "Geothermal Data Repository submission 1391 and INGENIOUS, already mirrored in data/external/",
+        "cost": "3/5", "gain": "medium"},
+    {
+        "rank": 4, "id": "H52-D", "name": "Coincident DEM slope break + radiometric ratio step",
+        "layers": "radiometric 1-7 (K, Th, U, TC, Th/K, U/K, U/Th), geodawn_rad 1-4, topo slope/curvature",
+        "signature": "AND of a topographic curvature break and a step in a radiometric ratio at the same azimuth",
+        "why_missing": "alluvium-covered faults show as a subtle topographic break plus a change in the "
+                       "radionuclide budget; ratio bands normalise the gross lithology",
+        "difference": "H51-A ORs the families; requiring coincidence suppresses the pattern-matching false "
+                      "positives a radiometric-only edge can emit",
+        "source": "none - the radiometric extensions are in the official stack",
+        "cost": "2/5", "gain": "low-medium"},
+    {
+        "rank": 5, "id": "H52-E", "name": "Focal-mechanism nodal-plane lineaments",
+        "layers": "USGS ComCat moment-tensor / focal-mechanism products",
+        "signature": "Hough accumulation over nodal-plane strikes, split by depth band, keeping mechanisms "
+                     "whose two planes agree on one strike",
+        "why_missing": "a mechanism gives the fault's orientation directly; a blind fault with mechanisms but "
+                       "no surface trace is a catalogue omission by definition",
+        "difference": "H51-B used epicentre geometry only; nodal planes carry orientation information that "
+                      "no epicentre pattern contains",
+        "source": "USGS ANSS ComCat, public domain - viability depends on mechanism coverage, must be measured first",
+        "cost": "4/5", "gain": "unknown (measure coverage first)"},
+]
+
+
+def load_json_optional(relative: str, evidence_dir: Path | None = None) -> dict[str, Any] | None:
+    path = Path(relative) if evidence_dir is None else Path(evidence_dir) / relative
+    if not path.exists():
+        return None
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return None
+
+
+def seismicity_qc(h51: dict[str, Any]) -> dict[str, Any]:
+    family = h51.get("seismicity_family", {})
+    return family.get("qc") or family.get("catalog_qc") or {}
+
+
+def build_unique_count(h51: dict[str, Any]) -> int:
+    return int(h51.get("uniqueness", {}).get("n_prior_artifacts", 0))
 
 
 def load_report(report_path: Path) -> dict[str, Any] | None:
@@ -149,8 +463,81 @@ analysis in <span class="hash">docs/research/h51-analysis.md</span>, ranked hypo
 </div></div></section>"""
 
 
+
+
+def two_candidates_card(ship: dict[str, Any] | None, h51: dict[str, Any] | None,
+                        compare: dict[str, Any] | None) -> str:
+    """Both candidate GeoTIFFs on this branch, against the one frame they share.
+
+    The two parallel sessions used different local instruments, so only the shared off-catalogue
+    frame (identical truth mask, identical scoring code) can order them. Report that column next
+    to each file's own instrument, and never imply an organizer score.
+    """
+    rows_data = (compare or {}).get("rows", {})
+    truth_px = (compare or {}).get("truth_px")
+    uni = (compare or {}).get("uniform_control", {})
+    control = (f"{fmt(uni.get('dti_mean'), 4)} mean / {fmt(uni.get('dti_max'), 4)} max"
+               if uni else "not measured")
+    body = []
+    if ship:
+        shared = next((r for key, r in rows_data.items() if ship["name"] in key), None)
+        body.append((
+            "A · H51 corridor-consensus mix",
+            f"{ship['budgets']['n']:,}",
+            f"{fmt(ship['predicted']['DTI'], 4)} (consensus instrument, leave-one-out)",
+            (f"{fmt(shared.get('dti'), 4)} ({fmt(shared.get('tp_per_dot'), 4)} credit/dot)"
+             if shared else "not measured"),
+            (f"{ship['gate']['pixels_shared_with_any_prior']} shared px · worst 2 px-proximity IoU "
+             f"{fmt(ship['gate']['measured_iou2px_max'], 4)}"),
+            (f'<a class="button" href="{esc(ship["outputs"]["tif"])}" download>Download .tif</a><br>'
+             f'<a href="{esc(ship["outputs"]["allfinite"])}" download>all-finite twin</a> · '
+             f'<a href="{esc(ship["outputs"]["zip"])}" download>.zip</a>')))
+    if h51:
+        primary = h51["outputs"]["primary"]
+        leaf = primary["path"].split("/")[-1]
+        shared = next((r for key, r in rows_data.items() if leaf in key), None)
+        own = h51.get("instruments", {}).get("candidate", {}).get("sgmc_off", {})
+        body.append((
+            "B · H51 scarp + radiometric lineaments (parallel session)",
+            f"{int(primary['footprint_nonzero']):,}",
+            (f"{fmt(own.get('credit_per_dot'), 4)} credit/dot on its own mass sweep"
+             if own else "see results.html"),
+            (f"{fmt(shared.get('dti'), 4)} ({fmt(shared.get('tp_per_dot'), 4)} credit/dot)"
+             if shared else "not measured"),
+            ("block Jaccard not informative at 32 px · 2.7 % exact overlap with the one prior file "
+             "available locally"),
+            (f'<a class="button" href="{esc(primary["path"])}" download>Download .tif</a><br>'
+             f'<a href="{esc(h51["outputs"]["allfinite"]["path"])}" download>all-finite twin</a> · '
+             f'<a href="{esc(h51["outputs"]["zip"]["path"])}" download>.zip</a>')))
+    if not body:
+        return ""
+    rows = "".join(
+        "<tr><td><strong>" + r[0] + "</strong></td><td>" + r[1] + "</td><td>" + r[2]
+        + "</td><td>" + r[3] + "</td><td>" + r[4] + "</td><td>" + r[5] + "</td></tr>"
+        for r in body)
+    incumbent = next((r for key, r in rows_data.items() if "seislin-44709" in key), None)
+    inc_row = (
+        '<p class="sourced">Reference point on the same frame: the frozen incumbent '
+        f'<code>gems50-seislin-44709</code> scores <strong>{fmt(incumbent.get("dti"), 4)}</strong>, '
+        "but it cannot be resubmitted — its novelty check fails against the prior artifacts.</p>"
+        if incumbent else "")
+    return f"""<section class="main"><div class="shell"><article class="card span-12" id="candidates">
+<h2>Two candidate GeoTIFFs on this branch — one shared frame, one ordering</h2>
+<div class="wide"><table><tr><th>candidate</th><th>dots</th><th>its own instrument (not comparable)</th>
+<th>shared off-catalogue frame DTI</th><th>uniqueness evidence</th><th>download</th></tr>{rows}</table></div>
+<p class="sourced">Both files were re-measured on one identical frame — unmasked domain, truth = SGMC fault
+pixels more than 300 m from the given catalogue{f", {truth_px:,} px" if truth_px else ""} — with the same
+code, so that column and the matched uniform control ({control}) are directly comparable. On this frame the
+parallel-session scarp + radiometric candidate is the stronger of the two new files, and the consensus-mix
+candidate scores below a matched uniform control. Neither file is organizer-scored: these are local
+proxy instruments, this repository never uploads anything, and the slot decision is the owner's.</p>
+{inc_row}
+</article></div></section>"""
+
+
 def build_pages(output_dir: Path, report_path: Path, tiff_path: Path,
-                h51_ship: Path | None = None, h51_check: Path | None = None) -> list[Path]:
+                evidence_dir: Path | None = None, h51_ship: Path | None = None,
+                h51_check: Path | None = None) -> list[Path]:
     report = load_report(report_path)
     tiff_exists = tiff_path.exists()
     relative_tiff = tiff_path.as_posix()
@@ -158,22 +545,41 @@ def build_pages(output_dir: Path, report_path: Path, tiff_path: Path,
         status_text = "research-only candidate" if tiff_exists else "no raster artifact"
         candidate_sha = report.get("submission_artifact", {}).get("sha256", "not available")
         candidate_hash = f'<div class="sourced">GeoTIFF SHA-256: <span class="hash">{esc(candidate_sha)}</span></div>'
-        _ = tiff_exists  # research-only artifact link is rendered by the H51 panel above
+        _ = (relative_tiff, tiff_exists)  # the candidate download is rendered by the H51 panel
     else:
         status_text = "awaiting verified run"
         candidate_hash = ""
 
-    h51_html = h51_block(output_dir, h51_ship or H51_SHIP_DEFAULT, h51_check or H51_CHECK_DEFAULT)
-    try:
-        _ship = json.loads((h51_ship or H51_SHIP_DEFAULT).read_text())
-        h51_download = _ship["outputs"]["tif"] if (output_dir / _ship["outputs"]["tif"]).exists() else "downloads/"
-    except Exception:  # noqa: BLE001
-        h51_download = "downloads/"
+    h51 = load_h51((evidence_dir / "build_h51.json") if evidence_dir else None)
+    ship = load_json_optional("evidence/h51_ship.json")
+    compare = load_json_optional("evidence/h51_candidate_frame_compare.json")
+    h51_html = h51_block(output_dir, h51_ship or H51_SHIP_DEFAULT,
+                         h51_check or H51_CHECK_DEFAULT)
+    h51_download = (ship["outputs"]["tif"]
+                    if ship and (output_dir / ship["outputs"]["tif"]).exists()
+                    else "downloads/")
+    secondary_card = two_candidates_card(ship, h51, compare)
+    index_note = ""
+    candidates_card = ""
+    if h51:
+        candidates_card = candidates_short_html()
+        primary = h51["outputs"]["primary"]
+        index_note = (
+            '<p class="sourced"><strong>Current deliverable (this page, top band):</strong> '
+            f'<code>{esc(Path(primary["path"]).name)}</code>, {int(primary["footprint_nonzero"]):,} '
+            'predicted pixels at the selected equal-mass budget, all of them more than 300 m from the given '
+            'catalogue by design. Local proxy instruments only; <strong>not organizer-scored</strong>. '
+            '<a href="results.html">Controls, folds and uniqueness audit →</a> · '
+            'machine-readable feed: <a href="docs/data/feed.json">docs/data/feed.json</a></p>'
+        )
+
     index_body = f"""
 <main><section class="hero"><div class="shell"><div class="eyebrow">DOE GEMS Prize Challenge · audit-first research</div><h1>Map what the catalogue missed.</h1><p>GEMSDOE50 tests whether waveform-relocated Nevada earthquake planes can point to plausible, previously unmapped fault traces—without copying a prior submission or spending a scoring slot before spatial validation.</p><div class="actions"><a class="button" href="{esc(h51_download)}" download>Download the H51 candidate GeoTIFF</a><a class="button secondary" href="submission.html">How to submit (5 steps)</a></div>{candidate_hash}</div></section>
 {h51_html}
-<section class="main"><div class="shell"><div class="grid"><article class="card span-8"><h2>Executive summary</h2><p><strong>What the scores actually say:</strong> with binary dots the official distance-weighted Tversky index is exactly <code>DTI = T / (0.2&middot;N + 0.8&middot;G)</code>, with <code>N</code> the predicted pixel count, <code>T</code> the credit captured inside the 300 m kernel, and <code>G</code> the hidden truth mass. Inverting a pinned blind-lattice artifact fixes <code>G &asymp; 12,226 px</code> (0.24 % of the unmasked footprint).</p><p>All 25 hash-verified scored artifacts were inverted to credit pixels: the best converts 0.1097 credit per dot (owner-quoted 0.2600), and the best coverage of the hidden truth is 59.3 %, reached only with 183,642 dots. A 0.3195 submission needs 41.2 % coverage at 30,000 dots - reachable in principle, never reached in practice. Re-blending, re-spacing or pruning the existing corpus cannot get there; a new detector is required.</p>{metric_cards(report)}<p class="sourced">Status: {esc(status_text)}. H51/H52: the consensus instrument predicts held-out scores at leave-one-out Spearman 0.973, but a trivial similarity predictor already reaches 0.905 and a block-grid truth-density inversion fails leave-one-out, so the score history constrains efficiency, not geography. Historical sibling-repository scores are not used as current official leaderboard claims or mapped to a TIFF.</p></article><aside class="card span-4"><h2>Decision rule</h2><ul class="list"><li>At least +0.005 absolute pooled DTI over the frozen incumbent</li><li>Positive delta in at least 3 of 4 macrofolds</li><li>95% spatial-block bootstrap lower bound above zero</li><li>Beat both matched translation and year-shuffle controls</li><li>Otherwise: <strong>no slot</strong></li></ul><a href="results.html">View full evidence →</a></aside><article class="card span-6"><h2>What this is—and is not</h2><p>This is a research proxy against existing mapped faults, not the hidden expert-labeled test set. A local pass is necessary for review but is not an organizer score or a promise of prize performance.</p><p>The Nevada catalog is CC BY 4.0, but it lacks event-specific location covariance. A precise-looking coordinate is not proof of a precise location; a hypocenter projection is not automatically a surface trace.</p></article><article class="card span-6"><h2>Project values</h2><p><span class="tag">Maximize P(Win)</span> Choose evidence that can improve the final result, not merely a public proxy.</p><p><span class="tag">Own the Outcome</span> Publish hashes, controls, limitations, and a clear no-go when a gate fails.</p><p><a href="methods.html">Read the protocol, sources, and limitations →</a></p></article><article class="card span-12"><h2>Verified primary links</h2><div class="grid"><div class="span-4"><strong>Competition specification</strong><br><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">Metric, inputs, and TIFF contract</a></div><div class="span-4"><strong>Nevada seismicity source</strong><br><a href="https://doi.org/10.5281/zenodo.11167510">Trugman (2024), Zenodo v2 · CC BY 4.0</a></div><div class="span-4"><strong>Official leaderboard</strong><br><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">Open manually; this project does not scrape it</a></div></div></article></div></div></section></main>
+{secondary_card}
+<section class="main"><div class="shell"><div class="grid"><article class="card span-8"><h2>Executive summary</h2><p><strong>What the scores actually say:</strong> with binary dots the official distance-weighted Tversky index is exactly <code>DTI = T / (0.2&middot;N + 0.8&middot;G)</code>, with <code>N</code> the predicted pixel count, <code>T</code> the credit captured inside the 300 m kernel, and <code>G</code> the hidden truth mass. Inverting a pinned blind-lattice artifact fixes <code>G &asymp; 12,226 px</code> (0.24 % of the unmasked footprint).</p><p>All 25 hash-verified scored artifacts were inverted to credit pixels: the best converts 0.1097 credit per dot (owner-quoted 0.2600), and the best coverage of the hidden truth is 59.3 %, reached only with 183,642 dots. A 0.3195 submission needs 41.2 % coverage at 30,000 dots - reachable in principle, never reached in practice. Re-blending, re-spacing or pruning the existing corpus cannot get there; a new detector is required.</p>{metric_cards(report)}{index_note}<p class="sourced">Status: {esc(status_text)}. H51/H52: the consensus instrument predicts held-out scores at leave-one-out Spearman 0.973, but a trivial similarity predictor already reaches 0.905 and a block-grid truth-density inversion fails leave-one-out, so the score history constrains efficiency, not geography. Historical sibling-repository scores are not used as current official leaderboard claims or mapped to a TIFF.</p></article><aside class="card span-4"><h2>Decision rule</h2><ul class="list"><li>At least +0.005 absolute pooled DTI over the frozen incumbent</li><li>Positive delta in at least 3 of 4 macrofolds</li><li>95% spatial-block bootstrap lower bound above zero</li><li>Beat both matched translation and year-shuffle controls</li><li>Otherwise: <strong>no slot</strong></li></ul><a href="results.html">View full evidence →</a></aside><article class="card span-6"><h2>What this is—and is not</h2><p>This is a research proxy against existing mapped faults, not the hidden expert-labeled test set. A local pass is necessary for review but is not an organizer score or a promise of prize performance.</p><p>The Nevada catalog is CC BY 4.0, but it lacks event-specific location covariance. A precise-looking coordinate is not proof of a precise location; a hypocenter projection is not automatically a surface trace.</p></article><article class="card span-6"><h2>Project values</h2><p><span class="tag">Maximize P(Win)</span> Choose evidence that can improve the final result, not merely a public proxy.</p><p><span class="tag">Own the Outcome</span> Publish hashes, controls, limitations, and a clear no-go when a gate fails.</p><p><a href="methods.html">Read the protocol, sources, and limitations →</a></p></article>{candidates_card}<article class="card span-12"><h2>Verified primary links</h2><div class="grid"><div class="span-4"><strong>Competition specification</strong><br><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">Metric, inputs, and TIFF contract</a></div><div class="span-4"><strong>Nevada seismicity source</strong><br><a href="https://doi.org/10.5281/zenodo.11167510">Trugman (2024), Zenodo v2 · CC BY 4.0</a></div><div class="span-4"><strong>Official leaderboard</strong><br><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">Open manually; this project does not scrape it</a></div></div></article></div></div></section></main>
 """
+
 
     if report:
         evaluation = report["evaluation"]
@@ -200,19 +606,28 @@ def build_pages(output_dir: Path, report_path: Path, tiff_path: Path,
             f"<tr><td>{esc(item['id'])}</td><td>{fmt(item['pooled_dti'], 6)}</td></tr>"
             for item in time_controls["scores"]
         )
+        density_scores = evaluation["smoothed_density_controls"]["pooled_dti"]
+        density_table = "".join(
+            f"<tr><td>{esc(name)}</td><td>{fmt(score, 6)}</td></tr>"
+            for name, score in density_scores.items()
+        )
         ci = evaluation["subtile_bootstrap"]["percentile_ci_95"]
+        scientific_gates = evaluation["promotion_gate"].get("scientific_gates", {})
         component_rows = []
         for name, passed in evaluation["promotion_gate"]["components"].items():
             label = name.replace("_", " ")
             result_text = "PASS" if passed else "FAIL"
+            detail = scientific_gates.get(name, {}).get("detail")
+            detail_html = f"<br><small>{esc(detail)}</small>" if detail else ""
             component_rows.append(
-                f'<tr><td>{esc(label)}</td><td>{result_text}</td></tr>'
+                f'<tr><td>{esc(label)}</td><td>{result_text}{detail_html}</td></tr>'
             )
         gate_rows_html = "".join(component_rows)
         score_summary = f"""
 <article class="card span-12"><h2>Metric and pooled components</h2><p>DTI uses the official 300 m triangular kernel, α=0.2, β=0.8; predictions are compared at equal binary probability mass. Local pooled holdout is not an official test score.</p><div class="wide"><table><thead><tr><th>Method</th><th>Pooled DTI</th><th>Truth cells</th><th>Predicted cells</th><th>TP weight</th><th>FP weight</th><th>FN weight</th></tr></thead><tbody>{"".join(method_rows)}</tbody></table></div><h3>Fold-wise paired scores</h3><div class="wide"><table><thead><tr><th>Macrofold</th><th>H50-S1</th><th>Incumbent ({esc(evaluation["incumbent_method"])})</th><th>Delta</th><th>Predictions</th><th>Truth</th></tr></thead><tbody>{"".join(fold_rows)}</tbody></table></div><p><strong>16-block bootstrap 95% interval:</strong> [{fmt(ci[0], 6)}, {fmt(ci[1], 6)}]. Candidate − incumbent pooled DTI = {fmt(evaluation["candidate_minus_incumbent_pooled_dti"], 6)}.</p></article>
 <article class="card span-6"><h2>Spatial translations</h2><p>32 no-wrap offsets at 5–20 km; 95th percentile DTI {fmt(controls["pooled_dti_q95"], 6)}. Candidate DTI {fmt(evaluation["method_results"]["H50-S1"]["pooled"]["score"], 6)}.</p><details><summary>Show individual controls</summary><div class="wide"><table><thead><tr><th>Control</th><th>Pooled DTI</th></tr></thead><tbody>{control_table}</tbody></table></div></details></article>
 <article class="card span-6"><h2>Origin-year shuffles</h2><p>{time_controls["count"]} refits with shuffled years; 95th percentile DTI {fmt(time_controls["pooled_dti_q95"], 6)}. Candidate DTI {fmt(evaluation["method_results"]["H50-S1"]["pooled"]["score"], 6)}.</p><details><summary>Show individual controls</summary><div class="wide"><table><thead><tr><th>Control</th><th>Pooled DTI</th></tr></thead><tbody>{time_table}</tbody></table></div></details></article>
+<article class="card span-12"><h2>Matched smoothed-density controls</h2><p>Gaussian-smoothed counts from the same relocated catalog events, scored at equal mass on the same blocked holdout. This controls spatial density only; it does not remove aftershocks or mine/injection confounding. Candidate must beat both scales.</p><div class="wide"><table><thead><tr><th>Density map</th><th>Pooled DTI</th></tr></thead><tbody>{density_table}</tbody></table></div></article>
 <article class="card span-12"><h2>Promotion-gate components</h2><div class="wide"><table><thead><tr><th>Criterion</th><th>Result</th></tr></thead><tbody>{gate_rows_html}</tbody></table></div><p><strong>Decision: {esc(evaluation["promotion_gate"]["decision"].replace("_", " "))}.</strong> A proxy pass authorizes review only; no portal slot is used automatically.</p><p><a href="{esc(report_path.as_posix())}">Open machine-readable report JSON</a> · Report SHA-256: <span class="hash">{esc(sha256_report(report_path))}</span></p></article>
 """
     else:
@@ -238,11 +653,17 @@ def build_pages(output_dir: Path, report_path: Path, tiff_path: Path,
         )
         submit_card = f"""<div class="callout {"success" if gate["pass"] else "danger"}"><strong>{esc(state)}</strong> No upload was performed by this project.</div><h2>Current artifact</h2>{download_html}<p><strong>Unique filename:</strong> <code>{esc(name)}</code></p><p><strong>Optional note:</strong> <q>{esc(note)}</q></p>{hash_html}<p>Portal specification is subject to change. Re-check the official problem page and test the bytes downloaded from this site before any manual upload.</p>"""
     else:
-        state = "No verified H50-S1 run is published on this page."
-        submit_card = f"""<div class="callout"><strong>{esc(state)}</strong></div><p>This card is the historical H50-S1 placeholder; the current candidate is the H51 panel at the top of this page. Verify its SHA-256 and its gate status before any manual upload.</p>"""
-    submission_body = h51_html + f"""<main><section class="pagehead"><div class="shell"><div class="eyebrow">No automated portal access</div><h1>Submission instructions</h1><p class="muted">Use this page only if the local gate has passed and the owner independently approves the artifact.</p></div></section><section class="main"><div class="shell"><div class="grid"><article class="card span-12">{submit_card}</article><article class="card span-8"><h2>Manual checklist (only after PASS)</h2><ol class="list"><li>Download the GeoTIFF and independently verify its SHA-256 and the byte-validation report in <a href="results.html">Results</a>.</li><li>Re-read the current <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">official problem specification</a> and rules; confirm the external-data license and required AI-use disclosure in the final narrative.</li><li>Sign in to DrivenData manually, open the DOE GEMS competition, and choose a weekly feedback slot only if one remains and the owner approves.</li><li>Upload the single-band float32 GeoTIFF. Do not change its grid, nodata footprint, or prediction values after validation.</li><li>Use the unique filename and optional note shown above, then manually verify the portal receipt and record it in this repository before making any claim of acceptance.</li></ol><div class="callout danger"><strong>Do not upload on a failed gate.</strong> A local proxy pass is not a score guarantee and is not a portal receipt.</div></article><aside class="card span-4"><h2>Portal warning caught</h2><p>The previous portal error was: <code>Predicted values must be in range [0, 1]</code>.</p><p>This pipeline reopens the actual GeoTIFF bytes and checks finite in-footprint values, `[0,1]` range, one float32 band, grid alignment, and nodata-mask agreement with the sample template.</p><p><span class="tag">No slot used by code</span></p></aside></div></div></section></main>"""
+        state = "Experiment not yet run. No submission slot has been used."
+        submit_card = f"""<div class="callout"><strong>{esc(state)}</strong></div><p>There is no candidate GeoTIFF to upload. Do not use a weekly slot until the spatial holdout, matched controls, raster-byte validation, and owner review are complete.</p><p><strong>Planned unique filename, if a verified build is produced:</strong> <code>gemsdoe50-h50s1-relocated-planes-20261006-research.tif</code></p><p><strong>Planned optional note:</strong> <q>Relocated Nevada event-plane lineaments; 300 m known-fault exclusion; research proxy, not organizer-scored.</q></p>"""
+    submission_body = f"""<main><section class="pagehead"><div class="shell"><div class="eyebrow">No automated portal access</div><h1>Submission instructions</h1><p class="muted">Use this page only if the local gate has passed and the owner independently approves the artifact.</p></div></section><section class="main"><div class="shell"><div class="grid"><article class="card span-12">{submit_card}</article><article class="card span-8"><h2>Manual checklist (only after PASS)</h2><ol class="list"><li>Download the GeoTIFF and independently verify its SHA-256 and the byte-validation report in <a href="results.html">Results</a>.</li><li>Re-read the current <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">official problem specification</a> and rules; confirm the external-data license and required AI-use disclosure in the final narrative.</li><li>Sign in to DrivenData manually, open the DOE GEMS competition, and choose a weekly feedback slot only if one remains and the owner approves.</li><li>Upload the single-band float32 GeoTIFF. Do not change its grid, nodata footprint, or prediction values after validation.</li><li>Use the unique filename and optional note shown above, then manually verify the portal receipt and record it in this repository before making any claim of acceptance.</li></ol><div class="callout danger"><strong>Do not upload on a failed gate.</strong> A local proxy pass is not a score guarantee and is not a portal receipt.</div></article><aside class="card span-4"><h2>Portal warning caught</h2><p>The previous portal error was: <code>Predicted values must be in range [0, 1]</code>.</p><p>This pipeline reopens the actual GeoTIFF bytes and checks finite in-footprint values, `[0,1]` range, one float32 band, grid alignment, and nodata-mask agreement with the sample template.</p><p><span class="tag">No slot used by code</span></p></aside></div></div></section></main>"""
 
-    methods_body = """<main><section class="pagehead"><div class="shell"><div class="eyebrow">Preregistered research</div><h1>Methods, sources & limitations</h1><p class="muted">The method was ranked before implementation; the exact spatial split and implementation constants were frozen before DTI calculation.</p></div></section><section class="main"><div class="shell"><div class="grid"><article class="card span-8"><h2>H50-S1: relocated event-plane geometry</h2><p>Use only waveform-relocated (`reloc=1`) Nevada catalog events inside the valid competition footprint. Fit compact local 3-D neighborhoods, require year support and stable horizontal strike, intersect plausible planes with z=0, and rasterize the surface-line proxy. Known mapped faults are masked by 300 m for the output; holdout labels are used only for scoring, never for line fitting.</p><p>Frozen parameters, folds, control design, and metric formula are documented in <a href="https://github.com/buffedlizard55-lab/GEMSDOE50/blob/main/docs/h50s1-protocol-addendum.md">the protocol addendum</a> and <a href="https://github.com/buffedlizard55-lab/GEMSDOE50/blob/main/docs/hypotheses-preregistered.md">the ranked preregistration</a>.</p><p><strong>Comparator policy:</strong> H50-prior is fixed as the primary comparator before holdout scoring. H32-D, H47-S3, and H48-DS are secondary context only; their holdout scores do not select the incumbent. No prior prediction pixels are copied to the candidate artifact.</p></article><article class="card span-4"><h2>Data & permissions</h2><ul class="list"><li>Nevada catalog: <a href="https://doi.org/10.5281/zenodo.11167510">Zenodo v2</a>, CC BY 4.0; attribution and license link required.</li><li>Competition labels/template: SHA-pinned public Dropbox mirrors from a local source bridge manifest; provenance caveat is in the experiment report.</li><li>New H50-S1 raw data stays in ignored `.arena/`; the report records hashes and access links for verification.</li><li>Inherited ComCat/SGMC/LiDAR/radiometric files are not H50-S1 inputs. ComCat rights/shareability and location uncertainty remain unresolved; legacy refresh workflows are disabled.</li><li>Competition rules require external inputs to be licensed and shareable with the sponsor.</li></ul></article><article class="card span-6"><h2>Scientific limitations</h2><ul class="list"><li>Existing USGS/INGENIOUS labels are an imperfect proxy, not the hidden expert-labeled test set.</li><li>The catalog has no event-specific location covariance; model errors can exceed the 300 m scoring kernel.</li><li>Hypocenter planes are not guaranteed to intersect a mapped surface fault at the projected line.</li><li>Observed earthquakes are biased toward active faults, and waveform relocation is a subset of the full catalog.</li><li>A lineament or local DTI increase is not proof of geothermal productivity or a fault discovery.</li></ul></article><article class="card span-6"><h2>Leaderboard & AI disclosure</h2><p>DrivenData's Terms of Use restrict automated leaderboard monitoring and manual copying without written consent. This site links to the official board but does not poll, scrape, or publish a live snapshot.</p><p>Before any final competition entry, disclose AI assistance as required by the current NLR/DOE rules and describe human review. This repository does not submit on the user's behalf.</p></article></div></div></section></main>"""
+    methods_body = """<main><section class="pagehead"><div class="shell"><div class="eyebrow">Preregistered research</div><h1>Methods, sources & limitations</h1><p class="muted">The method was ranked before implementation; the exact spatial split and implementation constants were frozen before DTI calculation.</p></div></section><section class="main"><div class="shell"><div class="grid"><article class="card span-8"><h2>H50-S1: relocated event-plane geometry</h2><p>Use only waveform-relocated (`reloc=1`) Nevada catalog events inside the valid competition footprint. Fit compact local 3-D neighborhoods, require year support and stable horizontal strike, intersect plausible planes with z=0, and rasterize the surface-line proxy. Known mapped faults are masked by 300 m for the output; holdout labels are used only for scoring, never for line fitting.</p><p>Frozen parameters, folds, control design, and metric formula are documented in <a href="https://github.com/buffedlizard55-lab/GEMSDOE50/blob/main/docs/h50s1-protocol-addendum.md">the protocol addendum</a> and <a href="https://github.com/buffedlizard55-lab/GEMSDOE50/blob/main/docs/hypotheses-preregistered.md">the ranked preregistration</a>.</p><p>Prior-art and 3–5-hypothesis review: <a href="docs/research/earthquake-geometry-review-20261006.md">seismicity audit</a> and <a href="docs/research/hypothesis-ranking-20261006.md">candidate ranking</a>.</p><p><strong>Comparator policy:</strong> H50-prior is fixed as the primary comparator before holdout scoring. H32-D, H47-S3, and H48-DS are secondary context only; their holdout scores do not select the incumbent. Two 1 km / 2 km Gaussian-smoothed event-density maps are required matched controls. No prior prediction pixels are copied to the candidate artifact.</p><p><strong>Slot eligibility:</strong> formal aftershock declustering, mine/injection-site screening, and event-location uncertainty suitable for the raster width remain additional hard gates. Until they pass, any numeric result and unique TIFF are research-only and <strong>NO SLOT</strong>.</p></article><article class="card span-4"><h2>Data & permissions</h2><ul class="list"><li>Nevada catalog: <a href="https://doi.org/10.5281/zenodo.11167510">Zenodo v2</a>, CC BY 4.0; attribution and license link required.</li><li>Competition labels/template: SHA-pinned public Dropbox mirrors from a local source bridge manifest; provenance caveat is in the experiment report.</li><li>New H50-S1 raw data stays in ignored `.arena/`; the report records hashes and access links for verification.</li><li>Inherited ComCat/SGMC/LiDAR/radiometric files are not H50-S1 inputs. ComCat rights/shareability and location uncertainty remain unresolved; legacy refresh workflows are disabled.</li><li>Competition rules require external inputs to be licensed and shareable with the sponsor.</li></ul></article><article class="card span-6"><h2>Scientific limitations</h2><ul class="list"><li>Existing USGS/INGENIOUS labels are an imperfect proxy, not the hidden expert-labeled test set.</li><li>The catalog has no event-specific location covariance; model errors can exceed the 300 m scoring kernel, and orientation bootstrap is not a position-error estimate.</li><li>Formal aftershock declustering and mine/injection-site masks are not yet applied, so the density control alone does not clear those confounds.</li><li>Hypocenter planes are not guaranteed to intersect a mapped surface fault at the projected line.</li><li>Observed earthquakes are biased toward active faults, and waveform relocation is a subset of the full catalog.</li><li>A lineament or local DTI increase is not proof of geothermal productivity or a fault discovery.</li></ul></article><article class="card span-6"><h2>Leaderboard & AI disclosure</h2><p>DrivenData's Terms of Use restrict automated leaderboard monitoring and manual copying without written consent. This site links to the official board but does not poll, scrape, or publish a live snapshot.</p><p>Before any final competition entry, disclose AI assistance as required by the current NLR/DOE rules and describe human review. This repository does not submit on the user's behalf.</p></article></div></div></section></main>"""
+
+    if h51:
+        results_body = results_body + h51_results_block(h51, evidence_dir)
+        methods_body = methods_body + h51_methods_block(h51)
+        submission_body = h51_download_band(h51) + submission_body + h51_submission_block(h51)
+    submission_body = submission_body + h51_html
 
     pages = {
         "index.html": page("Executive summary", index_body, active="overview"),
@@ -272,11 +693,12 @@ def main() -> None:
     parser.add_argument("--output-dir", default=".")
     parser.add_argument("--report", default=str(REPORT_DEFAULT))
     parser.add_argument("--tiff", default=str(TIFF_DEFAULT))
+    parser.add_argument("--evidence-dir", default="evidence")
     parser.add_argument("--h51-ship", default=str(H51_SHIP_DEFAULT))
     parser.add_argument("--h51-check", default=str(H51_CHECK_DEFAULT))
     args = parser.parse_args()
     written = build_pages(Path(args.output_dir), Path(args.report), Path(args.tiff),
-                          Path(args.h51_ship), Path(args.h51_check))
+                          Path(args.evidence_dir), Path(args.h51_ship), Path(args.h51_check))
     for path in written:
         print(path)
 

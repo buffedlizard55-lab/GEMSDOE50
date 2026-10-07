@@ -328,3 +328,54 @@ that is simultaneously gate-clean, pixel-novel, and above the incumbent on the v
 instrument. Its live score would (a) prospectively calibrate the consensus instrument, (b) settle
 the §12 conflict in the direction of whichever family it agrees with, and (c) add a 26th
 hash-verified row to the corpus used by every future design.
+
+**Superseded in part by §14.** The shared-frame measurement added on 2026-10-07 puts the
+parallel-session `gems51-scarpradio-offcat` file ahead of this candidate on the only frame where both
+were scored identically. Read §14 before acting on this table.
+
+## 14. Cross-frame adjudication of the two in-repo candidates [MEASURED]
+
+Sections 4–13 compare designs on *different* instruments: the consensus posterior prices an artifact
+against the 25 scored artifacts' score history, the off-catalogue `sgmc_off` frame prices coverage of
+USGS SGMC fault pixels that the given catalogue does not contain, and the 4-macrofold holdout prices
+generalisation. Those currencies are not interchangeable, which is exactly the conflict recorded in
+§12. One measurement can adjudicate, because the repository now holds two new candidate GeoTIFFs:
+
+* **A** — `gemsdoe50-h51-corridor-consensus-mix-20261007T0200Z.tif` (this branch; 30,000 dots).
+* **B** — `gems51-scarpradio-offcat-35000-20261006-ecf058ea-nan.tif` (parallel session; 35,000 dots).
+
+Both were re-scored on one identical frame with identical code
+(`python scripts/h51_validate.py --layers data/external --candidates A B`): unmasked domain of
+5,106,385 px; truth = SGMC fault pixels more than 300 m from the given catalogue, 61,664 px
+(1.208 %). Result (`evidence/h51_candidate_frame_compare.json`):
+
+| file | dots | `sgmc_off` DTI | credit per dot | tp per dot |
+| --- | ---: | ---: | ---: | ---: |
+| A · corridor-consensus mix | 30,000 | 0.0566 | 0.00616 | 0.1050 |
+| **B · scarp + radiometric lineaments** | 35,000 | **0.1158** | 0.00659 | **0.1889** |
+| archived `gems50-seislin-44709` (reference only) | 44,709 | 0.1472 | 0.00879 | 0.1972 |
+| matched uniform control at 30 k dots | 30,000 | 0.0592 mean / 0.0617 max | — | — |
+| four translations of A | — | 0.0448 mean / 0.0472 max | — | — |
+
+Readings that follow directly, with no extra assumptions:
+
+1. **B is the stronger of the two new files, and A does not clear its own matched control**
+   (0.0566 < 0.0592 mean, 0.0617 max). B beats every control on this frame by roughly 1.9×.
+2. **The consensus instrument's ordering does not transfer.** It prices A at 0.1684 and the archived
+   incumbent at only 0.0422, while on this frame the incumbent is 2.6× A. Combined with §10 (a
+   trivial similarity predictor already reaches ρ 0.905 and the truth-density inversion fails), the
+   parsimonious explanation is that the instrument prices *resemblance to the corpus*, and the corpus
+   optimum is a re-draw of itself (§11) — a property that cannot create new off-catalogue coverage.
+3. **§12's conflict is therefore resolved in favour of the seismicity/geophysics evidence line** on
+   the only frame that can adjudicate, at least for the purpose of choosing a file to submit. The
+   consensus posterior remains useful as a *prior over where dot-efficiency has historically paid*,
+   not as a predictor of new-territory value.
+4. **A slot, if the owner spends one, should carry B first.** B additionally has 4/4 positive
+   macrofolds on the frozen holdout (paired subtile CI `[0.0406, 0.0785]`,
+   `evidence/holdout_h51.json`), a line of evidence A never had.
+
+Limitations of this adjudication, stated so it is not over-read: it is **one frame** (a single
+variant of the SGMC mask at one clearance radius), it compares artifacts at different masses (30 k vs
+35 k vs 44.7 k dots), and it cannot rank either file against the 25 scored artifacts, whose scores
+come from the hidden expert labels. It is strong enough to order two *in-repo* candidates for the
+purpose of spending a slot, and not strong enough to predict a leaderboard number.

@@ -8,10 +8,10 @@
 
 1. **Deliver a new, unique GeoTIFF prediction.** Generate it from this repository's documented method and pinned inputs. Never copy a previous submission's prediction pixels; earlier artifacts may be inspected only for education, controls, or comparison. The intended download must be a single-band float32 GeoTIFF on the actual competition grid, EPSG:32611, 100 m resolution, with the official shape, transform, and bounds. Predictions must be finite and within `[0, 1]` wherever data are valid; outside-footprint handling must follow the official sample/template and be tested against the reported portal error `Predicted values must be in range [0, 1]`.
 2. **Make the artifact easy to find and download.** Put a one-click download and a concise executive summary at the top of the site. Include a clear, numbered “how to submit” page, a unique submission name, and a short distinguishing note for the competition's optional note field. Do not imply portal acceptance when no upload receipt exists.
-3. **Do the science before implementation.** Before writing a detector, list and rank 3–5 genuinely distinct geological hypotheses. Each must state the exact layers/data, physical signature, why it could detect a fault missing from USGS/INGENIOUS, how it differs from prior GEMSDOE work, expected DTI direction/impact, implementation cost, and data/license requirements. Preserve the ranking in [`docs/hypotheses-preregistered.md`](docs/hypotheses-preregistered.md); exact implementation choices and controls are frozen in [`docs/h50s1-protocol-addendum.md`](docs/h50s1-protocol-addendum.md).
-4. **Protect the weekly submission budget.** Validate the leading hypothesis on a spatially blocked holdout against a frozen, same-fold incumbent and appropriate controls before using any of the competition's three weekly scoring slots. A hypothesis that does not beat the holdout incumbent is not slot-eligible. A local proxy score is not an organizer score or a prediction of private-test performance.
+3. **Do the science before implementation.** Before writing a detector, list and rank 3–5 genuinely distinct geological hypotheses. Each must state the exact layers/data, physical signature, why it could detect a fault missing from USGS/INGENIOUS, how it differs from prior GEMSDOE work, expected DTI direction/impact, implementation cost, and data/license requirements. See the current audit in [`docs/research/hypothesis-ranking-20261006.md`](docs/research/hypothesis-ranking-20261006.md), the preregistered candidates in [`docs/hypotheses-preregistered.md`](docs/hypotheses-preregistered.md), and exact H50-S1 implementation choices/controls in [`docs/h50s1-protocol-addendum.md`](docs/h50s1-protocol-addendum.md). Re-check old work before calling any variant new.
+4. **Protect the weekly submission budget.** Validate the leading hypothesis on a spatially blocked holdout against a frozen, same-fold incumbent and appropriate controls before using any of the competition's three weekly scoring slots. H50-S1 must also beat both smoothed-density baselines and pass formal aftershock, mine/injection-site, and event-location-uncertainty gates. A hypothesis that fails any gate is not slot-eligible. A local proxy score is not an organizer score or a prediction of private-test performance.
 5. **Use compliant, traceable evidence.** Prefer official and peer-reviewed primary sources; link sources directly, state evidence and license status, pin file hashes, and disclose attribution/changes. External data may be used only where the competition permits it, the license permits commercial use, and the data can be shared with the organizers for independent verification. Do not use the scratch mixed-network USGS ComCat extract until its source-specific rights and location uncertainty are resolved.
-6. **Do not overstate the literature.** The project tests a 2-D raster adaptation of earthquake lineament methods cited by the user—Ouillon et al. (2008), Ouillon & Sornette (2011), and Wang et al. (2013, arXiv:1304.6912). These papers reconstruct 3-D fault networks from seismicity; the Nevada catalog lacks per-event location probability distributions. A 2-D adaptation is a hypothesis, not a validated transfer of those methods.
+6. **Do not overstate the literature.** H50-S1 is a 3-D local plane-fitting hypothesis on relocated Nevada events, but its catalog lacks per-event location covariance and it is not ACLUD. The already-implemented legacy H50-B method uses 2-D ComCat covariance/lineations; its 2-D triangle-area reduction of a 3-D tetrahedron statistic is explicitly **unverified**, and the builder does not apply the computed `keep` mask. Neither method is a validated transfer of the cited 3-D methods: [Ouillon et al. (2008)](https://doi.org/10.1029/2007JB005032), [Ouillon & Sornette (2011)](https://doi.org/10.1029/2010JB007752), and [Wang et al. (2013)](https://arxiv.org/abs/1304.6912).
 7. **Work autonomously and auditably.** Review rules, data, sources, prior attempts, and limitations; record every material decision and irregularity; run multiple implementation/review passes; fix defects found; and maintain a concise next-steps list. Do not ask the owner to do research or resolve issues the agent can verify independently.
 8. **Keep the score context honest.** The owner-quoted `0.3195` is historical, not the live leader. Prior sibling-repository notes contain conflicting historical leaderboard values and are not a fresh independent official check; do not repeat them as current official scores or map any score to a TIFF without organizer-verified provenance. DrivenData's Terms of Use prohibit automated monitoring/copying and manual monitoring/copying without prior written consent. This repository links to the official board but does not scrape, poll, or publish leaderboard snapshots.
 9. **Follow the prize rules.** The September 2026 NLR/DOE rules require an AI-use disclosure in the narrative, permit up to three feedback submissions per week, and require selection of one final submission for both prize rounds. Finalists must provide reproducible code/assets and documentation. The competition ends December 3, 2026 at 23:59 UTC (verify the official page before any deadline-dependent action).
@@ -119,6 +119,44 @@ owner-quoted 0.3195 target — and the pre-registered `sgmc_off` proxy gate FAIL
 a measurement the owner may choose to spend one slot on, not as a predicted win; the page says so
 above the download.
 
+### Two verified candidates now exist — and one shared frame orders them
+
+- **Candidate A — H51 corridor-consensus mix (this branch).**
+  `downloads/gemsdoe50-h51-corridor-consensus-mix-20261007T0200Z.tif`, 30,000 dots, consensus
+  instrument **0.1684**, frozen uniqueness gate PASS (0 shared pixels, worst 2 px-proximity IoU
+  0.4219).
+- **Candidate B — H51 scarp + radiometric lineaments (parallel session, now on `main`).**
+  `docs/downloads/gems51-scarpradio-offcat-35000-20261006-ecf058ea-nan.tif`, sha256
+  `8f8708d2872b66d71925707e0aede23eebcf217dfd2e57d6e61186f32e686f5d`, 35,000 dots; on its own
+  off-catalogue sweeps **0.1889 credit per dot** against **0.1161** for a matched random control at
+  the same mass, and it beats its matched control in **4/4** macrofolds of the frozen holdout
+  (paired subtile bootstrap 95 % CI `[0.0406, 0.0785]`, [`evidence/holdout_h51.json`](evidence/holdout_h51.json)).
+- **The one directly comparable measurement** ([`evidence/h51_candidate_frame_compare.json`](evidence/h51_candidate_frame_compare.json),
+  produced 2026-10-07 by `scripts/h51_validate.py` with `--layers data/external`): one identical
+  frame — unmasked domain of 5,106,385 px, truth = SGMC fault pixels more than 300 m from the given
+  catalogue, 61,664 px (1.208 %) — and identical code for all three files:
+
+  | file | dots | shared-frame `sgmc_off` DTI | credit per dot |
+  |---|---:|---:|---:|
+  | A · corridor-consensus mix | 30,000 | 0.0566 | 0.1050 |
+  | B · scarp + radiometric lineaments | 35,000 | **0.1158** | **0.1889** |
+  | archived `gems50-seislin-44709` | 44,709 | 0.1472 | 0.1972 |
+  | matched uniform control (30 k) | 30,000 | 0.0592 mean / 0.0617 max | — |
+  | translations (4) | — | 0.0448 mean / 0.0472 max | — |
+
+- **What that means, stated plainly.** On the only frame where the two new files are measured the
+  same way, **B is the stronger of the two and A does not beat a matched uniform control.** The
+  archived incumbent beats both but cannot be resubmitted (its novelty check fails). If the owner
+  spends a slot on a file from this repository, the evidence points at **B first**. A stays
+  published because it is the gate-clean measurement of the consensus line, and because its failure
+  on the shared frame is itself the strongest evidence yet that the score-consensus instrument's
+  skill does not transfer to new territory (analysis §12–14).
+- The two "own instrument" columns are **not** comparable to each other or to the shared-frame
+  column: A's 0.1684 is a leave-one-out prediction over 25 scored artifacts (a different frame and
+  a different currency), B's 0.1889 is credit per dot on its own sweep. Neither is an organizer
+  score, and no portal upload has occurred for either file.
+
+
 ## Verified project references
 
 | Source | Verified use | Link |
@@ -133,6 +171,22 @@ above the download.
 | Seismicity-to-fault literature | 3-D anisotropic clustering, spatial clustering/segmentation, and explicit location-uncertainty methods | [Ouillon et al. 2008](https://doi.org/10.1029/2007JB005032) · [Ouillon & Sornette 2011](https://doi.org/10.1029/2010JB007752) · [Wang et al. 2013](https://arxiv.org/abs/1304.6912) |
 | Reference-solution notebook | Reviewed 2026-10-06: uses a Tversky training loss with α=0.2/β=0.8, but does not implement the official distance-weighted scoring evaluator; scoring authority is the problem-description page above. | [DrivenData reference solution](https://github.com/drivendataorg/gems-prize-reference-solution/blob/main/unet-mc-cv-reference-solution.ipynb) |
 | Prior GEMSDOE experiments | Educational evidence only; prior outputs are never copied into this project's deliverable | [GEMSDOE32](https://github.com/buffedlizard55-lab/GEMSDOE32) · [GEMSDOE47](https://github.com/buffedlizard55-lab/GEMSDOE47) · [GEMSDOE48](https://github.com/buffedlizard55-lab/GEMSDOE48) |
+
+### Inherited from `main` and still true
+
+- **H50-S1 has not run.** Its dispatch-only workflow returns HTTP 403 `Resource not accessible by
+  integration` here, so no job ran and no data was fetched; the frozen split spec
+  (`78b6692155c6c6d5f9f19ccee6d595167c2065f1f25eb8d08636d1d9b285ff16`) and the realized-mask report
+  (`981b42e6d0310bf77f79c7c7662a0569c8d2e79514ef4e4a3624a5b07583ae3f`) are unchanged.
+- **Provenance caveat.** The bridge manifest points at the official data tab and public mirrors, but
+  no session has authenticated to DrivenData and re-downloaded the official bytes; matching hashes
+  establish consistency with the manifest, not organizer provenance.
+- **No automated leaderboard access.** One unintended automated request to the public leaderboard
+  page happened during earlier research; no rows/scores were saved or used, and no further
+  automated access is made. Historical sibling-repository scores are quoted as history only and are
+  never mapped to a TIFF.
+- **Repository suite:** `python -m pytest -q` → 72 passed, 0 skipped, including the H51 metric
+  identities (`tests/test_h51.py`, `tests/test_h51_ship_gate.py`).
 
 ## Reproduction
 
@@ -169,28 +223,57 @@ python scripts/h51_truth_map.py            # credit ledger + block-grid truth in
 python scripts/h51_validate.py --candidates downloads/*.tif --incumbent downloads/gems50-seislin-*.tif
 GEMS50_CORPUS=.arena/work/h51 python scripts/check_submission.py --submission downloads/gemsdoe50-h51-*.tif
 python scripts/h51_ship_novel.py           # reproduces the rejected pixel-disjoint H52 design
+python scripts/h51_validate.py --layers data/external \
+  --candidates downloads/gemsdoe50-h51-corridor-consensus-mix-*.tif \
+               docs/downloads/gems51-scarpradio-offcat-*.tif \
+  --out evidence/h51_candidate_frame_compare.json   # the shared-frame comparison above
+
+# The parallel-session candidate's own checks (unchanged from main).
+python scripts/verify_h51_raster.py
+python scripts/validate_h51_holdout.py
+python scripts/uniqueness_h51.py
+python scripts/update_registries_h51.py
 ```
 
-The manually dispatched [H50-S1 research workflow](.github/workflows/h50s1-research.yml) runs on `arena/5e2ce8c3-gemsdoe50` only. It verifies tests and the already-frozen masks before scoring, downloads no hidden labels, does not use the feature stack for H50-S1, and commits only the result report/site/research-only TIFF back to this fixed branch. If sandbox egress is still blocked there, the workflow fails visibly and the limitation remains recorded; no raw data are committed.
+## Executive summary and submission instructions
 
-## Open gates / next actions
+The site is generated and CI-verified. Root pages come from
+[`scripts/build_h50_site.py`](scripts/build_h50_site.py) (`index.html`, `results.html`,
+`methods.html`, `submission.html`) and the data feed from [`scripts/build_site.py`](scripts/build_site.py)
+plus [`scripts/update_registries_h51.py`](scripts/update_registries_h51.py) (`docs/data/*.json`).
+`.github/workflows/site.yml` regenerates the four root pages on every push and pull request and fails
+the build if the committed bytes differ. `index.html` now opens with a **"two candidates, one shared
+frame"** table rendered from `evidence/h51_ship.json`, `evidence/build_h51.json` and
+`evidence/h51_candidate_frame_compare.json`, so the numbers on the site cannot drift from the
+evidence, and both GeoTIFFs are one click away.
 
-1. **Decide the slot.** The shipped candidate is gate-clean and pixel-novel but predicted below the
-   repository's best delivered score; the decision to spend one of the three weekly feedback slots
-   belongs to the owner. If spent, it prospectively calibrates the consensus instrument and adds a
-   26th hash-verified row to the corpus.
-2. **Settle the instrument conflict** (§12 of the analysis). Either submit a corpus-consensus design
-   and a seismicity-lineament design in different weeks, or accept the conflict and pick a side with
-   a stated rationale. Do not silently average them.
-3. **Test hypothesis P1 (dot-economy pruning)**, the only lever with a *measured* sign: the champion
-   artifact is past its own family's optimum (`∂DTI/∂N < 0` at 0.2600). Sweep prune thresholds on
-   the frozen holdout and both independent frames.
-4. **Build a new detector for the missing 41 %** (P2 magnetic-lineament corridors first, then P4
-   relay bridges). No amount of re-blending can reach it; analysis §9 and the failed truth inversion
-   are the proof.
-5. **Fix the acquisition path.** Replace the unusable pre-registered proxy gate with one that has
-   demonstrated power against real scores, and re-enable an auditable fetch route for the
-   network-blocked official sources (`gh workflow run` currently returns 403 in this environment,
-   and `fetch-external-data.yml` is a disabled stub).
-6. Keep the site, feed, and evidence in sync with any new artifact; CI enforces byte-identical
-   regeneration of the four pages.
+**One-click downloads (top of the site):**
+
+| candidate | file | portal name | note for the optional field |
+|---|---|---|---|
+| A | `downloads/gemsdoe50-h51-corridor-consensus-mix-20261007T0200Z.tif` | `gemsdoe50-h51-corridor-consensus-mix-20261007T0200Z` | "Corridor evidence (seismicity lineaments + magnetic/radiometric ridges + thermal springs) fused with a validated score-consensus core; off-catalogue, 300 m-aware dot geometry; pixels and 200 m neighbourhoods novel against all 26 prior artifacts." |
+| B | `docs/downloads/gems51-scarpradio-offcat-35000-20261006-ecf058ea-nan.tif` | `GEMSDOE50-H51-SCARPRADIO-OFFCAT` | "GEMSDOE50 H51 \| corroborated 3DEP-scarp + radiometric lineaments, all dots >300 m from the given catalogue, metric-matched sparse emission; proxy-validated, NOT organizer-scored" |
+
+A is `float32`, EPSG:32611, 3730×3292, values `0`/`1`, 30,000 predicted pixels, SHA-256
+`a26055834f8e6cc57cc33e96a4a5a26a1adeaafbeec490135af84c6ccd4d1da0`, 339,039 bytes, NaN outside the
+published footprint. B is the same grid and dtype with 35,000 predicted pixels, SHA-256
+`8f8708d2872b66d71925707e0aede23eebcf217dfd2e57d6e61186f32e686f5d`. Each has an `-allfinite.tif`
+sibling that writes `0.0` outside the footprint, for portals that reject non-finite values, so the
+historical error `Predicted values must be in range [0, 1]` cannot recur; each also has a one-file
+`.zip`.
+
+**How to submit (manual, by the owner, never by this repository — it holds no portal credentials
+and never uploads):**
+
+1. Download one GeoTIFF — or its zip — from the band at the top of the site.
+2. Confirm the bytes against the SHA-256 shown next to the link.
+3. Sign in to [the competition](https://www.drivendata.org/competitions/306/competition-doe-gems/)
+   manually and open *Submit*.
+4. Choose the downloaded `.tif` without re-saving, re-projecting or re-compressing it.
+5. Paste the unique name and the short note from the table above.
+6. Submit, then record the receipt next to the file hash in this repository before claiming any
+   score.
+
+`submission.html` carries the same checklist. **No organizer score exists for either file and no
+weekly slot has been used by this repository.** Spending a slot is the owner's decision; the shared
+frame above says which file to spend it on first.

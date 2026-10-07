@@ -1,0 +1,67 @@
+{
+ "frame": "sgmc_off (>300 m from catalogue, unmasked domain)",
+ "domain_px": 5106385,
+ "truth_px": 61664,
+ "rows": {
+  "gemsdoe50-h51-corridor-consensus-mix-20261007T0200Z.tif": {
+   "dti": 0.05655284627939582,
+   "tp": 3149.5489000681137,
+   "fp": 28655.139400920532,
+   "fn": 58514.45109993189,
+   "truth_cells": 61664,
+   "pred_cells": 30000,
+   "dots_in_domain": 30000,
+   "dots_outside_domain": 0,
+   "tp_per_dot": 0.1049849633356038,
+   "fp_per_dot": 0.9551713133640177,
+   "_file": "gemsdoe50-h51-corridor-consensus-mix-20261007T0200Z.tif",
+   "_n_total": 30000
+  },
+  "gems51-scarpradio-offcat-35000-20261006-ecf058ea-nan.tif": {
+   "dti": 0.11582196973039802,
+   "tp": 6609.977055429728,
+   "fp": 32084.767316124016,
+   "fn": 55054.02294457027,
+   "truth_cells": 61664,
+   "pred_cells": 35000,
+   "dots_in_domain": 35000,
+   "dots_outside_domain": 0,
+   "tp_per_dot": 0.18885648729799223,
+   "fp_per_dot": 0.9167076376035433,
+   "_file": "gems51-scarpradio-offcat-35000-20261006-ecf058ea-nan.tif",
+   "_n_total": 35000
+  },
+  "gems50-seislin-44709-20261006T2041Z-79e260ae.tif": {
+   "dti": 0.14716017110959478,
+   "tp": 8687.181567205334,
+   "fp": 39817.57768251438,
+   "fn": 52976.818432794666,
+   "truth_cells": 61664,
+   "pred_cells": 44048,
+   "dots_in_domain": 44048,
+   "dots_outside_domain": 661,
+   "tp_per_dot": 0.19722079475130164,
+   "fp_per_dot": 0.9039588104457495,
+   "_file": "gems50-seislin-44709-20261006T2041Z-79e260ae.tif",
+   "_n_total": 44709
+  }
+ },
+ "uniform_control": {
+  "n": 30000,
+  "dti_mean": 0.0592347996948126,
+  "dti_max": 0.06166563702329531,
+  "draws": 5
+ },
+ "translation_control": {
+  "dti_mean": 0.04481419262074727,
+  "dti_max": 0.04717845135420654,
+  "draws": 5
+ },
+ "gate": {
+  "beats_uniform": false,
+  "beats_translation": true,
+  "beats_incumbent": false,
+  "incumbent_dti": 0.14716017110959478,
+  "all_pass": false
+ }
+}

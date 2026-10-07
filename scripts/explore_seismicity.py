@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Exploratory + structural analysis of the official USGS ComCat catalogue.
+"""Legacy exploratory analysis of the mixed-network USGS-hosted ComCat export.
 
-Prints the statistics that determine the seismicity-lineament prior:
-magnitude completeness, location uncertainty, the clustered-vs-background
-crossover distance, cluster geometry (inertia tensors) and corridor coverage
-relative to the published fault catalogue.
+This script is retained for audit/reproducibility only. It does not clear the
+export's contributor-specific rights, establish full location covariance, or
+implement an H50-S1 blocked-holdout test. Do not use its output as a current
+submission result.
 """
 
 from __future__ import annotations

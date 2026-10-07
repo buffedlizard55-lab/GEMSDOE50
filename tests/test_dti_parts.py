@@ -11,8 +11,8 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-from gems50 import dti as metric  # noqa: E402
-from gems50 import grid_io as grid  # noqa: E402
+from gems50 import dti as metric
+from gems50 import grid_io as grid
 
 
 def _random_case(seed: int, shape=(41, 47), density=0.01, offsets=3):

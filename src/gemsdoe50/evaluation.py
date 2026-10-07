@@ -16,6 +16,11 @@ BOOTSTRAP_REPLICATES = 5000
 TRANSLATION_CONTROLS = 32
 TIME_SHUFFLE_CONTROLS = 20
 PRIMARY_INCUMBENT_NAME = "H50-prior"
+SMOOTHED_DENSITY_CONTROL_SIGMA_M = {
+    "smoothed-density-1km": 1000.0,
+    "smoothed-density-2km": 2000.0,
+}
+SMOOTHED_DENSITY_CONTROL_NAMES = tuple(SMOOTHED_DENSITY_CONTROL_SIGMA_M)
 
 
 def allocate_largest_remainder(total: int, weights: list[int]) -> list[int]:
@@ -225,6 +230,12 @@ def evaluate_hypothesis(
             f"the preregistered primary incumbent {PRIMARY_INCUMBENT_NAME!r} is required; "
             "do not select an incumbent from holdout scores"
         )
+    missing_density_controls = set(SMOOTHED_DENSITY_CONTROL_NAMES) - set(baseline_maps)
+    if missing_density_controls:
+        raise ValueError(
+            "the preregistered smoothed-density controls are required: "
+            + ", ".join(sorted(missing_density_controls))
+        )
     if time_shuffle_maps is None or len(time_shuffle_maps) != TIME_SHUFFLE_CONTROLS:
         raise ValueError(
             f"the preregistered protocol requires exactly {TIME_SHUFFLE_CONTROLS} "
@@ -337,6 +348,13 @@ def evaluate_hypothesis(
     )
 
     delta = candidate["pooled"]["score"] - incumbent["pooled"]["score"]
+    density_control_scores = {
+        name: float(method_results[name]["pooled"]["score"])
+        for name in SMOOTHED_DENSITY_CONTROL_NAMES
+    }
+    beats_density_controls = all(
+        candidate["pooled"]["score"] > score for score in density_control_scores.values()
+    )
     pass_components = {
         "pooled_delta_at_least_0_005": bool(delta >= 0.005),
         "positive_fold_deltas_at_least_3_of_4": bool(sum(d > 0 for d in paired_fold_deltas) >= 3),
@@ -347,6 +365,7 @@ def evaluate_hypothesis(
         "beats_95th_percentile_time_shuffle_control": bool(
             candidate["pooled"]["score"] > time_control_q95
         ),
+        "beats_both_smoothed_density_controls": bool(beats_density_controls),
     }
     gate_pass = all(pass_components.values())
 
@@ -379,6 +398,15 @@ def evaluate_hypothesis(
             block.block_id: area for block, area in zip(blocks, fold_areas, strict=True)
         },
         "method_results": method_results,
+        "smoothed_density_controls": {
+            "names": list(SMOOTHED_DENSITY_CONTROL_NAMES),
+            "pooled_dti": density_control_scores,
+            "candidate_beats_both": bool(beats_density_controls),
+            "interpretation": (
+                "Gaussian-smoothed counts from the same relocated events; controls spatial "
+                "density, not aftershock or mining/injection confounding."
+            ),
+        },
         "incumbent_method": incumbent_name,
         "incumbent_selection_policy": (
             "H50-prior is fixed in the preregistered protocol before holdout scoring; "
