@@ -34,9 +34,11 @@ Registered in `registry/submissions.json` with `organizer_score: null`.
    their owner-reported scores and used to fit a per-cell Poisson truth field whose derived `N`,
    `T` and `FP` are the metric's own definitions
    (`scripts/h53_corpus.py`, `scripts/h53_fit_truth.py`). It did not reach a usable calibration: the
-   objective stayed at RMSE ~0.11-0.13 and was monotone in `N`, and the reason is now on the record -
-   a field that explains 1.5x of the leaderboard's concentration cannot reproduce a leaderboard that
-   needs 5.6x. `evidence/h53_fit.json`.
+   objective stayed at RMSE ~0.12-0.13 in its search log and was monotone in `N`, and the reason is now
+   on the record - a field that explains 1.5x of the leaderboard's concentration cannot reproduce a
+   leaderboard that needs 5.6x. `evidence/h53_fit_status.json` records what ran, what the numbers mean,
+   and that `evidence/h53_fit.json` belongs to the earlier *linear* model class (RMSE 0.093 first-order /
+   0.096 exact closure at a degenerate `N` = 249,337), not to this fit.
 2. *Metric-derived stratified emission.* `DTI = T / (0.2(T+F) + 0.8N)` gives the exact stop rule
    (`accept while kernel credit > 0.2T/(0.2F+0.8N)`) and it also exposes a trap the earlier builds fell
    into: `TPw` is a **maximum over predicted cells**, so a dense blob of dots pays once. Emitting one
