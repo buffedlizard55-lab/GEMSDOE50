@@ -559,6 +559,73 @@ The corpus's top seven artifacts all sit in the narrow mass band 37,654–44,090
 Full working: [`docs/research/h57-verdict-20261007.md`](docs/research/h57-verdict-20261007.md)
 (§7 lists the flagged irregularities, including the F2 name collision between this repository's
 catalogue-holdout frame and the H52 register's INGENIOUS-holdout frame).
+## H59 — official-stack belief field, the union arm, and the price of novelty (2026-10-07)
+
+**Question.** Does the organizer's own 19-band `training_features.tif` carry off-catalogue fault
+information that the owner-derived LiDAR/topographic-step families behind H57 do not — and can a
+*maximally* novel placement be built that still scores? **Answers: it carries information but no
+usable increment (the union arm ties H57), and maximal novelty is bought with score.** H59 is
+therefore a **NO SLOT** result and **H57 stays the recommended submission**.
+
+**Screen (measured, `evidence/h59_screen.json`).** 17 `tf` channels × {`raw`, `grad`, `ridge2`} at
+30,000 dots, scored on the off-catalogue F1 frame inside **five elevation strata** (the stratifier
+matters: F1 truth is USGS SGMC fault pixels, which live in the mountains). Winners, all 5/5 strata:
+`raw::det_elev_slope` **2.198**, `raw::det_elev` **2.193**, `grad::det_elev_slope` **2.064**,
+`grad::tc` **1.969**, `raw::iso_grav_anom` **1.909**, `ridge2::geod_dilaterate` **1.887**,
+`ridge2::det_elev_slope` **1.877**, `ridge2::tc` 1.491. Failures: every magnetic amplitude channel
+(0.50–0.98), the shipped gravity-gradient products (0.31–1.29), raw geodetic strain (0.28–0.38),
+`depth_to_base_surf` (0.33–1.18). **This corrects the earlier "official raw bands lose" claim** —
+detrended elevation and its slope do carry off-catalogue information.
+
+**Arms (measured).** | candidate | dots | frozen gate | matched uniform | folds |
+|---|---|---|---|---|---|
+H57-scarpstep (incumbent) | 80,000 | **0.2025** | 0.1053 | 4/4 |
+H59-union-d0 | 75,308 | **0.2033** | 0.1050 | 4/4 |
+H59-union-d2 (max novelty) | 75,308 | 0.0618 | 0.0917 | **0/4** |
+H59-official-stack alone | 50,000 | 0.1224 | 0.0749 | 4/4 |
+On the second (pooled off-catalogue F1) instrument the union arm scores 0.1018 vs H57's 0.0914
+(uniform 0.0421). So H59-union leads both proxies — by **+0.0008** on the gate. That is inside the
+instrument's noise, so the decision receipt records a tie and **NO SLOT**
+([`evidence/h59_gate_decision.json`](evidence/h59_gate_decision.json)).
+
+**The finding worth keeping: novelty past the corpus is bought with score.** Two arms were emitted
+from the same belief field at the same mass: one forbids only prior-*pixel* reuse (0 of 1,405,451
+prior cells reused; 0.437 of dots >2 px from every prior dot; gate 0.2033), the other excludes a
+Euclidean disk of radius 2 around every prior cell so *every* dot is >2 px from every prior dot
+(novel fraction 0.714, satisfying the repository's 0.5 threshold). The second collapses to
+**0.0618** — below its own matched uniform control (0.0917) and losing **0/4** macrofolds. The 0.5
+novelty threshold is therefore a **copy detector, not a placement constraint**; the binding charter
+rule is zero reused prior pixels, which both H57 and H59-union satisfy (max full-pixel IoU 0.204
+against this project's own H57; no byte-identical file).
+
+**Hidden-frame models disagree, and one of them fails a sanity check.** Transfer (retracted, R² =
+−0.87), mass (R² = 0.515) and corpus-calibrated (R² = 0.651) models give H57 0.1428 / 0.1761 /
+**0.2286** and H59-union 0.1623 / 0.1788 / **0.2237** — opposite signs. Applied to the
+maximal-novelty control the corpus-calibrated model predicts 0.2518, its highest value anywhere,
+while that control scores 0.0618 and loses to uniform in every fold. Model-implied numbers are
+therefore reported as indicative only and are not used to choose between the two files.
+
+**Published artifact (alternative, not the recommendation).**
+`docs/downloads/gemsdoe50-h59-union-d0-75308-20261007T2250Z-allfinite.tif` (+ `-nan.tif` twin and
+`.zip`), SHA-256 `143bae71968c5fc2b70b2de579e6a33f61d9d3e07beac13f20272760758b3bda`, 75,308 cells,
+draft name `GEMSDOE50-H59-UNION-75308`; every cell finite and in [0,1], every dot ≥300 m from the
+given catalogue and on no prior positive pixel. The site leads with H57 and says plainly that H57 is
+the file to submit; [`docs/downloads/README.md`](docs/downloads/README.md) labels every file in the
+download directory.
+
+**Next experiment (H60), in priority order.** (1) **The mass axis on the frozen gate**: the sweep
+and the arms disagree about the optimum number of dots, and the frozen gate is the only instrument
+with a matched control at every mass — measure 20k/30k/40k/50k/60k on H57's own field before any new
+family is tried; (2) only then, a genuinely new *family*: the screen's `grad::tc` (magnetic tilt
+gradient) and `ridge2::geod_dilaterate` (geodetic dilatation-ridge) are the two unexploited winners
+that are not topography; (3) resolve the strict-novelty threshold's semantics in the charter so it
+stops being read as a placement rule.
+
+Full working: [`docs/research/h59-verdict-20261007.md`](docs/research/h59-verdict-20261007.md)
+(§7 lists the flagged limitations, including the missing H59 preregistration document — the H59
+arms and the novelty control were defined after the screen was seen, so H59 is
+hypothesis-generating, not confirmatory).
+
 ## Standing project prompt — read at the start of every session (2026-10-07)
 
 This is the owner's standing instruction for this project, kept verbatim in summary so it is read

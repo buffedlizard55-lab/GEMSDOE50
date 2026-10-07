@@ -55,6 +55,13 @@ def test_h55_site_regeneration_is_deterministic_and_download_first():
         capture_output=True,
         text=True,
     )
+    subprocess.run(
+        [sys.executable, str(ROOT / "scripts/build_h60_site.py")],
+        cwd=ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
     assert {path: path.read_bytes() for path in tracked} == before
 
     index = (ROOT / "index.html").read_text(encoding="utf-8")
@@ -76,6 +83,40 @@ def test_h55_site_regeneration_is_deterministic_and_download_first():
     assert "Draft optional note (use only after rights clearance)" in index
     assert "mixed-network ComCat-derived geometry" in index
     assert "H53-A probe/TMI experiment: NO-GO / NO SLOT" in index
+
+
+def test_h60_band_is_below_the_recommendation_and_says_what_to_submit():
+    index = (ROOT / "index.html").read_text(encoding="utf-8")
+    results = (ROOT / "results.html").read_text(encoding="utf-8")
+    assert "Alternative candidate (H60-union)" in index
+    assert "GEMSDOE50-H60-UNION-75308" in index
+    assert "Which file should you submit? H57, directly above." in index
+    assert "NO SLOT for H60" in index
+    # ordering: the recommendation band, then the H60 alternative, then the H56 comparator
+    assert (
+        index.index("Download the current research candidate GeoTIFF (H57)")
+        < index.index('id="h60"')
+        < index.index('id="h56"')
+    )
+    assert 'id="h60-decision"' in results
+
+    receipt = json.loads((ROOT / "evidence/h60_gate_decision.json").read_text(encoding="utf-8"))
+    verdict = receipt["verdict"]
+    assert verdict["decision"] == "NO SLOT for H60; H57 stays the recommendation"
+    assert verdict["recommended_artifact"].endswith("gemsdoe50-h57-scarpstep-80000-20261007T1830Z-allfinite.tif")
+    assert verdict["gate_delta_inside_noise"] is True
+    art = ROOT / "docs/downloads/gemsdoe50-h60-union-d0-75308-20261007T2250Z-allfinite.tif"
+    build = json.loads((ROOT / "evidence/build_h60-union-d0.json").read_text(encoding="utf-8"))
+    assert _sha256(art) == build["files"]["all_finite"]["sha256"]
+    assert build["dots_on_prior_union"] == 0
+    with rasterio.open(art) as ds:
+        values = ds.read(1)
+        assert ds.count == 1 and ds.dtypes[0] == "float32"
+        assert str(ds.crs) == "EPSG:32611" and ds.shape == (3730, 3292)
+        assert np.all(np.isfinite(values))
+        assert float(values.min()) == 0.0 and float(values.max()) == 1.0
+        assert set(np.unique(values)) == {0.0, 1.0}
+        assert int(np.count_nonzero(values)) == 75_308
 
 
 def test_h55_site_local_links_exist():
