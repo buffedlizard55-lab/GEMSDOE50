@@ -704,7 +704,7 @@ def build_pages(output_dir: Path, report_path: Path, tiff_path: Path,
             if tiff_verified else '<div class="sourced">No H50-S1 TIFF is linked until byte and grid checks pass.</div>'
         )
     else:
-        status_text = "awaiting verified run"
+        status_text = "H50-S1 awaiting a verified run (the H51 candidates above are separate)"
         candidate_hash = ""
 
     h51 = load_h51((evidence_dir / "build_h51.json") if evidence_dir else None)
@@ -722,10 +722,13 @@ def build_pages(output_dir: Path, report_path: Path, tiff_path: Path,
         candidates_card = candidates_short_html()
         primary = h51["outputs"]["primary"]
         index_note = (
-            '<p class="sourced"><strong>Current deliverable (this page, top band):</strong> '
-            f'<code>{esc(Path(primary["path"]).name)}</code>, {int(primary["footprint_nonzero"]):,} '
-            'predicted pixels at the selected equal-mass budget, all of them more than 300 m from the given '
-            'catalogue by design. Local proxy instruments only; <strong>not organizer-scored</strong>. '
+            '<p class="sourced"><strong>Both candidates above are in-repo deliverables of this project,</strong> '
+            f'not of any organizer: this page publishes two files — the corridor-consensus mix '
+            f'(<code>gemsdoe50-h51-corridor-consensus-mix-20261007T0200Z.tif</code>) and the parallel-session '
+            f'scarp + radiometric lineaments file '
+            f'(<code>{esc(Path(primary["path"]).name)}</code>, {int(primary["footprint_nonzero"]):,} predicted '
+            'pixels at its selected equal-mass budget) — with the one shared frame that orders them. Local proxy '
+            'instruments only; <strong>not organizer-scored</strong>, no slot used. '
             '<a href="results.html">Controls, folds and uniqueness audit →</a> · '
             'machine-readable feed: <a href="docs/data/feed.json">docs/data/feed.json</a></p>'
         )
