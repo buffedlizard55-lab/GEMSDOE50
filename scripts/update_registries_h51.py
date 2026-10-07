@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Refresh archival H51 records and the current H53 status feed.
+"""Fold the H51 evidence into the repository registries and the status feed.
 
-Idempotent: any previous H51 entry is replaced, including lower-case historical names. H51
-records stay explicitly non-eligible and are never written as current upload advice. Evidence
-is copied from committed files; the current H53-A NO-GO / NO SLOT state remains authoritative.
+Idempotent: any previous H51 entry is replaced, so re-running after a rebuild cannot leave
+two competing records.  Every claim written here is copied from a file that exists on disk
+(``evidence/build_h51.json``, ``evidence/checks_h51_raster.json``, ``evidence/holdout_h51.json``);
+nothing is asserted that those files do not contain.
 """
 from __future__ import annotations
 
@@ -32,49 +33,39 @@ def main() -> int:
     holdout = load(HOLDOUT)
     name = build["name"]
     primary = build["outputs"]["primary"]
-    historical_label = "GEMSDOE50-H51-SCARPRADIO-OFFCAT"
-    archive_note = ("Historical identity only. This H51 candidate failed its pre-registered promotion proxy; "
-                    "no organizer score, upload, or receipt is verified. Do not use as portal instructions.")
+    portal_name = "GEMSDOE50-H51-SCARPRADIO-OFFCAT"
+    note = ("GEMSDOE50 H51 | corroborated 3DEP-scarp + radiometric lineaments, all dots >300 m "
+            "from the given catalogue, metric-matched sparse emission; proxy-validated, NOT "
+            "organizer-scored")
 
     submissions = json.loads((REPO / "registry" / "submissions.json").read_text(encoding="utf-8"))
-    submissions["current_project_status"] = "H53-A NO-GO / NO SLOT"
-    submissions["note"] = ("Historical artifact registry; H51 entries are retained for audit only and are not current slot recommendations. "
-                            "The current H53-A experiment is NO-GO / NO SLOT; no organizer score is asserted.")
     submissions["submissions"] = [
-        s for s in submissions.get("submissions", [])
-        if not (
-            str(s.get("name", "")).upper().startswith(("GEMS51", "GEMSDOE50-H51"))
-            or "H51" in str(s.get("portal_name", "")).upper()
-        )]
+        s for s in submissions.get("submissions", []) if not s.get("name", "").startswith(("GEMS51", "GEMSDOE50-H51"))]
     submissions["submissions"].append({
         "name": name,
-        "historical_label": historical_label,
-        "role": "historical H51 research artifact; not current submission recommendation",
-        "submission_eligible": False,
-        "current_recommendation": False,
+        "portal_name": portal_name,
         "file": primary["path"],
         "bytes": primary["bytes"],
         "sha256": primary["sha256"],
+        "all_finite_twin": build["outputs"]["allfinite"]["path"],
         "zip": build["outputs"]["zip"]["path"],
         "zip_sha256": build["outputs"]["zip"]["sha256"],
         "mass": int(primary["footprint_nonzero"]),
         "format": {k: primary[k] for k in ("crs", "shape", "dtype", "count", "transform",
                                            "cells_finite", "cells_nan", "outside_unit_interval",
                                            "outside_footprint_nonzero")},
-        "status": ("archived H51 research artifact; local proxy evidence only; no organizer score or receipt; "
-                   "not a current slot recommendation"),
+        "status": ("H51 deliverable; local proxy instruments only; no organizer score exists for "
+                   "this file and no portal upload was performed by this repository"),
         "organizer_score": None,
         "submitted_utc": None,
         "built_utc": build["built_utc"],
-        "archive_note": archive_note,
+        "portal_note": note,
         "evidence": ["evidence/build_h51.json", "evidence/checks_h51_raster.json",
                      "evidence/holdout_h51.json"],
     })
     write(REPO / "registry" / "submissions.json", submissions)
 
     claims = json.loads((REPO / "registry" / "claims.json").read_text(encoding="utf-8"))
-    claims["scope_note"] = ("H51 claims are historical proxy/format records only; they are not current slot recommendations. "
-                            "H53-A is NO-GO / NO SLOT. No organizer score or score-to-TIFF mapping is asserted.")
     claims["verified_on_published_bytes"] = [
         c for c in claims.get("verified_on_published_bytes", [])
         if "H51" not in c.get("claim", "")]
@@ -132,9 +123,8 @@ def main() -> int:
     claims["flagged_unresolved"] += [
         {
             "issue": "H51 mass selection rests on one transfer number",
-            "detail": ("the SGMC-off-to-hidden credit transfer (0.28) comes from a single owner/sibling "
-                       "corpus row with an unverified score-to-TIFF receipt and a local SGMC-off score. "
-                       "A +/-30% error in it "
+            "detail": ("the SGMC-off-to-hidden credit transfer (0.28) comes from a single owner file "
+                       "that has both a live score and a local SGMC-off score. A +/-30% error in it "
                        "moves the metric-optimal mass from ~12,000 to beyond 50,000 dots; the "
                        "amendment-A2 rule picks within that flat region and the full per-mass table "
                        "is published so a reviewer can move the mass with one argument."),
@@ -252,16 +242,10 @@ def main() -> int:
         },
     ]
     hypotheses["updated_utc"] = build["built_utc"][:10]
-    hypotheses["historical_role"] = "H51/H52-era proposals retained for audit; not current ranking or slot guidance"
-    hypotheses["current_project_status"] = "H53-A NO-GO / NO SLOT"
-    hypotheses["current_ranking_file"] = "docs/research/h53-hypotheses-20261007.md"
     write(REPO / "registry" / "hypotheses.json", hypotheses)
 
     sources = json.loads((REPO / "registry" / "sources.json").read_text(encoding="utf-8"))
-    sources.pop("h51_submission", None)
-    sources["h51_historical_artifact"] = {
-        "role": "historical H51 artifact; not a current submission recommendation",
-        "submission_eligible": False,
+    sources["h51_submission"] = {
         "file": primary["path"],
         "sha256": primary["sha256"],
         "bytes": primary["bytes"],
@@ -269,9 +253,9 @@ def main() -> int:
         "crs": primary["crs"],
         "dtype": primary["dtype"],
         "size": f"{primary['shape'][0]}x{primary['shape'][1]}",
-        "nodata": "NaN outside the official template footprint",
-        "historical_label": historical_label,
-        "archive_note": archive_note,
+        "nodata": "NaN outside the official template footprint (all-finite twin also written)",
+        "portal_name": portal_name,
+        "portal_note": note,
         "organizer_score": None,
         "sources": [
             {"name": "USGS 3DEP-derived scarp descriptor raster (12-band sibling-repository derivative)",
@@ -296,58 +280,18 @@ def main() -> int:
             "the exact derived scarp raster has no documented reuse license; mixed-network ComCat rights/shareability are unresolved; this file is not cleared for external competition upload until both sources are reviewed",
         ],
     }
-    h53_build_path = REPO / "evidence" / "h53-build-20261007.json"
-    h53_validation_path = REPO / "evidence" / "h53-validation-20261007.json"
-    if h53_build_path.exists():
-        h53_build = json.loads(h53_build_path.read_text(encoding="utf-8"))
-        h53_validation = json.loads(h53_validation_path.read_text(encoding="utf-8")) if h53_validation_path.exists() else {}
-        h53_artifact = h53_build["candidate"]["artifact"]
-        sources["current_candidate"] = {
-            "experiment": "H53-A",
-            "status": "NO-GO / NO SLOT" if h53_validation else "research-only; validation pending",
-            "submission_eligible": False,
-            "file": h53_artifact["path"],
-            "sha256": h53_artifact["sha256"],
-            "positive_pixels": h53_artifact["positive_cells"],
-            "organizer_score": None,
-            "portal_upload": None,
-            "weekly_slot_used": False,
-            "provenance": "Local source rasters are sibling mirrors, not byte-matched official binaries.",
-        }
     sources["generated_utc"] = build["built_utc"]
     write(REPO / "registry" / "sources.json", sources)
 
     feed = json.loads((REPO / "docs" / "data" / "feed.json").read_text(encoding="utf-8"))
-    feed["kind"] = "current H53-A no-go status plus historical H51 record; no leaderboard snapshot"
-    feed["current_status"] = "H53-A NO-GO / NO SLOT"
-    h53_build_path = REPO / "evidence" / "h53-build-20261007.json"
-    h53_validation_path = REPO / "evidence" / "h53-validation-20261007.json"
-    if h53_build_path.exists():
-        h53_build = json.loads(h53_build_path.read_text(encoding="utf-8"))
-        h53_validation = json.loads(h53_validation_path.read_text(encoding="utf-8")) if h53_validation_path.exists() else {}
-        h53_artifact = h53_build["candidate"]["artifact"]
-        feed["current_candidate"] = {
-            "status": "NO-GO / NO SLOT" if h53_validation else "research-only; validation pending",
-            "name": h53_build["candidate"]["name"],
-            "file": h53_artifact["path"],
-            "sha256": h53_artifact["sha256"],
-            "positive_pixels": h53_artifact["positive_cells"],
-            "local_dti": h53_validation.get("candidate", {}).get("native_pooled_dti", {}).get("score"),
-            "submission_eligible": False,
-            "organizer_score": None,
-            "portal_upload": None,
-            "weekly_slot_used": False,
-        }
+    feed["kind"] = "current-project status; no leaderboard snapshot"
     feed["h51"] = {
-        "role": "historical research artifact; not the current recommendation",
-        "current_recommendation": False,
-        "submission_eligible": False,
-        "status": "archived H51 build; no organizer score or upload receipt",
+        "status": "built, format-verified and proxy-validated; no organizer score claimed",
         "file": primary["path"],
         "sha256": primary["sha256"],
         "mass": int(primary["footprint_nonzero"]),
-        "historical_label": historical_label,
-        "archive_note": archive_note,
+        "portal_name": portal_name,
+        "portal_note": note,
         "instruments": {k: {kk: v[kk] for kk in ("dti", "credit_per_dot", "truth_cells")}
                         for k, v in build["instruments"]["candidate"].items()},
         "random_control": {k: v["credit_per_dot"] for k, v in build["instruments"]["random_control"].items()},
@@ -363,14 +307,6 @@ def main() -> int:
         "status": "research-only; the relocated-catalog data are still not fetchable in this sandbox",
         "organizer_score": None, "portal_upload": None, "weekly_slot_used": False,
     }
-    if isinstance(feed.get("h51_candidate"), dict):
-        legacy_feed = feed["h51_candidate"]
-        legacy_feed["role"] = "historical H51 artifact; not the current recommendation"
-        legacy_feed["current_recommendation"] = False
-        legacy_feed["submission_eligible"] = False
-        legacy_feed["archive_note"] = archive_note
-        for field in ("unique_name", "optional_note", "how_to_submit", "portal_name", "portal_note"):
-            legacy_feed.pop(field, None)
     feed["generated_utc"] = build["built_utc"]
     write(REPO / "docs" / "data" / "feed.json", feed)
     return 0

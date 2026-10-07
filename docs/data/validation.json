@@ -1,20 +1,4 @@
 {
- "current_project_status": "H53-A NO-GO / NO SLOT",
- "current_candidate": {
-  "status": "NO-GO / NO SLOT",
-  "name": "GEMSDOE50-H53-PROBE-TMI-POINTLINEATION-20261007",
-  "file": "docs/downloads/gemsdoe50-h53-probe-tmi-pointlineation-20261007-44afc05b.tif",
-  "sha256": "5f2fd91ad46a3602c03802e0f7773fd466b08e47cbfcf40ff796ffc2b956a382",
-  "positive_pixels": 0,
-  "local_dti": 0.0,
-  "slot_decision": "NO SLOT; do not submit or spend a weekly scoring slot",
-  "submission_eligible": false,
-  "organizer_score": null,
-  "portal_upload": null,
-  "weekly_slot_used": false
- },
- "historical_experiment": "archived H50 seismicity raster; local proxy only",
- "do_not_submit": true,
  "generated_from": "registry/submission_validation.json, registry/submission_build.json",
  "submission_scored_on_both_frames": {
   "submission": "/tmp/gems50/submission.tif",

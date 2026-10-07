@@ -92,7 +92,7 @@
   },
   {
    "issue": "H51 mass selection rests on one transfer number",
-   "detail": "the SGMC-off-to-hidden credit transfer (0.28) comes from a single owner/sibling corpus row with an unverified score-to-TIFF receipt and a local SGMC-off score. A +/-30% error in it moves the metric-optimal mass from ~12,000 to beyond 50,000 dots; the amendment-A2 rule picks within that flat region and the full per-mass table is published so a reviewer can move the mass with one argument."
+   "detail": "the SGMC-off-to-hidden credit transfer (0.28) comes from a single owner file that has both a live score and a local SGMC-off score. A +/-30% error in it moves the metric-optimal mass from ~12,000 to beyond 50,000 dots; the amendment-A2 rule picks within that flat region and the full per-mass table is published so a reviewer can move the mass with one argument."
   },
   {
    "issue": "H51 location-uncertainty model is this project's own work",
@@ -103,5 +103,5 @@
    "detail": "no portal upload was performed by this repository, no weekly slot is claimed, and every number in the H51 evidence is a local proxy instrument."
   }
  ],
- "scope_note": "H51 claims are historical proxy/format records only; they are not current slot recommendations. H53-A is NO-GO / NO SLOT. No organizer score or score-to-TIFF mapping is asserted."
+ "scope_note": "Legacy receipts inherited from earlier main-branch work. They are not H50-S1 evidence; local proxy results and sibling-repository score notes have not been independently authenticated as organizer scores or mapped to TIFFs. Do not use them for current leaderboard claims, slot decisions, or H50-S1 validation."
 }

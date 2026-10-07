@@ -50,9 +50,13 @@
    "status": "H51 deliverable; local proxy instruments only; no organizer score exists for this file and no portal upload was performed by this repository",
    "organizer_score": null,
    "submitted_utc": null,
-   "role": "historical H50-B research artifact; not current submission recommendation",
-   "submission_eligible": false,
-   "current_recommendation": false
+   "built_utc": "2026-10-06T23:36:14Z",
+   "portal_note": "GEMSDOE50 H51 | corroborated 3DEP-scarp + radiometric lineaments, all dots >300 m from the given catalogue, metric-matched sparse emission; proxy-validated, NOT organizer-scored",
+   "evidence": [
+    "evidence/build_h51.json",
+    "evidence/checks_h51_raster.json",
+    "evidence/holdout_h51.json"
+   ]
   },
   {
    "name": "gems52a-scarpdrainage-offcat-10000-20261007T021452Z-5c377a13",

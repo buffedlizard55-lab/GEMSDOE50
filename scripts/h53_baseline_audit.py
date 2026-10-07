@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Baseline-only audit for the frozen H53-A spatial-holdout protocol.
+"""Re-score the frozen H53-A incumbent set without reading candidate results.
 
-This command must run and write its report before `h53_build.py` or `h53_validate.py` are
-used. It contains no H53 candidate/control code and never reads the hidden competition labels.
+Always write the re-audit to an explicit separate path with ``--output``. The committed
+baseline report is hash-frozen and consumed by `h53_build.py` and `h53_validate.py`; do not
+overwrite it. This audit contains no H53 candidate/control code and never reads hidden labels.
 """
 from __future__ import annotations
 
@@ -19,10 +20,10 @@ from scipy.ndimage import binary_dilation, distance_transform_edt
 REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO / "src"))
 
+from gems51 import grid as g
 from gemsdoe50.common import sha256_file
 from gemsdoe50.holdout import build_spatial_blocks, load_split_spec
 from gemsdoe50.metric import distance_weighted_tversky
-from gems51 import grid as g
 
 SPEC = REPO / "evidence" / "holdout-v1.json"
 SGMC_PATH = REPO / "data" / "external" / "derived_sgmc_faults_100m_u8.tif"
@@ -102,7 +103,12 @@ def _score(truth: np.ndarray, prediction: np.ndarray, evaluation: np.ndarray) ->
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--output", type=Path, default=REPO / "evidence/h53-baseline-20261007.json")
+    parser.add_argument(
+        "--output",
+        type=Path,
+        required=True,
+        help="write a re-audit to a separate path; do not overwrite the hash-frozen baseline evidence",
+    )
     args = parser.parse_args()
 
     if not SPEC.is_file() or not SGMC_PATH.is_file():
@@ -163,10 +169,10 @@ def main() -> int:
             }
 
     # Fixed deterministic tie-break, independent of any H53 candidate result.
-    incumbent = sorted(
+    incumbent = min(
         baselines,
         key=lambda name: (-baselines[name]["pooled_union_of_cores"]["score"], name),
-    )[0]
+    )
     report = {
         "schema": "gemsdoe50.h53-baseline-audit.v1",
         "status": "BASELINE_FROZEN_AWAITING_H53",

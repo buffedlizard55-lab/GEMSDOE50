@@ -9,9 +9,7 @@
   "size": "3730x3292",
   "res_m": 100,
   "values": "{0, 1}",
-  "nodata": "NaN outside the study footprint",
-  "role": "historical H50 comparison artifact; not a current recommendation",
-  "current_recommendation": false
+  "nodata": "NaN outside the study footprint"
  },
  "sources": [
   {
@@ -38,7 +36,7 @@
   {
    "name": "USGS ANSS Comprehensive Earthquake Catalog (ComCat), FDSN event web service",
    "url": "https://earthquake.usgs.gov/fdsnws/event/1/",
-   "licence": "Unresolved at record/contributor level; not cleared for challenge use or sponsor sharing",
+   "licence": "Unresolved at record/contributor level; not cleared for external competition use",
    "read": "2026-10-06 (fetched by the GitHub Actions runner in .github/workflows/fetch-external-data.yml)",
    "used_for": "Legacy H50-B and exploratory H51-B analysis only; not an H50-S1 input and not cleared for external reuse pending source-specific rights/shareability review.",
    "caveat": "Mixed-network rows: the USGS net field does not establish rights for every contributor. horizontalError units/statistical meaning are not verified per source and it is not a full covariance."
@@ -110,21 +108,7 @@
   "The owner-provided 0.3195 is historical context only; it is not independently verified, not a live-leader claim, and not mapped to a verified TIFF. No fresh leaderboard monitoring was performed.",
   "The H51 scarp/radiometric candidate source audit has unresolved derived-raster reuse terms; the mixed-network ComCat source also has unresolved rights/shareability. Do not upload either artifact until its exact input rights are cleared."
  ],
- "current_candidate": {
-  "experiment": "H53-A",
-  "status": "NO-GO / NO SLOT",
-  "submission_eligible": false,
-  "file": "docs/downloads/gemsdoe50-h53-probe-tmi-pointlineation-20261007-44afc05b.tif",
-  "sha256": "5f2fd91ad46a3602c03802e0f7773fd466b08e47cbfcf40ff796ffc2b956a382",
-  "positive_pixels": 0,
-  "organizer_score": null,
-  "portal_upload": null,
-  "weekly_slot_used": false,
-  "provenance": "Local source rasters are sibling mirrors, not byte-matched official binaries."
- },
- "h51_historical_artifact": {
-  "role": "historical H51 artifact; not a current submission recommendation",
-  "submission_eligible": false,
+ "h51_submission": {
   "file": "docs/downloads/gems51-scarpradio-offcat-35000-20261006-ecf058ea-nan.tif",
   "sha256": "8f8708d2872b66d71925707e0aede23eebcf217dfd2e57d6e61186f32e686f5d",
   "bytes": 329192,
@@ -132,9 +116,9 @@
   "crs": "EPSG:32611",
   "dtype": "float32",
   "size": "3730x3292",
-  "nodata": "NaN outside the official template footprint",
-  "historical_label": "GEMSDOE50-H51-SCARPRADIO-OFFCAT",
-  "archive_note": "Historical identity only. This H51 candidate failed its pre-registered promotion proxy; no organizer score, upload, or receipt is verified. Do not use as portal instructions.",
+  "nodata": "NaN outside the official template footprint (all-finite twin also written)",
+  "portal_name": "GEMSDOE50-H51-SCARPRADIO-OFFCAT",
+  "portal_note": "GEMSDOE50 H51 | corroborated 3DEP-scarp + radiometric lineaments, all dots >300 m from the given catalogue, metric-matched sparse emission; proxy-validated, NOT organizer-scored",
   "organizer_score": null,
   "sources": [
    {

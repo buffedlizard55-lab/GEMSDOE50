@@ -19,7 +19,7 @@ jobs:
           python-version: "3.11"
       - name: Install the project and checks
         run: python -m pip install -e '.[test]' ruff
-      - name: Run the complete test suite, claim guardrails and lint
+      - name: Run the complete test suite and lint
         run: |
           python -m pytest -q
           ruff check src/gemsdoe50 src/gems55 scripts/build_h50_site.py scripts/build_h55.py scripts/build_h55_site.py scripts/build_prior_union.py scripts/run_experiment.py scripts/freeze_holdout.py scripts/verify_claims.py tests/test_h50_*.py tests/test_h55.py tests/test_h55_site.py tests/test_site.py tests/test_raster.py tests/test_spatial.py tests/test_geometry.py tests/test_catalog.py

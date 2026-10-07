@@ -1,6 +1,4 @@
-# Historical H51 analysis: can score history map the hidden truth? — No.
-
-> **Archive only.** This negative result and its score-corpus inputs are historical research, not a current submission recommendation or an authenticated leaderboard record. Current status: H53-A NO-GO / NO SLOT; see the [project site](../../index.html).
+# Can the group's score history be inverted into a map of the hidden truth? — No.
 
 **Result (negative).** Discretising the scored domain into 4²…32² blocks and solving the linear
 system implied by the metric for non-negative truth mass per block *does not* predict a held-out

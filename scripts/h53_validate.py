@@ -19,6 +19,8 @@ from scipy.ndimage import binary_dilation, distance_transform_edt
 REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO / "src"))
 
+from gems51 import emit
+from gems51 import grid as g
 from gemsdoe50.common import sha256_array, sha256_file
 from gemsdoe50.h53 import (
     build_probe_density,
@@ -30,7 +32,6 @@ from gemsdoe50.h53 import (
 )
 from gemsdoe50.holdout import build_spatial_blocks, load_split_spec
 from gemsdoe50.metric import distance_weighted_tversky
-from gems51 import emit, grid as g
 
 BASELINE_PATH = REPO / "evidence/h53-baseline-20261007.json"
 BUILD_PATH = REPO / "evidence/h53-build-20261007.json"

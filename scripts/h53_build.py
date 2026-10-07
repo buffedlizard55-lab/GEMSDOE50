@@ -20,6 +20,8 @@ from scipy.ndimage import distance_transform_edt
 REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO / "src"))
 
+from gems51 import emit
+from gems51 import grid as g
 from gemsdoe50.common import sha256_array, sha256_file
 from gemsdoe50.h53 import (
     build_probe_lineation,
@@ -28,7 +30,6 @@ from gemsdoe50.h53 import (
     read_probe_points,
     warm_probe_marks,
 )
-from gems51 import emit, grid as g
 
 BASELINE = REPO / "evidence/h53-baseline-20261007.json"
 PROBE_ZIP = REPO / ".arena/public-inputs/2m_temperature_probe_INGENIOUS_regional_data.zip"

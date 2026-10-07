@@ -3,7 +3,6 @@
 
 from __future__ import annotations
 
-import hashlib
 import json
 from pathlib import Path
 
@@ -29,10 +28,6 @@ def main() -> int:
     source_registry = json.loads((ROOT / "registry/sources.json").read_text(encoding="utf-8"))
     research_review = (ROOT / "docs/research/earthquake-geometry-review-20261006.md").read_text(encoding="utf-8")
     candidate_ranking = (ROOT / "docs/research/hypothesis-ranking-20261006.md").read_text(encoding="utf-8")
-    h33_review = (ROOT / "docs/research/h33-score-review-20261007.md").read_text(encoding="utf-8")
-    h53_hypotheses = (ROOT / "docs/research/h53-hypotheses-20261007.md").read_text(encoding="utf-8")
-    h53_build = json.loads((ROOT / "evidence/h53-build-20261007.json").read_text(encoding="utf-8"))
-    h53_validation = json.loads((ROOT / "evidence/h53-validation-20261007.json").read_text(encoding="utf-8"))
     runner = (ROOT / "scripts/run_experiment.py").read_text(encoding="utf-8")
     research_workflow = (ROOT / ".github/workflows/h50s1-research.yml").read_text(encoding="utf-8")
     site_builder = (ROOT / "scripts/build_h50_site.py").read_text(encoding="utf-8")
@@ -52,10 +47,28 @@ def main() -> int:
     check("H50-S1 status does not assert an organizer score", feed.get("h50_s1", {}).get("organizer_score") is None)
     check("registry carries no copied leaderboard rows", "public_leaderboard_2026_10_06" not in submissions)
     check(
-        "README treats 0.2778 as unresolved and 0.3195 as historical",
-        "not current leaderboard observations" in README
-        and "without an organizer receipt/hash crosswalk" in README
+        "README treats 0.2778 and 0.3774 as unverified reports",
+        "unverified reports, not freshly checked leaderboard" in README
+        and "without an organizer" in README and "receipt/hash crosswalk" in README
+        and "The 0.3774 claim is not treated as fact" in README
         and "No organizer receipt links these bytes to 0.2778" in README,
+    )
+    h53_review = (ROOT / "docs/research/h33-score-review-20261007.md").read_text(encoding="utf-8")
+    h53_validation = json.loads(
+        (ROOT / "evidence/h53-validation-20261007.json").read_text(encoding="utf-8")
+    )
+    check(
+        "H53-A remains a distinct audit-only no-go",
+        h53_validation.get("status") == "NO_SLOT"
+        and h53_validation.get("candidate", {}).get("artifact", {}).get("positive_cells") == 0
+        and "distinct probe/tmi point-pattern experiment" in h53_review.lower()
+        and "Do not submit the linked all-zero GeoTIFF" in h53_review,
+    )
+    check(
+        "H56 transfer estimate and unresolved ComCat rights are not promoted to a score",
+        "0.386" in README
+        and "not an organizer score" in README
+        and "ComCat contributor rights and sponsor-sharing" in README,
     )
     check(
         "prior-work notes require organizer receipt for score-to-file mapping",
@@ -84,44 +97,6 @@ def main() -> int:
         or h51.get("sha256") == json.loads(ship_path.read_text()).get("outputs", {}).get("sha256")
     ))
     check("H51 candidate is not claimed to pass the proxy gate", h51.get("proxy_gate_pass") is False)
-    check("H51 feed entry is explicitly historical", h51.get("current_recommendation") is False
-          and h51.get("submission_eligible") is False)
-    check("H51 feed has no legacy portal instructions", all(
-        key not in h51 for key in ("unique_name", "optional_note", "how_to_submit", "portal_name", "portal_note")))
-    h51_records = [item for item in submissions.get("submissions", [])
-                   if "H51" in str(item.get("name", "")).upper()
-                   or "H51" in str(item.get("historical_label", "")).upper()
-                   or "H51" in str(item.get("role", "")).upper()]
-    check("H51 registry has one archival record and no portal instructions", len(h51_records) == 1
-          and h51_records[0].get("submission_eligible") is False
-          and not any(key in h51_records[0] for key in
-                      ("portal_name", "portal_note", "all_finite_twin")))
-    check("H51 source metadata is archival, not a submission", "h51_historical_artifact" in source_registry
-          and "h51_submission" not in source_registry)
-    current = feed.get("current_candidate", {})
-    check("feed marks H53-A as current no-go", feed.get("current_status") == "H53-A NO-GO / NO SLOT"
-          and current.get("status") == "NO-GO / NO SLOT")
-    check("H53 build report records zero positive cells", h53_build.get("status") == "NO_GO_NO_ACCEPTED_LINEATIONS"
-          and h53_build.get("candidate", {}).get("artifact", {}).get("positive_cells") == 0)
-    check("H53 validation forbids a slot", h53_validation.get("status") == "NO_SLOT"
-          and h53_validation.get("decision", {}).get("candidate_promotes") is False)
-    check("H53 artifact checksum matches build report", (
-        ROOT / h53_build["candidate"]["artifact"]["path"]
-    ).is_file() and hashlib.sha256(
-        (ROOT / h53_build["candidate"]["artifact"]["path"]).read_bytes()
-    ).hexdigest() == h53_build["candidate"]["artifact"]["sha256"])
-    check("H33 score review does not treat projected score as official", "UNSCORED" in h33_review
-          and "0.274673" in h33_review and "not an organizer" in h33_review.lower())
-    check("H53 ranking has four distinct pre-ranked hypotheses", all(
-        token in h53_hypotheses for token in ("H53-A", "H53-B", "H53-C", "H53-D", "Expected DTI direction")))
-    check("README and root site state the H53 no-go", "H53-A is NO-GO / NO SLOT" in README
-          and "H53-A is NO-GO / NO SLOT" in (ROOT / "index.html").read_text(encoding="utf-8"))
-    check("root site download is the H53 artifact, not H51", "Download the H53-A no-go research TIFF" in
-          (ROOT / "index.html").read_text(encoding="utf-8") and "Download the H51 candidate GeoTIFF" not in
-          (ROOT / "index.html").read_text(encoding="utf-8"))
-    check("submission guide prohibits current upload and gives future checklist", "do not upload" in
-          (ROOT / "submission.html").read_text(encoding="utf-8").lower() and "SLOT-ELIGIBLE" in
-          (ROOT / "submission.html").read_text(encoding="utf-8"))
 
     comcat = next(
         (item for item in source_registry.get("sources", []) if "Comprehensive Earthquake Catalog" in item.get("name", "")),

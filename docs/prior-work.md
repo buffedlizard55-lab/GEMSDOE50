@@ -1,6 +1,4 @@
-# Historical prior-work audit — relevant findings, not copied submissions
-
-> This audit is historical background, not a current slot recommendation. The current H53-A result is NO-GO / NO SLOT; see the [current overview](../index.html) and [H53 hypothesis ranking](research/h53-hypotheses-20261007.md).
+# Prior-work audit — relevant findings, not copied submissions
 
 **Checked:** 2026-10-06 UTC. This is a scoped audit of the most recent related project repositories visible under the same GitHub account. It is not a proof that every historical site has been exhaustively examined. Past artifacts are used only as scientific controls/comparators, never as the GEMSDOE50 deliverable.
 

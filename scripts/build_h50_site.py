@@ -75,15 +75,6 @@ def load_h51(path: Path | None = None) -> dict[str, Any] | None:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def load_h53(evidence_dir: Path | None = None) -> tuple[dict[str, Any] | None, dict[str, Any] | None]:
-    evidence_dir = Path("evidence") if evidence_dir is None else Path(evidence_dir)
-    build_path = evidence_dir / H53_BUILD_DEFAULT.name
-    validation_path = evidence_dir / H53_VALIDATION_DEFAULT.name
-    build = json.loads(build_path.read_text(encoding="utf-8")) if build_path.exists() else None
-    validation = json.loads(validation_path.read_text(encoding="utf-8")) if validation_path.exists() else None
-    return build, validation
-
-
 def _pct(value: Any) -> str:
     try:
         return f"{100.0 * float(value):.2f}%"
@@ -125,79 +116,6 @@ Optional note (not evidence of eligibility): <q>{esc(H51_NOTE)}</q><br>
 SHA-256 <span class="hash">{esc(primary['sha256'])}</span> · {int(primary['footprint_nonzero']):,} predicted pixels · {primary['bytes']:,} bytes</p>
 <p class="small" style="color:#f0c58a"><strong>Not organizer-scored; no slot has been used.</strong> The numbers below are local proxy instruments, not hidden labels. This artifact is <strong>not cleared for external upload</strong> while the exact derived-raster license and mixed-network source rights remain unresolved. This project never uploads for you.</p>
 </div></section>"""
-
-
-def h53_hypotheses_short_html() -> str:
-    rows = """<tr><td><strong>1 · H53-A</strong></td><td>2 m temperature-probe point-pattern PCA + GeoDAWN TMI lineament alignment</td><td>0 accepted; no-go</td></tr>
-<tr><td>2 · H53-B</td><td>Depth-progressive MT conductance boundaries (five depth ranges)</td><td>Not implemented; license wording needs verification</td></tr>
-<tr><td>3 · H53-C</td><td>Well/spring chemistry and deep-circulation fingerprints</td><td>Not implemented; raw geochemistry not audited</td></tr>
-<tr><td>4 · H53-D</td><td>Paleo sinter/tufa/travertine corridors</td><td>Not implemented; source bytes not matched to GDR</td></tr>"""
-    return f"""<article class="card span-12"><h2>Pre-implementation geological hypotheses</h2>
-<p>Four distinct candidates were ranked and preregistered before H53-A implementation. The leader failed its frozen geometry and holdout gate; no alternate was promoted post hoc.</p>
-<div class="wide"><table><thead><tr><th>Rank</th><th>Distinct physical signature</th><th>Status</th></tr></thead><tbody>{rows}</tbody></table></div>
-<p><a href="docs/research/h53-hypotheses-20261007.md">Full ranking with layers, novelty, expected DTI direction, cost, permissions and official links →</a> · <a href="docs/research/h53-preregistration-20261007.md">Frozen protocol →</a></p></article>"""
-
-
-def h53_results_block(validation: dict[str, Any] | None) -> str:
-    if not validation:
-        return """<article class="card span-12"><h2>H53-A validation pending</h2><p>No candidate may use a weekly slot until the frozen baseline and spatial controls are recorded.</p></article>"""
-    candidate = validation["candidate"]
-    incumbent = validation["frozen_incumbent"]
-    decision = validation["decision"]
-    folds = "".join(
-        f"<tr><td>{esc(fold)}</td><td>{fmt(candidate['equal_mass_folds'][fold]['score'], 6)}</td>"
-        f"<td>{fmt(incumbent['folds'][fold]['score'], 6)}</td>"
-        f"<td>{fmt(validation['frozen_incumbent']['fold_dti_deltas_candidate_minus_incumbent'][fold], 6)}</td></tr>"
-        for fold in ("NW", "NE", "SW", "SE")
-    )
-    controls = []
-    for name, value in validation["registered_controls"].items():
-        requested = sum(fold["requested_mass"] for fold in value["folds"].values())
-        controls.append(f"<tr><td>{esc(name)}</td><td>{fmt(value['pooled_equal_incumbent_native_mass']['score'], 6)}</td>"
-                        f"<td>{value['total_emitted_cells']:,} / {requested:,}</td>"
-                        f"<td>{'yes' if value['all_fold_masses_match'] else 'no'}</td></tr>")
-    for item in validation["matched_uniform_controls"]:
-        requested = sum(fold["requested_mass"] for fold in item["folds"].values())
-        controls.append(f"<tr><td>uniform draw {item['draw']} (seed {item['seed']})</td>"
-                        f"<td>{fmt(item['pooled_equal_incumbent_native_mass']['score'], 6)}</td>"
-                        f"<td>{item['total_emitted_cells']:,} / {requested:,}</td>"
-                        f"<td>{'yes' if item['all_fold_masses_match'] else 'no'}</td></tr>")
-    ci = validation["subtile_bootstrap"]["percentile_ci_95"]
-    why = "".join(f"<li>{esc(item)}</li>" for item in decision.get("why", []))
-    return f"""<article class="card span-12"><h2>H53-A blocked validation · {esc(decision['slot_decision'])}</h2>
-<div class="metrics"><div class="metric"><strong>{fmt(candidate['native_pooled_dti']['score'], 6)}</strong><span>H53 no-go TIFF DTI</span></div>
-<div class="metric"><strong>{fmt(incumbent['native_pooled_dti']['score'], 6)}</strong><span>frozen comparator DTI (not a recommendation)</span></div>
-<div class="metric"><strong>{candidate['artifact']['positive_cells']:,} / {candidate['equal_mass_gate']['requested_full_grid']:,}</strong><span>candidate dots / requested budget</span></div>
-<div class="metric"><strong>{fmt(ci[0], 4)} to {fmt(ci[1], 4)}</strong><span>95% spatial-subtile bootstrap, paired delta</span></div></div>
-<p><strong>Local proxy only.</strong> Truth is SGMC faults more than 300 m from the supplied catalogue on the frozen spatial cores, not hidden expert labels or a leaderboard score. Among the pinned baseline files, <code>{esc(incumbent['name'])}</code> was highest on this proxy; this older seismicity map is only an incumbent comparator, not a novel validated strategy.</p>
-<div class="wide"><table><thead><tr><th>Macrofold</th><th>H53 equal-mass DTI</th><th>Incumbent DTI</th><th>Delta</th></tr></thead><tbody>{folds}</tbody></table></div>
-<h3>Controls (mass shortfalls shown)</h3><div class="wide"><table><thead><tr><th>Control</th><th>Pooled DTI</th><th>Dots emitted / in-core budget</th><th>All fold masses matched?</th></tr></thead><tbody>{''.join(controls)}</tbody></table></div>
-<ul class="list">{why}</ul>
-<p>Detector audit: {candidate['lineation_audit_recomputed']['clusters_tested']} clusters tested, {candidate['lineation_audit_recomputed']['clusters_accepted']} accepted. Exact details, file hashes and the 16-subtile table are in <a href="evidence/h53-validation-20261007.json">the machine-readable validation report</a>. Score review and caveats: <a href="docs/research/h33-score-review-20261007.md">H33-2-B2 provenance and 0.2778 review</a>.</p></article>"""
-
-
-def h53_methods_block() -> str:
-    return """<article class="card span-12"><h2>H53-A: shallow thermal point geometry + magnetic alignment</h2>
-<p>Within each GDR survey Area, select positive <code>F2mDAB</code> values at or above the within-Area 75th percentile. Join probes within 1.5 km, require ≥5 points, a PCA eigenvalue ratio ≥3, an 0.8–20 km axis, then require ≥50% of samples to be within 500 m and 30° of a high-strength/high-coherence GeoDAWN <code>TMI_up150</code> ridge. Emit a 1.5-pixel Gaussian corridor; exclude predictions within 300 m of the supplied catalogue. No labels or prior prediction pixels enter the feature builder.</p>
-<p><strong>Result:</strong> 145 clusters tested; 0 accepted (113 too small, 24 insufficient TMI alignment, 8 insufficient PCA ratio). No parameters were loosened after this result. See <a href="docs/research/h53-preregistration-20261007.md">the frozen preregistration</a> and <a href="src/gemsdoe50/h53.py">implementation</a>.</p>
-<p><strong>Seismicity caution:</strong> H51-B already tested point/event geometry and was not validated; declustering, injection/mining confounds, event-location uncertainty and matched smoothed-density controls remain unresolved. It is not ranked here as a novel validated strategy.</p>
-<h3>Source permissions and unresolved provenance</h3><ul class="list"><li><a href="https://gdr.openei.org/submissions/1391">GDR INGENIOUS, DOI 10.15121/1881483</a>: CC BY 4.0, attribution required. Local ZIP bytes match a pinned sibling mirror, not the official asset binary; direct official download failed, so no slot.</li><li><a href="https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and">USGS GeoDAWN, DOI 10.5066/P93LGLVQ</a>: official source CC0 1.0; local quantized extension was not independently rebuilt from official source files.</li><li><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">Competition external-data rule</a>: the participant must have rights to use external data in the challenge and share it with the sponsor for evaluation.</li><li><a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">DOE/NLR Official Rules (September 2026)</a>: single float32 GeoTIFF; disclose generative-AI extent/use in the narrative; finalist assets must reproduce results.</li></ul></article>"""
-
-
-def h53_submission_block(build: dict[str, Any] | None, validation: dict[str, Any] | None,
-                         output_dir: Path) -> str:
-    band = h53_download_band(build, validation, output_dir)
-    if not build:
-        return band
-    artifact = build.get("candidate", {}).get("artifact", {})
-    path = artifact.get("path", "docs/downloads/")
-    exists = (output_dir / path).is_file()
-    download = (f'<a class="button" href="{esc(path)}" download>Download the no-go research TIFF</a>'
-                if exists else "The raster file is not available at its expected path.")
-    return f"""{band}<main><section class="pagehead"><div class="shell"><div class="eyebrow">No automated portal access</div><h1>Submission instructions</h1><p class="muted">The current H53-A artifact failed its promotion gate. These instructions prevent accidental use of a no-go file.</p></div></section>
-<section class="main"><div class="shell"><div class="grid"><article class="card span-12"><h2>Current file: research only, do not submit</h2><div class="callout danger"><strong>NO SLOT.</strong> The download is an all-zero no-go artifact; do not upload it. The unique name and optional note below identify the build only and are not submission instructions.</div><p>{download}</p><p><strong>Research name:</strong> <code>{esc(H53_PORTAL_NAME)}</code><br><strong>Optional note for traceability only:</strong> <q>{esc(build['candidate'].get('optional_note', H53_OPTIONAL_NOTE))}</q><br><strong>SHA-256:</strong> <span class="hash">{esc(artifact.get('sha256', 'not available'))}</span></p></article>
-<article class="card span-8"><h2>Manual submission checklist for a future SLOT-ELIGIBLE artifact</h2><ol class="list"><li>Use only a file explicitly marked <strong>SLOT-ELIGIBLE</strong> after the registered blocked-holdout, control, license, and format gates pass. None is eligible now.</li><li>Download the direct single-band float32 GeoTIFF and verify its SHA-256.</li><li>Re-read the <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">official submission format</a>: EPSG:32611, 100 m, same bounds, values in [0,1] within the study footprint, null/NaN outside.</li><li>Confirm external-data permissions and include required attribution and the rules-required generative-AI disclosure in the narrative.</li><li>Sign in to DrivenData manually and upload the one-band TIFF without reprojecting or resaving it.</li><li>Use the eligible build's unique submission name and optional note, then save the portal receipt and score with the exact file hash. Do not claim an upload or score without a receipt.</li></ol></article>
-<aside class="card span-4"><h2>Why no upload?</h2><p>0 accepted lineations; 0 emitted predictions; blocked DTI 0.000000 versus 0.136074 for the comparator. The spatial bootstrap is negative. See <a href="results.html">Results</a>.</p><p><span class="tag">No weekly slot spent</span></p></aside></div></div></section></main>"""
 
 
 def h51_results_block(h51: dict[str, Any], evidence_dir: Path | None = None) -> str:
@@ -331,21 +249,21 @@ def h51_methods_block(h51: dict[str, Any]) -> str:
         f"<td>{esc(item['gain'])}</td></tr>"
         for item in H52_CANDIDATES)
     candidates_html = (
-        '<article class="card span-12"><h2>Historical H52-era candidate ideas (not the current ranking)</h2>'
-        '<p class="muted">These rows were proposals in an older H51-era review and are preserved for context; '
-        'they are not current submission recommendations. The current pre-implementation ranking is '
-        '<a href="docs/research/h53-hypotheses-20261007.md">the H53 review</a>. Full archived text: '
+        '<article class="card span-12"><h2>Candidates not yet tried, ranked by expected DTI gain / cost</h2>'
+        '<p class="muted">Each row names the layers, the physical signature, why it can catch a fault the '
+        'given catalogue misses, how it differs from what this repository already implements, and the free '
+        'official source if new data would be needed. Full text: '
         '<a href="docs/h51-candidates.md">docs/h51-candidates.md</a>.</p>'
         '<div class="wide"><table><tr><th>#</th><th>candidate</th><th>layers</th><th>physical signature</th>'
         '<th>why a missing fault</th><th>difference</th><th>source</th><th>cost</th><th>expected gain</th></tr>'
         + candidate_rows + '</table></div>'
-        '<p><strong>Historical gate note:</strong> the older H51/H52 review used a matched-random-control '
-        'test that is not the current promotion gate. No H51 file is currently slot-eligible. See the '
-        'current <a href="results.html">H53-A blocked results</a> and the current H53 hypothesis ranking '
-        'before considering any future experiment.</p></article>')
-    return f"""<section class="main" id="historical-h51-methods"><div class="shell"><div class="grid">
-<article class="card span-12"><h2>Historical H51 methods and H52 proposals — archive only</h2><p>Not the current hypothesis ranking and not a submission recommendation. These records preserve prior experiment design and local measurements. The current H53-A decision is NO-GO / NO SLOT; the current H53 ranking is linked above.</p></article>
-<article class="card span-8"><h2>Historical H51 method (archive only)</h2>
+        '<p><strong>Rule before spending a weekly slot:</strong> no candidate may go to the portal on instrument '
+        'scores alone. The top candidate must first pass the same spatially blocked test the shipped file passed: '
+        'positive against a matched-mass random control in every frozen macrofold, with the paired subtile '
+        'bootstrap lower bound above zero '
+        '(<a href="scripts/validate_h51_holdout.py">scripts/validate_h51_holdout.py</a>).</p></article>')
+    return f"""<section class="main"><div class="shell"><div class="grid">
+<article class="card span-8"><h2>H51 method, in one page</h2>
 <p><strong>Field.</strong> Two independent physical families, each reduced to an oriented lineament strength with a multi-scale structure tensor (gradient outer-product coherence × gradient magnitude, robust-normalised inside the footprint), then summed with equal weights. No single layer is allowed to carry the ranking on its own.</p>
 <div class="wide"><table><tr><th>family</th><th>layers</th><th>evidence class</th></tr>{fam_rows}</table></div>
 <p><strong>Domain.</strong> Every emitted dot is more than 300 m from any provided-catalogue pixel. The staff clarification recorded by the sibling repositories (2026-09-16 / 2026-09-21) is that catalogue pixels are masked out of the scored truth and a prediction near a known trace but far from NEW truth is fully penalised, so catalogue contact is a pure cost.</p>
@@ -928,7 +846,7 @@ H52_CANDIDATES = [
                        "available guess at a concealed fault",
         "difference": "H19-4/H19-5 used the thermal evidence as a favourability field; this inverts it into "
                       "discrete conduit segments anchored on the nearest structure",
-        "source": "GDR submission 1391 lists CC BY 4.0; local sibling mirror is not byte-matched to official assets; provenance/shareability unresolved",
+        "source": "Geothermal Data Repository submission 1391 and INGENIOUS, already mirrored in data/external/",
         "cost": "3/5", "gain": "medium"},
     {
         "rank": 4, "id": "H52-D", "name": "Coincident DEM slope break + radiometric ratio step",
@@ -1170,7 +1088,7 @@ def h51_block(repo_dir: Path, ship_path: Path, check_path: Path) -> str:
 <h2 style="margin-top:.2em">Download the H51 research-only GeoTIFF</h2>
 <p><a class="button" href="{esc(ship['outputs']['tif'])}" download>Download {esc(ship['name'])}-{esc(ship['stamp'])}.tif</a>
 <a class="button secondary" style="color:#172a33;background:#dcefe9" href="{esc(ship['outputs']['zip'])}" download>Download .zip</a>
-<a class="button secondary" style="color:#172a33;background:#eceae1" href="submission.html">Current H53 status &amp; future gates</a></p>
+<a class="button secondary" style="color:#172a33;background:#eceae1" href="submission.html">How to submit</a></p>
 <p class="sourced">SHA-256 <span class="hash">{esc(ship['outputs']['sha256'])}</span> · {ship['outputs']['bytes']:,} bytes · stamp {esc(ship['stamp'])}</p>
 <div class="metrics">
 <div class="metric"><strong>{ship['budgets']['n']:,}</strong><span>predicted pixels (values 0 / 1 only)</span></div>
@@ -1193,10 +1111,20 @@ placed only by independent evidence: seismicity lineament corridors, TMI magneti
 and thermal-spring alignment — the part of the map no prior submission has touched.</p>
 <p class="sourced">Evidence: <span class="hash">evidence/h51_ship.json</span>,
 <span class="hash">evidence/h51_consensus.json</span>, <span class="hash">evidence/h51_check_submission.json</span>,
-archived analysis <span class="hash">docs/research/h51-analysis.md</span>, and the failed truth-density inversion <span class="hash">docs/research/h51-truth-map.md</span>.</p></article>
-<article class="card span-5"><h2>Archived file notice</h2>
-<p><strong>This file is not currently eligible for a competition slot.</strong> Its historical unique-name and optional-note fields are intentionally not repeated here as portal instructions. Do not upload it based on its old format or uniqueness checks.</p>
-<p>The current experiment is H53-A and its decision is <strong>NO-GO / NO SLOT</strong>. Use the current <a href="submission.html">future-only submission guide</a> for the actual status and acceptance gates.</p></article>
+analysis in <span class="hash">docs/research/h51-analysis.md</span>, ranked hypotheses in
+<span class="hash">docs/research/h51-hypotheses.md</span>, and the failed truth-density inversion in
+<span class="hash">docs/research/h51-truth-map.md</span>.</p></article>
+<article class="card span-5"><h2>Submit it in five steps</h2>
+<ol class="list">
+<li>Download the .tif above and check the SHA-256.</li>
+<li>Open <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">the competition</a> and sign in manually.</li>
+<li>Upload the single GeoTIFF; do not re-save or re-project it.</li>
+<li>Use the unique name and the short note below.</li>
+<li>Record the portal receipt in the repository before claiming a score.</li>
+</ol>
+<p><strong>Unique name:</strong> <code>{esc(ship['name'])}-{esc(ship['stamp'])}.tif</code><br>
+<strong>Optional note:</strong> <q>{esc(ship['claim_note'])}</q></p>
+<p class="sourced">No automated portal access: this project never uploads for you.</p></article>
 </div></div></section>"""
 
 
@@ -1228,8 +1156,9 @@ def three_candidates_card(ship: dict[str, Any] | None, h51: dict[str, Any] | Non
              if shared else "not measured"),
             (f"{ship['gate']['pixels_shared_with_any_prior']} shared px · worst 2 px-proximity IoU "
              f"{fmt(ship['gate']['measured_iou2px_max'], 4)}"),
-            (f'<a class="button" href="{esc(ship["outputs"]["tif"])}" download>Download archived .tif</a> · '
-             f'<a href="{esc(ship["outputs"]["zip"])}" download>.zip (same TIFF)</a>')))
+            (f'<a class="button" href="{esc(ship["outputs"]["tif"])}" download>Download .tif</a><br>'
+             f'<a href="{esc(ship["outputs"]["allfinite"])}" download>all-finite twin</a> · '
+             f'<a href="{esc(ship["outputs"]["zip"])}" download>.zip</a>')))
     if h51:
         primary = h51["outputs"]["primary"]
         leaf = primary["path"].split("/")[-1]
@@ -1295,7 +1224,7 @@ an upload.</p>
 </article></div></section>"""
 
 
-def build_pages(output_dir: Path, report_path: Path,
+def build_pages(output_dir: Path, report_path: Path, tiff_path: Path,
                 evidence_dir: Path | None = None, h51_ship: Path | None = None,
                 h51_check: Path | None = None, h53_ship: Path | None = None,
                 h53_check: Path | None = None,
@@ -1428,7 +1357,7 @@ def build_pages(output_dir: Path, report_path: Path,
             )
         gate_rows_html = "".join(component_rows)
         score_summary = f"""
-<article class="card span-12"><h2>Separate H50-S1 research record — historical proxy only</h2><p>This optional report is not the current H53-A experiment, not a current slot recommendation, and not an organizer score. DTI uses the official 300 m triangular kernel, α=0.2, β=0.8; predictions are compared at equal binary probability mass.</p><h3>Metric and pooled components</h3><div class="wide"><table><thead><tr><th>Method</th><th>Pooled DTI</th><th>Truth cells</th><th>Predicted cells</th><th>TP weight</th><th>FP weight</th><th>FN weight</th></tr></thead><tbody>{"".join(method_rows)}</tbody></table></div><h3>Fold-wise paired scores</h3><div class="wide"><table><thead><tr><th>Macrofold</th><th>H50-S1</th><th>Incumbent ({esc(evaluation["incumbent_method"])})</th><th>Delta</th><th>Predictions</th><th>Truth</th></tr></thead><tbody>{"".join(fold_rows)}</tbody></table></div><p><strong>16-block bootstrap 95% interval:</strong> [{fmt(ci[0], 6)}, {fmt(ci[1], 6)}]. Candidate − incumbent pooled DTI = {fmt(evaluation["candidate_minus_incumbent_pooled_dti"], 6)}.</p></article>
+<article class="card span-12"><h2>Metric and pooled components</h2><p>DTI uses the official 300 m triangular kernel, α=0.2, β=0.8; predictions are compared at equal binary probability mass. Local pooled holdout is not an official test score.</p><div class="wide"><table><thead><tr><th>Method</th><th>Pooled DTI</th><th>Truth cells</th><th>Predicted cells</th><th>TP weight</th><th>FP weight</th><th>FN weight</th></tr></thead><tbody>{"".join(method_rows)}</tbody></table></div><h3>Fold-wise paired scores</h3><div class="wide"><table><thead><tr><th>Macrofold</th><th>H50-S1</th><th>Incumbent ({esc(evaluation["incumbent_method"])})</th><th>Delta</th><th>Predictions</th><th>Truth</th></tr></thead><tbody>{"".join(fold_rows)}</tbody></table></div><p><strong>16-block bootstrap 95% interval:</strong> [{fmt(ci[0], 6)}, {fmt(ci[1], 6)}]. Candidate − incumbent pooled DTI = {fmt(evaluation["candidate_minus_incumbent_pooled_dti"], 6)}.</p></article>
 <article class="card span-6"><h2>Spatial translations</h2><p>32 no-wrap offsets at 5–20 km; 95th percentile DTI {fmt(controls["pooled_dti_q95"], 6)}. Candidate DTI {fmt(evaluation["method_results"]["H50-S1"]["pooled"]["score"], 6)}.</p><details><summary>Show individual controls</summary><div class="wide"><table><thead><tr><th>Control</th><th>Pooled DTI</th></tr></thead><tbody>{control_table}</tbody></table></div></details></article>
 <article class="card span-6"><h2>Origin-year shuffles</h2><p>{time_controls["count"]} refits with shuffled years; 95th percentile DTI {fmt(time_controls["pooled_dti_q95"], 6)}. Candidate DTI {fmt(evaluation["method_results"]["H50-S1"]["pooled"]["score"], 6)}.</p><details><summary>Show individual controls</summary><div class="wide"><table><thead><tr><th>Control</th><th>Pooled DTI</th></tr></thead><tbody>{time_table}</tbody></table></div></details></article>
 <article class="card span-12"><h2>Matched smoothed-density controls</h2><p>Gaussian-smoothed counts from the same relocated catalog events, scored at equal mass on the same blocked holdout. This controls spatial density only; it does not remove aftershocks or mine/injection confounding. Candidate must strictly beat all three scales (300 m, 1 km, and 2 km).</p><div class="wide"><table><thead><tr><th>Density map</th><th>Pooled DTI</th></tr></thead><tbody>{density_table}</tbody></table></div></article>
@@ -1436,9 +1365,9 @@ def build_pages(output_dir: Path, report_path: Path,
 <article class="card span-12"><h2>Scientific and provenance eligibility</h2><p><strong>{esc(eligibility.get("decision", "NOT RECORDED"))}.</strong> A statistical pass alone does not authorize a slot.</p><div class="wide"><table><thead><tr><th>Eligibility gate</th><th>Result</th></tr></thead><tbody>{eligibility_rows}</tbody></table></div><p>{esc(eligibility.get("note", "Eligibility details not recorded."))}</p></article>
 """
     else:
-        score_summary = '<article class="card span-12"><h2>Separate H50-S1 research line</h2><p>No H50-S1 evaluation is included in this H53 results review. H53-A is the current experiment and is NO-GO / NO SLOT; no result here is an organizer score.</p></article>'
+        score_summary = '<article class="card span-12"><h2>Results pending</h2><p>No DTI has been computed. The holdout split and mask hashes are frozen before scoring.</p><p>Run instructions and protocol are in the repository; no submission slot has been used.</p></article>'
 
-    results_body = f"""<main><section class="pagehead"><div class="shell"><div class="eyebrow">Evidence, not leaderboard claims</div><h1>Holdout results</h1><p class="muted">All values below come from a spatial proxy on existing labels. The competition's hidden expert-labeled labels are not available here; no score is organizer-reported.</p></div></section><section class="main"><div class="shell"><div class="grid">{h53_results_block(h53_validation)}{score_summary}</div></div></section></main>"""
+    results_body = f"""<main><section class="pagehead"><div class="shell"><div class="eyebrow">Evidence, not leaderboard claims</div><h1>Holdout results</h1><p class="muted">All values below come from a spatial proxy on existing labels. The competition's hidden expert-labeled labels are not available here.</p></div></section><section class="main"><div class="shell"><div class="grid">{score_summary}</div></div></section></main>"""
 
     if report:
         gate = report["evaluation"]["promotion_gate"]
@@ -1473,14 +1402,7 @@ def build_pages(output_dir: Path, report_path: Path,
     methods_body = """<main><section class="pagehead"><div class="shell"><div class="eyebrow">Preregistered research</div><h1>Methods, sources & limitations</h1><p class="muted">The method was ranked before implementation; the exact spatial split and implementation constants were frozen before DTI calculation.</p></div></section><section class="main"><div class="shell"><div class="grid"><article class="card span-8"><h2>H50-S1: relocated event-plane geometry</h2><p>Use only waveform-relocated (`reloc=1`) Nevada catalog events inside the valid competition footprint. Fit compact local 3-D neighborhoods, require year support and stable horizontal strike, intersect plausible planes with the exact-grid USGS 3DEP terrain elevation surface, and rasterize the resulting diagnostic line proxy. Catalog/DEM vertical-datum reconciliation remains unresolved, so this is not a validated surface trace. Known mapped faults are masked by 300 m for the output; holdout labels are used only for scoring, never for line fitting.</p><p>Frozen parameters, folds, control design, and metric formula are documented in <a href="https://github.com/buffedlizard55-lab/GEMSDOE50/blob/main/docs/h50s1-protocol-addendum.md">the protocol addendum</a> and <a href="https://github.com/buffedlizard55-lab/GEMSDOE50/blob/main/docs/hypotheses-preregistered.md">the ranked preregistration</a>.</p><p>Prior-art and 3–5-hypothesis review: <a href="docs/research/earthquake-geometry-review-20261006.md">seismicity audit</a> and <a href="docs/research/hypothesis-ranking-20261006.md">candidate ranking</a>.</p><p><strong>Comparator policy:</strong> H50-prior is fixed as the primary comparator before holdout scoring. H32-D, H47-S3, and H48-DS are secondary context only; their holdout scores do not select the incumbent. Three same-event Gaussian-smoothed density maps (300 m, 1 km, and 2 km) are required matched controls. No prior prediction pixels are copied to the candidate artifact.</p><p><strong>Slot eligibility:</strong> formal aftershock declustering, mine/injection-site screening, and event-location uncertainty suitable for the raster width remain additional hard gates. Until they pass, any numeric result and unique TIFF are research-only and <strong>NO SLOT</strong>.</p></article><article class="card span-4"><h2>Data & permissions</h2><ul class="list"><li>Nevada catalog: <a href="https://doi.org/10.5281/zenodo.11167510">Zenodo v2</a>, CC BY 4.0; attribution and license link required.</li><li>Competition labels/template: SHA-pinned public Dropbox mirrors from a local source bridge manifest; provenance caveat is in the experiment report.</li><li>New H50-S1 raw data stays in ignored `.arena/`; the report records hashes and access links for verification.</li><li>Inherited ComCat/SGMC/LiDAR/radiometric files are not H50-S1 inputs. ComCat rights/shareability and location uncertainty remain unresolved; legacy refresh workflows are disabled.</li><li>Competition rules require external inputs to be licensed and shareable with the sponsor.</li></ul></article><article class="card span-6"><h2>Scientific limitations</h2><ul class="list"><li>Existing USGS/INGENIOUS labels are an imperfect proxy, not the hidden expert-labeled test set.</li><li>The catalog has no event-specific location covariance; model errors can exceed the 300 m scoring kernel, and orientation bootstrap is not a position-error estimate.</li><li>Formal aftershock declustering and mine/injection-site masks are not yet applied, so the density control alone does not clear those confounds.</li><li>Hypocenter planes are not guaranteed to intersect a mapped surface fault at the projected line.</li><li>Observed earthquakes are biased toward active faults, and waveform relocation is a subset of the full catalog.</li><li>A lineament or local DTI increase is not proof of geothermal productivity or a fault discovery.</li></ul></article><article class="card span-6"><h2>Leaderboard & AI disclosure</h2><p>DrivenData's Terms of Use restrict automated leaderboard monitoring and manual copying without written consent. This site links to the official board but does not poll, scrape, or publish a live snapshot.</p><p>Before any final competition entry, disclose AI assistance as required by the current NLR/DOE rules and describe human review. This repository does not submit on the user's behalf.</p></article></div></div></section></main>"""
 
     if h51:
-        archived_h51 = (
-            '<section id="historical-h51" class="main"><div class="shell"><div class="grid">'
-            '<article class="card span-12"><h2>Historical H51 evidence (archive only)</h2>'
-            '<p>These prior experiments are retained for auditability, not as current submission advice. '
-            'Their proxy results do not establish a route to the hidden competition score.</p></article>'
-            f'{secondary_card}{h51_results_block(h51, evidence_dir)}{h51_html}'
-            '</div></div></section>')
-        results_body = results_body.replace('</main>', archived_h51 + '</main>')
+        results_body = results_body + h51_results_block(h51, evidence_dir)
         methods_body = methods_body + h51_methods_block(h51)
         submission_body = h51_download_band(h51) + submission_body + h51_submission_block(h51)
     if h53:
@@ -1525,6 +1447,7 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--output-dir", default=".")
     parser.add_argument("--report", default=str(REPORT_DEFAULT))
+    parser.add_argument("--tiff", default=str(TIFF_DEFAULT))
     parser.add_argument("--evidence-dir", default="evidence")
     parser.add_argument("--h51-ship", default=str(H51_SHIP_DEFAULT))
     parser.add_argument("--h51-check", default=str(H51_CHECK_DEFAULT))

@@ -1,6 +1,4 @@
-# Historical preregistered geological hypotheses — H50-S1
-
-> This 2026-10-06 H50-S1 preregistration is an archived experiment record, not the current ranking or slot authorization. The active H53 ranking is in [`docs/research/h53-hypotheses-20261007.md`](research/h53-hypotheses-20261007.md); H53-A is NO-GO / NO SLOT. See the [current overview](../index.html).
+# Preregistered geological hypotheses — GEMSDOE50
 
 **Registered:** 2026-10-06 UTC, before implementation. This file freezes the candidate list, expected direction, data requirements, and promotion gate. Before any H50-S1 DTI, review amended the implementation protocol to correct the invalid sea-level plane projection, add a matched smoothed-density control, and separate statistical passage from submission eligibility; see the versioned amendment in [`h50s1-protocol-addendum.md`](h50s1-protocol-addendum.md). The hypothesis ranking and numeric promotion thresholds are unchanged. Later results belong in a separate results document; do not edit these priors to make a failed idea look successful.
 

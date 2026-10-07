@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Regenerate archival feeds and current H53-A no-go status from committed evidence.
+"""Regenerate legacy archival feeds from old project receipts.
 
-This script never fetches a leaderboard or external catalog. Inherited H50/H51 TIFFs
-are historical only and must not be labeled as current submission recommendations.
-Current root pages are built by scripts/build_h50_site.py.
+This script is not used by the current H50-S1 site workflow. It never fetches a
+leaderboard or external catalog and must not label the inherited TIFF as a current
+submission. Current pages are built by scripts/build_h50_site.py.
 """
 
 from __future__ import annotations
@@ -35,30 +35,8 @@ def main() -> int:
     validation = read("submission_validation.json")
     build = read("submission_build.json")
     sources = read("sources.json")
-    h53_build_path = ROOT / "evidence" / "h53-build-20261007.json"
-    h53_validation_path = ROOT / "evidence" / "h53-validation-20261007.json"
-    h53_build = json.loads(h53_build_path.read_text(encoding="utf-8")) if h53_build_path.exists() else None
-    h53_validation = json.loads(h53_validation_path.read_text(encoding="utf-8")) if h53_validation_path.exists() else None
-    h53_artifact = ((h53_build or {}).get("candidate", {}).get("artifact", {}))
-    h53_current = {
-        "status": "NO-GO / NO SLOT" if h53_validation else "research-only; validation pending",
-        "name": (h53_build or {}).get("candidate", {}).get("name"),
-        "file": h53_artifact.get("path"),
-        "sha256": h53_artifact.get("sha256"),
-        "positive_pixels": h53_artifact.get("positive_cells"),
-        "local_dti": (((h53_validation or {}).get("candidate", {}).get("native_pooled_dti", {})).get("score")),
-        "slot_decision": (((h53_validation or {}).get("decision", {})).get("slot_decision", "not evaluated")),
-        "submission_eligible": False,
-        "organizer_score": None,
-        "portal_upload": None,
-        "weekly_slot_used": False,
-    }
 
     (DATA / "no_manual_check.json").write_text(json.dumps({
-        "current_project_status": "H53-A NO-GO / NO SLOT",
-        "current_candidate": h53_current,
-        "role": "historical format/uniqueness audit only; not a current submission recommendation",
-        "do_not_submit": True,
         "generated_from": "registry/submission_checks.json, registry/submission_checks_ci.json",
         "submission": sub.name if sub else None,
         "sha256": sha,
@@ -80,10 +58,6 @@ def main() -> int:
     }, indent=1))
 
     (DATA / "validation.json").write_text(json.dumps({
-        "current_project_status": "H53-A NO-GO / NO SLOT",
-        "current_candidate": h53_current,
-        "historical_experiment": "archived H50 seismicity raster; local proxy only",
-        "do_not_submit": True,
         "generated_from": "registry/submission_validation.json, registry/submission_build.json",
         "submission_scored_on_both_frames": validation,
         "build_diagnostics": build,
@@ -107,11 +81,6 @@ def main() -> int:
         chk = json.loads(h51_check.read_text()) if h51_check.exists() else {}
         tif = ROOT / ship["outputs"]["tif"]
         h51_candidate = {
-            "role": "historical H51 research artifact; not the current recommendation",
-            "current_recommendation": False,
-            "archive_note": ("Historical identity only. H51 failed its pre-registered promotion proxy; "
-                            "no organizer score, upload, or receipt is verified. Do not use as portal instructions."),
-            "submission_eligible": False,
             "file": Path(ship["outputs"]["tif"]).name,
             "sha256": ship["outputs"]["sha256"],
             "bytes": ship["outputs"]["bytes"],
@@ -132,14 +101,14 @@ def main() -> int:
             "portal_upload": None,
             "weekly_slot_used": False,
             "download": ship["outputs"]["tif"],
-            "historical_label": Path(ship["outputs"]["tif"]).stem,
+            "unique_name": Path(ship["outputs"]["tif"]).stem,
+            "optional_note": ship["claim_note"],
+            "how_to_submit": "submission.html",
             "shared_frame_compare": shared_frame,
         }
     (DATA / "feed.json").write_text(json.dumps({
-        "generated_from": "historical receipts plus the current H53-A build/validation; no third-party leaderboard data",
-        "kind": "current H53-A status with historical H50/H51 records; no leaderboard snapshot is published",
-        "current_status": "H53-A NO-GO / NO SLOT",
-        "current_candidate": h53_current,
+        "generated_from": "legacy receipts and H50-S1 project status; no third-party leaderboard data",
+        "kind": "archival status feed; no leaderboard snapshot is published",
         "leaderboard": {
             "published": False,
             "reason": "Prior sibling-repository notes are conflicting and are not a fresh independent official check; no current score or score-to-TIFF mapping is asserted.",
@@ -179,20 +148,12 @@ def main() -> int:
                     break
         print("csv preview: data/comcat_preview.csv (25 rows)")
 
-    # Preserve committed docs/downloads artifacts (including the current H53 no-go
-    # research raster). Merge archived root downloads without deleting newer files.
-    src_downloads, dst_downloads = ROOT / "downloads", DOCS / "downloads"
-    if src_downloads.exists():
-        dst_downloads.mkdir(parents=True, exist_ok=True)
-        for item in src_downloads.iterdir():
-            target = dst_downloads / item.name
-            if item.is_file() and not target.exists():
-                shutil.copy2(item, target)
-    # Assets remain a generated mirror; the download directory is deliberately non-destructive.
-    src_assets, dst_assets = ROOT / "assets", DOCS / "assets"
-    if src_assets.exists():
-        shutil.rmtree(dst_assets, ignore_errors=True)
-        shutil.copytree(src_assets, dst_assets)
+    # site assets and downloads live outside docs/ so the repo stays one source of truth
+    for name in ("downloads", "assets"):
+        src, dst = ROOT / name, DOCS / name
+        if src.exists():
+            shutil.rmtree(dst, ignore_errors=True)
+            shutil.copytree(src, dst)
     print("site feeds written:", sorted(p.name for p in DATA.glob("*.json")))
     return 0
 

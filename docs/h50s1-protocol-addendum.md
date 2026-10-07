@@ -1,6 +1,4 @@
-# Historical H50-S1 implementation protocol addendum
-
-> This 2026-10-06 protocol is retained for reproducibility and does not authorize a current submission. The active experiment is H53-A, which failed and is NO-GO / NO SLOT. See the [current project overview](../index.html) and [H53 preregistration](research/h53-preregistration-20261007.md).
+# H50-S1 implementation protocol addendum
 
 **Version 2 — amended 2026-10-06 UTC, before any H50-S1 DTI was computed.** The initial draft incorrectly intersected a fitted hypocenter plane with sea-level `z=0` and did not include a same-event smoothed-density comparator. Review caught both problems before the Nevada catalog was scored. This amendment keeps the hypothesis ranking and statistical promotion thresholds fixed, replaces the invalid sea-level projection with an explicit terrain-elevation intersection, requires matched same-event density controls at 300 m, 1 km, and 2 km, and separates the statistical holdout gate from scientific/submission eligibility. No H50-S1 DTI, result, or TIFF existed when this amendment was made.
 

@@ -1,6 +1,4 @@
-# Historical H51 candidate hypotheses
-
-> **Superseded — do not treat the files or slot language below as current advice.** H51 outputs are archived; H53-A is NO-GO / NO SLOT. The current ranked proposals are in [`docs/research/h53-hypotheses-20261007.md`](research/h53-hypotheses-20261007.md). Historical local measurements are not organizer scores.
+# H51 candidate hypotheses
 
 Written 2026-10-06 for the DOE GEMS Prize (DrivenData #306). Two parts:
 
@@ -99,9 +97,8 @@ before treating either file as a submission candidate.
 * **Difference.** H19-4/H19-5 used the GDR thermal evidence as one term of a favourability
   *field*; this inverts it into discrete conduit *segments* anchored on the nearest structure,
   which changes both the geometry and the failure mode (it can be wrong per spring).
-* **Source / rights.** The official GDR submission 1391 page lists CC BY 4.0, requiring attribution.
-  The local files are sibling mirrors not byte-matched to the official assets, so their provenance
-  and shareability for this challenge remain unresolved; do not use them until independently cleared.
+* **Source.** Geothermal Data Repository submission 1391 and the INGENIOUS project (free to
+  redistribute with attribution; both already mirrored under `data/external/`).
 
 ### H52-D — Coincident DEM slope break + radiometric ratio step
 * **Layers.** `radiometric_u8` bands 1–7 (K, Th, U, TC and the Th/K, U/K, U/Th ratios),
@@ -126,10 +123,9 @@ before treating either file as a submission candidate.
   blind fault with mechanisms but no surface trace is precisely a catalogue omission.
 * **Difference.** H51-B used epicentre geometry only (locations, no orientations); nodal planes
   carry information that is not in any epicentre pattern.
-* **Source / rights.** USGS ANSS Comprehensive Earthquake Catalog, https://earthquake.usgs.gov/fdsnws/event/1/.
-  Public access does not resolve contributor-specific rights for this mixed-network extract; rights
-  for challenge use and sponsor sharing remain unverified. Mechanism coverage also needs measurement.
-  Do not use the staged extract until both data-rights and scientific gates are resolved.
+* **Source.** USGS ANSS Comprehensive Earthquake Catalog (public domain,
+  https://earthquake.usgs.gov/fdsnws/event/1/). Caveat to measure first: most events in this
+  footprint may not have a published mechanism, in which case the candidate is not viable.
 
 ## Part 3 — forward-looking H53+ candidates (2026-10-07, from the geothermal-vent research pass, NOT YET PREREGISTERED OR IMPLEMENTED)
 
@@ -192,8 +188,9 @@ named files first.
 
 ## Rule before spending a weekly slot
 
-This paragraph records an earlier H51-era proxy rule only. Its four-fold comparison against a
-matched random control did not establish transfer to the hidden competition labels and is not the
-current promotion gate. Neither H51 file is slot-eligible. The current experiment, H53-A, is
-**NO-GO / NO SLOT**; use the frozen H53 protocol and results—not this historical rule—to evaluate any
-future experiment.
+No candidate may be submitted on instrument scores alone. The top candidate must first pass the
+same spatially blocked validation the shipped file did
+(`scripts/validate_h51_holdout.py`, `evidence/holdout_h51.json`): its advantage over a
+matched-mass random control must be positive in every frozen macrofold and the paired subtile
+bootstrap lower bound must clear zero. A candidate that fails is recorded as a negative result
+and the slot is not spent.

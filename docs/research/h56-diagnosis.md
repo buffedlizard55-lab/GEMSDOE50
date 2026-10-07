@@ -4,7 +4,8 @@
 **[OFFICIAL]** read from the organizer's own page, **[MEASURED]** computed here from pinned bytes,
 **[MODEL]** arithmetic from the published equations under stated assumptions, **[LIMIT]** a known
 weakness. No live leaderboard value is read, polled or published here; `0.2778`, `0.3195` and
-`0.3774` are the owner's own reported snapshots, as in `registry/h51_score_corpus.json`.
+`0.3774` are unverified owner/user-reported snapshots, not organizer receipts. The current task's
+0.3774 high-score claim is user-provided; 0.3195 is a separate older snapshot.
 
 ---
 
@@ -96,10 +97,10 @@ From (1), and with `G = 12,226`:
 
 | target | N | required `T` | required coverage `T/G` | required `T/N` |
 | ---: | ---: | ---: | ---: | ---: |
-| 0.2778 (repository best) | 37,654 | 4,384 | 35.9 % | 0.116 |
-| 0.3774 (owner-quoted top) | 30,000 | 5,955 | 48.7 % | **0.199** |
-| 0.3774 | 44,090 | 6,931 | 56.7 % | 0.157 |
-| 0.3774 | 108,000 | 12,020 | 98.3 % | 0.111 |
+| 0.2778 (repository best; attribution unverified) | 37,654 | 4,809 | 39.3 % | 0.1277 |
+| 0.3774 (user-provided claim; unverified) | 30,000 | 5,956 | 48.7 % | **0.199** |
+| 0.3774 | 44,090 | 7,019 | 57.4 % | 0.159 |
+| 0.3774 | 108,000 | 11,843 | 96.9 % | 0.110 |
 
 **[INFERENCE]** The corpus's best *measured* `T/N` on the hidden frame is **0.1277** (`h33-2-b2`
 itself). Every point of score above ~0.28 therefore needs either a detector roughly 1.6x more
@@ -222,18 +223,23 @@ translates into a competitive leaderboard number is untested.**
 
 ## 9. What would actually be needed to beat 0.3774, stated plainly
 
-1. **A trained model on the 19-band feature stack.** The competition ships surface conductivity,
-   depth to conductive base, detrended elevation and its slope, GNSS strain-rate invariants,
-   isostatic gravity and its slope, five magnetic products, a magnetic source-depth estimate and
-   earthquake density at 100 m. **None of those are in this sandbox**: the DrivenData data tab is
-   login-gated and its mirrors are network-blocked here. A U-Net trained with the official
-   Tversky loss on that stack, emitted through the H52 geometry, is the most likely route to the
-   *sustained* 98 % coverage that (1) requires.
-2. **Precision at the 1-px scale.** `seislin` earns `k` at 1 px from truth 2.93x more often than
-   chance while being *depleted* at 3 px. Since `k(0)=1`, `k(1)=0.67`, `k(2)=0.33`, the metric
-   pays roughly 3x more for a 1-px-accurate prediction than for a 2-px one. Any future detector
-   should be judged on 1-px enrichment, not on buffer coverage.
-3. **A real submitted score.** One upload of the H52 file would convert the whole transfer-factor
-   assumption into a measurement and add a 26th hash-pinned row to the corpus. That is the single
-   highest-information action available to the owner, and it is the owner's decision, not this
-   repository's.
+1. **Higher precision or near-saturated coverage.** Under equation (1), the user-claimed 0.3774
+   corresponds to about 48.7% weighted coverage at 30,000 dots and about 96.9% at 108,000 dots,
+   given the assumed `G = 12,226`; the same-mass H33 case needs about 57.4%. Those are conditional
+   arithmetic targets, not evidence that hidden truth has that mass. A detector that improves
+   1-pixel enrichment without duplicating support is a plausible route. H56 later produced a
+   local blocked-holdout gain and a transfer-model estimate of 0.386, but that is not an organizer
+   score and depends on a stated, uncertain transfer factor.
+2. **Treat location precision and family controls seriously.** The seismicity screen found `seislin`
+   earns `k` at 1 px from proxy truth 2.93x more often than chance while being depleted at 3 px.
+   Since `k(0)=1`, `k(1)=0.67`, and `k(2)=0.33`, any future detector should be judged on
+   1-pixel enrichment as well as buffer coverage, against smoothed-density and matched random
+   controls. H53-A's separate probe/TMI geometry failed its own frozen gate; it supplies no evidence
+   for beating 0.3774.
+3. **Do not spend a slot merely to calibrate a model.** No score receipt was obtained here, and
+   this project does not monitor the live leaderboard. Any future upload would require a preregistered
+   candidate that beats the frozen holdout incumbent, complete scientific/format/uniqueness gates,
+   and cleared external-data rights/shareability. The H56 ComCat-derived lineations still have
+   unresolved contributor-specific challenge-use and sponsor-sharing rights; until cleared, no
+   weekly slot is recommended. If a permitted submission later occurs, preserve the exact bytes,
+   submission ID, timestamp, and score receipt before making any score claim.

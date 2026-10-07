@@ -11,40 +11,48 @@ from rasterio.transform import Affine
 from scripts import build_h50_site
 
 
-def _h53_evidence(tmp_path: Path, output: Path) -> Path:
-    root = Path(__file__).parents[1]
-    evidence = tmp_path / "evidence"
-    evidence.mkdir(parents=True, exist_ok=True)
-    for name in ("h53-build-20261007.json", "h53-validation-20261007.json"):
-        (evidence / name).write_bytes((root / "evidence" / name).read_bytes())
-    build = json.loads((evidence / "h53-build-20261007.json").read_text(encoding="utf-8"))
-    artifact = output / build["candidate"]["artifact"]["path"]
-    artifact.parent.mkdir(parents=True, exist_ok=True)
-    artifact.write_bytes(b"no-go fixture placeholder")
-    return evidence
-
-
 def test_static_site_builds_clear_no_slot_pages_from_report(tmp_path: Path):
     output = tmp_path / "site"
-    evidence = _h53_evidence(tmp_path, output)
     report_path = tmp_path / "report.json"
+    tiff_path = tmp_path / "candidate.tif"
+    tiff_path.write_bytes(b"test placeholder")
     report = {
         "evaluation": {
             "method_results": {
                 "H50-S1": {
-                    "pooled": {"score": 0.12, "truth_cells": 100, "prediction_cells": 40,
-                               "tp_weight": 25, "fp_weight": 20, "fn_weight": 75},
-                    "folds": [{"id": "NW", "dti": 0.1, "prediction_cells": 10, "truth_cells": 25}],
+                    "pooled": {
+                        "score": 0.12,
+                        "truth_cells": 100,
+                        "prediction_cells": 40,
+                        "tp_weight": 25,
+                        "fp_weight": 20,
+                        "fn_weight": 75,
+                    },
+                    "folds": [
+                        {"id": "NW", "dti": 0.1, "prediction_cells": 10, "truth_cells": 25},
+                    ],
                 },
                 "H32-D": {
-                    "pooled": {"score": 0.11, "truth_cells": 100, "prediction_cells": 40,
-                               "tp_weight": 22, "fp_weight": 24, "fn_weight": 78},
-                    "folds": [{"id": "NW", "dti": 0.12, "prediction_cells": 10, "truth_cells": 25}],
+                    "pooled": {
+                        "score": 0.11,
+                        "truth_cells": 100,
+                        "prediction_cells": 40,
+                        "tp_weight": 22,
+                        "fp_weight": 24,
+                        "fn_weight": 78,
+                    },
+                    "folds": [
+                        {"id": "NW", "dti": 0.12, "prediction_cells": 10, "truth_cells": 25},
+                    ],
                 },
             },
             "incumbent_method": "H32-D",
             "candidate_minus_incumbent_pooled_dti": 0.01,
-            "promotion_gate": {"pass": False, "decision": "NO_SLOT", "components": {"test_gate": False}},
+            "promotion_gate": {
+                "pass": False,
+                "decision": "NO_SLOT",
+                "components": {"test_gate": False},
+            },
             "subtile_bootstrap": {"percentile_ci_95": [-0.01, 0.02]},
             "translation_controls": {
                 "pooled_dti_q95": 0.09,
@@ -69,21 +77,28 @@ def test_static_site_builds_clear_no_slot_pages_from_report(tmp_path: Path):
             "optional_note": "research only",
             "sha256": "abc123",
         },
-        "submission_artifact": {"unique_name": "candidate.tif", "optional_note": "research only",
-                                "sha256": "abc123"},
     }
     report_path.write_text(json.dumps(report), encoding="utf-8")
     script = Path(__file__).parents[1] / "scripts" / "build_h50_site.py"
     subprocess.run(
-        [sys.executable, str(script), "--output-dir", str(output), "--report", str(report_path),
-         "--evidence-dir", str(evidence)],
-        check=True, capture_output=True, text=True,
+        [
+            sys.executable,
+            str(script),
+            "--output-dir",
+            str(output),
+            "--report",
+            str(report_path),
+            "--tiff",
+            str(tiff_path),
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
     )
     for name in ("index.html", "results.html", "methods.html", "submission.html"):
         assert (output / name).is_file()
     index = (output / "index.html").read_text(encoding="utf-8")
     results = (output / "results.html").read_text(encoding="utf-8")
-    methods = (output / "methods.html").read_text(encoding="utf-8")
     submission = (output / "submission.html").read_text(encoding="utf-8")
     assert "NO SLOT" in results
     assert "smoothed-density-300m" in results
@@ -179,7 +194,7 @@ def test_site_never_links_artifact_when_holdout_gate_failed(monkeypatch, tmp_pat
 
 def _h51_evidence(tmp: Path) -> Path:
     evidence = tmp / "evidence"
-    evidence.mkdir(parents=True, exist_ok=True)
+    evidence.mkdir()
     build = {
         "name": "gems51-test-35000",
         "built_utc": "2026-10-06T23:00:00Z",
@@ -252,18 +267,16 @@ def _h51_evidence(tmp: Path) -> Path:
     return evidence
 
 
-def test_site_keeps_h51_visible_only_as_historical_evidence(tmp_path: Path):
+def test_site_publishes_the_h51_download_and_the_evidence_caveats(tmp_path: Path):
     output = tmp_path / "site"
-    evidence = _h53_evidence(tmp_path, output)
-    _h51_evidence(tmp_path)
-    archived_tiff = output / "downloads" / "gemsdoe50-h51-corridor-consensus-mix-20261007T0200Z.tif"
-    archived_tiff.parent.mkdir(parents=True, exist_ok=True)
-    archived_tiff.write_bytes(b"historical H51 fixture")
+    tiff = tmp_path / "candidate.tif"
+    tiff.write_bytes(b"placeholder")
     report_path = tmp_path / "report.json"
-    report_path.write_text("{}", encoding="utf-8")
+    report_path.write_text("{}", encoding="utf-8")  # no H50-S1 report in this fixture
+    evidence = _h51_evidence(tmp_path)
     script = Path(__file__).parents[1] / "scripts" / "build_h50_site.py"
     subprocess.run([sys.executable, str(script), "--output-dir", str(output), "--report",
-                    str(report_path), "--evidence-dir", str(evidence)],
+                    str(report_path), "--tiff", str(tiff), "--evidence-dir", str(evidence)],
                    check=True, capture_output=True, text=True)
     index = (output / "index.html").read_text(encoding="utf-8")
     results = (output / "results.html").read_text(encoding="utf-8")

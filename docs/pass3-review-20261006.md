@@ -1,6 +1,4 @@
-# Historical pass-3 review against the earlier request (2026-10-06 UTC)
-
-> **Superseded by the 2026-10-07 H53 review.** This record's H51 promotion and upload recommendations are withdrawn. H51 files are historical only; H53-A is NO-GO / NO SLOT. The current acceptance record is in the [README](../README.md), [results page](../results.html), and [H33 score review](research/h33-score-review-20261007.md).
+# Pass-3 re-check against the original request (2026-10-06 UTC)
 
 This file closes the third review pass. Pass 1 built and verified the H51 candidate, Pass 2 hunted bugs
 and edge cases, and Pass 3 re-read the original request line by line and checked every clause against an

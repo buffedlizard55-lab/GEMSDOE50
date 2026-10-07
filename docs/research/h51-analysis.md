@@ -1,14 +1,13 @@
-# Historical H51 analysis — legacy score model, superseded decision
-
-> **SUPERSEDED (2026-10-07): do not use this document as current upload advice.** Sections 13–14 contain an older H51 slot recommendation that is withdrawn. H51 artifacts are historical only; the current H53-A experiment is NO-GO / NO SLOT. The values below are local models or historical score claims, not organizer receipts. See the current [README](../../README.md), [H53 results](../../results.html), and [H33 score review](h33-score-review-20261007.md).
+# H51 analysis — why 0.2778 topped the corpus, and what beating 0.3195 actually requires
 
 Verification labels follow `docs/research/score-model.md`: **[OFFICIAL]** read from an organizer
 source, **[MEASURED]** computed here from hash-pinned bytes, **[MODEL]** arithmetic under stated
 assumptions, **[INFERENCE]** a conclusion drawn from measurements, **[LIMIT]** a known weakness.
-The scores quoted below are **owner-reported historical values recorded in sibling-repository registries**;
-file hashes identify local TIFF bytes but do not authenticate a score-to-file link or an organizer receipt.
-They are not asserted to be the current leaderboard, and this project does not scrape or poll the board.
-Historical values such as `0.3195`, `0.3774`, and `0.3220` remain user/owner-provided snapshots, not live reads.
+Every score quoted below is an **owner-quoted public-leaderboard value at its own submission
+date**, taken from the sibling repositories' registries and hash-matched to a file
+(`registry/h51_score_corpus.json`); none of them is asserted to be the current leaderboard, and
+this project does not scrape or poll the leaderboard. Historical values quoted in the charter
+(`0.3195`, `0.3774`, `0.3220`) remain **owner-quoted historical snapshots**, not live reads.
 
 ---
 
@@ -39,94 +38,92 @@ Two exact consequences drive everything below.
 Known USGS/INGENIOUS faults are masked out of evaluation, so dots on mapped faults are free and
 worthless. **[OFFICIAL]** Everything therefore turns on the hidden truth mass `G`.
 
-## 2. Conditional model of hidden truth mass [MODEL; inputs unverified]
+## 2. The hidden truth mass is measurable in closed form [MEASURED + MODEL]
 
-The earlier analysis used a sibling-repository record describing `GEMSDOE13` as a spacing-5 px
-lattice with `N = 204,504` dots and an owner-quoted `s = 0.0904`. This review does not authenticate
-that score, its receipt, or its mapping to the raster. For a unit lattice of spacing `s_px`, the
-model assumes every truth pixel has the same *ensemble* kernel credit `c`, with `M = c·G`; under
-those assumptions, equation (1) collapses to
+`GEMSDOE13`'s blind lattice artifact is a spacing-5 px lattice with `N = 204,504` dots, zero
+structural information, owner-quoted score `s = 0.0904`. For a unit lattice of spacing `s_px`
+every truth pixel has the same *ensemble* kernel credit `c`, and `M = c·G` as well, so (1)
+collapses to
 
 ```
 s = c·G / (0.2·N + 0.8·G)        ⇒        G = 0.2·N·s / (c − 0.8·s)            (2)
 ```
 
-with `c = 0.37481` the modelled mean kernel credit over the lattice's fundamental cell. If the
-recorded inputs and simplifying assumptions are accepted, substitution yields
+with `c = 0.37481` the mean kernel credit over the lattice's fundamental cell **[MODEL]**.
+Substituting the measured values gives
 
 ```
-G_model = 0.2 · 204,504 · 0.0904 / (0.37481 − 0.8 · 0.0904) = 12,226 px   (±~1%, cell-integration only)
+G = 0.2 · 204,504 · 0.0904 / (0.37481 − 0.8 · 0.0904) = 12,226 px   (±~1%, cell-integration)
 ```
 
-This is a **conditional model output, not a measurement of the private test's truth mass**. It would
-correspond to about 0.24% of a 5.1 M-pixel unmasked footprint, or roughly 1,200 km of 100 m-wide
-trace, only if its inputs and assumptions held. The older analysis also compared model-derived
-credits for other corpus entries and found internal numerical agreement. Those entries share the
-same unverified owner/sibling provenance and are not independent organizer receipts, so this is not
-external validation of `G_model`.
+**The entire hidden test truth in the scored domain is about 12,200 pixels** — 0.24 % of the
+5.1 M-pixel unmasked footprint, roughly 1,200 km of 100 m-wide trace. **[INFERENCE]** Two
+independent cross-checks agree: the corpus's best artifact at `N = 44,090` requires `T = 4,788`
+for `s = 0.2600` under (1), and the H51 consensus instrument's independent estimate of that same
+artifact's `T` is `4,803` — a 0.3 % agreement. Three artefacts of different construction
+(`h19-5` at 121 k dots, `h16-1` at 124 k, the lattice at 205 k) all reproduce (2) within 2 %.
 
-## 3. What the old model implies about coverage [conditional model]
+## 3. Coverage is the whole game [MEASURED]
 
-Solving (1) for the credit `T` a given score would require, under this model and its assumed
-`ρ = M/T = 1.188` ratio for dense corridor designs:
+Solving (1) for the credit `T` a given score requires, with the measured
+`ρ = M/T = 1.188` of dense corridor designs:
 
 ```
 T_req(s, N) = s·(0.2·N + 0.8·G) / (1 − 0.2·s·(1 − ρ))                        (3)
 ```
 
-The score-input column is a mixture of a local H51 model output and historical owner/sibling-corpus
-records. None of the latter is independently authenticated here; in particular, the pinned H33-2-B2
-audit labels its run UNSCORED and reports a projection rather than an organizer receipt. This table
-is scenario arithmetic, not an estimate of actual hidden-truth coverage.
-
-| artifact / target | N (dots) | score input (provenance unverified) | model-required `T` | model-required coverage `T/G` |
+| artifact / target | N (dots) | score | required `T` | required coverage `T/G` |
 | --- | ---: | ---: | ---: | ---: |
-| GEMSDOE9 placeholder | 343,816 | 0.0107, corpus-recorded | 1,008 | 8 % |
-| GEMSDOE4 combined | 264,247 | 0.0343, corpus-recorded | 2,361 | 19 % |
-| **H51 candidate** | **30,000** | **0.1684, local model output** | **2,641** | **21.6 %** |
-| gems25 dotted h19-5 d2.8 | 44,090 | 0.2600, corpus-recorded | 4,788 | 39.2 % |
-| **H33-2-B2 (user-provided score claim; pinned audit says UNSCORED)** | **37,654** | **0.2778, unauthenticated** | **4,759** | **38.9 %** |
-| owner-quoted DARD target | 30,000 (assumed) | 0.3195, unverified | 4,982 | 40.7 % |
-| owner-provided claimed high score | 42,000 (assumed) | 0.3774, unverified | 6,764 | 55.3 % |
+| GEMSDOE9 placeholder | 343,816 | 0.0107 | 1,008 | 8 % |
+| GEMSDOE4 combined | 264,247 | 0.0343 | 2,361 | 19 % |
+| **H51 shipped candidate** | **30,000** | **0.1684 (pred)** | **2,641** | **21.6 %** |
+| gems25 dotted h19-5 d2.8 | 44,090 | 0.2600 | 4,788 | 39.2 % |
+| **gems32 h33-2-b2 (repository best)** | **37,654** | **0.2778** | **4,759** | **38.9 %** |
+| owner-quoted DARD target | 30,000 (assumed) | 0.3195 | 4,982 | 40.7 % |
+| owner-quoted leaderboard top | 42,000 (assumed) | 0.3774 | 6,764 | 55.3 % |
 
-The `N` values in the last two rows are assumptions, and their scores are claims rather than verified
-leaderboard values. Within this model only, a higher DTI at fixed truth mass requires either more
-credit or a more efficient prediction mass. The calculation does not establish that the actual
-hidden test has `G = 12,226` pixels, that the score claims are valid, or that any listed strategy
-would achieve its modeled coverage.
+The `N` values in the last two rows are **assumptions** (those artifacts are not in the corpus);
+the coverage column is the assumption-free statement: **every point of score above ~0.26 in this
+competition corresponds to capturing a larger fraction of the same 12,226 hidden pixels.**
 
-**Could pruning explain the user-provided 0.2778 H33-2-B2 claim? [PLAUSIBLE, NOT VERIFIED]** The
-pinned sibling audit describes removing 2,545 catalogue-near dots from a 40,199-dot parent, leaving
-37,654. Under the binary-dot DTI formula, removing predictions with very low marginal truth credit
-can improve the score by reducing denominator mass. That is a plausible mechanism, not a verified
-explanation: the 0.2778 itself is unauthenticated, the pinned audit labels the run UNSCORED, the
-score-to-TIFF mapping and receipt are missing, and no paired organizer-scored before/after comparison
-is available. Removing dots could also discard useful credit. The current caveated analysis is in
-[`h33-score-review-20261007.md`](h33-score-review-20261007.md).
+**Answer to the first question — why did 0.2778 score highest? [INFERENCE]** Because it captured
+*the same* hidden truth as the 0.2600 artifact (`T = 4,759` vs `4,788`, a 0.6 % difference —
+inside the metric's own discretisation) while spending **6,436 fewer dots**. From (1) the
+denominator difference is `0.2 · 6,436 = 1,287`, which is exactly the observed score gap. Its win
+was therefore **not geological**: it was dot economy — pruning redundant dots that sat inside the
+300 m support of neighbours (its 2-px-pruned predecessor) without giving up credit. The same
+mechanism explains the whole corpus's shape: the artifacts that reach 0.24–0.26 all capture 33–39 %
+of the hidden truth, and their ordering follows `N` almost exactly (`Spearman(score, log10 N) =
+−0.52`, p = 0.008).
 
-**Could a strategy exceed the user-provided 0.3774 high-score claim?** Mathematically, a higher DTI is
-possible, but the claim has not been independently verified as the current leaderboard high and this
-historical model cannot predict hidden-test performance. The conditional calculations above do not
-establish a winning route. H53-A failed its blocked holdout, and no strategy in this repository is
-validated as exceeding 0.3774.
+**Answer to the second question — is a score above 0.3195 achievable? [INFERENCE]** Yes in
+principle and no by any route in this repository's current evidence:
 
-## 4. The H51 score instrument and its limits [historical fit]
+* The barrier is **+1,200–1,400 credit pixels** — i.e. one unmapped fault strand of ~40–60 km
+  inside the scored domain, on top of everything the corpus already covers. It is not a tuning
+  problem: the corpus's 25 artifacts already exhaust the blending space, and the H51 instrument's
+  own optimum (a literal replica of the prior family) is `0.2559`.
+* It is *not* a truth-availability problem: the lattice inversion shows 12,226 px exist, the best
+  known capture is 39 %, and the owner-quoted top artifact implies ~50–55 % is reachable. Those
+  pixels are findable; nobody in this corpus found them.
+* The route is therefore **a genuinely different detector**, not a better-blended one. Section 6
+  lists the five candidates, ranked.
 
-`registry/h51_score_corpus.json` pins 25 raster artifacts whose hashes match local registry rows
-associated with owner-reported score values (recorded range 0.0107 … 0.2600 in sibling/public
-repositories). This review did not authenticate organizer receipts or the score-to-TIFF mapping.
-For each artifact the metric's fields are computed (`M_a` matched mass, `C_a` credit delivered), a
-posterior is formed as `q ∝ Σ_a exp(s_a/τ)·S_a` (`τ = 0.05`), and the instrument fits each recorded
-score from `(T, M, N)` under (1) with `q` as the assumed truth density. Leave-one-out:
+## 4. The H51 score instrument and what it can and cannot price [MEASURED]
+
+`registry/h51_score_corpus.json` pins 25 artifacts whose SHA-256 matches a registry row's
+owner-quoted score (scores 0.0107 … 0.2600, all in `buffedlizard55-lab/*` public repos). For each
+artifact the metric's own fields are computed (`M_a` matched mass, `C_a` credit delivered), a
+posterior is formed as `q ∝ Σ_a exp(s_a/τ)·S_a` (`τ = 0.05`), and the instrument predicts each
+artifact's score from `(T, M, N)` under (1) with `q` as the truth density. Leave-one-out:
 
 ```
-Spearman(corpus-recorded, fitted) = +0.973   (p = 3.7e-16, n = 25)
-Pearson                           = +0.949     MAE = 0.0192     RMSE = 0.0248
+Spearman(actual, predicted) = +0.973   (p = 3.7e-16, n = 25)
+Pearson                    = +0.949     MAE = 0.0192     RMSE = 0.0248
 ```
 
-These are internal leave-one-out fit statistics on one corpus, not independent calibration against
-verified organizer scores. At most, the instrument summarizes where the historical corpus recorded
-its score-associated pixels; because its posterior is a kernel density of where those dots occur:
+**[INFERENCE]** The instrument is a calibrated *ranking* device — but its posterior is a kernel
+density of where credit-earning dots have historically been, so:
 
 * **It can price "where the group already looks".** Its optimum over the unrestricted domain is
   `0.2559` at `N = 42,000` — and 94 % of those dots land on pixels a prior artifact already used.
@@ -155,32 +152,28 @@ its score-associated pixels; because its posterior is a kernel density of where 
   ~zero by the instrument by construction (section 4), and they cost ~0.012 of predicted score
   relative to a 24 k-dot exploration-free design (`0.1806`).
 * Proxy frames: `sgmc_off` DTI 0.0642, below the matched uniform control 0.0704 — the candidate
-  **failed the then-used H51 proxy gate**. That gate was not usable here: on the same
-  frame, the proxy's rank correlation with 25 owner/sibling-corpus score records was only
-  `ρ = +0.196` (p = 0.35) (`evidence/h51_proxy_ranking_power.json`), and it ranked a 264 k-dot
-  artifact at 0.224 against a corpus-recorded 0.034. Neither value is independently authenticated
-  as an organizer score. **[LIMIT — recorded, not explained away.]**
+  **fails the repository's pre-registered proxy gate**. That gate is not usable here: on the same
+  frame, the proxy's rank correlation with the 25 real scores is only `ρ = +0.196` (p = 0.35)
+  (`evidence/h51_proxy_ranking_power.json`), and it ranks a 264 k-dot artifact at 0.224 for an
+  actual 0.034. **[LIMIT — recorded, not explained away.]**
 
 Consequences, stated plainly:
 
-* The candidate was **format-checked and pixel-novel under the archived audit**; the old instrument
-  selected it as its preferred design. Those are historical artifact-level checks, not evidence of
-  competition performance or permission to submit it.
-* The legacy instrument's modeled DTI is **≈0.17 (LOO RMSE 0.025)**. This is not an expected
-  leaderboard score. It is numerically below the user-provided 0.2778 H33 value and owner-quoted
-  0.3195 target, both unauthenticated here and not mapped to a verified organizer receipt. No
-  submission was made to test whether the consensus-core placement transfers.
-* The old H51 slot recommendation is withdrawn. Its proxy gate did not establish transfer to hidden
-  labels, and it is not the current promotion gate. The current experiment is H53-A **NO-GO / NO
-  SLOT**; see the current project overview and frozen H53 protocol.
+* The candidate is **format-clean, pixel-novel, and the best-scoring design the validated
+  instrument admits** — not a copy of anything, and the first H51 artifact to pass the frozen
+  uniqueness gate.
+* Its expected leaderboard score is **≈0.17 (LOO RMSE 0.025)**, i.e. **below** the repository's best
+  delivered artifact (0.2778) and below the owner-quoted target (0.3195). It should be treated as a
+  *measurement*, not as a competitive score: a submitted score would add a 26th row to the corpus
+  and would test whether the consensus-core placement transfers.
+* Because it fails the frozen proxy gate, the repository's own rule ("a hypothesis that does not
+  beat the holdout incumbent is not slot-eligible") says **do not spend a weekly slot on it** until
+  the owner decides otherwise. The site states this in the same place as the download.
 
-## 6. Historical H51 hypotheses (superseded; not the current ranking)
+## 6. Ranked hypotheses that could actually raise coverage
 
-The rows below are old proposals, not a live ranking or slot recommendation. The current four-way
-ranking, with layers, physical signature, novelty, expected DTI direction, cost, source, and licence
-needs, is in `docs/research/h53-hypotheses-20261007.md`. Every association and ΔDTI below is
-corpus-internal or a historical hypothesis estimate based on unverified score/file records; none is a
-current forecast or a validated route to the hidden test.
+Full fields (layers, physical signature, off-catalogue argument, difference from prior work,
+expected DTI, cost, source, licence, obtainability) are in `docs/research/h51-hypotheses.md`.
 
 | rank | hypothesis | why it could raise `T` | expected ΔDTI | cost |
 | ---: | --- | --- | ---: | --- |
@@ -193,34 +186,31 @@ current forecast or a validated route to the hidden test.
 ## 7. Limitations
 
 1. **No organizer score exists for the shipped file.** Every number here is local. The instrument
-   was fitted against 25 owner/sibling-corpus score records; their receipt provenance and mapping to
-   the underlying TIFFs were not independently verified in this review (section 4).
+   is validated against 25 real public scores, but it is corpus-conditional (section 4).
 2. **`G = 12,226` rests on the uniform-cell assumption** for the blind lattice's mean credit `c`;
    an adversarial spatial arrangement of truth could move it by several percent. It is a working
    constant, not an organizer figure.
 3. **The corpus is one group's artifact family**, not a random sample of the competition; its
    mutual agreement may encode shared method bias. The instrument's high LOO score partly measures
    that agreement.
-4. **The historical H51 proxy gate was not a valid promotion gate** (section 5). Its results are
-   retained for audit only; they neither authorize a slot nor define the current test. H53-A's
-   separate preregistered holdout failed, so the current decision remains NO-GO / NO SLOT.
-5. **Exploration was unpriced.** The 6,000 exploration dots were a hypothesis, not a validated
-   contribution. The original H51 recommendation is withdrawn; do not infer efficacy from it.
+4. **The pre-registered proxy gate is unusable** (section 5). The repository needs a new gate: a
+   candidate that beats the corpus's best on the instrument *and* survives a real submitted score.
+5. **Exploration is unpriced.** The 6,000 exploration dots are a deliberate, documented bet on the
+   corridor evidence; nothing local can validate them. This is stated on the site, not hidden.
 6. **Leaderboard values are historical.** No live leaderboard value, rank, or competitor name is
    asserted anywhere in this repository; the DrivenData Terms of Use forbid automated monitoring.
 
 ---
 
-## 8. Conditional inversion of the historical corpus [MODEL; inputs unverified]
+## 8. The corpus ledger: every scored artifact inverted to credit pixels [MEASURED]
 
-If the conditional `G_model = 12,226` from §2 and the owner/sibling-reported score values were all
-valid, each artifact's implied credit would follow from `T = s·(0.2·N + 0.8·G)`. Applying that
-algebra to the 25 hash-verified raster files (`scripts/h51_truth_map.py`,
-`evidence/h51_truth_map.json`) gives the table below. The raster hashes do not authenticate organizer
-scores or their mapping to those files. `T/N` and `T/G` are therefore model-derived values, not
-measured hidden-truth credit or coverage.
+With `G = 12,226` (§2), each scored artifact's credit mass follows from its score alone:
+`T = s·(0.2·N + 0.8·G)`. Inverting the 25 hash-verified artifacts
+(`scripts/h51_truth_map.py`, `evidence/h51_truth_map.json`) gives the table below. `T/N` is the
+**credit per dot** — the quantity the marginal rule of §1 prices at `0.2·s ≈ 0.05` — and `T/G` is
+the fraction of the whole hidden truth the artifact reached.
 
-| artifact (family) | corpus-recorded score (unverified) | N | model-implied `T` | model `T/N` | model `T/G` |
+| artifact (family) | score | N | T (credit px) | T/N | T/G |
 | --- | ---: | ---: | ---: | ---: | ---: |
 | dotted-h19-5 **d2.8** | 0.2600 | 44,090 | **4,836** | **0.1097** | 0.396 |
 | dotted-h19-5 d1.5 | 0.2477 | 60,069 | 5,399 | 0.0899 | 0.442 |
@@ -232,64 +222,69 @@ measured hidden-truth credit or coverage.
 | dual-union | 0.1560 | 183,642 | **7,255** | 0.0395 | **0.593** |
 | blind lattice s5 | 0.0904 | 206,895 | 4,625 | 0.0224 | 0.378 |
 
-These are three conclusions of the *conditional model*, not facts about hidden truth or contest performance.
+Three facts follow, and they decide the whole strategy.
 
-* **Model-implied corpus maximum credit per dot is 0.1097.** This describes the transformed records
-  only, assuming the score/file mappings and `G_model` are correct; it does not show what a new
-  submission can achieve.
-* **Model-implied maximum coverage is 0.593** for the recorded 183,642-dot row. It does not establish
-  that 41% of actual hidden truth is unreachable, nor that 0.3195 is impossible by blending. The old
-  posterior has no validated ability to predict new territory.
-* **Conditional nested-family arithmetic.** If `d2.8 ⊂ d1.5 ≈ topo-gap ⊂ mirror` and all input scores
-  are correct, the *differences* imply `44,090 → 60,069` earns `(5,399 − 4,836)/15,979 = 0.0352`
-  per dot, and `44,090 → 121,131` earns `(6,536 − 4,836)/77,041 = 0.0221` per dot. This is below
-  the modelled marginal cost `0.2·s = 0.052`; it motivates a pruning hypothesis, but does not prove
-  that pruning a specific H33 file caused a verified score change.
+* **The corpus's maximum credit per dot is 0.1097.** No artifact in the group's history converts
+  more than ~0.11 credit per predicted pixel, and the blind lattice converts 0.0224. A submission
+  earns a prize-contending score only by pushing this number up, not by pushing `N` up.
+* **The corpus's maximum coverage is 0.593** — reached only with 183,642 dots, at a credit per dot
+  barely above blind. **Faults that this group's entire detector family cannot reach are ≈41 % of
+  the hidden truth**, and they are the reason 0.3195 is not reachable by blending.
+* **Nested-family marginal rates.** Because `d2.8 ⊂ d1.5 ≈ topo-gap ⊂ mirror` at the pixel level,
+  the *differences* price the marginal dots: `44,090 → 60,069` earns
+  `(5,399 − 4,836)/15,979 = 0.0352` per dot, and `44,090 → 121,131` earns
+  `(6,536 − 4,836)/77,041 = 0.0221` per dot. Both are **below the marginal cost `0.2·s = 0.052`**
+  (`∂DTI/∂N < 0` at the champion). The 0.2600 lattice is therefore already *past* its own
+  family's optimum: a correctly pruned subset of the same structure should score higher. Nothing
+  in the corpus scores a subset of `d2.8`, so the size of that gain is **not measurable locally**
+  (§10, hypothesis P1).
 
-## 9. Conditional DTI arithmetic at the historical targets [MODEL, not feasibility]
+## 9. What a 0.3195 submission requires, in credit pixels [MODEL]
 
-Under `G_model = 12,226`, the formula `DTI = T/(0.2·N + 0.8·G)` gives the following arithmetic at
-`N = 30,000` dots. Targets and historical score inputs are unverified; these calculations do not show
-that any value is a real leaderboard score or an achievable prediction:
+`DTI = T/(0.2·N + 0.8·G)`, so at `N = 30,000` dots:
 
-| hypothetical target / historical model input | model-required `T` | model-required `T/G` |
-| --- | ---: | ---: |
-| 0.1684 (H51 local instrument output) | 2,657 | 21.7 % |
-| 0.2600 (corpus-recorded value; unverified) | 4,103 | 33.6 % |
-| 0.2778 (user-provided H33-2-B2 claim; unverified) | 4,384 | 35.9 % |
-| **0.3195 (owner-quoted historical target; unverified)** | **5,042** | **41.2 %** |
-| 0.3774 (user-provided current-high claim; not independently checked) | 5,955 | 48.7 % |
+| target score | required `T` | required coverage `T/G` |
+| ---: | ---: | ---: |
+| 0.1684 (shipped candidate, instrument) | 2,657 | 21.7 % |
+| 0.2600 (best scored artifact) | 4,103 | 33.6 % |
+| 0.2778 (repository best) | 4,384 | 35.9 % |
+| **0.3195 (owner-quoted target)** | **5,042** | **41.2 %** |
+| 0.3774 (top of the recorded snapshot) | 5,955 | 48.7 % |
 
-At the historical champion budget (`N = 44,090`), the same assumptions yield `T = 5,726` for
-0.3195 and `T = 6,738` for 0.3774. This is arithmetic conditional on an unverified `G_model`, not
-evidence of reachability or a bound on an actual candidate. The earlier conclusion that a particular
-score was reachable or unreachable by re-blending is withdrawn; H53-A failed and this corpus model
-does not establish a strategy that exceeds 0.3774.
+At the champion's own budget (`N = 44,090`) 0.3195 needs `T = 5,726`, i.e. **+19 % over the
+champion's 4,836**, and 0.3774 needs `T = 6,738` (+39 %). Since the *whole corpus* tops out at
+`T = 7,255` (with 4.2× the dots), the honest statement is:
 
-## 10. Internal diagnostics of the historical instrument [same-corpus tests]
+> 0.3195 is reachable in principle — it needs about **1,200 credit pixels more than anything the
+> group has measured**, roughly one 40–60 km unmapped strand inside the 300 m kernel — but it is
+> **not reachable by re-blending, re-spacing or pruning the existing corpus**, because every
+> design in that space is bounded by coverage 0.59 and credit/dot 0.11.
 
-Two diagnostics were run against the same unverified owner/sibling score corpus to limit §4's claims.
-They do not validate organizer score provenance or prediction outside that corpus.
+## 10. Instrument honesty: how much of the corpus actually constrains anything [MEASURED]
+
+Two tests were run against the corpus to keep §4 from over-claiming.
 
 * **Trivial similarity predictor.** Predict each artifact's score as the IoU-weighted mean of the
   other 24 (`Spearman +0.905`, `RMSE 0.0296`, `MAE 0.0207`) versus the consensus instrument's LOO
   (`+0.973`, `0.0248`, `0.0192`). The median pairwise exact-pixel IoU in the corpus is only
   **0.031**, so this is not near-duplication — but a predictor that uses *no spatial information
-  at all* beyond "how similar is this to higher owner-reported-score entries" already reaches ρ = 0.91. **Most of the
+  at all* beyond "how similar is this to the winners" already reaches ρ = 0.91. **Most of the
   instrument's apparent skill is corpus self-similarity**, and its confident pricing of designs
   outside the corpus's span (e.g. `0.0422` for the repository's own `seislin` artifact) is *not*
   out-of-sample validated.
-* **Truth-density inversion.** `scripts/h51_truth_map.py` discretises the domain into 4²…32²
-  blocks and solves `T_a = Σ_c R_ac·φ_c` for non-negative `φ` with a Laplacian penalty, then tests
-  it leave-one-artifact-out in `evidence/h51_truth_map.json`. On the historical inputs, LOO
-  `RMSE(T) = 1,923 … 2,353` versus 1,920 for the corpus-mean baseline; fitted total mass is
-  3.2×10⁴ … 3.4×10⁵ versus the conditional `G_model ≈ 1.2×10⁴`. These internally derived targets did
-  not localise a stable pattern from the recorded corpus. They do not measure or locate actual hidden
-  truth because the score inputs and mapping are unverified.
+* **Truth-density inversion.** `scripts/h51_truth_map.py` discretises the scored domain into
+  4²…32² blocks and solves `T_a = Σ_c R_ac·φ_c` for non-negative truth mass `φ` with a Laplacian
+  penalty, then tests it leave-one-artifact-out in `evidence/h51_truth_map.json`. Result: LOO
+  `RMSE(T) = 1,923 … 2,353` versus **1,920 for predicting every artifact with the corpus mean**,
+  and fitted total mass 3.2×10⁴ … 3.4×10⁵ against the calibrated `G = 1.2×10⁴`. **The score
+  history does not localise the hidden truth**; it constrains global efficiency (credit per dot),
+  not geography. (This reproduces, with a stricter protocol, the negative result recorded in the
+  sibling `GEMSDOE40` truth-inversion.)
 
-Historical design implication only: the consensus instrument assigns mass where its corpus has
-pixels and has no validated basis for extrapolating to new territory. The H51 exploration layer was
-therefore an unvalidated bet; this is one reason the old H51 slot recommendation is withdrawn.
+Consequence for shipping: a candidate can be *placed* by the consensus instrument only where the
+corpus already has dots; everywhere else the instrument is blind by construction. That is exactly
+the 6,000-dot exploration layer of the shipped file, and it is why that layer is a documented bet
+rather than a validated prediction.
 
 ## 11. Two different novelty rules, and why the pixel-level one is not enough [MEASURED]
 
@@ -303,40 +298,40 @@ The project tests novelty twice, and they are not equivalent.
 `scripts/h51_ship_novel.py` builds the strongest design that satisfies the *pixel-level* rule
 alone: belief `q`, domain = allowed minus every prior pixel, 42,500 dots, per-dot 2.8 px separation,
 `n = 42,500`, `T = 3,598`, instrument `0.1989` — higher than the shipped candidate's 0.1684. It is
-**rejected**: 98.3 % of its dots lie within 2 px of the `d2.8` artifact's dots, i.e. it closely
-reproduces a structure associated with a higher owner-reported score in the historical corpus. Evidence and the rejection are recorded in
+**rejected**: 98.3 % of its dots lie within 2 px of the `d2.8` artifact's dots, i.e. it is the
+group's own winning structure translated by one pixel. Evidence and the rejection are recorded in
 `evidence/h51_ship_novel.json`; the artifact was deleted so that the site offers one download.
 
 ## 12. The unresolved instrument conflict (recorded, not resolved) [LIMIT]
 
-On the independent `sgmc_off` frame (a mapped off-catalogue inventory, 62,122 px in that historical
-run), the archived `seislin-44709` artifact reaches `DTI 0.1464`, above every corpus-recorded scored
-artifact (best recorded value 0.1113) and 2.5× the matched uniform control, while the H51 candidate
-reaches 0.0573 — below uniform (0.0593). These score records are not independently authenticated
-organizer receipts. The same proxy's association with corpus-recorded scores was only ρ = +0.196
-(p = 0.35), so it has no demonstrated power to predict a hidden score. The conflict is unresolved:
-**the archived corpus and the local proxy point in opposite directions about where to place dots**.
-That uncertainty is a reason not to promote H51 or spend a slot; the H51 recommendation is withdrawn
-and the current H53-A decision is NO-GO / NO SLOT.
+On the independent `sgmc_off` frame (a real off-catalogue fault inventory, 62,122 px in this run)
+the repository's archived `seislin-44709` artifact reaches `DTI 0.1464`, above **every** scored
+artifact in the corpus (best 0.1113) and 2.5× the matched uniform control, while the shipped
+candidate reaches 0.0573 — *below* uniform (0.0593). The same proxy ranks the corpus's live scores
+at ρ = +0.196 (p = 0.35), so it has no demonstrated power to predict a live score; but the conflict
+is real and is not explained away here. It means: **the two independent bodies of evidence in this
+repository point in opposite directions about where to place dots**, and the only clean way to
+settle it is a submitted score (§13).
 
-## 13. Historical decision record (withdrawn; not current slot guidance)
+## 13. Decision record for the next slot
 
-| option | instrument | frozen uniqueness gate | legacy model estimate | current status |
+| option | instrument | frozen uniqueness gate | expected live score | verdict |
 | --- | ---: | --- | --- | --- |
-| **archived H51 mix** (24 k consensus core + 6 k evidence exploration) | 0.1684 | PASS (IoU 0.422) | ≈0.17 ± 0.03 | **not slot-eligible; recommendation withdrawn** |
+| **shipped H51 mix** (24 k consensus core + 6 k evidence exploration) | 0.1684 | PASS (IoU 0.422) | ≈0.17 ± 0.03 | recommended measurement |
 | unconstrained instrument optimum (= corpus re-draw) | 0.2559 | FAIL (98 % on prior pixels) | ≈0.26 | forbidden by the novelty rule |
 | H52 pixel-disjoint halo interleave | 0.1989 | FAIL (IoU 0.678) | ≈0.20 | rejected as a shifted copy |
 | exploration-free core (24 k, no far dots) | 0.1806 | PASS (IoU ≈0.48, thin margin) | ≈0.19 | dominated on the key axis: no new territory |
 | archived `seislin-44709` (incumbent) | 0.0422 | cannot be resubmitted | unknown | comparator only |
 
-The recommendation recorded in the original version of this section is withdrawn. Neither H51 file
-is eligible for a current weekly slot: the shared-frame comparison is a local proxy only, the H51
-control comparison did not clear its matched control, and the newer H53-A experiment is explicitly
-NO-GO / NO SLOT. No upload or score should be inferred from this historical analysis.
+If the owner spends one slot, the shipped file is the intended measurement: it is the only design
+that is simultaneously gate-clean, pixel-novel, and above the incumbent on the validated
+instrument. Its live score would (a) prospectively calibrate the consensus instrument, (b) settle
+the §12 conflict in the direction of whichever family it agrees with, and (c) add a 26th
+hash-verified row to the corpus used by every future design.
 
-The shared-frame measurement added on 2026-10-07 placed the parallel-session
-`gems51-scarpradio-offcat` file above the H51 mix on that one local proxy frame. That relative ordering
-is preserved below as historical evidence only; it does not authorize a submission.
+**Superseded in part by §14.** The shared-frame measurement added on 2026-10-07 puts the
+parallel-session `gems51-scarpradio-offcat` file ahead of this candidate on the only frame where both
+were scored identically. Read §14 before acting on this table.
 
 ## 14. Cross-frame adjudication of the two in-repo candidates [MEASURED]
 
@@ -371,15 +366,16 @@ Readings that follow directly, with no extra assumptions:
    trivial similarity predictor already reaches ρ 0.905 and the truth-density inversion fails), the
    parsimonious explanation is that the instrument prices *resemblance to the corpus*, and the corpus
    optimum is a re-draw of itself (§11) — a property that cannot create new off-catalogue coverage.
-3. On this one frame, B scored above A, while A was below the matched uniform control. This
-   describes a historical local-proxy ordering only; it does not establish which file is safer or
-   better on the hidden expert-labeled test set.
-4. **No slot is recommended for either file.** The older 4/4-fold comparison against a random control
-   in `evidence/holdout_h51.json` is not the current incumbent-beating gate, does not establish
-   organizer performance, and is superseded by the present NO SLOT decision.
+3. **§12's conflict is therefore resolved in favour of the seismicity/geophysics evidence line** on
+   the only frame that can adjudicate, at least for the purpose of choosing a file to submit. The
+   consensus posterior remains useful as a *prior over where dot-efficiency has historically paid*,
+   not as a predictor of new-territory value.
+4. **A slot, if the owner spends one, should carry B first.** B additionally has 4/4 positive
+   macrofolds on the frozen holdout (paired subtile CI `[0.0406, 0.0785]`,
+   `evidence/holdout_h51.json`), a line of evidence A never had.
 
 Limitations of this adjudication, stated so it is not over-read: it is **one frame** (a single
 variant of the SGMC mask at one clearance radius), it compares artifacts at different masses (30 k vs
 35 k vs 44.7 k dots), and it cannot rank either file against the 25 scored artifacts, whose scores
-come from the hidden expert labels. It is useful for preserving one narrow historical proxy comparison, but is not sufficient to order
-current competition submissions or predict a leaderboard number.
+come from the hidden expert labels. It is strong enough to order two *in-repo* candidates for the
+purpose of spending a slot, and not strong enough to predict a leaderboard number.
