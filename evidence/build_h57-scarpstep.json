@@ -1,0 +1,60 @@
+{
+ "generated_utc": "20261007T1830Z",
+ "tag": "h57-scarpstep",
+ "mass_requested": 80000,
+ "dots": 80000,
+ "min_chebyshev_spacing_px": 3,
+ "dots_within_300m_of_catalogue": 0,
+ "files": {
+  "all_finite": {
+   "path": "docs/downloads/gemsdoe50-h57-scarpstep-80000-20261007T1830Z-allfinite.tif",
+   "sha256": "8027c4e9fe0f789e2d7180a7ccc031abec90b391cf9e42ebcc125752af9fb696",
+   "bytes": 395743
+  },
+  "nan_outside": {
+   "path": "docs/downloads/gemsdoe50-h57-scarpstep-80000-20261007T1830Z.tif",
+   "sha256": "7625f34335cc48fb05dbe851f03950ae61ae49f8db93dd27ac7f516a3349b980",
+   "bytes": 435936
+  },
+  "zip": {
+   "path": "docs/downloads/gemsdoe50-h57-scarpstep-80000-20261007T1830Z-allfinite.zip",
+   "sha256": "db714e75e3a6d6a5d310ea622fac40b4042e6a576133abd768878bf737d1bbe8",
+   "bytes": 320149
+  }
+ },
+ "provenance": {
+  "lidar_channels": [
+   "step_max",
+   "lapneg_max",
+   "ex_mean",
+   "downface_max",
+   "ex_max",
+   "relief"
+  ],
+  "topo_channels": [
+   "slope_max",
+   "hs_lineament",
+   "curv_prof_absmax",
+   "slope_std",
+   "relief_local",
+   "steep_frac"
+  ]
+ },
+ "grid": {
+  "shape": [
+   3730,
+   3292
+  ],
+  "crs": "EPSG:32611",
+  "transform": [
+   100.0,
+   0.0,
+   243350.0,
+   0.0,
+   -100.0,
+   4508550.0
+  ],
+  "dtype": "float32"
+ },
+ "seconds": 9.3
+}

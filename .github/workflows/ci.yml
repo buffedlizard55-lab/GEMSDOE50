@@ -25,11 +25,15 @@ jobs:
           ruff check \
             src/gemsdoe50 src/gems55 \
             scripts/build_h50_site.py scripts/build_h55.py scripts/build_h55_site.py \
-            scripts/build_h57_site.py scripts/h57_field_power_screen.py \
-            scripts/h57_sharpen_sweep.py scripts/h57_holdout_fields.py \
+            scripts/build_h58.py scripts/build_h58_site.py \
+            scripts/build_h59_site.py scripts/h59_field_power_screen.py \
+            scripts/h59_sharpen_sweep.py scripts/h59_sharpen_ext.py \
+            scripts/h59_holdout_fields.py scripts/h59_novelty_price.py \
+            scripts/h59_delivered_metrics.py scripts/build_h59.py scripts/validate_h59.py \
             scripts/build_prior_union.py scripts/run_experiment.py scripts/download_3dep_dem.py \
             scripts/freeze_holdout.py scripts/verify_claims.py \
-            tests/test_h50_*.py tests/test_h55.py tests/test_h55_site.py tests/test_h57.py \
+            tests/test_h50_*.py tests/test_h55.py tests/test_h55_site.py \
+            tests/test_h56.py tests/test_h57_hidden_model.py tests/test_h58.py tests/test_h59.py \
             tests/test_site.py tests/test_build_h50_site.py tests/test_raster.py \
             tests/test_spatial.py tests/test_geometry.py tests/test_catalog.py \
             tests/test_controls.py tests/test_download_3dep_dem.py
@@ -41,5 +45,6 @@ jobs:
           echo 'bfaf83edf47bf7c48309f692a670f3b6d92f492081a120d85dedc30b462578a6  registry/prior_positive_union.npz' | sha256sum --check
           echo '7a366b7bbe431533a9d4246cbcdde34eb379ebb34fa116a8667431916506498d  docs/downloads/gemsdoe50-h55-seisgeom-ridgesnap-13591-20261007-bcb60d89-zeros.tif' | sha256sum --check
           echo 'cd7f765a95ea9c71b22abffbf330434597c28057f8a80ed723b753cd0a32d3c6  docs/downloads/gemsdoe50-h55-seisgeom-ridgesnap-13591-20261007-bcb60d89-nan.tif' | sha256sum --check
-          echo 'ad9750be86acf6b8c253dcd8f1ee6487c2ea8327a582a8c9e6a765d16037d319  docs/downloads/gemsdoe50-h57-topo-lineament-scatter-180k-20261007T170212Z-allfinite.tif' | sha256sum --check
+          echo '838f9502fd4a2720374559db0947fb3372f97629401a617e5c9c95c1b1ce8be5  docs/downloads/gemsdoe50-h59-sharpened-scarp-scatter-90k-20261007T171954Z-allfinite.tif' | sha256sum --check
+          echo 'cf645d250f8788929884c4591d6aa61f51152d4f3413b4c3920fc6443e1df6e6  docs/downloads/gemsdoe50-h59-sharpened-scarp-scatter-90k-20261007T171954Z-nan.tif' | sha256sum --check
           python scripts/verify_claims.py

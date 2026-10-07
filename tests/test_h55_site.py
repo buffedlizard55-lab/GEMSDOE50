@@ -37,7 +37,11 @@ def test_h55_site_regeneration_is_deterministic_and_download_first():
         for name in ("index.html", "results.html", "methods.html", "submission.html", "site.css")
     ]
     before = {path: path.read_bytes() for path in tracked}
-    for script in ("build_h55_site.py", "build_h57_site.py"):
+    # The committed pages are produced by three generators in sequence, the same
+    # order as the site workflow: build_h55_site.py regenerates from committed
+    # evidence, build_h58_site.py reproduces the preserved H57-scarpstep band and
+    # inserts the H58 band, and build_h59_site.py adds this session's H59 banner.
+    for script in ("build_h55_site.py", "build_h58_site.py", "build_h59_site.py"):
         subprocess.run(
             [sys.executable, str(ROOT / "scripts" / script)],
             cwd=ROOT,
@@ -50,15 +54,19 @@ def test_h55_site_regeneration_is_deterministic_and_download_first():
     index = (ROOT / "index.html").read_text(encoding="utf-8")
     assert "Download portal-safe TIFF" in index
     # Charter rule: a one-click download and the executive summary sit at the very top of the
-    # site.  A later session may legitimately place its own download band above this one, so the
+    # site.  Later sessions may legitimately place their own download band above this one, so the
     # assertion is about ordering and presence, not about which session's artifact is first.
-    first_download = index.index("Download the current research candidate GeoTIFF (H56)")
+    # The current top band is the H57-scarpstep session's; the H56 band below it was reworded
+    # to "Previous candidate (H56)" by that session, and this session's H58 band follows it.
+    first_download = index.index("Download the current research candidate GeoTIFF (H57)")
+    assert "Previous candidate (H56)" in index
+    assert "GEMSDOE50-H58-SEISLINEAGE-98598-C4FF6DB9" in index
     assert first_download < index.index("Executive summary")
     assert index.index("Download portal-safe TIFF") > first_download
-    # the H57 session's band is the first element on the page; it must not have
-    # displaced the H55/H56 material it sits above
-    assert "<!-- h57-banner -->" in index
-    assert index.index("<!-- h57-banner -->") < first_download
+    # this session's H59 band is the first thing on the page and must not have
+    # displaced the bands the earlier sessions contributed
+    assert "<!-- h59-banner -->" in index
+    assert index.index("<!-- h59-banner -->") < index.index("Download the current research candidate GeoTIFF (H57)")
     assert "NO SLOT" in index
     assert "0.019321" in index and "0.115822" in index
     assert "0.2778" in index and "UNSCORED" in index

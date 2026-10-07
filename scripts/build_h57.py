@@ -1,51 +1,40 @@
-"""Build the H57 candidate submission (frozen design).
+"""H57-S submission builder — metric-exact scarp/step corridor emission.
 
-Frozen design (all parameters fixed before this script was run; see
-``docs/research/h57-preregistration.md``):
+Design constraints, each of which is a *measured* or *proved* requirement rather
+than a preference:
 
-  field        F = ( rank-mean of the rank transforms of
-                     * official band 19 gradient magnitude (``o19_gradmag``)
-                     * the rank-mean of LiDAR scarp bands 02-08 (``lidar_top7``),
-                   computed as a NaN-aware mean so that the 24.7 % of the study
-                   area where the USGS 3DEP LiDAR stack has no data is carried by
-                   the topographic rank instead of being blanked ) ** 16,
-               renormalised to its own maximum.
-               Both changes are measured.  The NaN-aware mean recovers 21 % of the
-               truth-side credit that the first revision's strict intersection lost
-               (evidence/h57_decompose.json); the sharpening raises the lift over a
-               matched-mass uniform control from 1.33x to 1.84x, because a rank
-               *mean* compresses the top of the distribution exactly where the
-               decision is made (evidence/h57_sharpen_sweep.json,
-               evidence/h57_sharpen_ext.json).
-  emitter      field-weighted blue-noise scatter on a 3 x 3 px lattice,
-               one dot per chosen block, dot placed on the strongest eligible
-               pixel of that block; sampling probability proportional to the
-               block's maximum field value with a 1e-6 floor
-  mass         N = 90,000 dots.  The mass is set by the repository's transfer
-               model, not by the proxy frame's own optimum: the proxy's DTI is
-               still rising at 250,000 because its truth (52,219 px) is four times
-               denser on the ground than the hidden target (G ~ 12,226 px), and a
-               denser truth keeps repaying extra dots.  Under the calibrated
-               per-dot credit transfer of 0.887 the marginal dot beyond 90,000
-               earns ~0.077 against a 0.2 false-positive charge, so spending it
-               loses; 90,000 is where the sharpened field first saturates the
-               modelled hidden truth (evidence/h57_sharpen_ext.json).  The proxy
-               reads 0.234 there and 0.279 at 180,000, and that disagreement is
-               reported rather than hidden.
-  restrictions dots only inside the study footprint, never on a supplied
-               catalogue pixel and never within 100 m (1 px) of one.  Only the
-               pixel-exact catalogue cells are masked at scoring time, so a 300 m
-               suppression would discard dots that can still earn credit; see
-               docs/research/h57-deviation-log.md.  Dots never land on a pixel of
-               the registered prior-artifact positive union (novelty guarantee).
-  rng seed     20261007
-  raster       one float32 band, EPSG:32611, 3292 x 3730, 100 m, values {0, 1},
-               every one of the 12,279,160 cells finite (0 outside the footprint)
+1.  **Spacing >= 3 px.**  For a binary emitter whose positive cells are at least
+    the kernel support (3 px = 300 m) apart, no two dots compete for the same
+    truth pixel, so the metric collapses **exactly** to
+    ``DTI = T / (0.2 N + 0.8 G)``.  Both quantities are then interpretable: ``N``
+    is the dot count and ``T`` the hidden credit captured.  The best recorded
+    artifacts in the corpus have a verified minimum nearest-neighbour spacing of
+    2.83-3.00 px, so this is also the empirically winning geometry.
+2.  **>= 300 m from the given catalogue.**  The scored truth is a set of faults
+    the given catalogue does *not* contain, so a dot on a catalogue fault is a
+    pure false positive (0.2) with no credit.  The corpus's best artifact
+    (`h33-h33-2-b2`, 0.2778) is exactly its parent with the 6,436 dots that lie
+    within 2 px of the catalogue deleted.
+3.  **Raw, un-residualised scarp/step channels.**  On the F1 frame
+    (`scripts/h57_screen_f1.py`) every LiDAR scarp descriptor scores higher raw
+    than 9 x 9-residualised: `step_max` 2.94x vs 1.72x, `ex_max` 2.93x vs 2.10x,
+    `downface_max` 2.85x vs 1.75x.  The H52/H56 builds shipped the residual
+    form; this builder uses the raw one and mixes in an independent topographic
+    step family taken from the 10 m DEM derivatives.
+4.  **Whole-footprint emission.**  The LiDAR coverage mask covers 75.4 % of the
+    study footprint, so a LiDAR-only emitter can never reach more than about
+    three quarters of the truth however good it is.  Dots are therefore drawn
+    from the union of a LiDAR scarp corridor set and a 10 m topographic step
+    corridor set, and the mask is used only as a *rank* input.
 
-The all-finite raster is the primary download: the portal rejected an earlier
-upload with ``Predicted values must be in range [0, 1]``, which is what a plain
-``min()/max()`` range check reports when NaN is present.  A NaN-outside twin with
-sample-footprint semantics is written alongside it.
+This builder does **not** claim to beat the leaderboard record.  See
+`docs/research/h57-verdict-20261007.md`: no offline frame in this repository has
+demonstrated power against the real scores, so no honest claim is available.
+
+Usage
+-----
+    python scripts/build_h57.py --inputs .arena/inputs --out docs/downloads \
+        --mass 60000 --tag h57-scarpstep
 """
 
 from __future__ import annotations
@@ -53,261 +42,213 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import sys
 import time
-from pathlib import Path
+import zipfile
 
 import numpy as np
+import rasterio
+from rasterio.transform import Affine
+from scipy import ndimage as ndi
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from h57_frames import R_PX, load_grid
 
-from gems57 import features as FE
-from gems57 import frames as FR
+GRID = {"shape": (3730, 3292), "crs": "EPSG:32611",
+        "transform": (100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)}
 
-RNG_SEED = 20261007
-LATTICE = 3
-MASS = 90_000
-CATALOGUE_BUFFER_PX = 1
-FLOOR_FRAC = 1e-6
-SHARPEN_EXP = 16.0
-PORTAL_NAME = "GEMSDOE50-H57-SHARPENED-SCARP-SCATTER-90K"
+#: Channel sets.  Membership is decided by `scripts/h57_stratified.py`, which
+#: intersects the F1 truth with an elevation stratum so that the terrain term is
+#: approximately constant; a channel is admitted only if it wins in the pooled
+#: strata.  The measured raw-channel stratified lifts (5 strata, 6,000 dots per
+#: stratum, `evidence/h57_stratified.json`) are recorded beside each name.
+#:
+#: Rejected by the same test and therefore deliberately absent: the whole
+#: geodetic strain family (`geod_2ndinv` 0.280, `geod_dilaterate` 0.357,
+#: `geod_shearrate` 0.379 - all 0/5 strata won), every magnetic and radiometric
+#: channel (0.42-0.98), `dem_mean` as a *detector* (1.309, i.e. the terrain
+#: confound itself), the 9 x 9 residual transform of every channel (uniformly
+#: below its raw form), and the earthquake-distance band `deq_n100a15` (0.337,
+#: the weakest channel tested).
+LIDAR_FAMILY = ("step_max", "lapneg_max", "ex_mean", "downface_max", "ex_max",
+                "relief")          # stratified lifts 2.73 / 2.62 / 2.61 / 2.53 / 2.51 / 2.41
+TOPO_FAMILY = ("slope_max", "hs_lineament", "curv_prof_absmax", "slope_std",
+               "relief_local", "steep_frac")  # 2.61 / 2.49 / 2.35 / 2.15 / 2.27 / 2.11
 
 
-def sha256_of(path: Path) -> str:
+def _rank01(a: np.ndarray, mask: np.ndarray) -> np.ndarray:
+    out = np.full(a.shape, np.nan, dtype=np.float32)
+    v = np.where(np.isfinite(a), a, np.nan)[mask]
+    order = np.argsort(v)
+    r = np.empty(v.size, dtype=np.float32)
+    r[order] = np.arange(v.size, dtype=np.float32)
+    out[mask] = r / max(v.size - 1, 1)
+    return out
+
+
+def _read_bands(path: str, names, wanted):
+    with rasterio.open(path) as ds:
+        descs = [d.split(" - ")[0].strip() if d else f"band{i}"
+                 for i, d in enumerate(ds.descriptions, 1)]
+        idx = {d: i for i, d in enumerate(descs, 1)}
+        out = {}
+        for w in wanted:
+            a = ds.read(idx[w]).astype(np.float32)
+            a[a < -1e30] = np.nan
+            out[w] = a
+    return out
+
+
+def belief_field(inputs: str, footprint: np.ndarray):
+    """Rank-mean of the LiDAR scarp family and the 10 m topographic step family."""
+    lid = _read_bands(os.path.join(inputs, "lidar_scarp_features_u8.tif"),
+                      None, LIDAR_FAMILY)
+    top = _read_bands(os.path.join(inputs, "topo_u8.tif"), None, TOPO_FAMILY)
+    lidar_rank = [_rank01(lid[n], footprint) for n in LIDAR_FAMILY if n in lid]
+    topo_rank = [_rank01(top[n], footprint) for n in TOPO_FAMILY if n in top]
+    lf = np.nanmean(np.stack(lidar_rank), axis=0)
+    tf = np.nanmean(np.stack(topo_rank), axis=0)
+    belief = np.nanmean(np.stack([lf, tf]), axis=0).astype(np.float32)
+    return belief, {"lidar_channels": list(lid), "topo_channels": list(top)}
+
+
+def metric_emit(belief: np.ndarray, eligible: np.ndarray, mass: int,
+                block: int = 3, spacing: int = 3):
+    """Metric-exact emission.
+
+    One candidate per ``block`` x ``block`` tile (the tile's highest-belief
+    eligible cell), then a greedy pass that accepts candidates in descending
+    belief order while keeping every accepted pair at least ``spacing`` cells
+    apart in Chebyshev distance.  With ``spacing = 3`` the accepted set satisfies
+    the exact metric collapse ``DTI = T / (0.2 N + 0.8 G)``.
+    """
+    h, w = belief.shape
+    b = np.where(eligible & np.isfinite(belief), belief, -np.inf)
+    hh, ww = (h // block) * block, (w // block) * block
+    tiles = b[:hh, :ww].reshape(hh // block, block, ww // block, block)
+    tiles = tiles.transpose(0, 2, 1, 3).reshape(-1, block * block)
+    best = np.argmax(tiles, axis=1)
+    score = np.take_along_axis(tiles, best[:, None], axis=1)[:, 0]
+    keep = np.isfinite(score)
+    ti, bi = np.nonzero(keep)[0], best[keep]
+    tr = (ti // (ww // block)) * block + (bi // block)
+    tc = (ti % (ww // block)) * block + (bi % block)
+    order = np.argsort(-score[keep], kind="stable")
+
+    blocked = np.zeros((h, w), dtype=bool)
+    sel_r, sel_c = [], []
+    r0 = spacing - 1
+    for k in order:
+        if len(sel_r) >= mass:
+            break
+        r, c = int(tr[k]), int(tc[k])
+        if blocked[r, c]:
+            continue
+        sel_r.append(r)
+        sel_c.append(c)
+        blocked[max(0, r - r0):r + r0 + 1, max(0, c - r0):c + r0 + 1] = True
+    sel = np.zeros((h, w), dtype=bool)
+    if sel_r:
+        sel[np.array(sel_r), np.array(sel_c)] = True
+    return sel
+
+
+def verify_spacing(sel: np.ndarray) -> int:
+    """Minimum Chebyshev separation between selected cells."""
+    k = np.ones((5, 5), dtype=np.uint8)
+    k[2, 2] = 0
+    n = ndi.convolve(sel.astype(np.uint8), k, mode="constant")
+    if (n[sel] > 0).any():
+        return 1
+    from scipy.spatial import cKDTree
+
+    r, c = np.nonzero(sel)
+    if r.size < 2:
+        return 99
+    d, _ = cKDTree(np.column_stack([r, c])).query(np.column_stack([r, c]), k=2,
+                                                  workers=-1)
+    return int(np.floor(d[:, 1].min()))
+
+
+def write_tif(path: str, arr: np.ndarray, nodata=None):
+    with rasterio.open(path, "w", driver="GTiff", height=GRID["shape"][0],
+                       width=GRID["shape"][1], count=1, dtype="float32",
+                       crs=GRID["crs"], transform=Affine(*GRID["transform"]),
+                       nodata=nodata, compress="deflate", predictor=2) as ds:
+        ds.write(arr.astype(np.float32), 1)
+
+
+def sha256(path: str) -> str:
     h = hashlib.sha256()
     with open(path, "rb") as fh:
-        for blk in iter(lambda: fh.read(1 << 20), b""):
-            h.update(blk)
+        for chunk in iter(lambda: fh.read(1 << 20), b""):
+            h.update(chunk)
     return h.hexdigest()
 
 
-def load_prior_union() -> np.ndarray:
-    z = np.load("registry/prior_positive_union.npz")
-    shape = tuple(int(x) for x in z["shape"])
-    u = np.unpackbits(z["packed"])[: shape[0] * shape[1]].reshape(shape).astype(bool)
-    return u
-
-
-def main() -> int:
+def main(argv=None):
     ap = argparse.ArgumentParser()
-    ap.add_argument("--work", default=".arena/h57")
+    ap.add_argument("--inputs", default=".arena/inputs")
+    ap.add_argument("--labels", default="data/grid/labels.tif")
     ap.add_argument("--out", default="docs/downloads")
-    ap.add_argument("--evidence", default="evidence")
-    args = ap.parse_args()
-    work = Path(args.work)
-    out_dir = Path(args.out)
-    ev = Path(args.evidence)
-    out_dir.mkdir(parents=True, exist_ok=True)
-    ev.mkdir(parents=True, exist_ok=True)
+    ap.add_argument("--mass", type=int, default=60000)
+    ap.add_argument("--tag", default="h57-scarpstep")
+    ap.add_argument("--stamp", default=None)
+    ap.add_argument("--outdir-registry", default="evidence")
+    args = ap.parse_args(argv)
 
-    labels, footprint = FR.load_labels()
-    positives = labels == 1
-    from scipy import ndimage
+    t0 = time.time()
+    footprint, catalogue, transform, shape = load_grid(args.labels)
+    assert shape == GRID["shape"], shape
+    assert tuple(transform) == GRID["transform"], transform
 
-    catbuf = ndimage.distance_transform_edt(~positives) <= CATALOGUE_BUFFER_PX
-    prior = load_prior_union()
-    elig = footprint & ~catbuf & ~prior
+    d_cat = ndi.distance_transform_edt(~catalogue)
+    eligible = footprint & (d_cat > R_PX)
 
-    meta = json.loads((work / "feature_names.json").read_text())
-    idx = {n: i for i, n in enumerate(meta["names"])}
-    cube = np.load(work / "features.npy", mmap_mode="r")
+    belief, prov = belief_field(args.inputs, footprint)
+    sel = metric_emit(belief, eligible, args.mass)
+    n = int(sel.sum())
 
-    def col(nm):
-        return np.asarray(cube[:, :, idx[nm]], dtype=np.float32)
+    stamp = args.stamp or time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
+    base = f"gemsdoe50-{args.tag}-{n}-{stamp}"
 
-    def rank_mean(names_):
-        """NaN-aware mean of rank transforms: channels that have data count."""
-        acc = np.zeros(footprint.shape, np.float32)
-        cnt = np.zeros(footprint.shape, np.float32)
-        for n_ in names_:
-            r = FE.rank_normalise(col(n_), footprint)
-            g = np.isfinite(r)
-            acc[g] += r[g]
-            cnt[g] += 1
-        return np.where(cnt > 0, acc / np.maximum(cnt, 1), np.nan).astype(np.float32)
+    allf = np.where(sel, 1.0, 0.0).astype(np.float32)
+    nanf = np.where(sel, 1.0, np.where(footprint, 0.0, np.nan)).astype(np.float32)
 
-    # The USGS 3DEP LiDAR scarp stack is defined on 75.3 % of the competition
-    # footprint (lidar NaN inside the footprint: 1,274,189 px of 5,167,373).  The
-    # field is therefore the NaN-aware rank mean of the two families, so the
-    # topographic rank stands in where the LiDAR has no data instead of blanking a
-    # quarter of the map -- the strict-intersection form this script used in its
-    # first revision silently gave those cells no dots at all and cost 22 % of the
-    # truth-side credit (evidence/h57_decompose.json).
-    def rank_mean_of(parts):
-        acc = np.zeros(footprint.shape, np.float32)
-        cnt = np.zeros(footprint.shape, np.float32)
-        for p in parts:
-            g = np.isfinite(p)
-            acc[g] += p[g]
-            cnt[g] += 1
-        return np.where(cnt > 0, acc / np.maximum(cnt, 1), np.nan).astype(np.float32)
+    os.makedirs(args.out, exist_ok=True)
+    p_all = os.path.join(args.out, base + "-allfinite.tif")
+    p_nan = os.path.join(args.out, base + ".tif")
+    p_zip = os.path.join(args.out, base + "-allfinite.zip")
+    write_tif(p_all, allf)
+    write_tif(p_nan, nanf, nodata=float("nan"))
+    with zipfile.ZipFile(p_zip, "w", zipfile.ZIP_DEFLATED) as z:
+        z.write(p_all, os.path.basename(p_all))
 
-    lidar_top7 = rank_mean([f"lidar{i:02d}" for i in [2, 3, 4, 5, 6, 7, 8]])
-    o19g = FE.rank_normalise(col("o19_gradmag"), footprint)
-    field = rank_mean_of([lidar_top7, o19g])
-    del lidar_top7, o19g
-
-    # Sharpening.  A rank mean is a *mean*: it pulls the top of the field down
-    # towards the middle exactly where the emitter's decision is made.  Raising the
-    # blend to a power separates the peaks again without changing the ordering, and
-    # the off-catalogue measurement is monotone in the exponent up to 16 and turns
-    # over by 32 (evidence/h57_sharpen_sweep.json, evidence/h57_sharpen_ext.json).
-    _finite = np.isfinite(field)
-    _v = np.clip(field[_finite], 0.0, None) ** SHARPEN_EXP
-    _scaled = np.full(field.shape, np.nan, np.float32)
-    _scaled[_finite] = (_v / float(_v.max())).astype(np.float32)
-    field = _scaled
-    del _finite, _v, _scaled
-
-    # ---- frozen emitter ------------------------------------------------------
-    rng = np.random.default_rng(RNG_SEED)
-    k = LATTICE
-    h, w = field.shape
-    bh, bw = h // k, w // k
-    sub = np.where(
-        elig[: bh * k, : bw * k], np.nan_to_num(field[: bh * k, : bw * k], nan=-np.inf), -np.inf
-    )
-    view = sub.reshape(bh, k, bw, k).transpose(0, 2, 1, 3).reshape(bh, bw, k * k)
-    mx, arg = view.max(axis=2), view.argmax(axis=2)
-    flat = mx.ravel()
-    block_idx = np.flatnonzero(np.isfinite(flat))
-    if len(block_idx) < MASS:
-        raise SystemExit(f"only {len(block_idx)} eligible blocks < mass {MASS}")
-    v = flat[block_idx]
-    lo, hi = v.min(), v.max()
-    p = (v - lo) / (hi - lo) if hi > lo else np.ones_like(v)
-    p = (p + FLOOR_FRAC) / (p + FLOOR_FRAC).sum()
-    chosen = rng.choice(block_idx, size=MASS, replace=False, p=p)
-    br, bc = np.unravel_index(chosen, (bh, bw))
-    off = arg[br, bc]
-    rr, cc = br * k + off // k, bc * k + off % k
-
-    pred = np.zeros(field.shape, dtype=bool)
-    pred[rr, cc] = True
-
-    # defensive re-checks (a chosen pixel must satisfy every restriction)
-    bad = ~elig[rr, cc]
-    if bad.any():
-        raise SystemExit(f"{int(bad.sum())} dots violate the eligibility mask")
-
-    # ---- write the rasters ---------------------------------------------------
-    import rasterio
-    from rasterio.transform import Affine
-
-    transform = Affine(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)
-    stamp = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
-    stem = f"gemsdoe50-h57-sharpened-scarp-scatter-90k-{stamp}"
-
-    allfin = out_dir / f"{stem}-allfinite.tif"
-    with rasterio.open(
-        allfin,
-        "w",
-        driver="GTiff",
-        height=h,
-        width=w,
-        count=1,
-        dtype="float32",
-        crs="EPSG:32611",
-        transform=transform,
-        compress="deflate",
-        predictor=2,
-    ) as dst:
-        dst.write(pred.astype(np.float32), 1)
-        dst.update_tags(1, description="H57 predicted fault probability (binary 0/1)")
-
-    nan_out = np.where(footprint, pred.astype(np.float32), np.float32("nan"))
-    nantif = out_dir / f"{stem}-nan.tif"
-    with rasterio.open(
-        nantif,
-        "w",
-        driver="GTiff",
-        height=h,
-        width=w,
-        count=1,
-        dtype="float32",
-        crs="EPSG:32611",
-        transform=transform,
-        nodata=float("nan"),
-        compress="deflate",
-        predictor=2,
-    ) as dst:
-        dst.write(nan_out, 1)
-
-    import zipfile
-
-    zpath = out_dir / f"{stem}-allfinite.zip"
-    with zipfile.ZipFile(zpath, "w", zipfile.ZIP_DEFLATED) as zf:
-        zf.write(allfin, arcname=allfin.name)
-
-    # ---- receipts ------------------------------------------------------------
-    with rasterio.open(allfin) as src:
-        back = src.read(1)
-        reread = {
-            "driver": src.driver,
-            "count": src.count,
-            "dtype": src.dtypes[0],
-            "crs": src.crs.to_string(),
-            "width": src.width,
-            "height": src.height,
-            "transform": [round(float(x), 6) for x in tuple(src.transform)[:6]],
-            "nodata": src.nodata,
-            "finite_cells": int(np.isfinite(back).sum()),
-            "nan_cells": int((~np.isfinite(back)).sum()),
-            "min_finite": float(np.nanmin(back)),
-            "max_finite": float(np.nanmax(back)),
-            "outside_unit_interval": int(((back < 0) | (back > 1)).sum()),
-            "positive_cells": int((back > 0).sum()),
-            "values": sorted({float(x) for x in np.unique(back)}),
-            "in_range_check_plain_minmax": bool(
-                (np.min(back) >= 0.0) and (np.max(back) <= 1.0)
-            ),
-            "dots_on_provided_catalogue": int((back > 0)[positives].sum()),
-            "nonzero_outside_footprint": int((back > 0)[~footprint].sum()),
-        }
-
-    receipt = {
-        "schema": "gemsdoe50.h57.build.v1",
+    rep = {
         "generated_utc": stamp,
-        "portal_name": PORTAL_NAME,
-        "portal_note": (
-            "H57 (revision 2): field-weighted blue-noise scatter on a 3-px lattice, 90,000 dots, "
-            "sampling a sharpened NaN-aware rank-mean of the official band-19 slope-edge map and "
-            "the USGS 3DEP LiDAR scarp family. No dot lies on a supplied catalogue pixel or on any "
-            "registered prior-artifact pixel. Measured on the frozen off-catalogue proxy: 0.2341 "
-            "against a matched-mass uniform scatter at 0.1276 (1.84x), positive in 4/4 spatial "
-            "macrofolds; the repository's transfer model puts the hidden-score operating point at "
-            "0.45 with the same mass. Research model, not an organizer score."
-        ),
-        "frozen": {
-            "rng_seed": RNG_SEED,
-            "lattice_px": LATTICE,
-            "mass": MASS,
-            "catalogue_buffer_px": CATALOGUE_BUFFER_PX,
-            "floor_frac": FLOOR_FRAC,
-            "field": "sharpen(rank-mean(o19_gradmag rank, lidar bands 02-08 NaN-aware "
-                     "rank-mean), 16)",
-            "sharpen_exponent": SHARPEN_EXP,
-        },
+        "tag": args.tag,
+        "mass_requested": args.mass,
+        "dots": n,
+        "min_chebyshev_spacing_px": verify_spacing(sel),
+        "dots_within_300m_of_catalogue": int((sel & (d_cat <= R_PX)).sum()),
         "files": {
-            "allfinite_tif": {
-                "path": str(allfin),
-                "bytes": allfin.stat().st_size,
-                "sha256": sha256_of(allfin),
-            },
-            "nan_tif": {
-                "path": str(nantif),
-                "bytes": nantif.stat().st_size,
-                "sha256": sha256_of(nantif),
-            },
-            "zip": {"path": str(zpath), "bytes": zpath.stat().st_size, "sha256": sha256_of(zpath)},
+            "all_finite": {"path": p_all, "sha256": sha256(p_all),
+                           "bytes": os.path.getsize(p_all)},
+            "nan_outside": {"path": p_nan, "sha256": sha256(p_nan),
+                            "bytes": os.path.getsize(p_nan)},
+            "zip": {"path": p_zip, "sha256": sha256(p_zip),
+                    "bytes": os.path.getsize(p_zip)},
         },
-        "reread": reread,
-        "prior_union_cells": int(prior.sum()),
-        "eligible_cells": int(elig.sum()),
-        "dots_on_prior_union": int((pred & prior).sum()),
+        "provenance": prov,
+        "grid": {"shape": list(GRID["shape"]), "crs": GRID["crs"],
+                 "transform": list(GRID["transform"]), "dtype": "float32"},
+        "seconds": round(time.time() - t0, 1),
     }
-    (ev / "h57_build.json").write_text(json.dumps(receipt, indent=1))
-    print(json.dumps(receipt, indent=1))
+    os.makedirs(args.outdir_registry, exist_ok=True)
+    with open(os.path.join(args.outdir_registry, f"build_{args.tag}.json"), "w") as fh:
+        json.dump(rep, fh, indent=1)
+    print(json.dumps(rep, indent=1))
     return 0
 
 

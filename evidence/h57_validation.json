@@ -1,126 +1,227 @@
 {
- "raster": "docs/downloads/gemsdoe50-h57-sharpened-scarp-scatter-90k-20261007T171954Z-allfinite.tif",
- "positive_cells": 90000,
- "frames": {
-  "S_matched": {
-   "truth_px": 52219,
-   "dti": 0.23028191003766868,
-   "folds": [
-    {
-     "fold": "NW",
-     "truth_px": 19975,
-     "dti": 0.2071630910105004
-    },
-    {
-     "fold": "NE",
-     "truth_px": 17289,
-     "dti": 0.24501008388518994
-    },
-    {
-     "fold": "SW",
-     "truth_px": 2326,
-     "dti": 0.13937240068372064
-    },
-    {
-     "fold": "SE",
-     "truth_px": 12629,
-     "dti": 0.27623477224736265
-    }
-   ]
+ "generated_utc": "2026-10-07T16:22:59Z",
+ "candidate": "docs/downloads/gemsdoe50-h57-scarpstep-80000-20261007T1830Z-allfinite.tif",
+ "G": 14088.75,
+ "transfer_note": "hidden_c_per_dot / F1_c_per_dot, measured on the byte-verified well-spaced corpus artifacts with recorded scores; applying it to a different detector is an assumption, not a measurement.",
+ "n_candidate_dots": 80000,
+ "F1": {
+  "n_dots": 80000,
+  "credit": 5973.728515625,
+  "c_per_dot": 0.0746716064453125,
+  "coverage": 0.09687546243553775,
+  "dti": 0.09143760585485954
+ },
+ "F1_uniform_mean_c_per_dot": 0.0420908203125,
+ "F1_lift": 1.7740591865617967,
+ "F1_translation_mean_c_per_dot": 0.0729308443852933,
+ "F1_beats_translations": true,
+ "F1_block_bootstrap_vs_uniform": {
+  "mean_delta": 0.03837899940075062,
+  "lo95": 0.017153087962737772,
+  "hi95": 0.05894538209788972,
+  "positive_frac": 1.0,
+  "n_boot": 400
+ },
+ "F2": {
+  "F2_cat_NW": {
+   "n_dots": 28635,
+   "credit": 0.0,
+   "c_per_dot": 0.0,
+   "coverage": 0.0,
+   "dti": 0.0
   },
-  "S_raw": {
-   "truth_px": 61664,
-   "dti": 0.24917419755084955,
-   "folds": [
-    {
-     "fold": "NW",
-     "truth_px": 23093,
-     "dti": 0.22819436238978055
-    },
-    {
-     "fold": "NE",
-     "truth_px": 22774,
-     "dti": 0.27349744058836134
-    },
-    {
-     "fold": "SW",
-     "truth_px": 2326,
-     "dti": 0.13937240068372064
-    },
-    {
-     "fold": "SE",
-     "truth_px": 13471,
-     "dti": 0.27665938722404587
-    }
-   ]
+  "F2_cat_NE": {
+   "n_dots": 13466,
+   "credit": 0.0,
+   "c_per_dot": 0.0,
+   "coverage": 0.0,
+   "dti": 0.0
   },
-  "L": {
-   "truth_px": 60988,
-   "dti": 0.03892453994556949,
-   "folds": [
-    {
-     "fold": "NW",
-     "truth_px": 29305,
-     "dti": 0.03639601653685997
-    },
-    {
-     "fold": "NE",
-     "truth_px": 12610,
-     "dti": 0.036306621859686895
-    },
-    {
-     "fold": "SW",
-     "truth_px": 9447,
-     "dti": 0.04626987745171776
-    },
-    {
-     "fold": "SE",
-     "truth_px": 9626,
-     "dti": 0.043282056674637935
-    }
-   ]
+  "F2_cat_SW": {
+   "n_dots": 8990,
+   "credit": 0.0,
+   "c_per_dot": 0.0,
+   "coverage": 0.0,
+   "dti": 0.0
+  },
+  "F2_cat_SE": {
+   "n_dots": 14131,
+   "credit": 0.0,
+   "c_per_dot": 0.0,
+   "coverage": 0.0,
+   "dti": 0.0
   }
  },
- "controls": {
-  "matched_mass_uniform_matched_frame": {
-   "values": [
-    0.1249,
-    0.12462,
-    0.12582,
-    0.12266,
-    0.12116
-   ],
-   "mean": 0.12383229814698504,
-   "lift_of_candidate": 1.8596272013326547
+ "F2_summary": {
+  "folds": 4,
+  "folds_with_dots": 4,
+  "pooled_c_per_dot": 0.0,
+  "pooled_dti": 0.0
+ },
+ "F1_corpus_anchors": [
+  {
+   "file": "anderson_pinn.tif",
+   "n_dots": 38854,
+   "F1_c_per_dot": 0.06353075366817734,
+   "F1_dti": 0.04101822648645177
   },
-  "matched_mass_uniform_frozen_pool": {
-   "eligible_cells": 3886785,
-   "values": [
-    0.11081,
-    0.11143,
-    0.1084,
-    0.1118,
-    0.11425
-   ],
-   "mean": 0.11133898119924934,
-   "lift_of_candidate": 2.0682954663071884
+  {
+   "file": "d15_dotted.tif",
+   "n_dots": 60069,
+   "F1_c_per_dot": 0.06434170423232947,
+   "F1_dti": 0.052526579638963886
   },
-  "translations": {
-   "dy3_dx0": 0.22702,
-   "dy-3_dx0": 0.23061,
-   "dy0_dx3": 0.22982,
-   "dy0_dx-3": 0.22806,
-   "dy7_dx7": 0.20762
+  {
+   "file": "d28_poisson.tif",
+   "n_dots": 44090,
+   "F1_c_per_dot": 0.06416066265447538,
+   "F1_dti": 0.04034558839736353
   },
-  "translation_max": 0.23061197168941128,
-  "paired_bootstrap_candidate_minus_uniform": {
-   "n": 400,
-   "mean": 0.10407231875186194,
-   "ci95": [
-    0.09481533834653388,
-    0.11409144295295595
-   ],
-   "positive_fraction": 1.0
+  {
+   "file": "dual_union.tif",
+   "n_dots": 183642,
+   "F1_c_per_dot": 0.05953820316874455,
+   "F1_dti": 0.10832100409902126
+  },
+  {
+   "file": "edge_hybrid80k.tif",
+   "n_dots": 80000,
+   "F1_c_per_dot": 0.05285928236853233,
+   "F1_dti": 0.060368348604716765
+  },
+  {
+   "file": "ens12.tif",
+   "n_dots": 172974,
+   "F1_c_per_dot": 0.05808173495549536,
+   "F1_dti": 0.10304784738361067
+  },
+  {
+   "file": "g32_h33b2_02778.tif",
+   "n_dots": 37654,
+   "F1_c_per_dot": 0.06416066265447538,
+   "F1_dti": 0.04034558839736353
+  },
+  {
+   "file": "gemsdoe4_combined.tif",
+   "n_dots": 264247,
+   "F1_c_per_dot": 0.19543039626460249,
+   "F1_dti": 0.4664722645986948
+  },
+  {
+   "file": "greedy_mp.tif",
+   "n_dots": 272853,
+   "F1_c_per_dot": 0.0553891718693332,
+   "F1_dti": 0.12157710696869894
+  },
+  {
+   "file": "h19_5.tif",
+   "n_dots": 121131,
+   "F1_c_per_dot": 0.0666099892340843,
+   "F1_dti": 0.09398130196283322
+  },
+  {
+   "file": "h274_solo.tif",
+   "n_dots": 40199,
+   "F1_c_per_dot": 0.06416066265447538,
+   "F1_dti": 0.04034558839736353
+  },
+  {
+   "file": "h28_dotted_ridge.tif",
+   "n_dots": 69281,
+   "F1_c_per_dot": 0.04380676789987002,
+   "F1_dti": 0.03739411749100644
+  },
+  {
+   "file": "h32_prethin.tif",
+   "n_dots": 42294,
+   "F1_c_per_dot": 0.06415162736193909,
+   "F1_dti": 0.040334937220378876
+  },
+  {
+   "file": "h33d_stepover.tif",
+   "n_dots": 41865,
+   "F1_c_per_dot": 0.06413703846720585,
+   "F1_dti": 0.04068601782856322
+  },
+  {
+   "file": "h33f_analog.tif",
+   "n_dots": 44090,
+   "F1_c_per_dot": 0.05060238937120418,
+   "F1_dti": 0.03316710783324027
+  },
+  {
+   "file": "h36_blind.tif",
+   "n_dots": 37660,
+   "F1_c_per_dot": 0.06437808493168434,
+   "F1_dti": 0.038270762572939994
+  },
+  {
+   "file": "halo15.tif",
+   "n_dots": 1828699,
+   "F1_c_per_dot": 0.04730620734443477,
+   "F1_dti": 0.18953037653223806
+  },
+  {
+   "file": "hgb88_topk03.tif",
+   "n_dots": 155021,
+   "F1_c_per_dot": 0.08538534372903589,
+   "F1_dti": 0.061787233377991566
+  },
+  {
+   "file": "lattice_s5.tif",
+   "n_dots": 206895,
+   "F1_c_per_dot": 0.04217751834328208,
+   "F1_dti": 0.09152631426661115
+  },
+  {
+   "file": "lidarscarp_top2pct.tif",
+   "n_dots": 76859,
+   "F1_c_per_dot": 0.050794957121884844,
+   "F1_dti": 0.049256515790899104
+  },
+  {
+   "file": "pindrop_disc.tif",
+   "n_dots": 155021,
+   "F1_c_per_dot": 0.049838641845980115,
+   "F1_dti": 0.09100779215259172
+  },
+  {
+   "file": "pindrop_nodes.tif",
+   "n_dots": 155021,
+   "F1_c_per_dot": 0.04857388224257942,
+   "F1_dti": 0.08846900116684299
+  },
+  {
+   "file": "pindrop_ridge.tif",
+   "n_dots": 155021,
+   "F1_c_per_dot": 0.19512135174535108,
+   "F1_dti": 0.3277098973085435
+  },
+  {
+   "file": "r7_nms3_dem10_scarp.tif",
+   "n_dots": 103347,
+   "F1_c_per_dot": 0.055895602259020016,
+   "F1_dti": 0.06804387583723756
+  },
+  {
+   "file": "sgmc_gap.tif",
+   "n_dots": 61664,
+   "F1_c_per_dot": 0.9962770771844188,
+   "F1_dti": 0.9962770771844187
+  },
+  {
+   "file": "strike30x3.tif",
+   "n_dots": 575055,
+   "F1_c_per_dot": 0.05572111289893429,
+   "F1_dti": 0.10152205735152578
   }
+ ],
+ "transfer_factor": 1.8,
+ "modelled_hidden": {
+  "assumed_hidden_c_per_dot": 0.1344088916015625,
+  "N": 80000,
+  "T": 10752.711328125,
+  "coverage": 0.7632125865051903,
+  "dti": 0.39429105379799056
  }
 }

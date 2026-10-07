@@ -1,223 +1,203 @@
-"""Validate the H57 candidate and write the evidence file.
+"""H57 validation — metric-exact scoring of the candidate on every available frame.
 
-Reported instruments (all frozen; none is the hidden test set):
+Reports, for the candidate and for matched controls:
 
-  frame ``S-matched``  SGMC fault pixels inside the study footprint, more than
-                       300 m from the supplied catalogue, and belonging to a
-                       connected component smaller than the largest component ever
-                       drawn in the supplied catalogue (< 500 px).  The component
-                       filter matters: the raw proxy has 40 components >= 200 px
-                       while the supplied catalogue has 10 components >= 200 px and
-                       none >= 500 px, so the raw proxy over-represents long
-                       bedrock traces (see docs/research/h57-proxy-gap.md).
-  frame ``S-raw``      the repository's standard off-catalogue proxy, for
-                       comparability with earlier artifacts only.
-  frame ``L``          the supplied catalogue itself.  The candidate is *designed*
-                       to avoid it, so a value near zero here is expected and is a
-                       positive control on the catalogue-exclusion step, not a
-                       performance number.
+* ``N`` (dots), ``T`` (credit), ``c_per_dot = T/N`` and the exact
+  ``DTI = T / (0.2 T + 0.2 F + 0.8 G)`` on the F1 independent-population frame
+  and on the F2 catalogue-holdout frame, with an 8 x 8 block bootstrap;
+* matched-mass uniform controls (5 seeds) and 8 translation controls;
+* the same statistics for the corpus anchors that have byte-verified supports,
+  so the candidate's frame numbers sit next to the group's best;
+* the modelled hidden DTI under the **corpus transfer factor**, which is the
+  only bridge from a frame to the hidden truth available offline, and which is
+  an assumption, not a measurement.
 
-Controls: matched-mass uniform scatter (5 seeds), and four fixed translations of
-the candidate.  Uncertainty: paired block bootstrap over 32 x 32 px subtiles.
+Usage
+-----
+    python scripts/validate_h57.py --tif docs/downloads/<candidate>-allfinite.tif
 """
 
 from __future__ import annotations
 
 import argparse
+import glob
 import json
+import os
 import sys
-from pathlib import Path
+import time
 
 import numpy as np
+import rasterio
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from h57_frames import build_frames, load_grid
 
-from gems57 import frames as FR  # noqa: E402
-from gems57.metric import evaluate  # noqa: E402
-
-SUBTILE = 32
-N_BOOT = 400
-UNIFORM_SEEDS = (101, 202, 303, 404, 505)
-TRANSLATIONS = [(3, 0), (-3, 0), (0, 3), (0, -3), (7, 7)]
-
-
-def matched_frame() -> np.ndarray:
-    from scipy import ndimage
-
-    truth = FR.load_sgmc_offcatalogue()
-    lab, _ = ndimage.label(truth, structure=np.ones((3, 3), int))
-    sizes = np.bincount(lab.ravel())
-    sizes[0] = 0
-    keep = np.flatnonzero((sizes > 0) & (sizes < 500))
-    return np.isin(lab, keep)
+G_DEFAULT = 14088.75  # nested-pair solve, see docs/research/h57-verdict-20261007.md
+TRANSFER_NOTE = (
+    "hidden_c_per_dot / F1_c_per_dot, measured on the byte-verified well-spaced "
+    "corpus artifacts with recorded scores; applying it to a different detector "
+    "is an assumption, not a measurement."
+)
+DEFAULT_TRANSFER = 1.80
 
 
-def shift(mask: np.ndarray, dy: int, dx: int) -> np.ndarray:
-    out = np.zeros_like(mask)
-    h, w = mask.shape
-    ys0, ys1 = max(0, dy), min(h, h + dy)
-    xs0, xs1 = max(0, dx), min(w, w + dx)
-    out[ys0:ys1, xs0:xs1] = mask[max(0, -dy) : h - max(0, dy), max(0, -dx) : w - max(0, dx)][
-        : ys1 - ys0, : xs1 - xs0
-    ]
-    return out
+def load_pos(path: str) -> np.ndarray:
+    with rasterio.open(path) as ds:
+        a = ds.read(1)
+    return np.isfinite(a) & (a > 0)
 
 
-def subtile_credits(pred: np.ndarray, truth: np.ndarray, footprint: np.ndarray):
-    """Per-subtile (TP_w, FP_w, FN_w), summed exactly as the official metric does."""
-    out = []
-    h, w = pred.shape
-    step = SUBTILE
-    for r0 in range(0, h, step):
-        for c0 in range(0, w, step):
-            p = pred[r0 : r0 + step, c0 : c0 + step]
-            g = truth[r0 : r0 + step, c0 : c0 + step]
-            if not g.any() and not p.any():
-                continue
-            parts = evaluate(p, g)
-            out.append((parts.tp_w, parts.fp_w, parts.fn_w))
-    return out
+def stats(frame, sel, g):
+    m = sel & frame.domain
+    n = int(m.sum())
+    if n == 0:
+        return None
+    credit = float(np.nansum(frame.K[m]))
+    t = min(credit, float(frame.n_truth))
+    d = 0.2 * t + 0.2 * (n - credit) + 0.8 * float(frame.n_truth)
+    return {"n_dots": n, "credit": credit, "c_per_dot": credit / n,
+            "coverage": t / frame.n_truth, "dti": t / d}
 
 
-def main() -> int:
+def _per_block(frame, sel, blocks):
+    h, w = sel.shape
+    bh, bw = h // blocks, w // blocks
+    cred = np.zeros((blocks, blocks))
+    cnt = np.zeros((blocks, blocks))
+    for i in range(blocks):
+        for j in range(blocks):
+            sl = (slice(i * bh, (i + 1) * bh), slice(j * bw, (j + 1) * bw))
+            mm = sel[sl] & frame.domain[sl]
+            nn = int(mm.sum())
+            cnt[i, j] = nn
+            if nn:
+                cred[i, j] = float(np.nansum(frame.K[sl][mm]))
+    return cred, cnt
+
+
+def block_bootstrap(frame, sel, n_boot=400, blocks=8, seed=7):
+    """Paired spatial-block bootstrap of DTI(candidate) - DTI(matched uniform)."""
+    rng = np.random.default_rng(seed)
+    m = sel & frame.domain
+    n = int(m.sum())
+    if n == 0:
+        return None
+    idx = np.nonzero(frame.domain.ravel())[0]
+    uni = np.zeros(sel.size, dtype=bool)
+    uni[rng.choice(idx, size=min(n, idx.size), replace=False)] = True
+    uni = uni.reshape(sel.shape)
+    ca, na = _per_block(frame, m, blocks)
+    cu, nu = _per_block(frame, uni, blocks)
+    g_tot = float(frame.n_truth)
+    flat_i, flat_j = np.meshgrid(np.arange(blocks), np.arange(blocks), indexing="ij")
+    fi, fj = flat_i.ravel(), flat_j.ravel()
+    deltas = []
+    for _ in range(n_boot):
+        k = rng.integers(0, fi.size, size=fi.size)
+        n_a, c_a = na[fi[k], fj[k]].sum(), ca[fi[k], fj[k]].sum()
+        n_u, c_u = nu[fi[k], fj[k]].sum(), cu[fi[k], fj[k]].sum()
+        if n_a == 0 or n_u == 0:
+            continue
+        d_a = 0.2 * min(c_a, g_tot) + 0.2 * (n_a - c_a) + 0.8 * g_tot
+        d_u = 0.2 * min(c_u, g_tot) + 0.2 * (n_u - c_u) + 0.8 * g_tot
+        deltas.append(min(c_a, g_tot) / d_a - min(c_u, g_tot) / d_u)
+    if not deltas:
+        return None
+    d = np.asarray(deltas)
+    return {"mean_delta": float(d.mean()), "lo95": float(np.percentile(d, 2.5)),
+            "hi95": float(np.percentile(d, 97.5)),
+            "positive_frac": float((d > 0).mean()), "n_boot": int(d.size)}
+
+
+def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("--tif", required=True)
+    ap.add_argument("--prior", default=".arena/prior")
+    ap.add_argument("--inputs", default=".arena/inputs")
+    ap.add_argument("--labels", default="data/grid/labels.tif")
+    ap.add_argument("--sgmc", default="data/external/derived_sgmc_faults_100m_u8.tif")
     ap.add_argument("--out", default="evidence/h57_validation.json")
-    ap.add_argument("--boot", type=int, default=N_BOOT)
-    args = ap.parse_args()
+    ap.add_argument("--g", type=float, default=G_DEFAULT)
+    ap.add_argument("--transfer", type=float, default=DEFAULT_TRANSFER)
+    args = ap.parse_args(argv)
 
-    import rasterio
+    footprint, catalogue, _, _ = load_grid(args.labels)
+    with rasterio.open(args.sgmc) as ds:
+        sgmc = ds.read(1) == 1
+    with rasterio.open(os.path.join(args.inputs, "lidar_scarp_features_u8.tif")) as ds:
+        valid = ds.read(12) > 0
+    allf = build_frames(footprint, catalogue, sgmc, valid)
+    f1 = allf["F1_sgmc_off"]
+    f2 = {k: v for k, v in allf.items() if k.startswith("F2_")}
 
-    with rasterio.open(args.tif) as src:
-        arr = src.read(1)
-    pred = (np.nan_to_num(arr, nan=0.0) > 0)
+    cand = load_pos(args.tif)
+    rep = {"generated_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+           "candidate": args.tif, "G": args.g, "transfer_note": TRANSFER_NOTE,
+           "n_candidate_dots": int(cand.sum())}
 
-    labels, footprint = FR.load_labels()
-    positives = labels == 1
-    truth_m = matched_frame()
-    truth_raw = FR.load_sgmc_offcatalogue()
-    fold, fold_names = FR.macrofolds(footprint)
+    rep["F1"] = stats(f1, cand, args.g)
+    rng = np.random.default_rng(11)
+    idx = np.nonzero(f1.domain.ravel())[0]
+    n = int((cand & f1.domain).sum())
+    uni = []
+    for _ in range(5):
+        u = np.zeros(cand.size, dtype=bool)
+        u[rng.choice(idx, size=min(n, idx.size), replace=False)] = True
+        s = stats(f1, u.reshape(cand.shape), args.g)
+        if s:
+            uni.append(s["c_per_dot"])
+    rep["F1_uniform_mean_c_per_dot"] = float(np.mean(uni))
+    rep["F1_lift"] = (rep["F1"]["c_per_dot"] / rep["F1_uniform_mean_c_per_dot"]
+                      if rep["F1"] else None)
+    shifts = []
+    for dr, dc in ((-7, 0), (7, 0), (0, -7), (0, 7), (-5, -5), (5, 5), (-5, 5), (5, -5)):
+        s = stats(f1, np.roll(np.roll(cand, dr, 0), dc, 1), args.g)
+        if s:
+            shifts.append(s["c_per_dot"])
+    rep["F1_translation_mean_c_per_dot"] = float(np.mean(shifts))
+    rep["F1_beats_translations"] = bool(rep["F1"] and rep["F1"]["c_per_dot"] > np.mean(shifts))
+    rep["F1_block_bootstrap_vs_uniform"] = block_bootstrap(f1, cand)
 
-    res: dict[str, object] = {
-        "raster": args.tif,
-        "positive_cells": int(pred.sum()),
-        "frames": {},
-        "controls": {},
-    }
+    folds = {k: stats(fr, cand, args.g) for k, fr in f2.items()}
+    rep["F2"] = folds
+    ws = {k: v for k, v in folds.items() if k.startswith("F2_cat")}
+    cred = sum(v["credit"] for v in ws.values() if v)
+    dots = sum(v["n_dots"] for v in ws.values() if v)
+    gsum = sum(f2[k].n_truth for k in ws)
+    t = min(cred, gsum)
+    d = 0.2 * t + 0.2 * (dots - cred) + 0.8 * gsum
+    rep["F2_summary"] = {"folds": len(ws),
+                         "folds_with_dots": sum(1 for v in ws.values() if v),
+                         "pooled_c_per_dot": (cred / dots) if dots else None,
+                         "pooled_dti": (t / d) if dots else None}
 
-    for name, truth in [("S_matched", truth_m), ("S_raw", truth_raw), ("L", positives)]:
-        d = evaluate(pred.astype(np.float32), truth & footprint).dti
-        folds = []
-        for k, fn in enumerate(fold_names):
-            m = fold == k
-            folds.append(
-                {
-                    "fold": fn,
-                    "truth_px": int((truth & m).sum()),
-                    "dti": evaluate((pred & m).astype(np.float32), truth & m).dti,
-                }
-            )
-        res["frames"][name] = {"truth_px": int(truth.sum()), "dti": d, "folds": folds}
-        print(f"{name:10s} truth={int(truth.sum()):>6d} DTI={d:.5f} folds="
-              + ",".join(f"{f['dti']:.4f}" for f in folds))
+    anchors = []
+    for p in sorted(glob.glob(os.path.join(args.prior, "*.tif"))):
+        pos_ = load_pos(p)
+        s1 = stats(f1, pos_, args.g)
+        if not s1:
+            continue
+        anchors.append({"file": os.path.basename(p), "n_dots": int(pos_.sum()),
+                        "F1_c_per_dot": s1["c_per_dot"], "F1_dti": s1["dti"]})
+    rep["F1_corpus_anchors"] = anchors
 
-    # ---- matched-mass uniform control ---------------------------------------
-    rng_pool = np.flatnonzero(footprint.ravel())
-    uni_vals = []
-    for s in UNIFORM_SEEDS:
-        rng = np.random.default_rng(9100 + s)
-        idx = rng.choice(rng_pool, int(pred.sum()), replace=False)
-        u = np.zeros(footprint.size, bool)
-        u[idx] = True
-        u = u.reshape(footprint.shape)
-        uni_vals.append(evaluate(u.astype(np.float32), truth_m & footprint).dti)
-    res["controls"]["matched_mass_uniform_matched_frame"] = {
-        "values": [round(v, 5) for v in uni_vals],
-        "mean": float(np.mean(uni_vals)),
-        "lift_of_candidate": float(res["frames"]["S_matched"]["dti"] / np.mean(uni_vals)),
-    }
-    print("uniform control:", [round(v, 4) for v in uni_vals])
+    rep["transfer_factor"] = args.transfer
+    if rep["F1"]:
+        h = rep["F1"]["c_per_dot"] * args.transfer
+        nn = int(cand.sum())
+        t = min(h * nn, args.g)
+        d = 0.2 * t + 0.2 * (nn - h * nn) + 0.8 * args.g
+        rep["modelled_hidden"] = {"assumed_hidden_c_per_dot": h, "N": nn, "T": t,
+                                  "coverage": t / args.g, "dti": t / d}
 
-    # ---- fair control: uniform inside the artifact's own eligible pool ---------
-    # The candidate is barred from the registered prior-artifact positive union and
-    # from the pixel-exact catalogue, so the apples-to-apples control is a uniform
-    # scatter of the same count inside the *same* pool.  The pool is re-derived here
-    # from the frozen build constants and its size is cross-checked against the
-    # receipt, so a drifted constant cannot silently change the control.
-    from scipy import ndimage as _nd
-
-    cat = positives
-    d_cat = _nd.distance_transform_edt(~cat)
-    z = np.load("registry/prior_positive_union.npz")
-    shape = tuple(int(x) for x in z["shape"])
-    prior_u = np.unpackbits(z["packed"])[: shape[0] * shape[1]].reshape(shape).astype(bool)
-    elig = footprint & (d_cat > 1) & ~prior_u
-    receipt = json.loads(Path("evidence/h57_build.json").read_text())
-    assert int(elig.sum()) == int(receipt["eligible_cells"]), (
-        f"eligible pool {int(elig.sum())} != receipt {receipt['eligible_cells']}"
-    )
-    pool_idx = np.flatnonzero(elig.ravel())
-    fr_vals = []
-    for s in UNIFORM_SEEDS:
-        rng = np.random.default_rng(9200 + s)
-        idx = rng.choice(pool_idx, int(pred.sum()), replace=False)
-        u = np.zeros(elig.size, bool)
-        u[idx] = True
-        u = u.reshape(elig.shape)
-        fr_vals.append(evaluate(u.astype(np.float32), truth_m & footprint).dti)
-    res["controls"]["matched_mass_uniform_frozen_pool"] = {
-        "eligible_cells": int(elig.sum()),
-        "values": [round(v, 5) for v in fr_vals],
-        "mean": float(np.mean(fr_vals)),
-        "lift_of_candidate": float(res["frames"]["S_matched"]["dti"] / np.mean(fr_vals)),
-    }
-    print("frozen-pool uniform control:", [round(v, 4) for v in fr_vals],
-          "lift", round(res["frames"]["S_matched"]["dti"] / float(np.mean(fr_vals)), 3))
-
-    # ---- translation control -------------------------------------------------
-    tr = {}
-    for dy, dx in TRANSLATIONS:
-        t = shift(pred, dy, dx) & footprint
-        tr[f"dy{dy}_dx{dx}"] = evaluate(t.astype(np.float32), truth_m & footprint).dti
-    res["controls"]["translations"] = {k: round(v, 5) for k, v in tr.items()}
-    res["controls"]["translation_max"] = float(max(tr.values()))
-    print("translations:", {k: round(v, 4) for k, v in tr.items()})
-
-    # ---- paired block bootstrap ---------------------------------------------
-    b = min(args.boot, 400)
-    sub_p = subtile_credits((pred & footprint).astype(np.float32), truth_m & footprint, footprint)
-    deltas = []
-    rng = np.random.default_rng(20261007)
-    arr_p = np.array(sub_p)
-    for s in UNIFORM_SEEDS[:1]:
-        rngu = np.random.default_rng(9100 + s)
-        idx = rngu.choice(rng_pool, int(pred.sum()), replace=False)
-        u = np.zeros(footprint.size, bool)
-        u[idx] = True
-        u = u.reshape(footprint.shape)
-        arr_u = np.array(subtile_credits((u & footprint).astype(np.float32), truth_m & footprint, footprint))
-
-        def dti_of(a):
-            tp = a[:, 0].sum()
-            fp = a[:, 1].sum()
-            fn = a[:, 2].sum()
-            return tp / (tp + 0.2 * fp + 0.8 * fn + 1e-11)
-
-        n = len(arr_p)
-        for _ in range(b):
-            pick = rng.integers(0, n, n)
-            deltas.append(dti_of(arr_p[pick]) - dti_of(arr_u[pick]))
-    res["controls"]["paired_bootstrap_candidate_minus_uniform"] = {
-        "n": len(deltas),
-        "mean": float(np.mean(deltas)),
-        "ci95": [float(np.quantile(deltas, 0.025)), float(np.quantile(deltas, 0.975))],
-        "positive_fraction": float(np.mean(np.array(deltas) > 0)),
-    }
-    print("bootstrap:", res["controls"]["paired_bootstrap_candidate_minus_uniform"])
-
-    Path(args.out).parent.mkdir(parents=True, exist_ok=True)
-    Path(args.out).write_text(json.dumps(res, indent=1))
-    print("wrote", args.out)
+    os.makedirs(os.path.dirname(args.out) or ".", exist_ok=True)
+    with open(args.out, "w") as fh:
+        json.dump(rep, fh, indent=1)
+    print(json.dumps({k: v for k, v in rep.items() if k != "F1_corpus_anchors"}, indent=1))
+    print("\nF1 corpus anchors (c_per_dot is the quantity a detector is ranked on):")
+    for a in sorted(anchors, key=lambda z: -z["F1_c_per_dot"])[:12]:
+        print(f"  {a['file']:26s} N={a['n_dots']:8d} c/dot={a['F1_c_per_dot']:.4f} "
+              f"DTI={a['F1_dti']:.4f}")
     return 0
 
 
