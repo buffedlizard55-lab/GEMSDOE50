@@ -1,0 +1,786 @@
+{
+ "generated_utc": "20261007T205032Z",
+ "frame": "F1_sgmc_off (USGS SGMC faults > 300 m from the given catalogue)",
+ "instrument": "scripts/h57_stratified.py methodology: elevation-stratified, metric-exact credit per dot, uniform control inside each stratum",
+ "mass": 30000,
+ "n_strata": 5,
+ "operators": [
+  "raw",
+  "grad",
+  "ridge2"
+ ],
+ "frame_stats": {
+  "n_truth": 61664,
+  "domain_px": 4722579,
+  "uniform_c_per_dot": 0.042066141963005066
+ },
+ "channels": [
+  {
+   "channel": "raw::tf.det_elev_slope",
+   "pooled_c_per_dot": 0.08939503987630208,
+   "pooled_base": 0.04066611854359507,
+   "pooled_lift": 2.198268314702039,
+   "strata_won": 5,
+   "strata": 5,
+   "per_stratum_lift": [
+    15.205,
+    4.0902,
+    2.6275,
+    1.6272,
+    1.1441
+   ]
+  },
+  {
+   "channel": "raw::tf.det_elev",
+   "pooled_c_per_dot": 0.08917349700927735,
+   "pooled_base": 0.04066611854359507,
+   "pooled_lift": 2.192820465854915,
+   "strata_won": 5,
+   "strata": 5,
+   "per_stratum_lift": [
+    7.0107,
+    4.0529,
+    2.2974,
+    1.6357,
+    1.7466
+   ]
+  },
+  {
+   "channel": "grad::tf.det_elev_slope",
+   "pooled_c_per_dot": 0.08395443522135417,
+   "pooled_base": 0.04066611854359507,
+   "pooled_lift": 2.06448115109272,
+   "strata_won": 5,
+   "strata": 5,
+   "per_stratum_lift": [
+    9.8816,
+    3.8777,
+    2.5933,
+    1.8913,
+    1.049
+   ]
+  },
+  {
+   "channel": "grad::tf.tc",
+   "pooled_c_per_dot": 0.08007285130818685,
+   "pooled_base": 0.04066611854359507,
+   "pooled_lift": 1.9690310798250095,
+   "strata_won": 5,
+   "strata": 5,
+   "per_stratum_lift": [
+    1.0747,
+    2.838,
+    1.9965,
+    1.8516,
+    1.8648
+   ]
+  },
+  {
+   "channel": "raw::tf.iso_grav_anom",
+   "pooled_c_per_dot": 0.07763114293416341,
+   "pooled_base": 0.04066611854359507,
+   "pooled_lift": 1.9089882613444145,
+   "strata_won": 5,
+   "strata": 5,
+   "per_stratum_lift": [
+    4.0092,
+    2.2224,
+    1.948,
+    2.6015,
+    1.2403
+   ]
+  },
+  {
+   "channel": "ridge2::tf.geod_dilaterate",
+   "pooled_c_per_dot": 0.07673886922200521,
+   "pooled_base": 0.04066611854359507,
+   "pooled_lift": 1.8870468087515966,
+   "strata_won": 5,
+   "strata": 5,
+   "per_stratum_lift": [
+    1.3244,
+    1.3879,
+    2.6227,
+    2.088,
+    1.6543
+   ]
+  },
+  {
+   "channel": "ridge2::tf.det_elev_slope",
+   "pooled_c_per_dot": 0.07631322987874349,
+   "pooled_base": 0.04066611854359507,
+   "pooled_lift": 1.87658012644934,
+   "strata_won": 5,
+   "strata": 5,
+   "per_stratum_lift": [
+    7.2217,
+    3.277,
+    2.2599,
+    1.7298,
+    1.1514
+   ]
+  },
+  {
+   "channel": "grad::tf.det_elev",
+   "pooled_c_per_dot": 0.07146490681966146,
+   "pooled_base": 0.04066611854359507,
+   "pooled_lift": 1.7573574606843614,
+   "strata_won": 4,
+   "strata": 5,
+   "per_stratum_lift": [
+    9.9385,
+    3.7179,
+    2.2599,
+    1.2164,
+    0.9294
+   ]
+  },
+  {
+   "channel": "ridge2::tf.det_elev",
+   "pooled_c_per_dot": 0.061569507344563804,
+   "pooled_base": 0.04066611854359507,
+   "pooled_lift": 1.5140246856497943,
+   "strata_won": 4,
+   "strata": 5,
+   "per_stratum_lift": [
+    2.087,
+    3.2674,
+    2.5211,
+    1.3984,
+    0.7394
+   ]
+  },
+  {
+   "channel": "ridge2::tf.tc",
+   "pooled_c_per_dot": 0.06064371083577474,
+   "pooled_base": 0.04066611854359507,
+   "pooled_lift": 1.4912588908814397,
+   "strata_won": 5,
+   "strata": 5,
+   "per_stratum_lift": [
+    1.3541,
+    2.3938,
+    1.5302,
+    1.5217,
+    1.2332
+   ]
+  },
+  {
+   "channel": "raw::tf.cond_surf",
+   "pooled_c_per_dot": 0.05753456904093424,
+   "pooled_base": 0.04066611854359507,
+   "pooled_lift": 1.4148035539525559,
+   "strata_won": 3,
+   "strata": 5,
+   "per_stratum_lift": [
+    0.5813,
+    0.9014,
+    1.755,
+    1.3679,
+    1.5048
+   ]
+  },
+  {
+   "channel": "grad::tf.iso_grav_anom_slope",
+   "pooled_c_per_dot": 0.05240077247619629,
+   "pooled_base": 0.04066611854359507,
+   "pooled_lift": 1.2885609532668179,
+   "strata_won": 3,
+   "strata": 5,
+   "per_stratum_lift": [
+    0.59,
+    0.6345,
+    1.905,
+    1.4793,
+    1.1535
+   ]
+  },
+  {
+   "channel": "ridge2::tf.depth_to_base_surf",
+   "pooled_c_per_dot": 0.04816853421529134,
+   "pooled_base": 0.04066611854359507,
+   "pooled_lift": 1.1844881178825437,
+   "strata_won": 3,
+   "strata": 5,
+   "per_stratum_lift": [
+    1.0293,
+    0.7873,
+    0.9175,
+    1.1139,
+    1.4381
+   ]
+  },
+  {
+   "channel": "grad::tf.iso_grav_anom_vg",
+   "pooled_c_per_dot": 0.047079991404215496,
+   "pooled_base": 0.04066611854359507,
+   "pooled_lift": 1.1577203109203695,
+   "strata_won": 3,
+   "strata": 5,
+   "per_stratum_lift": [
+    1.4394,
+    0.8527,
+    0.697,
+    1.7497,
+    1.0028
+   ]
+  },
+  {
+   "channel": "grad::tf.tmi_hg",
+   "pooled_c_per_dot": 0.044689263407389324,
+   "pooled_base": 0.04066611854359507,
+   "pooled_lift": 1.098931125169503,
+   "strata_won": 2,
+   "strata": 5,
+   "per_stratum_lift": [
+    0.5453,
+    2.6367,
+    1.9147,
+    0.9684,
+    0.5262
+   ]
+  },
+  {
+   "channel": "ridge2::tf.tmi_hg",
+   "pooled_c_per_dot": 0.04270592244466146,
+   "pooled_base": 0.04066611854359507,
+   "pooled_lift": 1.0501597883968117,
+   "strata_won": 3,
+   "strata": 5,
+   "per_stratum_lift": [
+    1.2765,
+    2.1389,
+    1.7591,
+    0.8824,
+    0.6089
+   ]
+  },
+  {
+   "channel": "ridge2::tf.cond_surf",
+   "pooled_c_per_dot": 0.0414728276570638,
+   "pooled_base": 0.04066611854359507,
+   "pooled_lift": 1.019837376724408,
+   "strata_won": 2,
+   "strata": 5,
+   "per_stratum_lift": [
+    0.9386,
+    0.7963,
+    1.0422,
+    1.2492,
+    0.926
+   ]
+  },
+  {
+   "channel": "grad::tf.iso_grav_anom_hg",
+   "pooled_c_per_dot": 0.040991126505533854,
+   "pooled_base": 0.04066611854359507,
+   "pooled_lift": 1.0079921067851696,
+   "strata_won": 3,
+   "strata": 5,
+   "per_stratum_lift": [
+    2.3516,
+    1.3548,
+    0.8597,
+    1.1815,
+    0.7792
+   ]
+  },
+  {
+   "channel": "ridge2::tf.iso_grav_anom_slope",
+   "pooled_c_per_dot": 0.04068798065185547,
+   "pooled_base": 0.04066611854359507,
+   "pooled_lift": 1.0005376000720836,
+   "strata_won": 2,
+   "strata": 5,
+   "per_stratum_lift": [
+    2.0668,
+    1.0213,
+    0.988,
+    0.9217,
+    0.9866
+   ]
+  },
+  {
+   "channel": "grad::tf.tmi_vg",
+   "pooled_c_per_dot": 0.040349946975708005,
+   "pooled_base": 0.04066611854359507,
+   "pooled_lift": 0.9922251845218981,
+   "strata_won": 2,
+   "strata": 5,
+   "per_stratum_lift": [
+    0.5224,
+    2.1137,
+    1.7512,
+    0.9279,
+    0.4993
+   ]
+  },
+  {
+   "channel": "ridge2::tf.tmi_vg",
+   "pooled_c_per_dot": 0.040252539443969726,
+   "pooled_base": 0.04066611854359507,
+   "pooled_lift": 0.9898298850631151,
+   "strata_won": 2,
+   "strata": 5,
+   "per_stratum_lift": [
+    0.846,
+    2.1881,
+    1.6037,
+    0.7818,
+    0.6028
+   ]
+  },
+  {
+   "channel": "ridge2::tf.tmi",
+   "pooled_c_per_dot": 0.03987220217386882,
+   "pooled_base": 0.04066611854359507,
+   "pooled_lift": 0.9804772031814357,
+   "strata_won": 2,
+   "strata": 5,
+   "per_stratum_lift": [
+    0.8224,
+    2.2617,
+    1.7096,
+    0.7537,
+    0.5435
+   ]
+  },
+  {
+   "channel": "raw::tf.tmi_hg",
+   "pooled_c_per_dot": 0.03797987823486328,
+   "pooled_base": 0.04066611854359507,
+   "pooled_lift": 0.9339440201097119,
+   "strata_won": 3,
+   "strata": 5,
+   "per_stratum_lift": [
+    0.3482,
+    1.7185,
+    1.8248,
+    1.0797,
+    0.3515
+   ]
+  },
+  {
+   "channel": "grad::tf.tmi",
+   "pooled_c_per_dot": 0.03775423514048259,
+   "pooled_base": 0.04066611854359507,
+   "pooled_lift": 0.9283953446407511,
+   "strata_won": 3,
+   "strata": 5,
+   "per_stratum_lift": [
+    0.2892,
+    1.708,
+    1.8093,
+    1.097,
+    0.3392
+   ]
+  },
+  {
+   "channel": "grad::tf.rtp",
+   "pooled_c_per_dot": 0.03732288017272949,
+   "pooled_base": 0.04066611854359507,
+   "pooled_lift": 0.9177881123008692,
+   "strata_won": 3,
+   "strata": 5,
+   "per_stratum_lift": [
+    0.2786,
+    1.6296,
+    1.7431,
+    1.1118,
+    0.3497
+   ]
+  },
+  {
+   "channel": "ridge2::tf.rtp",
+   "pooled_c_per_dot": 0.036971416091918945,
+   "pooled_base": 0.04066611854359507,
+   "pooled_lift": 0.9091454364469204,
+   "strata_won": 2,
+   "strata": 5,
+   "per_stratum_lift": [
+    0.7041,
+    1.9966,
+    1.6474,
+    0.7172,
+    0.4991
+   ]
+  },
+  {
+   "channel": "grad::tf.geod_2ndinv",
+   "pooled_c_per_dot": 0.036482170867919925,
+   "pooled_base": 0.04066611854359507,
+   "pooled_lift": 0.8971146540285163,
+   "strata_won": 2,
+   "strata": 5,
+   "per_stratum_lift": [
+    0.6941,
+    0.6976,
+    1.584,
+    1.0272,
+    0.629
+   ]
+  },
+  {
+   "channel": "ridge2::tf.iso_grav_anom_vg",
+   "pooled_c_per_dot": 0.03607516632080078,
+   "pooled_base": 0.04066611854359507,
+   "pooled_lift": 0.8871062105946335,
+   "strata_won": 2,
+   "strata": 5,
+   "per_stratum_lift": [
+    2.8999,
+    0.6718,
+    1.0282,
+    0.9536,
+    0.7279
+   ]
+  },
+  {
+   "channel": "ridge2::tf.geod_2ndinv",
+   "pooled_c_per_dot": 0.034607867113749184,
+   "pooled_base": 0.04066611854359507,
+   "pooled_lift": 0.8510245962286443,
+   "strata_won": 2,
+   "strata": 5,
+   "per_stratum_lift": [
+    0.6954,
+    0.8808,
+    1.1091,
+    1.211,
+    0.527
+   ]
+  },
+  {
+   "channel": "raw::tf.tc",
+   "pooled_c_per_dot": 0.03451119794845581,
+   "pooled_base": 0.04066611854359507,
+   "pooled_lift": 0.8486474535665104,
+   "strata_won": 2,
+   "strata": 5,
+   "per_stratum_lift": [
+    0.6815,
+    1.645,
+    0.0271,
+    1.2175,
+    0.7112
+   ]
+  },
+  {
+   "channel": "grad::tf.geod_shearrate",
+   "pooled_c_per_dot": 0.03411622428894043,
+   "pooled_base": 0.04066611854359507,
+   "pooled_lift": 0.8389348556186154,
+   "strata_won": 2,
+   "strata": 5,
+   "per_stratum_lift": [
+    0.5777,
+    0.4051,
+    1.456,
+    1.0325,
+    0.6188
+   ]
+  },
+  {
+   "channel": "grad::tf.geod_dilaterate",
+   "pooled_c_per_dot": 0.033536892318725586,
+   "pooled_base": 0.04066611854359507,
+   "pooled_lift": 0.8246887954839658,
+   "strata_won": 2,
+   "strata": 5,
+   "per_stratum_lift": [
+    0.2251,
+    0.6563,
+    1.1438,
+    1.4187,
+    0.405
+   ]
+  },
+  {
+   "channel": "grad::tf.cond_surf",
+   "pooled_c_per_dot": 0.03249593633015951,
+   "pooled_base": 0.04066611854359507,
+   "pooled_lift": 0.7990911720606694,
+   "strata_won": 2,
+   "strata": 5,
+   "per_stratum_lift": [
+    7.2841,
+    1.0579,
+    0.3945,
+    0.7469,
+    0.5226
+   ]
+  },
+  {
+   "channel": "raw::tf.tmi_vg",
+   "pooled_c_per_dot": 0.03214352722167969,
+   "pooled_base": 0.04066611854359507,
+   "pooled_lift": 0.7904252575081893,
+   "strata_won": 2,
+   "strata": 5,
+   "per_stratum_lift": [
+    0.2916,
+    1.8404,
+    1.609,
+    0.6061,
+    0.3738
+   ]
+  },
+  {
+   "channel": "ridge2::tf.geod_shearrate",
+   "pooled_c_per_dot": 0.030891999181111653,
+   "pooled_base": 0.04066611854359507,
+   "pooled_lift": 0.7596495630138558,
+   "strata_won": 0,
+   "strata": 5,
+   "per_stratum_lift": [
+    0.5984,
+    0.8366,
+    0.8261,
+    0.9383,
+    0.6101
+   ]
+  },
+  {
+   "channel": "ridge2::tf.mag_anom",
+   "pooled_c_per_dot": 0.029977646128336588,
+   "pooled_base": 0.04066611854359507,
+   "pooled_lift": 0.7371651684976971,
+   "strata_won": 1,
+   "strata": 5,
+   "per_stratum_lift": [
+    0.8177,
+    0.5703,
+    0.8175,
+    1.0008,
+    0.5759
+   ]
+  },
+  {
+   "channel": "ridge2::tf.iso_grav_anom_hg",
+   "pooled_c_per_dot": 0.029562505594889325,
+   "pooled_base": 0.04066611854359507,
+   "pooled_lift": 0.7269566571296348,
+   "strata_won": 2,
+   "strata": 5,
+   "per_stratum_lift": [
+    1.4787,
+    0.9799,
+    1.1128,
+    0.661,
+    0.5202
+   ]
+  },
+  {
+   "channel": "grad::tf.mag_anom",
+   "pooled_c_per_dot": 0.025999596405029298,
+   "pooled_base": 0.04066611854359507,
+   "pooled_lift": 0.639342955171812,
+   "strata_won": 1,
+   "strata": 5,
+   "per_stratum_lift": [
+    0.3433,
+    0.7431,
+    1.6634,
+    0.6411,
+    0.26
+   ]
+  },
+  {
+   "channel": "raw::tf.rtp",
+   "pooled_c_per_dot": 0.023689977077643077,
+   "pooled_base": 0.04066611854359507,
+   "pooled_lift": 0.5825482717817497,
+   "strata_won": 2,
+   "strata": 5,
+   "per_stratum_lift": [
+    0.0453,
+    1.3322,
+    1.3302,
+    0.589,
+    0.1479
+   ]
+  },
+  {
+   "channel": "grad::tf.iso_grav_anom",
+   "pooled_c_per_dot": 0.021654555479685464,
+   "pooled_base": 0.04066611854359507,
+   "pooled_lift": 0.53249624638927,
+   "strata_won": 0,
+   "strata": 5,
+   "per_stratum_lift": [
+    0.4546,
+    0.21,
+    0.2336,
+    0.6066,
+    0.6801
+   ]
+  },
+  {
+   "channel": "raw::tf.tmi",
+   "pooled_c_per_dot": 0.02155208066304525,
+   "pooled_base": 0.04066611854359507,
+   "pooled_lift": 0.5299763398845379,
+   "strata_won": 1,
+   "strata": 5,
+   "per_stratum_lift": [
+    0.0,
+    0.7137,
+    1.4649,
+    0.6301,
+    0.1126
+   ]
+  },
+  {
+   "channel": "raw::tf.iso_grav_anom_vg",
+   "pooled_c_per_dot": 0.020624578603108724,
+   "pooled_base": 0.04066611854359507,
+   "pooled_lift": 0.5071686047685783,
+   "strata_won": 0,
+   "strata": 5,
+   "per_stratum_lift": [
+    0.3061,
+    0.0863,
+    0.8103,
+    0.4473,
+    0.5571
+   ]
+  },
+  {
+   "channel": "raw::tf.mag_anom",
+   "pooled_c_per_dot": 0.02049805119832357,
+   "pooled_base": 0.04066611854359507,
+   "pooled_lift": 0.5040572332062908,
+   "strata_won": 0,
+   "strata": 5,
+   "per_stratum_lift": [
+    0.0,
+    0.372,
+    0.8203,
+    0.8324,
+    0.2421
+   ]
+  },
+  {
+   "channel": "raw::tf.depth_to_base_surf",
+   "pooled_c_per_dot": 0.019093308385213215,
+   "pooled_base": 0.04066611854359507,
+   "pooled_lift": 0.4695139115562436,
+   "strata_won": 1,
+   "strata": 5,
+   "per_stratum_lift": [
+    0.0,
+    0.0,
+    0.0517,
+    0.0,
+    1.0729
+   ]
+  },
+  {
+   "channel": "raw::tf.iso_grav_anom_hg",
+   "pooled_c_per_dot": 0.01686355522473653,
+   "pooled_base": 0.04066611854359507,
+   "pooled_lift": 0.4146831767742571,
+   "strata_won": 0,
+   "strata": 5,
+   "per_stratum_lift": [
+    0.0,
+    0.0062,
+    0.1339,
+    0.3807,
+    0.6681
+   ]
+  },
+  {
+   "channel": "ridge2::tf.iso_grav_anom",
+   "pooled_c_per_dot": 0.016316209665934243,
+   "pooled_base": 0.04066611854359507,
+   "pooled_lift": 0.401223678341538,
+   "strata_won": 0,
+   "strata": 5,
+   "per_stratum_lift": [
+    0.7538,
+    0.1373,
+    0.1174,
+    0.7634,
+    0.3163
+   ]
+  },
+  {
+   "channel": "raw::tf.geod_shearrate",
+   "pooled_c_per_dot": 0.015415801509221394,
+   "pooled_base": 0.04066611854359507,
+   "pooled_lift": 0.379082195727514,
+   "strata_won": 1,
+   "strata": 5,
+   "per_stratum_lift": [
+    0.0,
+    0.0311,
+    0.5991,
+    1.0167,
+    0.0
+   ]
+  },
+  {
+   "channel": "raw::tf.geod_dilaterate",
+   "pooled_c_per_dot": 0.014522964477539063,
+   "pooled_base": 0.04066611854359507,
+   "pooled_lift": 0.35712689082854293,
+   "strata_won": 0,
+   "strata": 5,
+   "per_stratum_lift": [
+    0.9585,
+    0.4555,
+    0.4938,
+    0.0494,
+    0.4453
+   ]
+  },
+  {
+   "channel": "grad::tf.depth_to_base_surf",
+   "pooled_c_per_dot": 0.013220988877614338,
+   "pooled_base": 0.04066611854359507,
+   "pooled_lift": 0.32511066585912585,
+   "strata_won": 0,
+   "strata": 5,
+   "per_stratum_lift": [
+    0.2904,
+    0.0997,
+    0.195,
+    0.2975,
+    0.45
+   ]
+  },
+  {
+   "channel": "raw::tf.iso_grav_anom_slope",
+   "pooled_c_per_dot": 0.012774207623799641,
+   "pooled_base": 0.04066611854359507,
+   "pooled_lift": 0.31412409350317955,
+   "strata_won": 0,
+   "strata": 5,
+   "per_stratum_lift": [
+    0.0,
+    0.0613,
+    0.0942,
+    0.5076,
+    0.3524
+   ]
+  },
+  {
+   "channel": "raw::tf.geod_2ndinv",
+   "pooled_c_per_dot": 0.011389843241373697,
+   "pooled_base": 0.04066611854359507,
+   "pooled_lift": 0.2800818875586443,
+   "strata_won": 0,
+   "strata": 5,
+   "per_stratum_lift": [
+    0.0,
+    0.0311,
+    0.4129,
+    0.6763,
+    0.057
+   ]
+  }
+ ],
+ "seconds": 327.7,
+ "scope_note": "This is a proxy frame, not the organizer truth. A lift above 1.0 means the operator selects cells closer to *state-geologic-map* structures beyond the given catalogue than a uniform emitter does; it does not prove the same ordering against the hidden label set."
+}

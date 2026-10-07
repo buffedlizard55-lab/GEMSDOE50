@@ -1,8 +1,8 @@
 {
- "schema": "gemsdoe50.h59-build.v1",
- "generated_utc": "2026-10-07T21:07:52Z",
- "git_commit": "09fdee9868c0b6f98bacd0ffa02a07ee3d24b064",
- "preregistration": "docs/research/h59-hypotheses-preregistered.md",
+ "schema": "gemsdoe50.h61-build.v1",
+ "generated_utc": "2026-10-07T21:25:43Z",
+ "git_commit": "8f1263811d3faf4cdb72fcd177de76de9954444a",
+ "preregistration": "docs/research/h61-hypotheses-preregistered.md",
  "inputs": {
   "comcat": {
    "path": "data/external/usgs_comcat_earthquakes.csv.gz",
@@ -222,7 +222,7 @@
     "SE-11": 0.0
    }
   },
-  "H59-S": {
+  "H61-S": {
    "mass": 326,
    "pooled": {
     "score": 0.00015302811816164593,
@@ -275,7 +275,7 @@
     "SE-11": 0.0
    }
   },
-  "H59-S-support-emit": {
+  "H61-S-support-emit": {
    "mass": 326,
    "pooled": {
     "score": 0.00044017663595117125,
@@ -858,7 +858,7 @@
     "SE-11": 0.0
    }
   },
-  "H59-H-hybrid-80k": {
+  "H61-H-hybrid-80k": {
    "mass": 80000,
    "pooled": {
     "score": 0.2088327080799114,
@@ -911,7 +911,7 @@
     "SE-11": 0.0
    }
   },
-  "H59-M-spacing4-80k": {
+  "H61-M-spacing4-80k": {
    "mass": 80000,
    "pooled": {
     "score": 0.18656708636732566,
@@ -964,7 +964,7 @@
     "SE-11": 0.0
    }
   },
-  "H59-M-spacing5-80k": {
+  "H61-M-spacing5-80k": {
    "mass": 80000,
    "pooled": {
     "score": 0.178599441376928,
@@ -1034,7 +1034,7 @@
     "mass": 128,
     "truth_cells": 6514,
     "eligible": 374811,
-    "H59-S": {
+    "H61-S": {
      "score": 0.0007032278045430296,
      "tp": 3.6830517934604488,
      "fp": 127.07868932583327,
@@ -1118,7 +1118,7 @@
    }
   },
   "pooled": {
-   "H59-S": 0.0007032278045430296,
+   "H61-S": 0.0007032278045430296,
    "density-best": 0.009251288880239362,
    "translated-mean": 0.0064837325343587646,
    "H57-matched": 0.001163164410449071
@@ -1216,7 +1216,7 @@
   ]
  },
  "decisions": {
-  "H59-S": {
+  "H61-S": {
    "gates": {
     "pooled_above_incumbent": false,
     "fold_wins_vs_incumbent_ge_3": false,
@@ -1240,7 +1240,7 @@
    "numeric_pass": false,
    "slot_eligible_pending_uniqueness": false
   },
-  "H59-H-hybrid-80k": {
+  "H61-H-hybrid-80k": {
    "gates": {
     "pooled_above_incumbent": false,
     "fold_wins_vs_incumbent_ge_3": false,
@@ -1264,7 +1264,7 @@
    "numeric_pass": false,
    "slot_eligible_pending_uniqueness": false
   },
-  "H59-M-spacing4-80k": {
+  "H61-M-spacing4-80k": {
    "gates": {
     "pooled_above_incumbent": false,
     "fold_wins_vs_incumbent_ge_3": false,
@@ -1284,7 +1284,7 @@
    "numeric_pass": false,
    "slot_eligible_pending_uniqueness": false
   },
-  "H59-M-spacing5-80k": {
+  "H61-M-spacing5-80k": {
    "gates": {
     "pooled_above_incumbent": false,
     "fold_wins_vs_incumbent_ge_3": false,
@@ -1307,7 +1307,7 @@
  },
  "artifact": {
   "all_finite": {
-   "path": "docs/downloads/gemsdoe50-h59-updipseis-326-20261007T205554Z-cc1f44da-allfinite.tif",
+   "path": "docs/downloads/gemsdoe50-h61-updipseis-326-20261007T205554Z-cc1f44da-allfinite.tif",
    "sha256": "009dd3d8dffae29ded5db312bb7191c81de1d05e4acf7a071185f49f6fe26719",
    "bytes": 162992,
    "dtype": "float32",
@@ -1332,7 +1332,7 @@
    "nan_inside_footprint": 0
   },
   "nan_outside": {
-   "path": "docs/downloads/gemsdoe50-h59-updipseis-326-20261007T205554Z-cc1f44da-nan.tif",
+   "path": "docs/downloads/gemsdoe50-h61-updipseis-326-20261007T205554Z-cc1f44da-nan.tif",
    "sha256": "ed9ca147851f0df0a167d3aafc0481df6bf8adddf486c12034729e2d736ab148",
    "bytes": 212679,
    "dtype": "float32",
@@ -1357,11 +1357,11 @@
    "nan_inside_footprint": 0
   },
   "zip": {
-   "path": "docs/downloads/gemsdoe50-h59-updipseis-326-20261007T205554Z-cc1f44da-allfinite.zip",
-   "sha256": "2da283770f6b0dc6288290a2e454d5e36a6dc4570ecb473c23d3443a94744d10",
+   "path": "docs/downloads/gemsdoe50-h61-updipseis-326-20261007T205554Z-cc1f44da-allfinite.zip",
+   "sha256": "cd0b62b2f0fa131acde3fb8df1b086d2c9cbefdf1bf19f553c0426d5f7f65227",
    "bytes": 12029
   },
-  "entry_name": "GEMSDOE50-H59-UPDIPSEIS-326-CC1F44DA"
+  "entry_name": "GEMSDOE50-H61-UPDIPSEIS-326-CC1F44DA"
  },
- "seconds": 58.7
+ "seconds": 58.8
 }

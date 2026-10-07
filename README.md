@@ -73,42 +73,51 @@ by finding defensible fault traces omitted from the supplied catalogue. Core val
     to `main` only when repository/environment policy permits it. Never switch or push another
     branch from this session.
 
-## H59 — current status (2026-10-07): submit H57; the mandated seismic map failed
+## H61 — current status (2026-10-07): which file to submit, and the mandated seismic map
 
 **Recommended file (YES, OK to submit):**
-[`docs/downloads/gemsdoe50-h57-scarpstep-80000-20261007T1830Z-allfinite.tif`](docs/downloads/gemsdoe50-h57-scarpstep-80000-20261007T1830Z-allfinite.tif)
-(SHA-256 `8027c4e9fe0f789e2d7180a7ccc031abec90b391cf9e42ebcc125752af9fb696`), entry name
-`GEMSDOE50-H57-SCARPSTEP`; step-by-step guide: [`docs/how-to-submit.html`](docs/how-to-submit.html).
-It remains the best file on the frozen spatially-blocked holdout (pooled DTI 0.2178 in the H59
-frame) and re-emitting it from code reproduces the shipped pixels exactly. Expectation on the
-hidden labels ≈ 0.23 (P(> 0.3774) ≈ 4 %); a proxy result is not an organizer score.
+[`docs/downloads/gemsdoe50-h59-sharpened-scarp-scatter-90k-20261007T171954Z-allfinite.tif`](docs/downloads/gemsdoe50-h59-sharpened-scarp-scatter-90k-20261007T171954Z-allfinite.tif)
+(SHA-256 `838f9502fd4a2720374559db0947fb3372f97629401a617e5c9c95c1b1ce8be5`, 90,000 dots), entry name `GEMSDOE50-H59-SHARPENED-SCARP-SCATTER-90K`, note (corrected —
+the published one cites the retracted transfer model): "GEMSDOE50 H59 rev2: blue-noise scatter, 90,000 dots on a 3-px lattice, sampling a sharpened rank-mean of the official band-19 slope-edge map and USGS 3DEP LiDAR scarp descriptors; no dot on a supplied-catalogue pixel or any prior-artifact pixel. Research model; no organizer score."
+Step-by-step guide: [`docs/how-to-submit.html`](docs/how-to-submit.html).
 
-**H59 (preregistered in `docs/research/h59-hypotheses-preregistered.md`) — NO SLOT.** The
-mandated seismicity-lineation artifact was built as specified (ComCat → Zaliapin–Ben-Zion
-declustering → unverified 2-D triangle screen → location-error-deconvolved covariance →
-epicentral + up-dip corridors → snap to the H57 ridge): 31 lineations, 326 dots, DTI 0.0002,
-below random dots and translated corridors, and below smoothed density on withheld faults
-(0.0007 vs 0.0093). Inside every H57-strength decile the corridors carry *less* fault credit than
-the cells outside them; loosening every screen (up to 1,034 lineations) never lifts that ratio
-above 0.97. A corridor/H57 hybrid (0.2088) and wider H57 spacing (4 px 0.1866, 5 px 0.1786) also
-lost. The H59 file is valid and unique but labelled **do not submit**.
+**Why this file (merge-time adjudication, [`evidence/h61_candidates.json`](evidence/h61_candidates.json)).**
+While this session ran, two other sessions merged new candidates and `main` ended up naming two
+different "current candidates" (the page led with H57; the H60 receipt recommended the sharpened-scarp
+file). Rule: a file is eligible only if none of its dots reuses a pixel of the 61 registered prior
+artifacts (charter item 2); eligible files are ranked by the repository's frozen gate. Result:
+sharpened-scarp 90k **0.2125** > H60-union 0.2033 > H57 0.2025
+(H57 is ineligible anyway: 27,248 of its dots reuse prior pixels). This session's independent
+instrument agrees on the order (0.2492 vs H57 0.2178 pooled), but the lead is not uniform:
+2/4 macrofolds vs H57, paired 16-subtile interval [-0.0225, +0.0539].
+4,753 of its dots lie within 300 m of the supplied catalogue (1-px buffer). Proxy scores
+are not organizer scores; expect roughly the low 0.2s.
+
+**H61 (preregistered in [`docs/research/h61-hypotheses-preregistered.md`](docs/research/h61-hypotheses-preregistered.md);
+developed as "H59" and renumbered at merge) — NO SLOT.** The mandated seismicity-lineation artifact was
+built as specified (ComCat → Zaliapin–Ben-Zion declustering → unverified 2-D triangle screen →
+location-error-deconvolved covariance → epicentral + up-dip corridors → snap to the H57 ridge): 31
+lineations, 326 dots, DTI 0.0002, below random dots and translated corridors, and below smoothed
+density on withheld faults (0.0007 vs 0.0093). Inside every H57-strength decile the corridors carry
+*less* fault credit than the cells outside them; loosening every screen (up to 1,034 lineations) never
+lifts that ratio above 0.97. A corridor/H57 hybrid (0.2088) and wider H57 spacing (4 px 0.1866, 5 px
+0.1786) also lost. The H61 file is valid and unique but labelled **do not submit**.
 
 **Corrections made this session:** the metric "reduces exactly" claim and the "3 px ⇒ no
 competition" claim are false (errata in `docs/research/h56-diagnosis.md`,
-`docs/research/h33-02778-study-20261007.md`, and the site); H57's uniqueness was re-measured against
-the full corpus of 302 distinct prior files (not a copy: max Jaccard 0.172 with our own unsubmitted
-H56; 34 % of its dots share a pixel with at least one registered prior; chance-corrected 2-px
-proximity 0.508 to the dense 13GEMSDOE r8-ensemble — borderline, because all scarp-based files follow
-the same scarps); `scripts/check_submission.py` now accepts zero-outside files (the portal scored
-such files). Full working, flags and next steps:
-[`docs/research/h59-verdict-20261007.md`](docs/research/h59-verdict-20261007.md).
+`docs/research/h33-02778-study-20261007.md`, this README and the site); uniqueness was re-measured
+against the full corpus of 307 distinct rasters; `scripts/check_submission.py` now accepts
+zero-outside files (the portal scored such files); the preserved H57 band no longer says "Yes,
+submit". Full working, flags F1–F9 and next steps:
+[`docs/research/h61-verdict-20261007.md`](docs/research/h61-verdict-20261007.md).
 
 ```bash
-.venv/bin/python scripts/fetch_prior_corpus.py --out .arena/prior_corpus --receipt evidence/h59_prior_corpus_receipt.json
-.venv/bin/python scripts/build_h59.py --stamp 20261007T205554Z      # deterministic: same bytes
-.venv/bin/python scripts/h59_uniqueness.py --candidate docs/downloads/<file>.tif
-.venv/bin/python scripts/h59_sensitivity.py                          # post-hoc, exploratory
-python scripts/build_h55_site.py && python scripts/build_h58_site.py && python scripts/build_h59_site.py
+.venv/bin/python scripts/fetch_prior_corpus.py --out .arena/prior_corpus --receipt evidence/h61_prior_corpus_receipt.json
+.venv/bin/python scripts/build_h61.py --stamp 20261007T205554Z      # deterministic: same bytes
+.venv/bin/python scripts/h61_candidates.py                           # which file to submit
+.venv/bin/python scripts/h61_uniqueness.py --candidate docs/downloads/<file>.tif
+.venv/bin/python scripts/h61_sensitivity.py                          # post-hoc, exploratory
+for b in h55 h58 h59 h60 h61; do python scripts/build_${b}_site.py; done
 ```
 
 ## H56 — the best-measured design in this repository, and an H51 provenance correction (this session)
@@ -143,7 +152,8 @@ eligibility are cleared.**
 **Three findings that are binding on anything built afterwards.**
 
 1. **The corpus's structural flaw is emission geometry, not detector content.** For binary unit dots
-   the official metric reduces exactly to `DTI = T / (0.2N + 0.8G)`, so every dot costs the same
+   the official metric reduces exactly to `DTI = T / (0.2N + 0.8G)` *(erratum, H61: false — exact only
+   when T = M; see `docs/research/h61-verdict-20261007.md` §4)*, so every dot costs the same
    0.2 in the denominator no matter what it earns. Top-*N* selection piles dots a few pixels deep on
    the strongest feature, where the `max` in the numerator saturates and the cost does not. H56
    emits **variable-density blue noise at exactly 3 px** — `R = 300 m`, the coarsest spacing at
@@ -173,6 +183,94 @@ python scripts/validate_h56.py --truth-mode sgmc_off --out evidence/h56_holdout_
 python scripts/h56_uniqueness.py --novel-threshold 0.45
 python scripts/h56_holdout.py --n-boot 200        # frozen macrofold split
 ```
+
+## H59 — the current candidate of this session: sharpened topographic-scarp scatter (this session)
+
+**Note on numbering.** This session's work was originally numbered H57, but unrelated H57 and H58
+series were merged to `main` from other Arena sessions while this branch was in flight, so the series
+was renumbered **H59** at merge time. The raster bytes were not changed by the rename; every hash in
+`evidence/h59_build.json` was re-verified against the renamed files afterwards, and the `.zip` was
+rebuilt so its internal entry name matches the delivered file.
+
+**Read first:** [`docs/hypotheses-20261007-h59.md`](docs/hypotheses-20261007-h59.md),
+[`docs/research/h59-preregistration.md`](docs/research/h59-preregistration.md) (the frozen protocol and
+its declared **Amendment 1**),
+[`docs/research/h59-final-analysis.md`](docs/research/h59-final-analysis.md),
+[`docs/research/h59-deviation-log.md`](docs/research/h59-deviation-log.md) (the three-pass record),
+[`docs/research/h59-proxy-gap.md`](docs/research/h59-proxy-gap.md), and
+[`docs/research/gems-official-clarifications.md`](docs/research/gems-official-clarifications.md)
+(official rulings and the source licence ledger).
+
+**One-click download, and it is the first thing on the site:**
+[`docs/downloads/gemsdoe50-h59-sharpened-scarp-scatter-90k-20261007T171954Z-allfinite.tif`](docs/downloads/gemsdoe50-h59-sharpened-scarp-scatter-90k-20261007T171954Z-allfinite.tif) — 90,000 predicted cells, values `0` / `1`,
+`float32`, EPSG:32611, 3730 × 3292, **every one of the 12,279,160 cells finite and inside `[0, 1]`**,
+SHA-256 `838f9502fd4a2720374559db0947fb3372f97629401a617e5c9c95c1b1ce8be5`. A `-nan.tif` sibling keeps NaN outside the study
+footprint to match the official sample, and a `.zip` carries the all-finite GeoTIFF. Portal entry name
+`GEMSDOE50-H59-SHARPENED-SCARP-SCATTER-90K`; the note is the `portal_note` field of
+[`evidence/h59_build.json`](evidence/h59_build.json).
+
+### What it is, and what changed after the first build
+
+The field is a **sharpened NaN-aware rank-mean** of two families: the official layer 19
+(detrended-elevation slope) *gradient magnitude*, a step-edge detector for a fault scarp, and the USGS
+3DEP 1 m LiDAR scarp descriptor stack. Sharpening exponent **^16**, 90,000 dots on a 3 px lattice, one
+per chosen block, on the strongest eligible cell of the block; never on a supplied catalogue cell and
+never on a registered prior-artifact cell.
+
+Two screens after the first frozen build changed the design; both are declared post-hoc in the
+preregistration because they were run **after** the first build's numbers were seen:
+
+1. **A rank mean was compressing the peaks.** Raising the blend to a power lifted the off-catalogue DTI
+   at 90,000 dots from **0.17142 to 0.23406** with emitter, seed, lattice and pool frozen (+37 %), and
+   the lift over a matched-mass uniform control from 1.33× to **1.84×**. The response is monotone to
+   ^8, ^16 is the frozen value, and it turns over by ^32.
+2. **The dot count was sized for the wrong frame.** Revision 1 spent 180,000 dots because the *proxy*
+   prefers ~250,000. The proxy's truth (52,219 px) is ~4× denser on the ground than the hidden target
+   (≈12,226 px), so it keeps repaying dots the hidden scoring would not. Under the repository's
+   calibrated per-dot credit transfer (0.887) the sharpened field saturates at **90,000**; the marginal
+   dot beyond it earns ~0.077 against a 0.2 false-positive charge. Proxy reading at 180,000 is 0.27864
+   against 0.23406 at 90,000 — that disagreement is published, with a sensitivity table from transfer
+   0.30 to 1.00.
+
+### Measured on the delivered bytes ([`evidence/h59_delivered_metrics.json`](evidence/h59_delivered_metrics.json))
+
+| frame | truth px | DTI | NW / NE / SW / SE |
+| --- | ---: | ---: | --- |
+| `S_matched` (geometry-matched off-catalogue proxy) | 52,219 | **0.23028** | 0.1455 / 0.1500 / 0.0273 / 0.1294 |
+| `S_raw` (unmodified proxy) | 61,664 | 0.24917 | — |
+| `L` (supplied catalogue — negative control) | 60,988 | 0.03892 | — |
+
+Controls at matched mass 90,000: whole-footprint uniform **0.12383** (lift **1.86×**),
+same-pool uniform **0.11134** (lift **2.07×**); paired 32 × 32 px block
+bootstrap **+0.1041**, 95 % interval **[+0.0948, +0.1141]**, positive
+in 100/400 replicates. Uniqueness: **0** cells shared with the
+61-artifact prior union, worst 800 m block IoU **0.0419** across 50 signature-pinned priors.
+
+### Where 0.3774 stands, measured rather than asserted
+
+The file earns **14,090** of truth-side credit at **27.0 %** coverage with
+**82,971** of false-positive mass. A prediction with *zero* false positives at this
+coverage would score **0.3160** — the file realises 73 % of its
+own ceiling — and 0.3774 with perfect precision needs **32.7 %**
+coverage. So on this frame the target is **not** reachable by precision alone: it needs roughly 3,000
+more truth pixels covered, i.e. a field that finds fault pixels this one misses. The transfer model,
+by contrast, puts the same bytes at **0.44** (saturated) at a transfer of 0.887 and 0.15 at 0.30.
+Both readings are published; neither is an organizer score, and no score is claimed.
+
+### Corrections this session
+
+1. A 24.7 % LiDAR **dead zone** in the first revision (strict intersection) cost 21 % of truth credit;
+   the NaN-aware mean fixed it (0.17990 → 0.21812 in that revision).
+2. A **rank mean flattens the top** — corrected by the exponent sweep, worth +37 % proxy DTI.
+3. **Dense emission is not better**: blobs and skeletonised 1 px lines lose to field-weighted spreading
+   at matched painted count.
+4. The **mass instrument was measuring specks**: random-pixel subsampling of the proxy truth severs
+   connectivity and inflates the curve by 33 %; whole-component selection replaces it.
+5. The **catalogue buffer is 1 px**, not 300 m, per staff rulings on the evaluation mask and on new
+   geometry of existing systems; the apparent 3 px win on the proxy is a frame selection artefact and is
+   labelled as one.
+6. The **seismicity point-pattern term is at chance** here: implemented, measured, reported as a
+   negative, and excluded from the artifact.
 
 ## H58 — the owner-mandated unique ComCat point-geometry artifact (this session)
 
@@ -552,7 +650,7 @@ Primary evidence:
   prediction-equivalent twins, rebuilt the strict exclusion and all H55 outputs; reran tests, deterministic build/hash
   checks, format/range checks, and site-link validation before PR.
 
-## H57 — current candidate (2026-10-07), and an honest retraction
+## H57 — former candidate (superseded 2026-10-07: reuses 27,248 prior pixels), and an honest retraction
 
 **Download (one click, portal-safe):**
 [`docs/downloads/gemsdoe50-h57-scarpstep-80000-20261007T1830Z-allfinite.tif`](docs/downloads/gemsdoe50-h57-scarpstep-80000-20261007T1830Z-allfinite.tif)
@@ -597,6 +695,79 @@ The corpus's top seven artifacts all sit in the narrow mass band 37,654–44,090
 Full working: [`docs/research/h57-verdict-20261007.md`](docs/research/h57-verdict-20261007.md)
 (§7 lists the flagged irregularities, including the F2 name collision between this repository's
 catalogue-holdout frame and the H52 register's INGENIOUS-holdout frame).
+## H60 — official-stack belief field, the union arm, and the price of novelty (2026-10-07)
+
+**Question.** Does the organizer's own 19-band `training_features.tif` carry off-catalogue fault
+information that the owner-derived LiDAR/topographic-step families behind H57 do not — and can a
+*maximally* novel placement be built that still scores? **Answers: yes it carries information — the
+union arm beats the older H57 on both instruments — and maximal novelty is bought with score.** H60
+is still a **NO SLOT** result, because the current candidate merged on main (the sibling session's
+H59 topographic-scarp scatter) ranks higher on the same frozen gate; it does **not** replace it.
+
+**Naming note.** This series was developed as "H59" and renamed **H60** during the merge, because
+the sibling session merged on main already owns the H59 label (`docs/research/h59-*.md`,
+`h59.html`).
+
+**Screen (measured, `evidence/h59_screen.json`).** 17 `tf` channels × {`raw`, `grad`, `ridge2`} at
+30,000 dots, scored on the off-catalogue F1 frame inside **five elevation strata** (the stratifier
+matters: F1 truth is USGS SGMC fault pixels, which live in the mountains). Winners, all 5/5 strata:
+`raw::det_elev_slope` **2.198**, `raw::det_elev` **2.193**, `grad::det_elev_slope` **2.064**,
+`grad::tc` **1.969**, `raw::iso_grav_anom` **1.909**, `ridge2::geod_dilaterate` **1.887**,
+`ridge2::det_elev_slope` **1.877**, `ridge2::tc` 1.491. Failures: every magnetic amplitude channel
+(0.50–0.98), the shipped gravity-gradient products (0.31–1.29), raw geodetic strain (0.28–0.38),
+`depth_to_base_surf` (0.33–1.18). **This corrects the earlier "official raw bands lose" claim** —
+detrended elevation and its slope do carry off-catalogue information.
+
+**Arms (measured).** | candidate | dots | frozen gate | matched uniform | folds |
+|---|---|---|---|---|---|
+H57-scarpstep (incumbent) | 80,000 | **0.2025** | 0.1053 | 4/4 |
+H59-union-d0 | 75,308 | **0.2033** | 0.1050 | 4/4 |
+H59-union-d2 (max novelty) | 75,308 | 0.0618 | 0.0917 | **0/4** |
+H59-official-stack alone | 50,000 | 0.1224 | 0.0749 | 4/4 |
+On the second (pooled off-catalogue F1) instrument the union arm scores 0.1018 vs H57's 0.0914
+(uniform 0.0421). So H59-union leads both proxies — by **+0.0008** on the gate. That is inside the
+instrument's noise, so the decision receipt records a tie and **NO SLOT**
+([`evidence/h59_gate_decision.json`](evidence/h59_gate_decision.json)).
+
+**The finding worth keeping: novelty past the corpus is bought with score.** Two arms were emitted
+from the same belief field at the same mass: one forbids only prior-*pixel* reuse (0 of 1,405,451
+prior cells reused; 0.437 of dots >2 px from every prior dot; gate 0.2033), the other excludes a
+Euclidean disk of radius 2 around every prior cell so *every* dot is >2 px from every prior dot
+(novel fraction 0.714, satisfying the repository's 0.5 threshold). The second collapses to
+**0.0618** — below its own matched uniform control (0.0917) and losing **0/4** macrofolds. The 0.5
+novelty threshold is therefore a **copy detector, not a placement constraint**; the binding charter
+rule is zero reused prior pixels, which H59-union satisfies *(erratum, H61: H57 does not — 27,248 of
+its 80,000 dots are on the prior union, per `evidence/h60_gate_decision.json`)* (max full-pixel IoU 0.204
+against this project's own H57; no byte-identical file).
+
+**Hidden-frame models disagree, and one of them fails a sanity check.** Transfer (retracted, R² =
+−0.87), mass (R² = 0.515) and corpus-calibrated (R² = 0.651) models give H57 0.1428 / 0.1761 /
+**0.2286** and H59-union 0.1623 / 0.1788 / **0.2237** — opposite signs. Applied to the
+maximal-novelty control the corpus-calibrated model predicts 0.2518, its highest value anywhere,
+while that control scores 0.0618 and loses to uniform in every fold. Model-implied numbers are
+therefore reported as indicative only and are not used to choose between the two files.
+
+**Published artifact (alternative, not the recommendation).**
+`docs/downloads/gemsdoe50-h59-union-d0-75308-20261007T2250Z-allfinite.tif` (+ `-nan.tif` twin and
+`.zip`), SHA-256 `143bae71968c5fc2b70b2de579e6a33f61d9d3e07beac13f20272760758b3bda`, 75,308 cells,
+draft name `GEMSDOE50-H59-UNION-75308`; every cell finite and in [0,1], every dot ≥300 m from the
+given catalogue and on no prior positive pixel. The site leads with H57 and says plainly that H57 is
+the file to submit; [`docs/downloads/README.md`](docs/downloads/README.md) labels every file in the
+download directory.
+
+**Next experiment (H60), in priority order.** (1) **The mass axis on the frozen gate**: the sweep
+and the arms disagree about the optimum number of dots, and the frozen gate is the only instrument
+with a matched control at every mass — measure 20k/30k/40k/50k/60k on H57's own field before any new
+family is tried; (2) only then, a genuinely new *family*: the screen's `grad::tc` (magnetic tilt
+gradient) and `ridge2::geod_dilaterate` (geodetic dilatation-ridge) are the two unexploited winners
+that are not topography; (3) resolve the strict-novelty threshold's semantics in the charter so it
+stops being read as a placement rule.
+
+Full working: [`docs/research/h60-verdict-20261007.md`](docs/research/h60-verdict-20261007.md)
+(§7 lists the flagged limitations, including the missing H59 preregistration document — the H59
+arms and the novelty control were defined after the screen was seen, so H59 is
+hypothesis-generating, not confirmatory).
+
 ## Standing project prompt — read at the start of every session (2026-10-07)
 
 This is the owner's standing instruction for this project, restated item by item (not a verbatim
@@ -609,7 +780,7 @@ charter items where they differ.
    metric is the distance-weighted Tversky index (alpha=0.2, beta=0.8, R=300 m); for binary dots
    it is `DTI = T / (0.2N + 0.8G + 0.2(T − M))` with `M = Σ K(dot)` — **not** the
    `T / (0.2N + 0.8G)` collapse earlier sessions wrote (exact only when T = M; dots < 6 px apart
-   compete). See `docs/research/h59-verdict-20261007.md` §4 and `tests/test_h59.py`.
+   compete). See `docs/research/h61-verdict-20261007.md` §4 and `tests/test_h61.py`.
 2. **MUST GENERATE A UNIQUE TIF SUBMISSION for the competition.** Never copy a previous submission;
    prior files are for learning, controls, and comparison only. The generated submission must be
    **obvious to download** (one click, top of the site / executive summary) and **it must be
@@ -650,7 +821,7 @@ charter items where they differ.
    permission, treat failure and success as signals. Work autonomously; no manual input; work
    line by line; verify everything; run three passes (implement, review/fix, re-check).
 8. **Session mechanics.** Work, commit, and push only on this session's assigned branch
-   (`arena/5550c3e4-gemsdoe50` for the 2026-10-07 H59 session); open the pull request from it;
+   (`arena/5550c3e4-gemsdoe50` for the 2026-10-07 H61 session); open the pull request from it;
    merge to `main` when the checks
    pass. Keep large scratch data out of Git; keep hash-pinned derivatives needed to reproduce.
    End every session with suggested next work, limitations, and any access still required.

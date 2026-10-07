@@ -1,0 +1,163 @@
+{
+ "candidate": "docs/downloads/gemsdoe50-h59-sharpened-scarp-scatter-90k-20261007T171954Z-allfinite.tif",
+ "n_dots": 90000,
+ "truth_mode": "sgmc_off",
+ "split_spec": "evidence/holdout-v1.json",
+ "split_valid_mask_sha256": "c075e765e015e44f8da6b85aff1f5daa9c39d70d8fc3601d4811984fabe687cf",
+ "folds": {
+  "NW": {
+   "eligible_cells": 2075898,
+   "truth_cells": 19101,
+   "candidate_dots_in_cell": 32926,
+   "dti_candidate": 0.22530052498119815,
+   "coverage_candidate": 0.26371843333726275,
+   "credit_per_dot_candidate": 0.15298808829420688,
+   "dti_uniform_mean": 0.11332773524319373,
+   "dti_uniform_max": 0.11562961207280152,
+   "dti_translation_mean": 0.18498562341812314,
+   "dti_translation_max": 0.19795840420625135,
+   "lift_over_uniform": 1.9880440079184352,
+   "subtiles": [
+    {
+     "id": "NW-00",
+     "dti": 0.2365654639491542,
+     "dti_uniform": 0.14331645440940666
+    },
+    {
+     "id": "NW-01",
+     "dti": 0.19790873402913683,
+     "dti_uniform": 0.0808514891423337
+    },
+    {
+     "id": "NW-10",
+     "dti": 0.22973948230081864,
+     "dti_uniform": 0.15615095443225976
+    },
+    {
+     "id": "NW-11",
+     "dti": 0.22403959007798735,
+     "dti_uniform": 0.07717468197133508
+    }
+   ]
+  },
+  "NE": {
+   "eligible_cells": 987533,
+   "truth_cells": 19576,
+   "candidate_dots_in_cell": 20014,
+   "dti_candidate": 0.28049894862312197,
+   "coverage_candidate": 0.2901309748691812,
+   "credit_per_dot_candidate": 0.2837815511161732,
+   "dti_uniform_mean": 0.16149799574703103,
+   "dti_uniform_max": 0.1646417045478123,
+   "dti_translation_mean": 0.21768061989306275,
+   "dti_translation_max": 0.24153580811414838,
+   "lift_over_uniform": 1.7368571499951797,
+   "subtiles": [
+    {
+     "id": "NE-00",
+     "dti": 0.24128978348734792,
+     "dti_uniform": 0.13285134346415303
+    },
+    {
+     "id": "NE-01",
+     "dti": 0.3073785787704778,
+     "dti_uniform": 0.18898328073465973
+    },
+    {
+     "id": "NE-10",
+     "dti": 0.20224730680256264,
+     "dti_uniform": 0.21187662624964362
+    },
+    {
+     "id": "NE-11",
+     "dti": 0.0,
+     "dti_uniform": NaN
+    }
+   ]
+  },
+  "SW": {
+   "eligible_cells": 375029,
+   "truth_cells": 1188,
+   "candidate_dots_in_cell": 6784,
+   "dti_candidate": 0.10926280619353877,
+   "coverage_candidate": 0.21444760296743948,
+   "credit_per_dot_candidate": 0.037553619151727315,
+   "dti_uniform_mean": 0.07617390025749933,
+   "dti_uniform_max": 0.08234964612012222,
+   "dti_translation_mean": 0.08574067152992285,
+   "dti_translation_max": 0.1032511241816309,
+   "lift_over_uniform": 1.4343863951325222,
+   "subtiles": [
+    {
+     "id": "SW-00",
+     "dti": 0.0,
+     "dti_uniform": NaN
+    },
+    {
+     "id": "SW-01",
+     "dti": 0.11218740081054811,
+     "dti_uniform": 0.06413508525617106
+    },
+    {
+     "id": "SW-10",
+     "dti": 0.0,
+     "dti_uniform": NaN
+    },
+    {
+     "id": "SW-11",
+     "dti": 0.10108897227508568,
+     "dti_uniform": 0.08598568117626575
+    }
+   ]
+  },
+  "SE": {
+   "eligible_cells": 600955,
+   "truth_cells": 11218,
+   "candidate_dots_in_cell": 10798,
+   "dti_candidate": 0.28539037428617575,
+   "coverage_candidate": 0.291989751328542,
+   "credit_per_dot_candidate": 0.30334701152098387,
+   "dti_uniform_mean": 0.140703837035029,
+   "dti_uniform_max": 0.1432975672092015,
+   "dti_translation_mean": 0.20461254121108882,
+   "dti_translation_max": 0.21768304022817267,
+   "lift_over_uniform": 2.0283055551294327,
+   "subtiles": [
+    {
+     "id": "SE-00",
+     "dti": 0.1797297640610907,
+     "dti_uniform": 0.10722265571848169
+    },
+    {
+     "id": "SE-01",
+     "dti": 0.0,
+     "dti_uniform": NaN
+    },
+    {
+     "id": "SE-10",
+     "dti": 0.30501898138887523,
+     "dti_uniform": 0.1665724643482813
+    },
+    {
+     "id": "SE-11",
+     "dti": 0.0,
+     "dti_uniform": NaN
+    }
+   ]
+  }
+ },
+ "controls": {},
+ "summary": {
+  "pooled_dti_candidate": 0.21247218708664406,
+  "pooled_dti_uniform": 0.12864733790027197,
+  "mean_paired_delta": 0.08382484918637216,
+  "paired_ci95": [
+   0.055660890239037364,
+   0.11052428860219345
+  ],
+  "positive_macrofolds": 4,
+  "n_macrofolds": 4,
+  "beats_matched_uniform_in_all_folds": true,
+  "beats_translation_mean_in_all_folds": true
+ }
+}
