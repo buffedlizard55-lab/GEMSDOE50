@@ -1,0 +1,154 @@
+{
+ "generated_utc": "20261007T205159Z",
+ "field": {
+  "official_topography": [
+   "raw::tf.det_elev",
+   "raw::tf.det_elev_slope",
+   "grad::tf.det_elev_slope",
+   "ridge2::tf.det_elev_slope"
+  ],
+  "official_magnetics": [
+   "grad::tf.tc",
+   "ridge2::tf.tc"
+  ],
+  "official_gravity": [
+   "raw::tf.iso_grav_anom"
+  ],
+  "official_geodesy": [
+   "ridge2::tf.geod_dilaterate"
+  ]
+ },
+ "measured_lifts": {
+  "raw::det_elev": 2.193,
+  "raw::det_elev_slope": 2.198,
+  "grad::det_elev_slope": 2.064,
+  "ridge2::det_elev_slope": 1.877,
+  "grad::tc": 1.969,
+  "ridge2::tc": 1.491,
+  "raw::iso_grav_anom": 1.909,
+  "ridge2::geod_dilaterate": 1.887
+ },
+ "frame": "F1_sgmc_off",
+ "frame_uniform_c_per_dot": 0.042066141963005066,
+ "models": {
+  "mass": {
+   "form": "h = exp(a) * N**p",
+   "a": 4.7618681848226645,
+   "p": -0.6709233268544545,
+   "r2": 0.5148654742410103
+  },
+  "both": {
+   "form": "h = a + b*F1_c_per_dot + c*ln N",
+   "a": 0.5305166674464777,
+   "b": -0.16688318131690957,
+   "c": -0.03898323221976038,
+   "r2": 0.6510543342410142
+  },
+  "G_hat": 14088.75,
+  "source": "evidence/h57_hidden_model.json, fitted on 21 owner-reported score anchors; transfer model r2 is negative - treat as weak"
+ },
+ "rows": [
+  {
+   "requested_mass": 15000,
+   "dots": 15000,
+   "F1_c_per_dot": 0.10785908203125,
+   "F1_lift": 2.564035516404293,
+   "F1_dti": 0.030916283793774074,
+   "hidden_c_per_dot_mass_model": 0.18459334319529072,
+   "hidden_dti_mass_model": 0.19402285389456664,
+   "hidden_c_per_dot_both_model": 0.13766162269300858,
+   "hidden_dti_both_model": 0.14469373837818855,
+   "hidden_dti_model_mean": 0.1693582961363776
+  },
+  {
+   "requested_mass": 25000,
+   "dots": 25000,
+   "F1_c_per_dot": 0.10331181640625,
+   "F1_lift": 2.455937520895243,
+   "F1_dti": 0.047537978365216484,
+   "hidden_c_per_dot_mass_model": 0.13103054104563863,
+   "hidden_dti_mass_model": 0.20132527356283977,
+   "hidden_c_per_dot_both_model": 0.11850685093172808,
+   "hidden_dti_both_model": 0.1820829250379941,
+   "hidden_dti_model_mean": 0.19170409930041693
+  },
+  {
+   "requested_mass": 37654,
+   "dots": 37654,
+   "F1_c_per_dot": 0.09802841305663076,
+   "F1_lift": 2.330339995116299,
+   "F1_dti": 0.06491438685298397,
+   "hidden_c_per_dot_mass_model": 0.09954848561477227,
+   "hidden_dti_mass_model": 0.19936382034372427,
+   "hidden_c_per_dot_both_model": 0.10342245830746033,
+   "hidden_dti_both_model": 0.20712215027864944,
+   "hidden_dti_model_mean": 0.20324298531118684
+  },
+  {
+   "requested_mass": 50000,
+   "dots": 50000,
+   "F1_c_per_dot": 0.09192365234375,
+   "F1_lift": 2.1852170903761974,
+   "F1_dti": 0.0774665372887705,
+   "hidden_c_per_dot_mass_model": 0.08230088174368576,
+   "hidden_dti_mass_model": 0.19345795153891623,
+   "hidden_c_per_dot_both_model": 0.09338622647759648,
+   "hidden_dti_both_model": 0.21951536476328448,
+   "hidden_dti_model_mean": 0.20648665815110034
+  },
+  {
+   "requested_mass": 65000,
+   "dots": 65000,
+   "F1_c_per_dot": 0.08678912259615384,
+   "F1_lift": 2.063158600864331,
+   "F1_dti": 0.0905051237381921,
+   "hidden_c_per_dot_mass_model": 0.06901718394251417,
+   "hidden_dti_mass_model": 0.18483445083694208,
+   "hidden_c_per_dot_both_model": 0.08401528608853887,
+   "hidden_dti_both_model": 0.22500076617176984,
+   "hidden_dti_model_mean": 0.20491760850435597
+  },
+  {
+   "requested_mass": 80000,
+   "dots": 80000,
+   "F1_c_per_dot": 0.08218572998046875,
+   "F1_lift": 1.9537263496316521,
+   "F1_dti": 0.10063887389849718,
+   "hidden_c_per_dot_mass_model": 0.06004206637629244,
+   "hidden_dti_mass_model": 0.176134549891951,
+   "hidden_c_per_dot_both_model": 0.07668906131798131,
+   "hidden_dti_both_model": 0.224968827891845,
+   "hidden_dti_model_mean": 0.200551688891898
+  },
+  {
+   "requested_mass": 100000,
+   "dots": 100000,
+   "F1_c_per_dot": 0.0755864892578125,
+   "F1_lift": 1.7968486229207041,
+   "F1_dti": 0.10902232942428876,
+   "hidden_c_per_dot_mass_model": 0.051693560003151666,
+   "hidden_dti_mass_model": 0.16530830482924008,
+   "hidden_c_per_dot_both_model": 0.06909150672483039,
+   "hidden_dti_both_model": 0.22094434691832812,
+   "hidden_dti_model_mean": 0.1931263258737841
+  },
+  {
+   "requested_mass": 130000,
+   "dots": 130000,
+   "F1_c_per_dot": 0.06588276742788461,
+   "F1_lift": 1.5661709002414579,
+   "F1_dti": 0.11369472098712086,
+   "hidden_c_per_dot_mass_model": 0.043350008697259614,
+   "hidden_dti_mass_model": 0.1512033787836052,
+   "hidden_c_per_dot_both_model": 0.06048308764652027,
+   "hidden_dti_both_model": 0.21096298446641185,
+   "hidden_dti_model_mean": 0.18108318162500853
+  }
+ ],
+ "argmax_by_model_mean": {
+  "dots": 50000,
+  "hidden_dti_model_mean": 0.20648665815110034
+ },
+ "caveat": "Modelled hidden DTI is arithmetic under a fitted transfer model, not a measurement and not an organizer score.",
+ "seconds": 46.2
+}
