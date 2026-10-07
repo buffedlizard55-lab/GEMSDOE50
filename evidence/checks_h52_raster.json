@@ -1,0 +1,65 @@
+{
+ "file": "docs/downloads/gems52-union-h51-h52a-offcat-44828-20261007T021528Z-990213fd-nan.tif",
+ "sha256": "15468475cc99b9106b9959c95add9966ad38678329435daa3a9cbf7e8ccc9a21",
+ "checks": {
+  "single_band": true,
+  "float32": true,
+  "crs_matches_template": true,
+  "shape_matches_template": true,
+  "transform_matches_template": true,
+  "values_finite_in_range": true,
+  "nan_only_where_template_is_nan": true,
+  "nonzero_only_inside_template": true,
+  "has_predictions": true,
+  "sha256_matches_build_evidence": true
+ },
+ "errors": [],
+ "predicted_cells": 44828,
+ "finite_cells": 5167373,
+ "nan_cells": 7111787,
+ "profile": {
+  "crs": "EPSG:32611",
+  "transform": [
+   100.0,
+   0.0,
+   243350.0,
+   0.0,
+   -100.0,
+   4508550.0
+  ],
+  "height": 3730,
+  "width": 3292,
+  "dtype": "float32",
+  "count": 1,
+  "nodata": NaN
+ },
+ "template": {
+  "crs": "EPSG:32611",
+  "transform": [
+   100.0,
+   0.0,
+   243350.0,
+   0.0,
+   -100.0,
+   4508550.0
+  ],
+  "height": 3730,
+  "width": 3292,
+  "dtype": "float32",
+  "count": 1
+ },
+ "mass_matches_evidence": true,
+ "allfinite_twin": {
+  "file": "gems52-union-h51-h52a-offcat-44828-20261007T021528Z-990213fd-allfinite.tif",
+  "all_finite": true,
+  "outside_footprint_nonzero": 0
+ },
+ "zip": {
+  "entries": [
+   "gems52-union-h51-h52a-offcat-44828-20261007T021528Z-990213fd-nan.tif"
+  ],
+  "single_geotiff": true,
+  "bytes_match_tif": true,
+  "sha256": "abaf1485121bb81cfa58d003d25abc68f1b581ed5f19aededdb47200383f5eb4"
+ }
+}

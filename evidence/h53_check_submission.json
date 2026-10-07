@@ -1,0 +1,227 @@
+{
+ "format": {
+  "driver": "GTiff",
+  "count_is_1": true,
+  "dtype_is_float32": true,
+  "crs_is_epsg32611": true,
+  "same_shape": true,
+  "same_transform": true,
+  "same_bounds": true,
+  "min": 0.0,
+  "max": 1.0,
+  "nan_count": 7111787,
+  "values_in_0_1": true,
+  "nan_only_outside_footprint": true,
+  "positive_px": 23598,
+  "unique_positive_values": [
+   1.0
+  ],
+  "compression": "Compression.deflate",
+  "nodata": NaN,
+  "footprint_source": "competition sample_submission.tif",
+  "footprint_px": 5167373,
+  "outside_footprint_all_nan": true,
+  "all_checks_pass": true
+ },
+ "uniqueness": {
+  "n_prior": 27,
+  "identical_sha256": [],
+  "max_iou": 0.07669410554167279,
+  "worst_overlap_file": "gems51-scarpradio-offcat-35000-20261006-ecf058ea-nan.tif",
+  "min_novel_fraction_at_2px": 0.8231206034409696,
+  "corpus_entries": [
+   {
+    "file": "gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-nan.tif",
+    "prior_dots": 44090,
+    "novel_fraction_at_2px": 0.8981693363844394,
+    "reproduced_prior": 0.05878884100703107,
+    "iou_2px": 0.03680784253657042
+   },
+   {
+    "file": "gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif",
+    "prior_dots": 44090,
+    "novel_fraction_at_2px": 0.8981693363844394,
+    "reproduced_prior": 0.05878884100703107,
+    "iou_2px": 0.03680784253657042
+   },
+   {
+    "file": "gems32-bayesopt-dilation-scarp-d28-20261004-nan.tif",
+    "prior_dots": 45000,
+    "novel_fraction_at_2px": 0.8618950758538859,
+    "reproduced_prior": 0.0774,
+    "iou_2px": 0.049878326879811447
+   },
+   {
+    "file": "gems32-bayesopt-dilation-scarp-d28-20261004-zeros.tif",
+    "prior_dots": 45000,
+    "novel_fraction_at_2px": 0.8618950758538859,
+    "reproduced_prior": 0.0774,
+    "iou_2px": 0.049878326879811447
+   },
+   {
+    "file": "gems32-lazygreedy-maxcov-44090-supconfined-zeros.tif",
+    "prior_dots": 44090,
+    "novel_fraction_at_2px": 0.9048224425798796,
+    "reproduced_prior": 0.0582444998865956,
+    "iou_2px": 0.03432046697839308
+   },
+   {
+    "file": "gems32-probe-S1-ANCHOR-identical-to-live-02600.tif",
+    "prior_dots": 44090,
+    "novel_fraction_at_2px": 0.8981693363844394,
+    "reproduced_prior": 0.05878884100703107,
+    "iou_2px": 0.03680784253657042
+   },
+   {
+    "file": "gems32-probe-S2-SCALE-lambda-0.5.tif",
+    "prior_dots": 44090,
+    "novel_fraction_at_2px": 0.8981693363844394,
+    "reproduced_prior": 0.05878884100703107,
+    "iou_2px": 0.03680784253657042
+   },
+   {
+    "file": "gems32-probe-S3-NULLADD-2000px.tif",
+    "prior_dots": 46090,
+    "novel_fraction_at_2px": 0.8966437833714722,
+    "reproduced_prior": 0.05701887611195487,
+    "iou_2px": 0.036268197296614076
+   },
+   {
+    "file": "gemsdoe32-d28-ref02600-repro-44090-20261004T183200Z-426073b6-nan.tif",
+    "prior_dots": 44090,
+    "novel_fraction_at_2px": 0.8981693363844394,
+    "reproduced_prior": 0.05878884100703107,
+    "iou_2px": 0.03680784253657042
+   },
+   {
+    "file": "gemsdoe32-d28-ref02600-repro-44090-20261004T183200Z-426073b6-zeros.tif",
+    "prior_dots": 44090,
+    "novel_fraction_at_2px": 0.8981693363844394,
+    "reproduced_prior": 0.05878884100703107,
+    "iou_2px": 0.03680784253657042
+   },
+   {
+    "file": "gemsdoe32-h32a-dip-projected-step-46090-20261004T183200Z-838fcd84-nan.tif",
+    "prior_dots": 46090,
+    "novel_fraction_at_2px": 0.8829561827273498,
+    "reproduced_prior": 0.06474289433716642,
+    "iou_2px": 0.04126946179362281
+   },
+   {
+    "file": "gemsdoe32-h32a-dip-projected-step-46090-20261004T183200Z-838fcd84-zeros.tif",
+    "prior_dots": 46090,
+    "novel_fraction_at_2px": 0.8829561827273498,
+    "reproduced_prior": 0.06474289433716642,
+    "iou_2px": 0.04126946179362281
+   },
+   {
+    "file": "gemsdoe32-h32b-transtensional-swarm-45890-20261004T183200Z-27b7c9e6-nan.tif",
+    "prior_dots": 45890,
+    "novel_fraction_at_2px": 0.8882108653275701,
+    "reproduced_prior": 0.0617345826977555,
+    "iou_2px": 0.03946148092744951
+   },
+   {
+    "file": "gemsdoe32-h32b-transtensional-swarm-45890-20261004T183200Z-27b7c9e6-zeros.tif",
+    "prior_dots": 45890,
+    "novel_fraction_at_2px": 0.8882108653275701,
+    "reproduced_prior": 0.0617345826977555,
+    "iou_2px": 0.03946148092744951
+   },
+   {
+    "file": "gemsdoe32-h32c-mt-claycap-breach-45890-20261004T183200Z-a5963d0a-nan.tif",
+    "prior_dots": 45890,
+    "novel_fraction_at_2px": 0.8847359945758115,
+    "reproduced_prior": 0.06360862933100893,
+    "iou_2px": 0.04073807812125569
+   },
+   {
+    "file": "gemsdoe32-h32c-mt-claycap-breach-45890-20261004T183200Z-a5963d0a-zeros.tif",
+    "prior_dots": 45890,
+    "novel_fraction_at_2px": 0.8847359945758115,
+    "reproduced_prior": 0.06360862933100893,
+    "iou_2px": 0.04073807812125569
+   },
+   {
+    "file": "gemsdoe32-h32d-equalbudget-44090-20261004T183200Z-350cdc3f-nan.tif",
+    "prior_dots": 44090,
+    "novel_fraction_at_2px": 0.8936350538181201,
+    "reproduced_prior": 0.06137446132909957,
+    "iou_2px": 0.03850992666237074
+   },
+   {
+    "file": "gemsdoe32-h32d-equalbudget-44090-20261004T183200Z-350cdc3f-zeros.tif",
+    "prior_dots": 44090,
+    "novel_fraction_at_2px": 0.8936350538181201,
+    "reproduced_prior": 0.06137446132909957,
+    "iou_2px": 0.03850992666237074
+   },
+   {
+    "file": "gemsdoe32-h32d-submodular-multipysics-46090-20261004T183200Z-4de30601-nan.tif",
+    "prior_dots": 46090,
+    "novel_fraction_at_2px": 0.8863463005339436,
+    "reproduced_prior": 0.06276849642004773,
+    "iou_2px": 0.04002626630451005
+   },
+   {
+    "file": "gemsdoe32-h32d-submodular-multipysics-46090-20261004T183200Z-4de30601-zeros.tif",
+    "prior_dots": 46090,
+    "novel_fraction_at_2px": 0.8863463005339436,
+    "reproduced_prior": 0.06276849642004773,
+    "iou_2px": 0.04002626630451005
+   },
+   {
+    "file": "gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-nan.tif",
+    "prior_dots": 37654,
+    "novel_fraction_at_2px": 0.8989744893635054,
+    "reproduced_prior": 0.06819992563871036,
+    "iou_2px": 0.040497383977712846
+   },
+   {
+    "file": "gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif",
+    "prior_dots": 37654,
+    "novel_fraction_at_2px": 0.8989744893635054,
+    "reproduced_prior": 0.06819992563871036,
+    "iou_2px": 0.040497383977712846
+   },
+   {
+    "file": "gemsdoe32-h33-h33-2b2-plus-h33-1-20261004T220000Z-31588dc7-nan.tif",
+    "prior_dots": 38554,
+    "novel_fraction_at_2px": 0.8962200186456479,
+    "reproduced_prior": 0.06844944752814235,
+    "iou_2px": 0.04101971425221513
+   },
+   {
+    "file": "gemsdoe32-h33-h33-2b2-plus-h33-1-20261004T220000Z-31588dc7-zeros.tif",
+    "prior_dots": 38554,
+    "novel_fraction_at_2px": 0.8962200186456479,
+    "reproduced_prior": 0.06844944752814235,
+    "iou_2px": 0.04101971425221513
+   },
+   {
+    "file": "gems50-seislin-44709-20261006T2041Z-79e260ae.tif",
+    "prior_dots": 44709,
+    "novel_fraction_at_2px": 0.849055004661412,
+    "reproduced_prior": 0.09575253304703751,
+    "iou_2px": 0.055015831338327284
+   },
+   {
+    "file": "gems51-scarpradio-offcat-35000-20261006-ecf058ea-nan.tif",
+    "prior_dots": 35000,
+    "novel_fraction_at_2px": 0.8231206034409696,
+    "reproduced_prior": 0.13454285714285713,
+    "iou_2px": 0.07669410554167279
+   },
+   {
+    "file": "gemsdoe50-h51-corridor-consensus-mix-20261007T0200Z.tif",
+    "prior_dots": 30000,
+    "novel_fraction_at_2px": 0.8915586066615815,
+    "reproduced_prior": 0.09013333333333333,
+    "iou_2px": 0.050138129665549876
+   }
+  ],
+  "my_dots": 23598,
+  "my_sha256": "3c22da583d5358b2986189a4ed3322182f39f562bdde14809f3300aeb6bd37ea",
+  "verdict_unique": true
+ }
+}

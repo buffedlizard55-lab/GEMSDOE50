@@ -32,9 +32,10 @@ def _sha256(path: Path) -> str:
 
 
 def test_h55_site_regeneration_is_deterministic_and_download_first():
-    tracked = [ROOT / name for name in (
-        "index.html", "results.html", "methods.html", "submission.html", "site.css"
-    )]
+    tracked = [
+        ROOT / name
+        for name in ("index.html", "results.html", "methods.html", "submission.html", "site.css")
+    ]
     before = {path: path.read_bytes() for path in tracked}
     subprocess.run(
         [sys.executable, str(ROOT / "scripts/build_h55_site.py")],
@@ -49,7 +50,7 @@ def test_h55_site_regeneration_is_deterministic_and_download_first():
     assert "Download portal-safe TIFF" in index
     assert index.index("Download portal-safe TIFF") < index.index("Executive summary")
     assert "NO SLOT" in index
-    assert "0.019551" in index and "0.115822" in index
+    assert "0.019654" in index and "0.115822" in index
     assert "0.2778" in index and "UNSCORED" in index
 
 
@@ -84,7 +85,7 @@ def test_h55_artifact_range_grid_and_prior_pixel_exclusion():
         assert np.all(np.isfinite(zero))
         assert float(zero.min()) == 0.0 and float(zero.max()) == 1.0
         assert set(np.unique(zero)) == {0.0, 1.0}
-        assert int(np.count_nonzero(zero)) == 13_710
+        assert int(np.count_nonzero(zero)) == 13_674
         np.testing.assert_array_equal(zero > 0, np.isfinite(nan) & (nan > 0))
 
     with np.load(ROOT / "registry/prior_positive_union.npz", allow_pickle=False) as prior:
@@ -92,3 +93,37 @@ def test_h55_artifact_range_grid_and_prior_pixel_exclusion():
         union = np.unpackbits(prior["packed"])[: int(np.prod(shape))].reshape(shape).astype(bool)
     assert not np.any((zero > 0) & union)
     assert report["prior_pixel_exclusion"]["candidate_exact_overlap_with_union"] == 0
+
+
+def test_h55_prior_receipt_includes_latest_main_artifacts_and_exact_copy_groups():
+    receipt = json.loads(
+        (ROOT / "evidence/results/h55-prior-corpus-receipt-20261007.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    assert receipt["schema"] == "gemsdoe50.h55-prior-corpus-receipt.v3"
+    assert receipt["all_sha256_verified"] is True
+    assert receipt["all_source_assertions"] == 63
+    assert receipt["registered_sibling_entries"] == 50
+    assert receipt["local_prior_entries"] == 13
+    assert receipt["unique_source_paths"] == 62
+    assert receipt["unique_filenames"] == 60
+    assert receipt["unique_sha256"] == 59
+    assert receipt["unique_positive_masks"] == 33
+
+    source_paths = {entry["source_path"] for entry in receipt["entries"]}
+    for prefix in ("gems52-union-", "gems52a-scarpdrainage-", "gemsdoe50-h53-tmiconj-"):
+        assert any(prefix in source_path for source_path in source_paths)
+    exact_copy_groups = [set(group["source_paths"]) for group in receipt["byte_identical_groups"]]
+    assert {
+        "docs/downloads/gemsdoe50-h53-tmiconj-20261007T0345Z.tif",
+        "downloads/gemsdoe50-h53-tmiconj-20261007T0345Z.tif",
+    } in exact_copy_groups
+
+    with np.load(ROOT / "registry/prior_positive_union.npz", allow_pickle=False) as prior:
+        assert int(prior["registry_entries"]) == 50
+        assert int(prior["local_prior_entries"]) == 13
+        assert int(prior["all_source_entries"]) == 63
+        assert len(prior["sha256"]) == 59
+        assert len(set(prior["positive_mask_sha256"].tolist())) == 33
+        assert int(prior["positive_cells"]) == 1_375_484

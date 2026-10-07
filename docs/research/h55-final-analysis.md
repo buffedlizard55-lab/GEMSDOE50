@@ -23,9 +23,9 @@ hash-pinned bytes; **OWNER-REPORTED** = repository/user claim without an organiz
    dot. Recombining the existing family cannot supply that missing coverage; a genuinely different
    detector is needed.
 4. H55-S1 was that kind of detector in construction, but not in measured performance. The final
-   600 m earthquake-geometry candidate scores local SGMC-off DTI **0.019551**, versus **0.115822**
+   600 m earthquake-geometry candidate scores local SGMC-off DTI **0.019654**, versus **0.115822**
    for frozen Candidate B, loses in all four spatial macrofolds, and has paired-subtile
-   credit-per-dot CI **[-0.118667, -0.037195]**. It is a unique, format-clean research TIFF, but the
+   credit-per-dot CI **[-0.118623, -0.037328]**. It is a unique, format-clean research TIFF, but the
    frozen decision is **NO SLOT**.
 
 ## 1. What H33-B2 actually is
@@ -167,18 +167,18 @@ per-event covariance, so the corridor widths are sensitivity assumptions, not me
 
 | method | pooled DTI | credit/dot | emitted dots |
 | --- | ---: | ---: | ---: |
-| H55-S1 300 m | 0.011175 | 0.068670 | 8,308 |
-| **H55-S1 600 m** | **0.019551** | **0.074407** | **13,710** |
-| H55-S1 1,000 m | 0.030946 | 0.077715 | 21,418 |
-| density 1 km | 0.046398 | 0.075053 | 35,000 |
-| density 2 km | 0.046807 | 0.075729 | 35,000 |
-| matched random in novelty domain | 0.029964 | 0.048411 | 35,000 |
+| H55-S1 300 m | 0.011153 | 0.068600 | 8,300 |
+| **H55-S1 600 m** | **0.019654** | **0.074985** | **13,674** |
+| H55-S1 1,000 m | 0.030784 | 0.077441 | 21,378 |
+| density 1 km | 0.046040 | 0.074470 | 35,000 |
+| density 2 km | 0.045797 | 0.074087 | 35,000 |
+| matched random in novelty domain | 0.030849 | 0.049848 | 35,000 |
 | **frozen Candidate B incumbent** | **0.115822** | **0.188856** | **35,000** |
 
 Only 299 axes pass the point-geometry filters. Under the frozen 3-pixel spacing their corridors
-cannot supply the target 35,000 dots, so the central realization emits 13,710. H55 loses to the
+cannot supply the target 35,000 dots, so the central realization emits 13,674. H55 loses to the
 incumbent in all four macrofolds; the paired 16-subtile bootstrap interval for
-candidate-minus-incumbent credit per dot is `[-0.118667, -0.037195]`. Broader width increases recall
+candidate-minus-incumbent credit per dot is `[-0.118623, -0.037328]`. Broader width increases recall
 but never reverses the ranking against density or the incumbent.
 
 **INFERENCE:** recurrent earthquake epicentre axes are too spatially selective and too weakly tied
@@ -189,11 +189,12 @@ registered claim that this implementation is ready to consume a weekly slot.
 ## 7. Artifact status and limitations
 
 The final NaN-outside TIFF passes the competition-grid checks and a complete direct comparison
-against the 50-row sibling registry plus five newer local priors (55 assertions, 54 unique
-filenames, 53 unique hashes): no identical hash,
-zero exact prior-positive pixels by construction, and maximum 200 m-proximity IoU 0.04007. The
-all-finite zero-outside twin re-reads with values exactly `{0,1}` and exists specifically to avoid
-the historical portal range-parser failure.
+against 60 comparison filenames. The source receipt covers 63 assertions: the 50-row sibling
+registry plus 13 in-repository H50/H51/H52/H52A/H53 paths, representing 59 byte-distinct TIFFs and
+33 distinct positive masks after explicit grouping of byte-identical copies and finite/NaN twins.
+The candidate has no identical hash, zero exact prior-positive pixels by construction, and maximum
+200 m-proximity IoU 0.04020. The all-finite zero-outside twin re-reads with values exactly `{0,1}`
+and exists specifically to avoid the historical portal range-parser failure.
 
 Neither file has an organizer score. The all-finite twin is the obvious download, while the
 NaN-outside twin matches the sample footprint semantics. This duality is disclosed because local
@@ -214,10 +215,11 @@ Hard limitations remain:
 ## Reproduction
 
 ```bash
+PYTHONPATH=src .venv/bin/python scripts/build_prior_union.py
 PYTHONPATH=src .venv/bin/python scripts/build_h55.py
 GEMS50_CORPUS=.arena/prior_corpus PYTHONPATH=src .venv/bin/python \
   scripts/check_submission.py \
-  --submission docs/downloads/gemsdoe50-h55-seisgeom-ridgesnap-13710-20261007-9b37258c-nan.tif \
+  --submission docs/downloads/gemsdoe50-h55-seisgeom-ridgesnap-13674-20261007-7160d1e5-nan.tif \
   --out evidence/results/h55s1-full-corpus-check-20261007.json
 PYTHONPATH=src .venv/bin/python -m pytest -q
 ```
