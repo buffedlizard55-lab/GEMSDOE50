@@ -59,6 +59,72 @@
    ]
   },
   {
+   "name": "gems52a-scarpdrainage-offcat-10000-20261007T021452Z-5c377a13",
+   "portal_name": "GEMSDOE50-H52A-SCARPDRAINAGE-OFFCAT",
+   "file": "docs/downloads/gems52a-scarpdrainage-offcat-10000-20261007T021452Z-5c377a13-nan.tif",
+   "bytes": 253701,
+   "sha256": "150620f57160ee7f755fb2b2c77928bb36850b5b38547dfc4b77516346483efd",
+   "all_finite_twin": "docs/downloads/gems52a-scarpdrainage-offcat-10000-20261007T021452Z-5c377a13-allfinite.tif",
+   "zip": "docs/downloads/gems52a-scarpdrainage-offcat-10000-20261007T021452Z-5c377a13-nan.zip",
+   "zip_sha256": "7e27f0d555f6a5dcfc1f3a4d86ca05fa8ea07a11399b6cb9eb7fd651047a2cee",
+   "mass": 10000,
+   "format": {
+    "crs": "EPSG:32611",
+    "shape": [3730, 3292],
+    "dtype": "float32",
+    "count": 1,
+    "transform": [100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0],
+    "cells_finite": 5167373,
+    "cells_nan": 7111787,
+    "outside_unit_interval": 0,
+    "outside_footprint_nonzero": 0
+   },
+   "status": "H52-A deliverable; genuinely new hypothesis (scarp-matched-filter x drainage-deflection corroboration), only 1.7% cell overlap with H51 -- the lowest of any candidate measured in this project; standalone SGMC-off DTI is lower than H51's because far fewer dots are emitted; local proxy instruments only; no organizer score exists and no portal upload was performed by this repository",
+   "organizer_score": null,
+   "submitted_utc": null,
+   "built_utc": "2026-10-07T02:14:52Z",
+   "portal_note": "GEMSDOE50 H52-A | scarp matched-filter corroborated by independent drainage-deflection test, all dots >300 m from the given catalogue; genuinely new method vs all prior GEMSDOE submissions; proxy-validated, NOT organizer-scored",
+   "evidence": [
+    "evidence/build_h52a.json",
+    "evidence/checks_h52a_raster.json",
+    "docs/h52a-protocol.md"
+   ]
+  },
+  {
+   "name": "gems52-union-h51-h52a-offcat-44828-20261007T021528Z-990213fd",
+   "portal_name": "GEMSDOE50-H52-UNION-OFFCAT",
+   "file": "docs/downloads/gems52-union-h51-h52a-offcat-44828-20261007T021528Z-990213fd-nan.tif",
+   "bytes": 355561,
+   "sha256": "15468475cc99b9106b9959c95add9966ad38678329435daa3a9cbf7e8ccc9a21",
+   "all_finite_twin": "docs/downloads/gems52-union-h51-h52a-offcat-44828-20261007T021528Z-990213fd-allfinite.tif",
+   "zip": "docs/downloads/gems52-union-h51-h52a-offcat-44828-20261007T021528Z-990213fd-nan.zip",
+   "zip_sha256": "abaf1485121bb81cfa58d003d25abc68f1b581ed5f19aededdb47200383f5eb4",
+   "mass": 44828,
+   "format": {
+    "crs": "EPSG:32611",
+    "shape": [3730, 3292],
+    "dtype": "float32",
+    "count": 1,
+    "transform": [100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0],
+    "cells_finite": 5167373,
+    "cells_nan": 7111787,
+    "outside_unit_interval": 0,
+    "outside_footprint_nonzero": 0
+   },
+   "status": "H52 deliverable (H51 union H52-A); best-validated current candidate by every local proxy instrument and the only one to pass the full spatially blocked holdout gate; DISCLOSED CAVEAT: this file is a literal pixel superset of H51 -- ~78% of its 44,828 predicted pixels are H51's own prior output, only ~22% (9,828 pixels) are new from H52-A -- presented transparently as a fusion of this project's own prior work, never as an independently-derived new hypothesis; local proxy instruments only; no organizer score exists and no portal upload was performed by this repository",
+   "organizer_score": null,
+   "submitted_utc": null,
+   "built_utc": "2026-10-07T02:15:28Z",
+   "portal_note": "GEMSDOE50 H52 | H51 scarp+radiometric UNION H52-A scarp-matched-filter+drainage; disclosed fusion of this project's own validated prior work, not an independently new method; beats H51 in 3/4 spatial holdout macrofolds and 4/4 vs random control; proxy-validated, NOT organizer-scored",
+   "evidence": [
+    "evidence/build_h52.json",
+    "evidence/checks_h52_raster.json",
+    "evidence/holdout_h52.json",
+    "evidence/uniqueness_h52.json",
+    "docs/h52a-protocol.md"
+   ]
+  },
+  {
    "name": "gems51-scarpradio-offcat-35000-20261006-ecf058ea",
    "portal_name": "GEMSDOE50-H51-SCARPRADIO-OFFCAT",
    "file": "docs/downloads/gems51-scarpradio-offcat-35000-20261006-ecf058ea-nan.tif",
