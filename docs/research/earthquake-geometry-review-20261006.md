@@ -1,4 +1,6 @@
-# Earthquake-geometry review and eligibility decision
+# Historical earthquake-geometry review and eligibility decision
+
+> **Superseded status notice (2026-10-07):** This review predates H53-A. It records an older eligibility assessment, not a current submission recommendation. Current experiment H53-A is NO-GO / NO SLOT; H51/H50 artifacts remain historical only. See the [current project overview](../../index.html) and [H53 ranking](h53-hypotheses-20261007.md).
 
 **Reviewed:** 2026-10-06 UTC, before any H50-S1 DTI calculation.  
 **Decision:** Do not present the 2-D ComCat covariance/triangle-area method as new, and do not revive its mixed-network ComCat input for a competition artifact until source-specific rights are resolved. H50-S1 is a separate, already-implemented 3-D relocated-catalog experiment; it may be run as an exploratory blocked-holdout study, but it is not slot-eligible while its scientific controls below remain open.
@@ -23,7 +25,7 @@ Additional scientific gaps in the legacy H50-B run are: no applied formal declus
 
 ## H50-S1 is different, but also not yet submission-ready
 
-H50-S1 reads the CC BY 4.0 Nevada relocated catalog from [Zenodo DOI 10.5281/zenodo.11167510](https://doi.org/10.5281/zenodo.11167510), fits local 3-D hypocenter planes, and projects only plausible planes to their z=0 intersection. It is not the user's 2-D ComCat covariance-lineation method. The paper/catalog table does not supply event-specific location covariance; the code's bootstrap tests orientation stability, **not** absolute location uncertainty or corridor width. The current H50-S1 implementation also uses one-event-per-250-m-cell-per-year deduplication rather than a formal space-time declusterer, and it has no applied independent mine/injection mask.
+H50-S1 reads the CC BY 4.0 Nevada relocated catalog from [Zenodo DOI 10.5281/zenodo.11167510](https://doi.org/10.5281/zenodo.11167510), fits local 3-D hypocenter planes, and projects only plausible planes to their z=0 intersection. It is not the user's 2-D ComCat covariance-lineation method. The paper/catalog table does not supply event-specific location covariance; the code's bootstrap tests orientation stability, **not** absolute location uncertainty or corridor width. The then-current H50-S1 implementation also used one-event-per-250-m-cell-per-year deduplication rather than a formal space-time declusterer, and it has no applied independent mine/injection mask.
 
 Before the first H50-S1 score, a smoothed-density baseline is added as a required control. The experiment may still be run as a **research-only exploratory test**, but a numerical pass cannot clear a submission slot until all three additional scientific gates pass:
 

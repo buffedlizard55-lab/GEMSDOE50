@@ -25,7 +25,7 @@ footer{color:var(--mut);font-size:.88rem;border-top:1px solid var(--line);paddin
 </style>
 </head>
 <body>
-<div role="note" style="margin:14px auto;padding:12px 16px;max-width:1100px;background:#fff1df;border-left:5px solid #a96519;border-radius:6px;font:600 15px/1.5 system-ui,sans-serif;color:#3b2b19">ARCHIVED, UNVERIFIED PRIOR WORK — this page describes earlier main-branch experiments/artifacts, not H50-S1. Do not upload files linked here. Historical local metrics and copied leaderboard notes are not a fresh independent official check, and no organizer receipt authenticates a score-to-TIFF mapping. See the <a href="../index.html">current H50-S1 project site</a>.</div>
+<div role="note" style="margin:14px auto;padding:12px 16px;max-width:1100px;background:#fff1df;border-left:5px solid #a96519;border-radius:6px;font:600 15px/1.5 system-ui,sans-serif;color:#3b2b19">ARCHIVED HISTORICAL REPORT — figures on this page are local proxy analyses and are not current competition scores or score-to-file receipts. Do not treat any linked H50/H51 TIFF as a recommendation. Current status: <a href="../index.html">H53-A NO-GO / NO SLOT</a>; review the <a href="research/h33-score-review-20261007.md">caveated H33 score audit</a> for the unauthenticated 0.2778 claim.</div>
 
 <header><nav><a href="./">Home</a><a href="how-to-submit.html">How to submit</a><a href="report.html">Report</a></nav></header>
 <main>
@@ -47,7 +47,7 @@ DTI   = TP_w / (TP_w + 0.2·FP_w + 0.8·FN_w + ε)</pre>
 
 <h2>2. What that artifact is [MEASURED]</h2>
 <table>
-<tr><th>property</th><th>0.2600 file (dotted d2.8)</th><th>0.2778 file (h33-2-b2)</th></tr>
+<tr><th>property</th><th>dotted d2.8 file (score attribution unverified)</th><th>H33-2-B2 claimed file/score pairing (unverified)</th></tr>
 <tr><td>positive pixels</td><td>44,090</td><td>37,654</td></tr>
 <tr><td>unique positive value</td><td>1.0</td><td>1.0</td></tr>
 <tr><td>nearest-neighbour spacing (median / p10)</td><td>3.00 / 2.83 px</td><td>3.00 / 2.83 px</td></tr>
@@ -55,28 +55,28 @@ DTI   = TP_w / (TP_w + 0.2·FP_w + 0.8·FN_w + ε)</pre>
 <tr><td>footprint within 300 m of a dot</td><td>17.19 %</td><td>—</td></tr>
 <tr><td>dots within 300 m of the catalogue</td><td>19.52 %</td><td>0 (by construction)</td></tr>
 </table>
-<p>So the winning artifact is a <b>binary dot lattice at the metric's own 300 m spacing</b> — not a density map and not a better model. Its 0.2778 variant differs from its 0.2708 predecessor by deleting 2,545 dots that lay within 200 m of the published catalogue: dots that, by the metric's test-set definition, had no hidden truth to earn credit from.</p>
+<p><strong>Conditional interpretation only, not an established cause:</strong> if the score/file attributions above are correct and the reported rasters are nested as described, pruning a 200 m catalogue-near ring could raise DTI when the removed dots carry little credit against the scored truth. The available pinned audit does not authenticate the 0.2778 score or its organizer score-to-file mapping, and does not prove that every removed dot had zero credit. See the newer <a href="research/h33-score-review-20261007.md">H33 score review</a> before repeating this hypothesis.</p>
 
 <h2>3. A three-point model of the hidden truth [MODEL]</h2>
 <table>
-<tr><th>artifact</th><th>dots</th><th>reported score</th></tr>
+<tr><th>artifact label</th><th>dots (reported)</th><th>user-provided score claim (not authenticated)</th></tr>
 <tr><td>d28-poisson300m-offcat-44090</td><td>44,090</td><td>0.2600</td></tr>
 <tr><td>h27-4-r1-solo-d2-8</td><td>40,199</td><td>0.2708</td></tr>
 <tr><td>h33-h33-2-b2 (pruned 2 px)</td><td>37,654</td><td>0.2778</td></tr>
 </table>
-<p>Solving the metric identity with the first two scores reproduces the third: <code>G ≈ 13,800</code> hidden-truth pixels and <code>T ≈ 5,460</code> weighted credit, i.e. <b>≈40 % weighted coverage at ≈0.12 credit per emitted dot</b>. This is a model — the three scores are owner-reported and the artifacts are only nearly nested — but it explains why <em>removing</em> dots raised the score (121k→0.1922, 60k→0.2477, 44k→0.2600, 37.6k→0.2778 [PROJECT]) and it sets the emitter's belief scale (G<sub>est</sub> = 13,833), which is the only place it is used.</p>
+<p>Solving the metric identity under the assumed inputs gives a modelled hidden-truth scale and credit estimate; it does not authenticate the inputs. The sibling audit labels H33-2-B2 <strong>UNSCORED</strong> and gives a projected DTI of 0.274673, not an organizer receipt. The owner-provided score sequence and approximate nesting could be consistent with removing low-credit dots, but that is only one plausible explanation; the score, score-to-file mapping, and removed-pixel credits remain unverified. Do not treat this legacy model as a leaderboard forecast or as proof that pruning caused a higher score.</p>
 
-<h2>4. The shipped file, scored on both frames</h2>
-<p>The GEMSDOE50 submission itself (44,709 dots) was re-read from its bytes and scored on the same two frames, against a matched uniform-random control at the identical dot count [MEASURED, <code>registry/submission_validation.json</code>]:</p>
+<h2>4. Archived GEMSDOE50 raster, historical local-frame checks</h2>
+<p>An earlier 44,709-dot GEMSDOE50 raster was re-read from its bytes and measured on two local proxy frames against a matched uniform-random control [MEASURED at the time, <code>registry/submission_validation.json</code>]. This is historical evidence only—not the current H53-A artifact, an organizer score, or a submission recommendation:</p>
 <table>
 <tr><th>frame</th><th>GEMSDOE50</th><th>uniform random, same count</th><th>ratio</th></tr>
 <tr><td>catalogue folds (F1 mean of 4)</td><td><b>0.0416</b></td><td>0.0073</td><td>5.7×</td></tr>
 <tr><td>SGMC off-catalogue (F2)</td><td><b>0.0670</b></td><td>0.0301</td><td>2.2×</td></tr>
 </table>
-<p>These are legacy held-out-frame proxies, not organizer scores. No organizer receipt authenticates a score for this file or maps a score to its TIFF; the current H50-S1 project does not use these proxies.</p>
+<p>These are legacy held-out-frame proxies, not organizer scores. No organizer receipt authenticates a score for this file or maps a score to its TIFF; the current H53-A experiment is separate and failed its local gate.</p>
 
 <h2>5. Conditional ceiling model (legacy assumptions only)</h2>
-<p>Under the legacy model assumptions, with G ≈ 13,833 and perfect knowledge at 300 m spacing, <code>T ≈ 0.8G</code> and DTI ≈ 0.78. This is a theoretical ceiling, not a forecast or a comparison to any current competition score. The data and method are distinct from the current H50-S1 candidate and are not used in its holdout evaluation.</p>
+<p>Under the legacy model assumptions, with G ≈ 13,833 and perfect knowledge at 300 m spacing, <code>T ≈ 0.8G</code> and DTI ≈ 0.78. This is a theoretical ceiling, not a forecast or a comparison to any current competition score. The data and method belong to an archived earlier experiment and are not used in H53-A's holdout evaluation.</p>
 
 <h2>6. The hypotheses, ranked</h2>
 <ol>

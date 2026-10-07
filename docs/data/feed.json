@@ -1,6 +1,19 @@
 {
- "generated_from": "legacy receipts and H50-S1 project status; no third-party leaderboard data",
- "kind": "current-project status; no leaderboard snapshot",
+ "generated_from": "historical receipts plus the current H53-A build/validation; no third-party leaderboard data",
+ "kind": "current H53-A no-go status plus historical H51 record; no leaderboard snapshot",
+ "current_status": "H53-A NO-GO / NO SLOT",
+ "current_candidate": {
+  "status": "NO-GO / NO SLOT",
+  "name": "GEMSDOE50-H53-PROBE-TMI-POINTLINEATION-20261007",
+  "file": "docs/downloads/gemsdoe50-h53-probe-tmi-pointlineation-20261007-44afc05b.tif",
+  "sha256": "5f2fd91ad46a3602c03802e0f7773fd466b08e47cbfcf40ff796ffc2b956a382",
+  "positive_pixels": 0,
+  "local_dti": 0.0,
+  "submission_eligible": false,
+  "organizer_score": null,
+  "portal_upload": null,
+  "weekly_slot_used": false
+ },
  "leaderboard": {
   "published": false,
   "reason": "Prior sibling-repository notes are conflicting and are not a fresh independent official check; no current score or score-to-TIFF mapping is asserted.",
@@ -19,6 +32,10 @@
   "weekly_slot_used": false
  },
  "h51_candidate": {
+  "role": "historical H51 artifact; not the current recommendation",
+  "current_recommendation": false,
+  "archive_note": "Historical identity only. This H51 candidate failed its pre-registered promotion proxy; no organizer score, upload, or receipt is verified. Do not use as portal instructions.",
+  "submission_eligible": false,
   "file": "gemsdoe50-h51-corridor-consensus-mix-20261007T0200Z.tif",
   "sha256": "a26055834f8e6cc57cc33e96a4a5a26a1adeaafbeec490135af84c6ccd4d1da0",
   "bytes": 339039,
@@ -36,9 +53,7 @@
   "portal_upload": null,
   "weekly_slot_used": false,
   "download": "downloads/gemsdoe50-h51-corridor-consensus-mix-20261007T0200Z.tif",
-  "unique_name": "gemsdoe50-h51-corridor-consensus-mix-20261007T0200Z",
-  "optional_note": "Corridor evidence (seismicity lineaments + magnetic/radiometric ridges + thermal springs) fused with a validated score-consensus core; off-catalogue, 300 m-aware dot geometry; pixels and 200 m neighbourhoods novel against all 26 prior artifacts.",
-  "how_to_submit": "submission.html",
+  "historical_label": "gemsdoe50-h51-corridor-consensus-mix-20261007T0200Z",
   "shared_frame_compare": {
    "evidence": "evidence/h51_candidate_frame_compare.json",
    "frame": "sgmc_off (>300 m from catalogue, unmasked domain)",
@@ -57,12 +72,15 @@
   }
  },
  "h51": {
-  "status": "built, format-verified and proxy-validated; no organizer score claimed",
+  "role": "historical research artifact; not the current recommendation",
+  "current_recommendation": false,
+  "submission_eligible": false,
+  "status": "archived H51 build; no organizer score or upload receipt",
   "file": "docs/downloads/gems51-scarpradio-offcat-35000-20261006-ecf058ea-nan.tif",
   "sha256": "8f8708d2872b66d71925707e0aede23eebcf217dfd2e57d6e61186f32e686f5d",
   "mass": 35000,
-  "portal_name": "GEMSDOE50-H51-SCARPRADIO-OFFCAT",
-  "portal_note": "GEMSDOE50 H51 | corroborated 3DEP-scarp + radiometric lineaments, all dots >300 m from the given catalogue, metric-matched sparse emission; proxy-validated, NOT organizer-scored",
+  "historical_label": "GEMSDOE50-H51-SCARPRADIO-OFFCAT",
+  "archive_note": "Historical identity only. This H51 candidate failed its pre-registered promotion proxy; no organizer score, upload, or receipt is verified. Do not use as portal instructions.",
   "instruments": {
    "catalogue": {
     "dti": 0.0,

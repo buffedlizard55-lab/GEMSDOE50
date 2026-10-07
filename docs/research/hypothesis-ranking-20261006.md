@@ -1,4 +1,6 @@
-# Distinct geological-hypothesis review
+# Historical distinct geological-hypothesis review (H50)
+
+> This H50-era ranking is preserved for historical review, not as the current hypothesis list or slot guidance. The current pre-implementation ranking is [H53](h53-hypotheses-20261007.md); H53-A failed and is NO-GO / NO SLOT. See the [project overview](../../index.html).
 
 **Version:** 2026-10-06, reviewed before H50-S1's first DTI. This ranks testable hypotheses by expected incremental value, independence from project history, implementation readiness, data rights, and validation cost. It is not a score forecast. No candidate gets a submission slot without the fixed blocked holdout, matched controls, artifact validation, and human review.
 

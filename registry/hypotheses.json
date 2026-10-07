@@ -1,6 +1,6 @@
 {
  "updated_utc": "2026-10-06",
- "ranking_rule": "expected DTI gain per unit implementation cost; every candidate measured at matched emitted mass",
+ "ranking_rule": "historical H51 ranking retained for context; current H53 ranking and pre-registration are in docs/research/h53-hypotheses-20261007.md and docs/research/h53-preregistration-20261007.md",
  "hypotheses": [
   {
    "id": "H50-1",
@@ -212,5 +212,8 @@
    ]
   }
  ],
- "audit_note": "2026-10-06 review: see docs/research/earthquake-geometry-review-20261006.md and docs/research/hypothesis-ranking-20261006.md. Historical metric fields are retained but are not current official score claims."
+ "audit_note": "2026-10-06 review: see docs/research/earthquake-geometry-review-20261006.md and docs/research/hypothesis-ranking-20261006.md. Historical metric fields are retained but are not current official score claims.",
+ "historical_role": "H51/H52-era proposals retained for audit; not current ranking or slot guidance",
+ "current_project_status": "H53-A NO-GO / NO SLOT",
+ "current_ranking_file": "docs/research/h53-hypotheses-20261007.md"
 }

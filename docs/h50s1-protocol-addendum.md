@@ -1,4 +1,6 @@
-# H50-S1 implementation protocol addendum
+# Historical H50-S1 implementation protocol addendum
+
+> This 2026-10-06 protocol is retained for reproducibility and does not authorize a current submission. The active experiment is H53-A, which failed and is NO-GO / NO SLOT. See the [current project overview](../index.html) and [H53 preregistration](research/h53-preregistration-20261007.md).
 
 **Frozen:** 2026-10-06 UTC, before any H50-S1 DTI calculation. The comparator policy was amended later the same day, still before any H50-S1 DTI, after code review found that selecting the highest-scoring baseline on the holdout would leak holdout labels; no H50-S1 holdout scores were viewed. This addendum makes the implementation choices and control counts executable and auditable; it does not revise the ranked scientific hypotheses or their promotion thresholds in [`hypotheses-preregistered.md`](hypotheses-preregistered.md).
 

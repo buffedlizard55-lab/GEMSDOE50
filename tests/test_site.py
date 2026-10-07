@@ -4,100 +4,77 @@ import sys
 from pathlib import Path
 
 
+def _h53_evidence(tmp_path: Path, output: Path) -> Path:
+    root = Path(__file__).parents[1]
+    evidence = tmp_path / "evidence"
+    evidence.mkdir(parents=True, exist_ok=True)
+    for name in ("h53-build-20261007.json", "h53-validation-20261007.json"):
+        (evidence / name).write_bytes((root / "evidence" / name).read_bytes())
+    build = json.loads((evidence / "h53-build-20261007.json").read_text(encoding="utf-8"))
+    artifact = output / build["candidate"]["artifact"]["path"]
+    artifact.parent.mkdir(parents=True, exist_ok=True)
+    artifact.write_bytes(b"no-go fixture placeholder")
+    return evidence
+
+
 def test_static_site_builds_clear_no_slot_pages_from_report(tmp_path: Path):
     output = tmp_path / "site"
+    evidence = _h53_evidence(tmp_path, output)
     report_path = tmp_path / "report.json"
-    tiff_path = tmp_path / "candidate.tif"
-    tiff_path.write_bytes(b"test placeholder")
     report = {
         "evaluation": {
             "method_results": {
                 "H50-S1": {
-                    "pooled": {
-                        "score": 0.12,
-                        "truth_cells": 100,
-                        "prediction_cells": 40,
-                        "tp_weight": 25,
-                        "fp_weight": 20,
-                        "fn_weight": 75,
-                    },
-                    "folds": [
-                        {"id": "NW", "dti": 0.1, "prediction_cells": 10, "truth_cells": 25},
-                    ],
+                    "pooled": {"score": 0.12, "truth_cells": 100, "prediction_cells": 40,
+                               "tp_weight": 25, "fp_weight": 20, "fn_weight": 75},
+                    "folds": [{"id": "NW", "dti": 0.1, "prediction_cells": 10, "truth_cells": 25}],
                 },
                 "H32-D": {
-                    "pooled": {
-                        "score": 0.11,
-                        "truth_cells": 100,
-                        "prediction_cells": 40,
-                        "tp_weight": 22,
-                        "fp_weight": 24,
-                        "fn_weight": 78,
-                    },
-                    "folds": [
-                        {"id": "NW", "dti": 0.12, "prediction_cells": 10, "truth_cells": 25},
-                    ],
+                    "pooled": {"score": 0.11, "truth_cells": 100, "prediction_cells": 40,
+                               "tp_weight": 22, "fp_weight": 24, "fn_weight": 78},
+                    "folds": [{"id": "NW", "dti": 0.12, "prediction_cells": 10, "truth_cells": 25}],
                 },
             },
             "incumbent_method": "H32-D",
             "candidate_minus_incumbent_pooled_dti": 0.01,
-            "promotion_gate": {
-                "pass": False,
-                "decision": "NO_SLOT",
-                "components": {"test_gate": False},
-            },
+            "promotion_gate": {"pass": False, "decision": "NO_SLOT", "components": {"test_gate": False}},
             "subtile_bootstrap": {"percentile_ci_95": [-0.01, 0.02]},
-            "translation_controls": {
-                "pooled_dti_q95": 0.09,
-                "scores": [{"id": "translate-01", "pooled_dti": 0.08}],
-            },
-            "time_shuffle_controls": {
-                "count": 1,
-                "pooled_dti_q95": 0.08,
-                "scores": [{"id": "time-shuffle-01", "pooled_dti": 0.07}],
-            },
-            "smoothed_density_controls": {
-                "pooled_dti": {"smoothed-density-1km": 0.10, "smoothed-density-2km": 0.09},
-                "candidate_beats_both": True,
-            },
+            "translation_controls": {"pooled_dti_q95": 0.09, "scores": [{"id": "translate-01", "pooled_dti": 0.08}]},
+            "time_shuffle_controls": {"count": 1, "pooled_dti_q95": 0.08,
+                                      "scores": [{"id": "time-shuffle-01", "pooled_dti": 0.07}]},
+            "smoothed_density_controls": {"pooled_dti": {"smoothed-density-1km": 0.10,
+                                                            "smoothed-density-2km": 0.09},
+                                          "candidate_beats_both": True},
         },
-        "submission_artifact": {
-            "unique_name": "candidate.tif",
-            "optional_note": "research only",
-            "sha256": "abc123",
-        },
+        "submission_artifact": {"unique_name": "candidate.tif", "optional_note": "research only",
+                                "sha256": "abc123"},
     }
     report_path.write_text(json.dumps(report), encoding="utf-8")
     script = Path(__file__).parents[1] / "scripts" / "build_h50_site.py"
     subprocess.run(
-        [
-            sys.executable,
-            str(script),
-            "--output-dir",
-            str(output),
-            "--report",
-            str(report_path),
-            "--tiff",
-            str(tiff_path),
-        ],
-        check=True,
-        capture_output=True,
-        text=True,
+        [sys.executable, str(script), "--output-dir", str(output), "--report", str(report_path),
+         "--evidence-dir", str(evidence)],
+        check=True, capture_output=True, text=True,
     )
     for name in ("index.html", "results.html", "methods.html", "submission.html"):
         assert (output / name).is_file()
+    index = (output / "index.html").read_text(encoding="utf-8")
     results = (output / "results.html").read_text(encoding="utf-8")
+    methods = (output / "methods.html").read_text(encoding="utf-8")
     submission = (output / "submission.html").read_text(encoding="utf-8")
-    assert "NO SLOT" in results
-    assert "smoothed-density-1km" in results
-    assert "smoothed-density-2km" in results
-    assert "do not use a weekly submission slot" in submission
-    assert "candidate.tif" in submission
+    assert index.index("Download the H53-A no-go research TIFF") < index.index("<h1>Test new evidence")
+    assert "H53-A is NO-GO / NO SLOT" in index
+    assert "NO SLOT" in results and "0.000000" in results
+    assert "smoothed-density-1km" in results and "smoothed-density-2km" in results
+    assert "Separate H50-S1 research record — historical proxy only" in results
+    assert "NO SLOT" in submission and "do not upload" in submission
+    assert "GEMSDOE50-H53-PROBE-TMI-POINTLINEATION-20261007" in submission
+    assert "0 accepted" in methods
 
 
 def _h51_evidence(tmp: Path) -> Path:
     evidence = tmp / "evidence"
-    evidence.mkdir()
+    evidence.mkdir(parents=True, exist_ok=True)
     build = {
         "name": "gems51-test-35000",
         "built_utc": "2026-10-06T23:00:00Z",
@@ -170,32 +147,36 @@ def _h51_evidence(tmp: Path) -> Path:
     return evidence
 
 
-def test_site_publishes_the_h51_download_and_the_evidence_caveats(tmp_path: Path):
+def test_site_keeps_h51_visible_only_as_historical_evidence(tmp_path: Path):
     output = tmp_path / "site"
-    tiff = tmp_path / "candidate.tif"
-    tiff.write_bytes(b"placeholder")
+    evidence = _h53_evidence(tmp_path, output)
+    _h51_evidence(tmp_path)
+    archived_tiff = output / "downloads" / "gemsdoe50-h51-corridor-consensus-mix-20261007T0200Z.tif"
+    archived_tiff.parent.mkdir(parents=True, exist_ok=True)
+    archived_tiff.write_bytes(b"historical H51 fixture")
     report_path = tmp_path / "report.json"
-    report_path.write_text("{}", encoding="utf-8")  # no H50-S1 report in this fixture
-    evidence = _h51_evidence(tmp_path)
+    report_path.write_text("{}", encoding="utf-8")
     script = Path(__file__).parents[1] / "scripts" / "build_h50_site.py"
     subprocess.run([sys.executable, str(script), "--output-dir", str(output), "--report",
-                    str(report_path), "--tiff", str(tiff), "--evidence-dir", str(evidence)],
+                    str(report_path), "--evidence-dir", str(evidence)],
                    check=True, capture_output=True, text=True)
     index = (output / "index.html").read_text(encoding="utf-8")
     results = (output / "results.html").read_text(encoding="utf-8")
     methods = (output / "methods.html").read_text(encoding="utf-8")
     submission = (output / "submission.html").read_text(encoding="utf-8")
-    # Merged design: the index page opens with the H51 candidate panel and the two-candidate table
-    # (both with one-click downloads) before the executive summary; the high-contrast one-click band
-    # now lives on the submission page.
-    assert "ONE-CLICK COMPETITION SUBMISSION FILE" in submission
-    assert "gems51-test-35000-nan.tif" in index and "gems51-test-35000-nan.zip" in index
-    assert "two-candidate" in index or "Two candidate GeoTIFFs" in index
-    assert index.index("Download .tif") < index.index("<h2>Executive summary</h2>")
-    assert "GEMSDOE50-H51-SCARPRADIO-OFFCAT" in submission
-    assert "How to submit the H51 file" in submission
-    assert "Spatially blocked validation" in results and "4/4" in results
-    assert "weak guard" in results
-    assert "null distribution" in results
-    assert "H52-A" in methods
-    assert "organizer-scored" in index  # the page must say the numbers are local, not organizer scores
+    assert "H53-A no-go research TIFF" in index
+    assert "Older H51 files and metrics are retained as experiment history" in index
+    assert "Historical H51 evidence (archive only)" in results
+    assert "Separate H50-S1 research line" in results
+    assert "not an organizer score" in results
+    assert "Historical H51 candidate TIFFs" in results
+    assert "Archived H51 design notes" in results
+    assert "H51 file archive (not the current recommendation)" in results
+    assert "Submit it in five steps" not in results
+    assert "How to submit" not in results
+    assert "all-finite twin" not in results
+    assert "GEMSDOE50-H51-SCARPRADIO-OFFCAT" not in index
+    assert "GEMSDOE50-H51-SCARPRADIO-OFFCAT" not in submission
+    assert "SLOT-ELIGIBLE" in submission and "NO SLOT" in submission
+    assert "H52-A" in methods  # retained in the historical H51 methods block
+    assert "not as current submission advice" in results

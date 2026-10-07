@@ -1,0 +1,413 @@
+{
+  "schema": "gemsdoe50.h53-baseline-audit.v1",
+  "status": "BASELINE_FROZEN_AWAITING_H53",
+  "built_utc": "2026-10-07T02:48:05.704582+00:00",
+  "purpose": "Candidate-independent ranking of the preregistered incumbent set; no H53 DTI computed.",
+  "frozen_split": {
+    "spec_path": "evidence/holdout-v1.json",
+    "spec_sha256": "78b6692155c6c6d5f9f19ccee6d595167c2065f1f25eb8d08636d1d9b285ff16",
+    "template_sha256": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc",
+    "valid_mask_sha256": "c075e765e015e44f8da6b85aff1f5daa9c39d70d8fc3601d4811984fabe687cf",
+    "catalogue_label_sha256": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
+    "fold_cores": {
+      "NW": [
+        100,
+        1765,
+        100,
+        1546
+      ],
+      "NE": [
+        100,
+        1765,
+        1746,
+        3192
+      ],
+      "SW": [
+        1965,
+        3630,
+        100,
+        1546
+      ],
+      "SE": [
+        1965,
+        3630,
+        1746,
+        3192
+      ]
+    },
+    "subtile_ids": [
+      "NW-00",
+      "NW-01",
+      "NW-10",
+      "NW-11",
+      "NE-00",
+      "NE-01",
+      "NE-10",
+      "NE-11",
+      "SW-00",
+      "SW-01",
+      "SW-10",
+      "SW-11",
+      "SE-00",
+      "SE-01",
+      "SE-10",
+      "SE-11"
+    ]
+  },
+  "proxy_truth": {
+    "path": "data/external/derived_sgmc_faults_100m_u8.tif",
+    "sha256": "26d142c4c93282cd94f6950ab96f22aeff59fbbea523d43d662e76fa1b161b5c",
+    "definition": "SGMC positive cells >300 m from the provided catalogue; proxy only, not hidden truth.",
+    "truth_cells_total": 61664
+  },
+  "metric": {
+    "name": "official distance-weighted Tversky",
+    "alpha": 0.2,
+    "beta": 0.8,
+    "radius_m": 300.0,
+    "block_context_halo_px": 3
+  },
+  "registered_baselines": {
+    "H51-A scarp-radiometric": {
+      "sha256": "8f8708d2872b66d71925707e0aede23eebcf217dfd2e57d6e61186f32e686f5d",
+      "raster": {
+        "path": "docs/downloads/gems51-scarpradio-offcat-35000-20261006-ecf058ea-nan.tif",
+        "dtype": "float32",
+        "nodata": null,
+        "positive_cells": 35000,
+        "nonbinary_finite_cells": 0
+      },
+      "native_positive_cells_total": 35000,
+      "positive_cells_in_valid_footprint": 35000,
+      "positive_cells_within_300m_catalogue_buffer": 0,
+      "folds": {
+        "NW": {
+          "score": 0.10038156829947338,
+          "tp_weight": 1795.0687713255,
+          "fp_weight": 11213.200917970462,
+          "fn_weight": 17305.9312286745,
+          "truth_cells": 19101,
+          "prediction_cells": 12015,
+          "alpha": 0.2,
+          "beta": 0.8,
+          "radius_m": 300.0
+        },
+        "NE": {
+          "score": 0.0922150932844518,
+          "tp_weight": 1576.897281453499,
+          "fp_weight": 5620.143019466769,
+          "fn_weight": 17999.1027185465,
+          "truth_cells": 19576,
+          "prediction_cells": 6322,
+          "alpha": 0.2,
+          "beta": 0.8,
+          "radius_m": 300.0
+        },
+        "SW": {
+          "score": 0.09858114276642607,
+          "tp_weight": 152.5515738051365,
+          "fp_weight": 2832.8092197538854,
+          "fn_weight": 1035.4484261948635,
+          "truth_cells": 1188,
+          "prediction_cells": 2905,
+          "alpha": 0.2,
+          "beta": 0.8,
+          "radius_m": 300.0
+        },
+        "SE": {
+          "score": 0.15268159366107367,
+          "tp_weight": 1565.5119636968793,
+          "fp_weight": 4829.701266074873,
+          "fn_weight": 9652.488036303122,
+          "truth_cells": 11218,
+          "prediction_cells": 5484,
+          "alpha": 0.2,
+          "beta": 0.8,
+          "radius_m": 300.0
+        }
+      },
+      "pooled_union_of_cores": {
+        "score": 0.10879949627934658,
+        "tp_weight": 5090.029590281015,
+        "fp_weight": 24495.85442326599,
+        "fn_weight": 45992.97040971898,
+        "truth_cells": 51083,
+        "prediction_cells": 26726,
+        "alpha": 0.2,
+        "beta": 0.8,
+        "radius_m": 300.0
+      },
+      "matched_mass_by_fold": {
+        "NW": 12015,
+        "NE": 6322,
+        "SW": 2905,
+        "SE": 5484
+      },
+      "offcatalogue_positive_cells_by_fold": {
+        "NW": 12015,
+        "NE": 6322,
+        "SW": 2905,
+        "SE": 5484
+      }
+    },
+    "H50 prior seismicity": {
+      "sha256": "79e260ae223d7dfd96413da28a9c6fed30107285ab843795181a5c9e5dff7262",
+      "raster": {
+        "path": "docs/downloads/gems50-seislin-44709-20261006T2041Z-79e260ae.tif",
+        "dtype": "float32",
+        "nodata": null,
+        "positive_cells": 44709,
+        "nonbinary_finite_cells": 0
+      },
+      "native_positive_cells_total": 44709,
+      "positive_cells_in_valid_footprint": 44709,
+      "positive_cells_within_300m_catalogue_buffer": 4453,
+      "folds": {
+        "NW": {
+          "score": 0.10258754167175198,
+          "tp_weight": 1817.9222537093572,
+          "fp_weight": 10381.538950480348,
+          "fn_weight": 17283.077746290644,
+          "truth_cells": 19101,
+          "prediction_cells": 11253,
+          "alpha": 0.2,
+          "beta": 0.8,
+          "radius_m": 300.0
+        },
+        "NE": {
+          "score": 0.09611492594095966,
+          "tp_weight": 1639.646722185788,
+          "fp_weight": 5352.508174342689,
+          "fn_weight": 17936.35327781421,
+          "truth_cells": 19576,
+          "prediction_cells": 6166,
+          "alpha": 0.2,
+          "beta": 0.8,
+          "radius_m": 300.0
+        },
+        "SW": {
+          "score": 0.07447584744045185,
+          "tp_weight": 161.30935058150519,
+          "fp_weight": 5916.332481316262,
+          "fn_weight": 1026.6906494184948,
+          "truth_cells": 1188,
+          "prediction_cells": 6011,
+          "alpha": 0.2,
+          "beta": 0.8,
+          "radius_m": 300.0
+        },
+        "SE": {
+          "score": 0.2645727429112545,
+          "tp_weight": 2900.0283121345938,
+          "fp_weight": 7033.850030123125,
+          "fn_weight": 8317.971687865407,
+          "truth_cells": 11218,
+          "prediction_cells": 8389,
+          "alpha": 0.2,
+          "beta": 0.8,
+          "radius_m": 300.0
+        }
+      },
+      "pooled_union_of_cores": {
+        "score": 0.1360741213166003,
+        "tp_weight": 6518.9066386112445,
+        "fp_weight": 28684.229636262426,
+        "fn_weight": 44564.093361388754,
+        "truth_cells": 51083,
+        "prediction_cells": 31819,
+        "alpha": 0.2,
+        "beta": 0.8,
+        "radius_m": 300.0
+      },
+      "matched_mass_by_fold": {
+        "NW": 11253,
+        "NE": 6166,
+        "SW": 6011,
+        "SE": 8389
+      },
+      "offcatalogue_positive_cells_by_fold": {
+        "NW": 10146,
+        "NE": 5780,
+        "SW": 5021,
+        "SE": 7735
+      }
+    },
+    "H51 corridor consensus": {
+      "sha256": "a26055834f8e6cc57cc33e96a4a5a26a1adeaafbeec490135af84c6ccd4d1da0",
+      "raster": {
+        "path": "docs/downloads/gemsdoe50-h51-corridor-consensus-mix-20261007T0200Z.tif",
+        "dtype": "float32",
+        "nodata": null,
+        "positive_cells": 30000,
+        "nonbinary_finite_cells": 0
+      },
+      "native_positive_cells_total": 30000,
+      "positive_cells_in_valid_footprint": 30000,
+      "positive_cells_within_300m_catalogue_buffer": 1796,
+      "folds": {
+        "NW": {
+          "score": 0.0689438268843714,
+          "tp_weight": 1223.5451344168591,
+          "fp_weight": 11107.38514939589,
+          "fn_weight": 17877.45486558314,
+          "truth_cells": 19101,
+          "prediction_cells": 11635,
+          "alpha": 0.2,
+          "beta": 0.8,
+          "radius_m": 300.0
+        },
+        "NE": {
+          "score": 0.04696748247775951,
+          "tp_weight": 783.904807411733,
+          "fp_weight": 4363.960829935137,
+          "fn_weight": 18792.09519258827,
+          "truth_cells": 19576,
+          "prediction_cells": 4697,
+          "alpha": 0.2,
+          "beta": 0.8,
+          "radius_m": 300.0
+        },
+        "SW": {
+          "score": 0.07589466877508862,
+          "tp_weight": 120.34357690467156,
+          "fp_weight": 3055.9851744355524,
+          "fn_weight": 1067.6564230953286,
+          "truth_cells": 1188,
+          "prediction_cells": 3112,
+          "alpha": 0.2,
+          "beta": 0.8,
+          "radius_m": 300.0
+        },
+        "SE": {
+          "score": 0.0547295166303796,
+          "tp_weight": 538.153575963632,
+          "fp_weight": 3754.6855361778735,
+          "fn_weight": 10679.846424036368,
+          "truth_cells": 11218,
+          "prediction_cells": 3974,
+          "alpha": 0.2,
+          "beta": 0.8,
+          "radius_m": 300.0
+        }
+      },
+      "pooled_union_of_cores": {
+        "score": 0.058137376042175996,
+        "tp_weight": 2665.947094696896,
+        "fp_weight": 22282.016689944452,
+        "fn_weight": 48417.052905303106,
+        "truth_cells": 51083,
+        "prediction_cells": 23418,
+        "alpha": 0.2,
+        "beta": 0.8,
+        "radius_m": 300.0
+      },
+      "matched_mass_by_fold": {
+        "NW": 11635,
+        "NE": 4697,
+        "SW": 3112,
+        "SE": 3974
+      },
+      "offcatalogue_positive_cells_by_fold": {
+        "NW": 10959,
+        "NE": 4329,
+        "SW": 2958,
+        "SE": 3818
+      }
+    },
+    "GEMSDOE32 H33-2-B2 (comparison only)": {
+      "sha256": "baeae3219bba6a19bc8cfe79224e28555c50184b7c1ca65c2a822f54807c77dd",
+      "raster": {
+        "path": ".arena/review/gemsdoe32-h33-h33-2-b2-nan.tif",
+        "dtype": "float32",
+        "nodata": null,
+        "positive_cells": 37654,
+        "nonbinary_finite_cells": 0
+      },
+      "native_positive_cells_total": 37654,
+      "positive_cells_in_valid_footprint": 37654,
+      "positive_cells_within_300m_catalogue_buffer": 2171,
+      "folds": {
+        "NW": {
+          "score": 0.10456977614813104,
+          "tp_weight": 1936.7677112714316,
+          "fp_weight": 14265.709160580533,
+          "fn_weight": 17164.23228872857,
+          "truth_cells": 19101,
+          "prediction_cells": 15134,
+          "alpha": 0.2,
+          "beta": 0.8,
+          "radius_m": 300.0
+        },
+        "NE": {
+          "score": 0.09770899263815835,
+          "tp_weight": 1690.83601595355,
+          "fp_weight": 6529.237679855327,
+          "fn_weight": 17885.163984046452,
+          "truth_cells": 19576,
+          "prediction_cells": 7252,
+          "alpha": 0.2,
+          "beta": 0.8,
+          "radius_m": 300.0
+        },
+        "SW": {
+          "score": 0.0995908396233634,
+          "tp_weight": 163.90567067225751,
+          "fp_weight": 3313.047478634592,
+          "fn_weight": 1024.0943293277423,
+          "truth_cells": 1188,
+          "prediction_cells": 3395,
+          "alpha": 0.2,
+          "beta": 0.8,
+          "radius_m": 300.0
+        },
+        "SE": {
+          "score": 0.07518724387262571,
+          "tp_weight": 742.7855158403913,
+          "fp_weight": 3780.9282769583406,
+          "fn_weight": 10475.21448415961,
+          "truth_cells": 11218,
+          "prediction_cells": 4088,
+          "alpha": 0.2,
+          "beta": 0.8,
+          "radius_m": 300.0
+        }
+      },
+      "pooled_union_of_cores": {
+        "score": 0.09575913387316354,
+        "tp_weight": 4534.294913737631,
+        "fp_weight": 27888.92259602879,
+        "fn_weight": 46548.70508626237,
+        "truth_cells": 51083,
+        "prediction_cells": 29869,
+        "alpha": 0.2,
+        "beta": 0.8,
+        "radius_m": 300.0
+      },
+      "matched_mass_by_fold": {
+        "NW": 15134,
+        "NE": 7252,
+        "SW": 3395,
+        "SE": 4088
+      },
+      "offcatalogue_positive_cells_by_fold": {
+        "NW": 14330,
+        "NE": 6829,
+        "SW": 3159,
+        "SE": 3937
+      }
+    }
+  },
+  "incumbent": {
+    "name": "H50 prior seismicity",
+    "sha256": "79e260ae223d7dfd96413da28a9c6fed30107285ab843795181a5c9e5dff7262",
+    "pooled_dti": 0.1360741213166003,
+    "full_grid_positive_cells": 44709,
+    "matched_mass_by_fold": {
+      "NW": 11253,
+      "NE": 6166,
+      "SW": 6011,
+      "SE": 8389
+    }
+  },
+  "note": "No candidate features, H53 maps, hidden labels, or leaderboard values were read."
+}

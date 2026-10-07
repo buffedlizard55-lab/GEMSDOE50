@@ -1,0 +1,2725 @@
+{
+  "schema": "gemsdoe50.h53-validation.v1",
+  "built_utc": "2026-10-07T02:59:04.846708+00:00",
+  "status": "NO_SLOT",
+  "decision": {
+    "candidate_promotes": false,
+    "slot_decision": "NO SLOT; do not submit or spend a weekly scoring slot",
+    "why": [
+      "the frozen detector accepted zero probe/TMI lineations and emitted zero pixels",
+      "the candidate does not meet the preregistered incumbent-matched mass",
+      "the no-go raster does not beat the frozen incumbent or controls",
+      "official-source mirror bytes are not byte-matched to the official downloads"
+    ],
+    "candidate_mass_gate_passed": false,
+    "all_data_permissions_and_provenance_verified": false,
+    "controls_beaten": false
+  },
+  "candidate": {
+    "name": "GEMSDOE50-H53-PROBE-TMI-POINTLINEATION-20261007",
+    "artifact": {
+      "path": "docs/downloads/gemsdoe50-h53-probe-tmi-pointlineation-20261007-44afc05b.tif",
+      "sha256": "5f2fd91ad46a3602c03802e0f7773fd466b08e47cbfcf40ff796ffc2b956a382",
+      "dtype": "float32",
+      "nodata": null,
+      "min_finite": 0.0,
+      "max_finite": 0.0,
+      "all_finite": false,
+      "finite_pixels": 5167373,
+      "positive_cells": 0,
+      "unique_finite_values": [
+        0.0
+      ],
+      "finite_outside_valid_footprint": 0,
+      "in_valid_min": 0.0,
+      "in_valid_max": 0.0,
+      "all_finite_in_valid_footprint": true
+    },
+    "field_sha256_recomputed": "44afc05b34f596ad9a4730b1c7aeec741c35926085b19f70dc48920323439de9",
+    "lineation_audit_recomputed": {
+      "cluster_radius_m": 1500.0,
+      "minimum_cluster_points": 5,
+      "minimum_axis_ratio": 3.0,
+      "axis_length_m": [
+        800.0,
+        20000.0
+      ],
+      "maximum_tmi_distance_px": 5.0,
+      "maximum_angle_deg": 30.0,
+      "minimum_tmi_alignment_fraction": 0.5,
+      "corridor_sigma_px": 1.5,
+      "ridge_threshold_p95": 0.7265129685401917,
+      "ridge_pixels": 258216,
+      "clusters_tested": 145,
+      "clusters_accepted": 0,
+      "clusters": [
+        {
+          "cluster_id": 1,
+          "area": "Alum",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 2,
+          "area": "Alum",
+          "n_points": 8,
+          "accepted": false,
+          "reason": "weak_tmi_alignment",
+          "axis_ratio": 4.200430221762407,
+          "length_m": 1757.985556527071,
+          "tmi_alignment_fraction": 0.0
+        },
+        {
+          "cluster_id": 3,
+          "area": "Alum",
+          "n_points": 3,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 4,
+          "area": "Astor Pass",
+          "n_points": 53,
+          "accepted": false,
+          "reason": "weak_tmi_alignment",
+          "axis_ratio": 10.352526986028973,
+          "length_m": 1919.7125830421478,
+          "tmi_alignment_fraction": 0.047619047619047616
+        },
+        {
+          "cluster_id": 5,
+          "area": "Battle Mountain",
+          "n_points": 9,
+          "accepted": false,
+          "reason": "weak_tmi_alignment",
+          "axis_ratio": 4724.636416645932,
+          "length_m": 4462.650021965318,
+          "tmi_alignment_fraction": 0.0
+        },
+        {
+          "cluster_id": 6,
+          "area": "Battle Mountain",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 7,
+          "area": "Battle Mountain",
+          "n_points": 11,
+          "accepted": false,
+          "reason": "weak_tmi_alignment",
+          "axis_ratio": 20.389914517710555,
+          "length_m": 4228.841036919783,
+          "tmi_alignment_fraction": 0.0
+        },
+        {
+          "cluster_id": 8,
+          "area": "Blue Wing",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 9,
+          "area": "Blue Wing",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 10,
+          "area": "Blue Wing",
+          "n_points": 3,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 11,
+          "area": "Blue Wing",
+          "n_points": 5,
+          "accepted": false,
+          "reason": "low_axis_ratio",
+          "axis_ratio": 2.788586808330338,
+          "length_m": 1743.0953679912031
+        },
+        {
+          "cluster_id": 12,
+          "area": "Blue Wing",
+          "n_points": 3,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 13,
+          "area": "Blue Wing",
+          "n_points": 4,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 14,
+          "area": "Blue Wing",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 15,
+          "area": "Blue Wing",
+          "n_points": 2,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 16,
+          "area": "Blue Wing",
+          "n_points": 2,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 17,
+          "area": "Blue Wing",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 18,
+          "area": "Blue Wing",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 19,
+          "area": "Blue Wing",
+          "n_points": 2,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 20,
+          "area": "Blue Wing",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 21,
+          "area": "Blue Wing",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 22,
+          "area": "Blue Wing",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 23,
+          "area": "Buena Vista Valley",
+          "n_points": 18,
+          "accepted": false,
+          "reason": "weak_tmi_alignment",
+          "axis_ratio": 752.4088755052267,
+          "length_m": 12807.421042582086,
+          "tmi_alignment_fraction": 0.0
+        },
+        {
+          "cluster_id": 24,
+          "area": "Buffalo Valley",
+          "n_points": 15,
+          "accepted": false,
+          "reason": "weak_tmi_alignment",
+          "axis_ratio": 18.942372582754224,
+          "length_m": 4114.115569455913,
+          "tmi_alignment_fraction": 0.0
+        },
+        {
+          "cluster_id": 25,
+          "area": "Buffalo Valley",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 26,
+          "area": "Buffalo Valley",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 27,
+          "area": "Buffalo Valley",
+          "n_points": 4,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 28,
+          "area": "Buffalo Valley",
+          "n_points": 8,
+          "accepted": false,
+          "reason": "low_axis_ratio",
+          "axis_ratio": 2.2905360939476744,
+          "length_m": 517.751862285057
+        },
+        {
+          "cluster_id": 29,
+          "area": "Columbus Marsh",
+          "n_points": 2,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 30,
+          "area": "Columbus Marsh",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 31,
+          "area": "Columbus Marsh",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 32,
+          "area": "Columbus Marsh",
+          "n_points": 3,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 33,
+          "area": "Columbus Marsh",
+          "n_points": 13,
+          "accepted": false,
+          "reason": "weak_tmi_alignment",
+          "axis_ratio": 4.248952414040066,
+          "length_m": 1715.286237244869,
+          "tmi_alignment_fraction": 0.47368421052631576
+        },
+        {
+          "cluster_id": 34,
+          "area": "Columbus Marsh",
+          "n_points": 2,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 35,
+          "area": "Columbus Marsh",
+          "n_points": 3,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 36,
+          "area": "Columbus Marsh",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 37,
+          "area": "Crescent Valley",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 38,
+          "area": "Crescent Valley",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 39,
+          "area": "Crescent Valley",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 40,
+          "area": "Crescent Valley",
+          "n_points": 2,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 41,
+          "area": "Crescent Valley",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 42,
+          "area": "Crescent Valley",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 43,
+          "area": "Crescent Valley",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 44,
+          "area": "Crescent Valley",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 45,
+          "area": "Crescent Valley",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 46,
+          "area": "Crescent Valley",
+          "n_points": 4,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 47,
+          "area": "Crescent Valley",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 48,
+          "area": "Crescent Valley",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 49,
+          "area": "Dead Horse Wells",
+          "n_points": 21,
+          "accepted": false,
+          "reason": "weak_tmi_alignment",
+          "axis_ratio": 6.118129671000694,
+          "length_m": 2061.0962699476677,
+          "tmi_alignment_fraction": 0.0
+        },
+        {
+          "cluster_id": 50,
+          "area": "Desert Peak",
+          "n_points": 34,
+          "accepted": false,
+          "reason": "weak_tmi_alignment",
+          "axis_ratio": 5.865699637893806,
+          "length_m": 4621.8444859507545,
+          "tmi_alignment_fraction": 0.20833333333333334
+        },
+        {
+          "cluster_id": 51,
+          "area": "Desert Queen",
+          "n_points": 33,
+          "accepted": false,
+          "reason": "weak_tmi_alignment",
+          "axis_ratio": 16.894214549046893,
+          "length_m": 3877.562516116176,
+          "tmi_alignment_fraction": 0.275
+        },
+        {
+          "cluster_id": 52,
+          "area": "Diamond Field Jack Wash",
+          "n_points": 2,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 53,
+          "area": "Diamond Field Jack Wash",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 54,
+          "area": "Diamond Field Jack Wash",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 55,
+          "area": "Diamond Field Jack Wash",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 56,
+          "area": "Dixie / Fairview Valley",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 57,
+          "area": "Dixie / Fairview Valley",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 58,
+          "area": "Dixie / Fairview Valley",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 59,
+          "area": "Dixie / Fairview Valley",
+          "n_points": 4,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 60,
+          "area": "Dixie / Fairview Valley",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 61,
+          "area": "Dixie / Fairview Valley",
+          "n_points": 6,
+          "accepted": false,
+          "reason": "weak_tmi_alignment",
+          "axis_ratio": 5.836953161724582,
+          "length_m": 2251.1278035188825,
+          "tmi_alignment_fraction": 0.0
+        },
+        {
+          "cluster_id": 62,
+          "area": "Dixie / Fairview Valley",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 63,
+          "area": "Dixie / Fairview Valley",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 64,
+          "area": "Dixie / Fairview Valley",
+          "n_points": 2,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 65,
+          "area": "Dixie / Fairview Valley",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 66,
+          "area": "Dixie / Fairview Valley",
+          "n_points": 4,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 67,
+          "area": "Dixie / Fairview Valley",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 68,
+          "area": "Dixie / Fairview Valley",
+          "n_points": 2,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 69,
+          "area": "Dixie / Fairview Valley",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 70,
+          "area": "Dixie / Fairview Valley",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 71,
+          "area": "Dixie / Fairview Valley",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 72,
+          "area": "Dixie / Fairview Valley",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 73,
+          "area": "Dixie / Fairview Valley",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 74,
+          "area": "Dixie / Fairview Valley",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 75,
+          "area": "Dixie / Fairview Valley",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 76,
+          "area": "Dixie / Fairview Valley",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 77,
+          "area": "Dixie Valley",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 78,
+          "area": "Dixie Valley",
+          "n_points": 9,
+          "accepted": false,
+          "reason": "low_axis_ratio",
+          "axis_ratio": 1.4083036930023023,
+          "length_m": 1895.384762527935
+        },
+        {
+          "cluster_id": 79,
+          "area": "Dixie Valley",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 80,
+          "area": "Dun Glen",
+          "n_points": 7,
+          "accepted": false,
+          "reason": "weak_tmi_alignment",
+          "axis_ratio": 6.024694505456044,
+          "length_m": 2496.0517524327033,
+          "tmi_alignment_fraction": 0.0
+        },
+        {
+          "cluster_id": 81,
+          "area": "Emerson Pass",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 82,
+          "area": "Emerson Pass",
+          "n_points": 19,
+          "accepted": false,
+          "reason": "low_axis_ratio",
+          "axis_ratio": 2.7832309914343134,
+          "length_m": 1266.7156839423
+        },
+        {
+          "cluster_id": 83,
+          "area": "Emerson Pass",
+          "n_points": 2,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 84,
+          "area": "Fallon",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 85,
+          "area": "Fallon",
+          "n_points": 2,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 86,
+          "area": "Fallon",
+          "n_points": 15,
+          "accepted": false,
+          "reason": "low_axis_ratio",
+          "axis_ratio": 2.3884877204387776,
+          "length_m": 5508.55147286468
+        },
+        {
+          "cluster_id": 87,
+          "area": "Fallon",
+          "n_points": 2,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 88,
+          "area": "Fallon",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 89,
+          "area": "Fallon",
+          "n_points": 2,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 90,
+          "area": "Fallon",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 91,
+          "area": "Fallon",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 92,
+          "area": "Fallon",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 93,
+          "area": "Fallon",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 94,
+          "area": "Fallon",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 95,
+          "area": "Fallon",
+          "n_points": 2,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 96,
+          "area": "Fallon",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 97,
+          "area": "Fireball Craters",
+          "n_points": 23,
+          "accepted": false,
+          "reason": "weak_tmi_alignment",
+          "axis_ratio": 5.562280883978896,
+          "length_m": 5013.543022984135,
+          "tmi_alignment_fraction": 0.09615384615384616
+        },
+        {
+          "cluster_id": 98,
+          "area": "Fireball Craters",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 99,
+          "area": "Fireball Craters",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 100,
+          "area": "Gabbs Valley",
+          "n_points": 14,
+          "accepted": false,
+          "reason": "low_axis_ratio",
+          "axis_ratio": 2.71074769455803,
+          "length_m": 3046.8907885027443
+        },
+        {
+          "cluster_id": 101,
+          "area": "Gabbs Valley",
+          "n_points": 3,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 102,
+          "area": "Gabbs Valley",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 103,
+          "area": "Gabbs Valley",
+          "n_points": 10,
+          "accepted": false,
+          "reason": "low_axis_ratio",
+          "axis_ratio": 2.876754459497145,
+          "length_m": 2056.2516813905536
+        },
+        {
+          "cluster_id": 104,
+          "area": "Gabbs Valley",
+          "n_points": 46,
+          "accepted": false,
+          "reason": "weak_tmi_alignment",
+          "axis_ratio": 3.6680779519203877,
+          "length_m": 4682.2144885492,
+          "tmi_alignment_fraction": 0.0
+        },
+        {
+          "cluster_id": 105,
+          "area": "Gerlach",
+          "n_points": 3,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 106,
+          "area": "Gerlach",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 107,
+          "area": "Granite Springs Valley",
+          "n_points": 28,
+          "accepted": false,
+          "reason": "weak_tmi_alignment",
+          "axis_ratio": 4.352853293293115,
+          "length_m": 5926.220286585298,
+          "tmi_alignment_fraction": 0.0
+        },
+        {
+          "cluster_id": 108,
+          "area": "Granite Springs Valley",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 109,
+          "area": "Granite Springs Valley",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 110,
+          "area": "Granite Springs Valley",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 111,
+          "area": "Hawthorne",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 112,
+          "area": "Hawthorne",
+          "n_points": 27,
+          "accepted": false,
+          "reason": "weak_tmi_alignment",
+          "axis_ratio": 10.076251529043889,
+          "length_m": 5448.877336151914,
+          "tmi_alignment_fraction": 0.0
+        },
+        {
+          "cluster_id": 113,
+          "area": "Hawthorne",
+          "n_points": 9,
+          "accepted": false,
+          "reason": "weak_tmi_alignment",
+          "axis_ratio": 4.524642855814071,
+          "length_m": 2621.9747470329303,
+          "tmi_alignment_fraction": 0.0
+        },
+        {
+          "cluster_id": 114,
+          "area": "Hawthorne",
+          "n_points": 2,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 115,
+          "area": "Hawthorne",
+          "n_points": 2,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 116,
+          "area": "Hawthorne",
+          "n_points": 6,
+          "accepted": false,
+          "reason": "weak_tmi_alignment",
+          "axis_ratio": 3.470734610704214,
+          "length_m": 2421.4473677201336,
+          "tmi_alignment_fraction": 0.0
+        },
+        {
+          "cluster_id": 117,
+          "area": "Hawthorne",
+          "n_points": 5,
+          "accepted": false,
+          "reason": "weak_tmi_alignment",
+          "axis_ratio": 17.89081233076762,
+          "length_m": 2763.405475545698,
+          "tmi_alignment_fraction": 0.0
+        },
+        {
+          "cluster_id": 118,
+          "area": "Hawthorne",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 119,
+          "area": "Hawthorne",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 120,
+          "area": "HumboldtNSO",
+          "n_points": 3,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 121,
+          "area": "HumboldtNSO",
+          "n_points": 2,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 122,
+          "area": "HumboldtTufa",
+          "n_points": 2,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 123,
+          "area": "HumboldtTufa",
+          "n_points": 2,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 124,
+          "area": "HumboldtTufa",
+          "n_points": 2,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 125,
+          "area": "HumboldtTufa",
+          "n_points": 2,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 126,
+          "area": "HumboldtTufa",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 127,
+          "area": "Lee Hot Springs",
+          "n_points": 12,
+          "accepted": false,
+          "reason": "weak_tmi_alignment",
+          "axis_ratio": 23.62465240694821,
+          "length_m": 1839.1991774292505,
+          "tmi_alignment_fraction": 0.4
+        },
+        {
+          "cluster_id": 128,
+          "area": "Monte Cristo Valley",
+          "n_points": 3,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 129,
+          "area": "Monte Cristo Valley",
+          "n_points": 4,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 130,
+          "area": "MtTobin",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 131,
+          "area": "MtTobin",
+          "n_points": 2,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 132,
+          "area": "MtTobin",
+          "n_points": 2,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 133,
+          "area": "MtTobin",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 134,
+          "area": "Queen Valley",
+          "n_points": 2,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 135,
+          "area": "Queen Valley",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 136,
+          "area": "Rhodes Marsh",
+          "n_points": 15,
+          "accepted": false,
+          "reason": "weak_tmi_alignment",
+          "axis_ratio": 5.034114870656668,
+          "length_m": 2626.359325853289,
+          "tmi_alignment_fraction": 0.0
+        },
+        {
+          "cluster_id": 137,
+          "area": "Salt Wells",
+          "n_points": 13,
+          "accepted": false,
+          "reason": "weak_tmi_alignment",
+          "axis_ratio": 11.397834022242277,
+          "length_m": 5204.331391831477,
+          "tmi_alignment_fraction": 0.2037037037037037
+        },
+        {
+          "cluster_id": 138,
+          "area": "Silver Peak",
+          "n_points": 29,
+          "accepted": false,
+          "reason": "low_axis_ratio",
+          "axis_ratio": 2.2466639542458937,
+          "length_m": 3854.395664284146
+        },
+        {
+          "cluster_id": 139,
+          "area": "Silver Peak",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 140,
+          "area": "Sou Hills",
+          "n_points": 4,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 141,
+          "area": "Sou Hills",
+          "n_points": 7,
+          "accepted": false,
+          "reason": "weak_tmi_alignment",
+          "axis_ratio": 81.96012060314088,
+          "length_m": 4789.058174757235,
+          "tmi_alignment_fraction": 0.04081632653061224
+        },
+        {
+          "cluster_id": 142,
+          "area": "Toulon",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 143,
+          "area": "Toulon",
+          "n_points": 1,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 144,
+          "area": "Toulon",
+          "n_points": 4,
+          "accepted": false,
+          "reason": "too_few_points"
+        },
+        {
+          "cluster_id": 145,
+          "area": "Winemucca Lake",
+          "n_points": 7,
+          "accepted": false,
+          "reason": "weak_tmi_alignment",
+          "axis_ratio": 10.935700775518441,
+          "length_m": 2251.3021720937304,
+          "tmi_alignment_fraction": 0.0
+        }
+      ],
+      "positive_score_cells": 0,
+      "score_max": 0.0
+    },
+    "native_mass_by_fold": {
+      "NW": 0,
+      "NE": 0,
+      "SW": 0,
+      "SE": 0
+    },
+    "native_pooled_dti": {
+      "score": 0.0,
+      "tp_weight": 0.0,
+      "fp_weight": 0.0,
+      "fn_weight": 51083.0,
+      "truth_cells": 51083,
+      "prediction_cells": 0,
+      "alpha": 0.2,
+      "beta": 0.8,
+      "radius_m": 300.0
+    },
+    "native_folds": {
+      "NW": {
+        "score": 0.0,
+        "tp_weight": 0.0,
+        "fp_weight": 0.0,
+        "fn_weight": 19101.0,
+        "truth_cells": 19101,
+        "prediction_cells": 0,
+        "alpha": 0.2,
+        "beta": 0.8,
+        "radius_m": 300.0
+      },
+      "NE": {
+        "score": 0.0,
+        "tp_weight": 0.0,
+        "fp_weight": 0.0,
+        "fn_weight": 19576.0,
+        "truth_cells": 19576,
+        "prediction_cells": 0,
+        "alpha": 0.2,
+        "beta": 0.8,
+        "radius_m": 300.0
+      },
+      "SW": {
+        "score": 0.0,
+        "tp_weight": 0.0,
+        "fp_weight": 0.0,
+        "fn_weight": 1188.0,
+        "truth_cells": 1188,
+        "prediction_cells": 0,
+        "alpha": 0.2,
+        "beta": 0.8,
+        "radius_m": 300.0
+      },
+      "SE": {
+        "score": 0.0,
+        "tp_weight": 0.0,
+        "fp_weight": 0.0,
+        "fn_weight": 11218.0,
+        "truth_cells": 11218,
+        "prediction_cells": 0,
+        "alpha": 0.2,
+        "beta": 0.8,
+        "radius_m": 300.0
+      }
+    },
+    "equal_mass_pooled_dti": {
+      "score": 0.0,
+      "tp_weight": 0.0,
+      "fp_weight": 0.0,
+      "fn_weight": 51083.0,
+      "truth_cells": 51083,
+      "prediction_cells": 0,
+      "alpha": 0.2,
+      "beta": 0.8,
+      "radius_m": 300.0
+    },
+    "equal_mass_folds": {
+      "NW": {
+        "score": 0.0,
+        "tp_weight": 0.0,
+        "fp_weight": 0.0,
+        "fn_weight": 19101.0,
+        "truth_cells": 19101,
+        "prediction_cells": 0,
+        "alpha": 0.2,
+        "beta": 0.8,
+        "radius_m": 300.0
+      },
+      "NE": {
+        "score": 0.0,
+        "tp_weight": 0.0,
+        "fp_weight": 0.0,
+        "fn_weight": 19576.0,
+        "truth_cells": 19576,
+        "prediction_cells": 0,
+        "alpha": 0.2,
+        "beta": 0.8,
+        "radius_m": 300.0
+      },
+      "SW": {
+        "score": 0.0,
+        "tp_weight": 0.0,
+        "fp_weight": 0.0,
+        "fn_weight": 1188.0,
+        "truth_cells": 1188,
+        "prediction_cells": 0,
+        "alpha": 0.2,
+        "beta": 0.8,
+        "radius_m": 300.0
+      },
+      "SE": {
+        "score": 0.0,
+        "tp_weight": 0.0,
+        "fp_weight": 0.0,
+        "fn_weight": 11218.0,
+        "truth_cells": 11218,
+        "prediction_cells": 0,
+        "alpha": 0.2,
+        "beta": 0.8,
+        "radius_m": 300.0
+      }
+    },
+    "equal_mass_pack_by_fold": {
+      "NW": {
+        "requested_mass": 11253,
+        "emitted_mass": 0,
+        "mass_match": false,
+        "pack": {
+          "mass": 0,
+          "suppression_px": 3.0,
+          "belief_max": 0.0
+        }
+      },
+      "NE": {
+        "requested_mass": 6166,
+        "emitted_mass": 0,
+        "mass_match": false,
+        "pack": {
+          "mass": 0,
+          "suppression_px": 3.0,
+          "belief_max": 0.0
+        }
+      },
+      "SW": {
+        "requested_mass": 6011,
+        "emitted_mass": 0,
+        "mass_match": false,
+        "pack": {
+          "mass": 0,
+          "suppression_px": 3.0,
+          "belief_max": 0.0
+        }
+      },
+      "SE": {
+        "requested_mass": 8389,
+        "emitted_mass": 0,
+        "mass_match": false,
+        "pack": {
+          "mass": 0,
+          "suppression_px": 3.0,
+          "belief_max": 0.0
+        }
+      }
+    },
+    "equal_mass_gate": {
+      "requested_full_grid": 44709,
+      "emitted_full_grid": 0,
+      "requested_by_fold": {
+        "NW": 11253,
+        "NE": 6166,
+        "SW": 6011,
+        "SE": 8389
+      },
+      "emitted_by_fold": {
+        "NW": 0,
+        "NE": 0,
+        "SW": 0,
+        "SE": 0
+      },
+      "passed": false
+    },
+    "artifact_sha_unique_against_registered_baselines": true,
+    "overlap_pixels_with_registered_baselines": {
+      "H51-A scarp-radiometric": 0,
+      "H50 prior seismicity": 0,
+      "H51 corridor consensus": 0,
+      "GEMSDOE32 H33-2-B2 (comparison only)": 0
+    }
+  },
+  "frozen_incumbent": {
+    "name": "H50 prior seismicity",
+    "sha256": "79e260ae223d7dfd96413da28a9c6fed30107285ab843795181a5c9e5dff7262",
+    "artifact": {
+      "path": "docs/downloads/gems50-seislin-44709-20261006T2041Z-79e260ae.tif",
+      "sha256": "79e260ae223d7dfd96413da28a9c6fed30107285ab843795181a5c9e5dff7262",
+      "dtype": "float32",
+      "nodata": null,
+      "min_finite": 0.0,
+      "max_finite": 1.0,
+      "all_finite": false,
+      "finite_pixels": 5167373,
+      "positive_cells": 44709,
+      "unique_finite_values": [
+        0.0,
+        1.0
+      ],
+      "finite_outside_valid_footprint": null,
+      "in_valid_min": null,
+      "in_valid_max": null,
+      "all_finite_in_valid_footprint": null
+    },
+    "native_positive_cells": 44709,
+    "native_pooled_dti": {
+      "score": 0.1360741213166003,
+      "tp_weight": 6518.9066386112445,
+      "fp_weight": 28684.229636262426,
+      "fn_weight": 44564.093361388754,
+      "truth_cells": 51083,
+      "prediction_cells": 31819,
+      "alpha": 0.2,
+      "beta": 0.8,
+      "radius_m": 300.0
+    },
+    "folds": {
+      "NW": {
+        "score": 0.10258754167175198,
+        "tp_weight": 1817.9222537093572,
+        "fp_weight": 10381.538950480348,
+        "fn_weight": 17283.077746290644,
+        "truth_cells": 19101,
+        "prediction_cells": 11253,
+        "alpha": 0.2,
+        "beta": 0.8,
+        "radius_m": 300.0
+      },
+      "NE": {
+        "score": 0.09611492594095966,
+        "tp_weight": 1639.646722185788,
+        "fp_weight": 5352.508174342689,
+        "fn_weight": 17936.35327781421,
+        "truth_cells": 19576,
+        "prediction_cells": 6166,
+        "alpha": 0.2,
+        "beta": 0.8,
+        "radius_m": 300.0
+      },
+      "SW": {
+        "score": 0.07447584744045185,
+        "tp_weight": 161.30935058150519,
+        "fp_weight": 5916.332481316262,
+        "fn_weight": 1026.6906494184948,
+        "truth_cells": 1188,
+        "prediction_cells": 6011,
+        "alpha": 0.2,
+        "beta": 0.8,
+        "radius_m": 300.0
+      },
+      "SE": {
+        "score": 0.2645727429112545,
+        "tp_weight": 2900.0283121345938,
+        "fp_weight": 7033.850030123125,
+        "fn_weight": 8317.971687865407,
+        "truth_cells": 11218,
+        "prediction_cells": 8389,
+        "alpha": 0.2,
+        "beta": 0.8,
+        "radius_m": 300.0
+      }
+    },
+    "matched_mass_by_fold": {
+      "NW": 11253,
+      "NE": 6166,
+      "SW": 6011,
+      "SE": 8389
+    },
+    "fold_dti_deltas_candidate_minus_incumbent": {
+      "NW": -0.10258754167175198,
+      "NE": -0.09611492594095966,
+      "SW": -0.07447584744045185,
+      "SE": -0.2645727429112545
+    },
+    "beats_incumbent": false
+  },
+  "registered_controls": {
+    "probe_density_500m": {
+      "folds": {
+        "NW": {
+          "requested_mass": 11253,
+          "emitted_mass": 11253,
+          "mass_match": true,
+          "dti": {
+            "score": 0.029576736234909928,
+            "tp_weight": 519.9212617581045,
+            "fp_weight": 10969.695131318256,
+            "fn_weight": 18581.078738241893,
+            "truth_cells": 19101,
+            "prediction_cells": 11253,
+            "alpha": 0.2,
+            "beta": 0.8,
+            "radius_m": 300.0
+          },
+          "pack": {
+            "mass": 11253,
+            "suppression_px": 3.0,
+            "belief_max": 1.0
+          }
+        },
+        "NE": {
+          "requested_mass": 6166,
+          "emitted_mass": 4569,
+          "mass_match": false,
+          "dti": {
+            "score": 0.01731439165458214,
+            "tp_weight": 287.47675892713755,
+            "fp_weight": 4425.231151524156,
+            "fn_weight": 19288.52324107286,
+            "truth_cells": 19576,
+            "prediction_cells": 4569,
+            "alpha": 0.2,
+            "beta": 0.8,
+            "radius_m": 300.0
+          },
+          "pack": {
+            "mass": 4569,
+            "suppression_px": 3.0,
+            "belief_max": 0.23319074511528015
+          }
+        },
+        "SW": {
+          "requested_mass": 6011,
+          "emitted_mass": 3167,
+          "mass_match": false,
+          "dti": {
+            "score": 0.04622481463673463,
+            "tp_weight": 73.5306896884864,
+            "fp_weight": 3128.064177732106,
+            "fn_weight": 1114.4693103115135,
+            "truth_cells": 1188,
+            "prediction_cells": 3167,
+            "alpha": 0.2,
+            "beta": 0.8,
+            "radius_m": 300.0
+          },
+          "pack": {
+            "mass": 3167,
+            "suppression_px": 3.0,
+            "belief_max": 0.369491845369339
+          }
+        },
+        "SE": {
+          "requested_mass": 8389,
+          "emitted_mass": 1868,
+          "mass_match": false,
+          "dti": {
+            "score": 0.017922399294402747,
+            "tp_weight": 167.87843452219857,
+            "fp_weight": 1794.9319512194786,
+            "fn_weight": 11050.121565477803,
+            "truth_cells": 11218,
+            "prediction_cells": 1868,
+            "alpha": 0.2,
+            "beta": 0.8,
+            "radius_m": 300.0
+          },
+          "pack": {
+            "mass": 1868,
+            "suppression_px": 3.0,
+            "belief_max": 0.2919275760650635
+          }
+        }
+      },
+      "pooled_equal_incumbent_native_mass": {
+        "score": 0.023234670991634218,
+        "tp_weight": 1048.8071448959272,
+        "fp_weight": 20317.922411793996,
+        "fn_weight": 50034.19285510407,
+        "truth_cells": 51083,
+        "prediction_cells": 20857,
+        "alpha": 0.2,
+        "beta": 0.8,
+        "radius_m": 300.0
+      },
+      "total_emitted_cells": 20857,
+      "all_fold_masses_match": false,
+      "beats_incumbent_pooled": false
+    },
+    "probe_density_1km": {
+      "folds": {
+        "NW": {
+          "requested_mass": 11253,
+          "emitted_mass": 11253,
+          "mass_match": true,
+          "dti": {
+            "score": 0.031094501924695504,
+            "tp_weight": 546.6618218801227,
+            "fp_weight": 10952.631050280079,
+            "fn_weight": 18554.338178119877,
+            "truth_cells": 19101,
+            "prediction_cells": 11253,
+            "alpha": 0.2,
+            "beta": 0.8,
+            "radius_m": 300.0
+          },
+          "pack": {
+            "mass": 11253,
+            "suppression_px": 3.0,
+            "belief_max": 1.0
+          }
+        },
+        "NE": {
+          "requested_mass": 6166,
+          "emitted_mass": 6166,
+          "mass_match": true,
+          "dti": {
+            "score": 0.02559099820217575,
+            "tp_weight": 433.45109603010076,
+            "fp_weight": 5950.745238809057,
+            "fn_weight": 19142.5489039699,
+            "truth_cells": 19576,
+            "prediction_cells": 6166,
+            "alpha": 0.2,
+            "beta": 0.8,
+            "radius_m": 300.0
+          },
+          "pack": {
+            "mass": 6166,
+            "suppression_px": 3.0,
+            "belief_max": 0.1918388158082962
+          }
+        },
+        "SW": {
+          "requested_mass": 6011,
+          "emitted_mass": 6011,
+          "mass_match": true,
+          "dti": {
+            "score": 0.06260259728916032,
+            "tp_weight": 135.50179048331398,
+            "fp_weight": 5934.875902359919,
+            "fn_weight": 1052.498209516686,
+            "truth_cells": 1188,
+            "prediction_cells": 6011,
+            "alpha": 0.2,
+            "beta": 0.8,
+            "radius_m": 300.0
+          },
+          "pack": {
+            "mass": 6011,
+            "suppression_px": 3.0,
+            "belief_max": 0.4007672071456909
+          }
+        },
+        "SE": {
+          "requested_mass": 8389,
+          "emitted_mass": 4789,
+          "mass_match": false,
+          "dti": {
+            "score": 0.04244030638399229,
+            "tp_weight": 423.38336461971915,
+            "fp_weight": 4584.483287258309,
+            "fn_weight": 10794.61663538028,
+            "truth_cells": 11218,
+            "prediction_cells": 4789,
+            "alpha": 0.2,
+            "beta": 0.8,
+            "radius_m": 300.0
+          },
+          "pack": {
+            "mass": 4789,
+            "suppression_px": 3.0,
+            "belief_max": 0.3799869418144226
+          }
+        }
+      },
+      "pooled_equal_incumbent_native_mass": {
+        "score": 0.03298412798284681,
+        "tp_weight": 1538.9980730132565,
+        "fp_weight": 27422.735478707364,
+        "fn_weight": 49544.00192698674,
+        "truth_cells": 51083,
+        "prediction_cells": 28219,
+        "alpha": 0.2,
+        "beta": 0.8,
+        "radius_m": 300.0
+      },
+      "total_emitted_cells": 28219,
+      "all_fold_masses_match": false,
+      "beats_incumbent_pooled": false
+    },
+    "tmi_only": {
+      "folds": {
+        "NW": {
+          "requested_mass": 11253,
+          "emitted_mass": 11253,
+          "mass_match": true,
+          "dti": {
+            "score": 0.06972979677283901,
+            "tp_weight": 1231.4420140019392,
+            "fp_weight": 10665.547734582688,
+            "fn_weight": 17869.55798599806,
+            "truth_cells": 19101,
+            "prediction_cells": 11253,
+            "alpha": 0.2,
+            "beta": 0.8,
+            "radius_m": 300.0
+          },
+          "pack": {
+            "mass": 11253,
+            "suppression_px": 3.0,
+            "belief_max": 1.0
+          }
+        },
+        "NE": {
+          "requested_mass": 6166,
+          "emitted_mass": 2736,
+          "mass_match": false,
+          "dti": {
+            "score": 0.014892107370540282,
+            "tp_weight": 241.74705662722283,
+            "fp_weight": 2620.420568995201,
+            "fn_weight": 19334.252943372776,
+            "truth_cells": 19576,
+            "prediction_cells": 2736,
+            "alpha": 0.2,
+            "beta": 0.8,
+            "radius_m": 300.0
+          },
+          "pack": {
+            "mass": 2736,
+            "suppression_px": 3.0,
+            "belief_max": 1.0
+          }
+        },
+        "SW": {
+          "requested_mass": 6011,
+          "emitted_mass": 3336,
+          "mass_match": false,
+          "dti": {
+            "score": 0.08436380424453066,
+            "tp_weight": 137.48425645882372,
+            "fp_weight": 3258.8121420913003,
+            "fn_weight": 1050.515743541176,
+            "truth_cells": 1188,
+            "prediction_cells": 3336,
+            "alpha": 0.2,
+            "beta": 0.8,
+            "radius_m": 300.0
+          },
+          "pack": {
+            "mass": 3336,
+            "suppression_px": 3.0,
+            "belief_max": 1.0
+          }
+        },
+        "SE": {
+          "requested_mass": 8389,
+          "emitted_mass": 1765,
+          "mass_match": false,
+          "dti": {
+            "score": 0.01971823267770116,
+            "tp_weight": 184.30893311801725,
+            "fp_weight": 1679.3534689256799,
+            "fn_weight": 11033.691066881984,
+            "truth_cells": 11218,
+            "prediction_cells": 1765,
+            "alpha": 0.2,
+            "beta": 0.8,
+            "radius_m": 300.0
+          },
+          "pack": {
+            "mass": 1765,
+            "suppression_px": 3.0,
+            "belief_max": 1.0
+          }
+        }
+      },
+      "pooled_equal_incumbent_native_mass": {
+        "score": 0.04000386293615363,
+        "tp_weight": 1794.982260206003,
+        "fp_weight": 18224.13391459487,
+        "fn_weight": 49288.017739794,
+        "truth_cells": 51083,
+        "prediction_cells": 19090,
+        "alpha": 0.2,
+        "beta": 0.8,
+        "radius_m": 300.0
+      },
+      "total_emitted_cells": 19090,
+      "all_fold_masses_match": false,
+      "beats_incumbent_pooled": false
+    }
+  },
+  "matched_uniform_controls": [
+    {
+      "draw": 1,
+      "seed": 5301,
+      "folds": {
+        "NW": {
+          "requested_mass": 11253,
+          "emitted_mass": 11253,
+          "mass_match": true,
+          "dti": {
+            "score": 0.05458184350164647,
+            "tp_weight": 963.4761301264994,
+            "fp_weight": 10892.28831859364,
+            "fn_weight": 18137.5238698735,
+            "truth_cells": 19101,
+            "prediction_cells": 11253,
+            "alpha": 0.2,
+            "beta": 0.8,
+            "radius_m": 300.0
+          },
+          "pack": {
+            "mass": 11253,
+            "suppression_px": 3.0,
+            "belief_max": 0.9999988675117493
+          }
+        },
+        "NE": {
+          "requested_mass": 6166,
+          "emitted_mass": 6166,
+          "mass_match": true,
+          "dti": {
+            "score": 0.0638321446956878,
+            "tp_weight": 1087.3180439295577,
+            "fp_weight": 5778.783095014913,
+            "fn_weight": 18488.681956070443,
+            "truth_cells": 19576,
+            "prediction_cells": 6166,
+            "alpha": 0.2,
+            "beta": 0.8,
+            "radius_m": 300.0
+          },
+          "pack": {
+            "mass": 6166,
+            "suppression_px": 3.0,
+            "belief_max": 0.9999995231628418
+          }
+        },
+        "SW": {
+          "requested_mass": 6011,
+          "emitted_mass": 6011,
+          "mass_match": true,
+          "dti": {
+            "score": 0.08083301512114581,
+            "tp_weight": 175.6155479511272,
+            "fp_weight": 5935.244614313535,
+            "fn_weight": 1012.3844520488728,
+            "truth_cells": 1188,
+            "prediction_cells": 6011,
+            "alpha": 0.2,
+            "beta": 0.8,
+            "radius_m": 300.0
+          },
+          "pack": {
+            "mass": 6011,
+            "suppression_px": 3.0,
+            "belief_max": 0.9999998807907104
+          }
+        },
+        "SE": {
+          "requested_mass": 8389,
+          "emitted_mass": 8389,
+          "mass_match": true,
+          "dti": {
+            "score": 0.13494429682229409,
+            "tp_weight": 1463.061670953786,
+            "fp_weight": 7874.775476900364,
+            "fn_weight": 9754.938329046214,
+            "truth_cells": 11218,
+            "prediction_cells": 8389,
+            "alpha": 0.2,
+            "beta": 0.8,
+            "radius_m": 300.0
+          },
+          "pack": {
+            "mass": 8389,
+            "suppression_px": 3.0,
+            "belief_max": 0.9999996423721313
+          }
+        }
+      },
+      "pooled_equal_incumbent_native_mass": {
+        "score": 0.07734657749866851,
+        "tp_weight": 3689.4713929609707,
+        "fp_weight": 30481.09150482245,
+        "fn_weight": 47393.52860703903,
+        "truth_cells": 51083,
+        "prediction_cells": 31819,
+        "alpha": 0.2,
+        "beta": 0.8,
+        "radius_m": 300.0
+      },
+      "total_emitted_cells": 31819,
+      "all_fold_masses_match": true
+    },
+    {
+      "draw": 2,
+      "seed": 5302,
+      "folds": {
+        "NW": {
+          "requested_mass": 11253,
+          "emitted_mass": 11253,
+          "mass_match": true,
+          "dti": {
+            "score": 0.058471259498212344,
+            "tp_weight": 1032.6915483542357,
+            "fp_weight": 10870.928059681548,
+            "fn_weight": 18068.308451645767,
+            "truth_cells": 19101,
+            "prediction_cells": 11253,
+            "alpha": 0.2,
+            "beta": 0.8,
+            "radius_m": 300.0
+          },
+          "pack": {
+            "mass": 11253,
+            "suppression_px": 3.0,
+            "belief_max": 0.999998927116394
+          }
+        },
+        "NE": {
+          "requested_mass": 6166,
+          "emitted_mass": 6166,
+          "mass_match": true,
+          "dti": {
+            "score": 0.06453064793307443,
+            "tp_weight": 1099.2996783775106,
+            "fp_weight": 5773.2570112084695,
+            "fn_weight": 18476.70032162249,
+            "truth_cells": 19576,
+            "prediction_cells": 6166,
+            "alpha": 0.2,
+            "beta": 0.8,
+            "radius_m": 300.0
+          },
+          "pack": {
+            "mass": 6166,
+            "suppression_px": 3.0,
+            "belief_max": 0.9999998807907104
+          }
+        },
+        "SW": {
+          "requested_mass": 6011,
+          "emitted_mass": 6011,
+          "mass_match": true,
+          "dti": {
+            "score": 0.0846136613018912,
+            "tp_weight": 183.8563185045989,
+            "fp_weight": 5928.601954287629,
+            "fn_weight": 1004.1436814954011,
+            "truth_cells": 1188,
+            "prediction_cells": 6011,
+            "alpha": 0.2,
+            "beta": 0.8,
+            "radius_m": 300.0
+          },
+          "pack": {
+            "mass": 6011,
+            "suppression_px": 3.0,
+            "belief_max": 0.9999998211860657
+          }
+        },
+        "SE": {
+          "requested_mass": 8389,
+          "emitted_mass": 8389,
+          "mass_match": true,
+          "dti": {
+            "score": 0.13186327457821193,
+            "tp_weight": 1429.1140489516272,
+            "fp_weight": 7888.123004457285,
+            "fn_weight": 9788.885951048374,
+            "truth_cells": 11218,
+            "prediction_cells": 8389,
+            "alpha": 0.2,
+            "beta": 0.8,
+            "radius_m": 300.0
+          },
+          "pack": {
+            "mass": 8389,
+            "suppression_px": 3.0,
+            "belief_max": 0.9999988079071045
+          }
+        }
+      },
+      "pooled_equal_incumbent_native_mass": {
+        "score": 0.0784982604375238,
+        "tp_weight": 3744.9615941879724,
+        "fp_weight": 30460.91002963493,
+        "fn_weight": 47338.038405812025,
+        "truth_cells": 51083,
+        "prediction_cells": 31819,
+        "alpha": 0.2,
+        "beta": 0.8,
+        "radius_m": 300.0
+      },
+      "total_emitted_cells": 31819,
+      "all_fold_masses_match": true
+    },
+    {
+      "draw": 3,
+      "seed": 5303,
+      "folds": {
+        "NW": {
+          "requested_mass": 11253,
+          "emitted_mass": 11253,
+          "mass_match": true,
+          "dti": {
+            "score": 0.056839420863853796,
+            "tp_weight": 1003.6453187106883,
+            "fp_weight": 10880.140117618868,
+            "fn_weight": 18097.35468128931,
+            "truth_cells": 19101,
+            "prediction_cells": 11253,
+            "alpha": 0.2,
+            "beta": 0.8,
+            "radius_m": 300.0
+          },
+          "pack": {
+            "mass": 11253,
+            "suppression_px": 3.0,
+            "belief_max": 0.9999997019767761
+          }
+        },
+        "NE": {
+          "requested_mass": 6166,
+          "emitted_mass": 6166,
+          "mass_match": true,
+          "dti": {
+            "score": 0.07005904159215466,
+            "tp_weight": 1194.3312997334017,
+            "fp_weight": 5739.153583807665,
+            "fn_weight": 18381.6687002666,
+            "truth_cells": 19576,
+            "prediction_cells": 6166,
+            "alpha": 0.2,
+            "beta": 0.8,
+            "radius_m": 300.0
+          },
+          "pack": {
+            "mass": 6166,
+            "suppression_px": 3.0,
+            "belief_max": 0.9999998211860657
+          }
+        },
+        "SW": {
+          "requested_mass": 6011,
+          "emitted_mass": 6011,
+          "mass_match": true,
+          "dti": {
+            "score": 0.09232682972107362,
+            "tp_weight": 200.90703004790726,
+            "fp_weight": 5927.301391207883,
+            "fn_weight": 987.0929699520927,
+            "truth_cells": 1188,
+            "prediction_cells": 6011,
+            "alpha": 0.2,
+            "beta": 0.8,
+            "radius_m": 300.0
+          },
+          "pack": {
+            "mass": 6011,
+            "suppression_px": 3.0,
+            "belief_max": 0.9999994039535522
+          }
+        },
+        "SE": {
+          "requested_mass": 8389,
+          "emitted_mass": 8389,
+          "mass_match": true,
+          "dti": {
+            "score": 0.13596003326377842,
+            "tp_weight": 1474.3775669565582,
+            "fp_weight": 7874.614130506354,
+            "fn_weight": 9743.622433043442,
+            "truth_cells": 11218,
+            "prediction_cells": 8389,
+            "alpha": 0.2,
+            "beta": 0.8,
+            "radius_m": 300.0
+          },
+          "pack": {
+            "mass": 8389,
+            "suppression_px": 3.0,
+            "belief_max": 0.9999994039535522
+          }
+        }
+      },
+      "pooled_equal_incumbent_native_mass": {
+        "score": 0.0811574090738869,
+        "tp_weight": 3873.2612154485555,
+        "fp_weight": 30421.20922314077,
+        "fn_weight": 47209.738784551446,
+        "truth_cells": 51083,
+        "prediction_cells": 31819,
+        "alpha": 0.2,
+        "beta": 0.8,
+        "radius_m": 300.0
+      },
+      "total_emitted_cells": 31819,
+      "all_fold_masses_match": true
+    },
+    {
+      "draw": 4,
+      "seed": 5304,
+      "folds": {
+        "NW": {
+          "requested_mass": 11253,
+          "emitted_mass": 11253,
+          "mass_match": true,
+          "dti": {
+            "score": 0.05613018485529562,
+            "tp_weight": 990.9851280597122,
+            "fp_weight": 10880.612985008076,
+            "fn_weight": 18110.014871940286,
+            "truth_cells": 19101,
+            "prediction_cells": 11253,
+            "alpha": 0.2,
+            "beta": 0.8,
+            "radius_m": 300.0
+          },
+          "pack": {
+            "mass": 11253,
+            "suppression_px": 3.0,
+            "belief_max": 0.9999990463256836
+          }
+        },
+        "NE": {
+          "requested_mass": 6166,
+          "emitted_mass": 6166,
+          "mass_match": true,
+          "dti": {
+            "score": 0.07513542114715274,
+            "tp_weight": 1281.7847902528245,
+            "fp_weight": 5712.518638590238,
+            "fn_weight": 18294.215209747177,
+            "truth_cells": 19576,
+            "prediction_cells": 6166,
+            "alpha": 0.2,
+            "beta": 0.8,
+            "radius_m": 300.0
+          },
+          "pack": {
+            "mass": 6166,
+            "suppression_px": 3.0,
+            "belief_max": 0.9999998807907104
+          }
+        },
+        "SW": {
+          "requested_mass": 6011,
+          "emitted_mass": 6011,
+          "mass_match": true,
+          "dti": {
+            "score": 0.10338171544150787,
+            "tp_weight": 225.29234780452708,
+            "fp_weight": 5918.848562717092,
+            "fn_weight": 962.707652195473,
+            "truth_cells": 1188,
+            "prediction_cells": 6011,
+            "alpha": 0.2,
+            "beta": 0.8,
+            "radius_m": 300.0
+          },
+          "pack": {
+            "mass": 6011,
+            "suppression_px": 3.0,
+            "belief_max": 0.9999997615814209
+          }
+        },
+        "SE": {
+          "requested_mass": 8389,
+          "emitted_mass": 8389,
+          "mass_match": true,
+          "dti": {
+            "score": 0.1312358670868575,
+            "tp_weight": 1421.910561239276,
+            "fp_weight": 7879.944224132132,
+            "fn_weight": 9796.089438760726,
+            "truth_cells": 11218,
+            "prediction_cells": 8389,
+            "alpha": 0.2,
+            "beta": 0.8,
+            "radius_m": 300.0
+          },
+          "pack": {
+            "mass": 8389,
+            "suppression_px": 3.0,
+            "belief_max": 0.9999986290931702
+          }
+        }
+      },
+      "pooled_equal_incumbent_native_mass": {
+        "score": 0.08213017120337428,
+        "tp_weight": 3919.9728273563396,
+        "fp_weight": 30391.924410447537,
+        "fn_weight": 47163.02717264366,
+        "truth_cells": 51083,
+        "prediction_cells": 31819,
+        "alpha": 0.2,
+        "beta": 0.8,
+        "radius_m": 300.0
+      },
+      "total_emitted_cells": 31819,
+      "all_fold_masses_match": true
+    },
+    {
+      "draw": 5,
+      "seed": 5305,
+      "folds": {
+        "NW": {
+          "requested_mass": 11253,
+          "emitted_mass": 11253,
+          "mass_match": true,
+          "dti": {
+            "score": 0.060837045094134796,
+            "tp_weight": 1074.7434292847547,
+            "fp_weight": 10850.943492697923,
+            "fn_weight": 18026.256570715246,
+            "truth_cells": 19101,
+            "prediction_cells": 11253,
+            "alpha": 0.2,
+            "beta": 0.8,
+            "radius_m": 300.0
+          },
+          "pack": {
+            "mass": 11253,
+            "suppression_px": 3.0,
+            "belief_max": 0.9999996423721313
+          }
+        },
+        "NE": {
+          "requested_mass": 6166,
+          "emitted_mass": 6166,
+          "mass_match": true,
+          "dti": {
+            "score": 0.0657408144663564,
+            "tp_weight": 1120.112037745603,
+            "fp_weight": 5767.41219555751,
+            "fn_weight": 18455.887962254397,
+            "truth_cells": 19576,
+            "prediction_cells": 6166,
+            "alpha": 0.2,
+            "beta": 0.8,
+            "radius_m": 300.0
+          },
+          "pack": {
+            "mass": 6166,
+            "suppression_px": 3.0,
+            "belief_max": 0.9999997615814209
+          }
+        },
+        "SW": {
+          "requested_mass": 6011,
+          "emitted_mass": 6011,
+          "mass_match": true,
+          "dti": {
+            "score": 0.1001331061315174,
+            "tp_weight": 218.05846733081464,
+            "fp_weight": 5918.37173098496,
+            "fn_weight": 969.9415326691853,
+            "truth_cells": 1188,
+            "prediction_cells": 6011,
+            "alpha": 0.2,
+            "beta": 0.8,
+            "radius_m": 300.0
+          },
+          "pack": {
+            "mass": 6011,
+            "suppression_px": 3.0,
+            "belief_max": 0.9999990463256836
+          }
+        },
+        "SE": {
+          "requested_mass": 8389,
+          "emitted_mass": 8389,
+          "mass_match": true,
+          "dti": {
+            "score": 0.14270295545495504,
+            "tp_weight": 1548.6020797649371,
+            "fp_weight": 7839.033778078907,
+            "fn_weight": 9669.397920235064,
+            "truth_cells": 11218,
+            "prediction_cells": 8389,
+            "alpha": 0.2,
+            "beta": 0.8,
+            "radius_m": 300.0
+          },
+          "pack": {
+            "mass": 8389,
+            "suppression_px": 3.0,
+            "belief_max": 0.9999999403953552
+          }
+        }
+      },
+      "pooled_equal_incumbent_native_mass": {
+        "score": 0.08299174616044909,
+        "tp_weight": 3961.5160141261094,
+        "fp_weight": 30375.761197319298,
+        "fn_weight": 47121.48398587389,
+        "truth_cells": 51083,
+        "prediction_cells": 31819,
+        "alpha": 0.2,
+        "beta": 0.8,
+        "radius_m": 300.0
+      },
+      "total_emitted_cells": 31819,
+      "all_fold_masses_match": true
+    }
+  ],
+  "uniform_control_max_pooled_dti": 0.08299174616044909,
+  "subtile_bootstrap": {
+    "registered_units": 16,
+    "informative_units": 11,
+    "draws": 5000,
+    "seed": 5307,
+    "paired_delta_mean": -0.12330417910317984,
+    "percentile_ci_95": [
+      -0.1698610532920519,
+      -0.07979087213216975
+    ],
+    "lower_bound_above_zero": false,
+    "tiles": [
+      {
+        "id": "NW-00",
+        "truth_cells": 5905,
+        "candidate_mass": 0,
+        "incumbent_mass": 2246,
+        "candidate_dti": 0.0,
+        "incumbent_dti": 0.04348845141032761,
+        "paired_delta": -0.04348845141032761,
+        "informative": true
+      },
+      {
+        "id": "NW-01",
+        "truth_cells": 3203,
+        "candidate_mass": 0,
+        "incumbent_mass": 3194,
+        "candidate_dti": 0.0,
+        "incumbent_dti": 0.15498337904181317,
+        "paired_delta": -0.15498337904181317,
+        "informative": true
+      },
+      {
+        "id": "NW-10",
+        "truth_cells": 5760,
+        "candidate_mass": 0,
+        "incumbent_mass": 984,
+        "candidate_dti": 0.0,
+        "incumbent_dti": 0.04544417532987334,
+        "paired_delta": -0.04544417532987334,
+        "informative": true
+      },
+      {
+        "id": "NW-11",
+        "truth_cells": 4233,
+        "candidate_mass": 0,
+        "incumbent_mass": 4829,
+        "candidate_dti": 0.0,
+        "incumbent_dti": 0.19542597589344712,
+        "paired_delta": -0.19542597589344712,
+        "informative": true
+      },
+      {
+        "id": "NE-00",
+        "truth_cells": 8034,
+        "candidate_mass": 0,
+        "incumbent_mass": 5021,
+        "candidate_dti": 0.0,
+        "incumbent_dti": 0.18256998028485452,
+        "paired_delta": -0.18256998028485452,
+        "informative": true
+      },
+      {
+        "id": "NE-01",
+        "truth_cells": 11490,
+        "candidate_mass": 0,
+        "incumbent_mass": 839,
+        "candidate_dti": 0.0,
+        "incumbent_dti": 0.025655466593235397,
+        "paired_delta": -0.025655466593235397,
+        "informative": true
+      },
+      {
+        "id": "NE-10",
+        "truth_cells": 52,
+        "candidate_mass": 0,
+        "incumbent_mass": 306,
+        "candidate_dti": 0.0,
+        "incumbent_dti": 0.16297913634305292,
+        "paired_delta": -0.16297913634305292,
+        "informative": true
+      },
+      {
+        "id": "NE-11",
+        "truth_cells": 0,
+        "candidate_mass": 0,
+        "incumbent_mass": 0,
+        "candidate_dti": 0.0,
+        "incumbent_dti": 0.0,
+        "paired_delta": 0.0,
+        "informative": false
+      },
+      {
+        "id": "SW-00",
+        "truth_cells": 0,
+        "candidate_mass": 0,
+        "incumbent_mass": 0,
+        "candidate_dti": 0.0,
+        "incumbent_dti": 0.0,
+        "paired_delta": 0.0,
+        "informative": false
+      },
+      {
+        "id": "SW-01",
+        "truth_cells": 794,
+        "candidate_mass": 0,
+        "incumbent_mass": 4690,
+        "candidate_dti": 0.0,
+        "incumbent_dti": 0.0810972076436651,
+        "paired_delta": -0.0810972076436651,
+        "informative": true
+      },
+      {
+        "id": "SW-10",
+        "truth_cells": 0,
+        "candidate_mass": 0,
+        "incumbent_mass": 0,
+        "candidate_dti": 0.0,
+        "incumbent_dti": 0.0,
+        "paired_delta": 0.0,
+        "informative": false
+      },
+      {
+        "id": "SW-11",
+        "truth_cells": 394,
+        "candidate_mass": 0,
+        "incumbent_mass": 1321,
+        "candidate_dti": 0.0,
+        "incumbent_dti": 0.05645408891167469,
+        "paired_delta": -0.05645408891167469,
+        "informative": true
+      },
+      {
+        "id": "SE-00",
+        "truth_cells": 1636,
+        "candidate_mass": 0,
+        "incumbent_mass": 1304,
+        "candidate_dti": 0.0,
+        "incumbent_dti": 0.11899372023546852,
+        "paired_delta": -0.11899372023546852,
+        "informative": true
+      },
+      {
+        "id": "SE-01",
+        "truth_cells": 0,
+        "candidate_mass": 0,
+        "incumbent_mass": 0,
+        "candidate_dti": 0.0,
+        "incumbent_dti": 0.0,
+        "paired_delta": 0.0,
+        "informative": false
+      },
+      {
+        "id": "SE-10",
+        "truth_cells": 9582,
+        "candidate_mass": 0,
+        "incumbent_mass": 7085,
+        "candidate_dti": 0.0,
+        "incumbent_dti": 0.28925438844756585,
+        "paired_delta": -0.28925438844756585,
+        "informative": true
+      },
+      {
+        "id": "SE-11",
+        "truth_cells": 0,
+        "candidate_mass": 0,
+        "incumbent_mass": 0,
+        "candidate_dti": 0.0,
+        "incumbent_dti": 0.0,
+        "paired_delta": 0.0,
+        "informative": false
+      }
+    ]
+  },
+  "inputs_and_holdout": {
+    "baseline_report_sha256": "acd05c2a55d4d5a64a297075907bd53b5c0d52a78f655ddf3d34bc1d4d85f7bb",
+    "build_report_sha256": "60950d74e00c831e12600539005679005b7203c45ee607db0fe561d20684fd39",
+    "split_spec_sha256": "78b6692155c6c6d5f9f19ccee6d595167c2065f1f25eb8d08636d1d9b285ff16",
+    "realized_valid_mask_sha256": "c075e765e015e44f8da6b85aff1f5daa9c39d70d8fc3601d4811984fabe687cf",
+    "sgmc_proxy_sha256": "26d142c4c93282cd94f6950ab96f22aeff59fbbea523d43d662e76fa1b161b5c",
+    "probe_archive_sha256": "1301f70d230058e616ea5d34d1c7a32fabf7d49198172f376c59c89bd652eca3",
+    "geodawn_extension_sha256": "a35a9c6d2a14786f4dab85481ee59769213072f5dab5b2535ea82ae4d9bb7d9b",
+    "probe_source_audit": {
+      "archive": "/home/user/GEMSDOE50/.arena/public-inputs/2m_temperature_probe_INGENIOUS_regional_data.zip",
+      "shapefile_member": "2m_temperature_probe_INGENIOUS_regional_data/2m_temperature_probe_n83geo/2m_temperature_probe_n83geo.shp",
+      "source_crs": "EPSG:4269 (NAD83 geographic; archive .prj inspected)",
+      "target_crs": "EPSG:32611",
+      "records_total": 3800,
+      "records_valid_in_footprint": 2782,
+      "records_invalid_or_missing": 0,
+      "records_outside_footprint": 1018,
+      "area_groups_before_deduplication": 34,
+      "utm_coordinate_crosscheck_n": 3800,
+      "utm_coordinate_crosscheck_median_m": 0.00011686369970163118,
+      "utm_coordinate_crosscheck_p95_m": 0.00016498793261133767,
+      "source_units_for_F2mDAB": "not specified in the inspected archive README; use only relative within-Area ranking"
+    },
+    "probe_dedup_audit": {
+      "input_points": 2782,
+      "unique_area_grid_cells": 2702,
+      "duplicate_area_grid_rows_collapsed": 80
+    },
+    "warm_mark_audit": {
+      "minimum_area_points": 12,
+      "within_area_quantile": 0.75,
+      "warm_points": 714,
+      "areas": [
+        {
+          "area": "Alum",
+          "n": 41,
+          "used": true,
+          "q75_F2mDAB": 0.699999988079071,
+          "positive_upper_quartile_n": 12
+        },
+        {
+          "area": "Astor Pass",
+          "n": 210,
+          "used": true,
+          "q75_F2mDAB": 2.475000023841858,
+          "positive_upper_quartile_n": 53
+        },
+        {
+          "area": "Battle Mountain",
+          "n": 81,
+          "used": true,
+          "q75_F2mDAB": 1.0,
+          "positive_upper_quartile_n": 21
+        },
+        {
+          "area": "Blue Wing",
+          "n": 93,
+          "used": true,
+          "q75_F2mDAB": 0.4000000059604645,
+          "positive_upper_quartile_n": 29
+        },
+        {
+          "area": "Buena Vista Valley",
+          "n": 55,
+          "used": true,
+          "q75_F2mDAB": 0.699999988079071,
+          "positive_upper_quartile_n": 18
+        },
+        {
+          "area": "Buffalo Valley",
+          "n": 106,
+          "used": true,
+          "q75_F2mDAB": 0.699999988079071,
+          "positive_upper_quartile_n": 29
+        },
+        {
+          "area": "Columbus Marsh",
+          "n": 101,
+          "used": true,
+          "q75_F2mDAB": 0.800000011920929,
+          "positive_upper_quartile_n": 26
+        },
+        {
+          "area": "Crescent Valley",
+          "n": 59,
+          "used": true,
+          "q75_F2mDAB": 0.5,
+          "positive_upper_quartile_n": 16
+        },
+        {
+          "area": "Dead Horse Wells",
+          "n": 82,
+          "used": true,
+          "q75_F2mDAB": 9.849999904632568,
+          "positive_upper_quartile_n": 21
+        },
+        {
+          "area": "Desert Peak",
+          "n": 135,
+          "used": true,
+          "q75_F2mDAB": 1.75,
+          "positive_upper_quartile_n": 34
+        },
+        {
+          "area": "Desert Queen",
+          "n": 129,
+          "used": true,
+          "q75_F2mDAB": 3.700000047683716,
+          "positive_upper_quartile_n": 33
+        },
+        {
+          "area": "Diamond Field Jack Wash",
+          "n": 20,
+          "used": true,
+          "q75_F2mDAB": 0.5250000059604645,
+          "positive_upper_quartile_n": 5
+        },
+        {
+          "area": "Dixie / Fairview Valley",
+          "n": 136,
+          "used": true,
+          "q75_F2mDAB": 0.32500001043081284,
+          "positive_upper_quartile_n": 34
+        },
+        {
+          "area": "Dixie Valley",
+          "n": 44,
+          "used": true,
+          "q75_F2mDAB": 0.5250000059604645,
+          "positive_upper_quartile_n": 11
+        },
+        {
+          "area": "Dun Glen",
+          "n": 28,
+          "used": true,
+          "q75_F2mDAB": 0.8749999850988388,
+          "positive_upper_quartile_n": 7
+        },
+        {
+          "area": "Emerson Pass",
+          "n": 87,
+          "used": true,
+          "q75_F2mDAB": 1.949999988079071,
+          "positive_upper_quartile_n": 22
+        },
+        {
+          "area": "Fallon",
+          "n": 113,
+          "used": true,
+          "q75_F2mDAB": 0.699999988079071,
+          "positive_upper_quartile_n": 31
+        },
+        {
+          "area": "Fireball Craters",
+          "n": 93,
+          "used": true,
+          "q75_F2mDAB": 0.699999988079071,
+          "positive_upper_quartile_n": 25
+        },
+        {
+          "area": "Gabbs Valley",
+          "n": 290,
+          "used": true,
+          "q75_F2mDAB": 2.0,
+          "positive_upper_quartile_n": 74
+        },
+        {
+          "area": "Gerlach",
+          "n": 14,
+          "used": true,
+          "q75_F2mDAB": 1.469999998807907,
+          "positive_upper_quartile_n": 4
+        },
+        {
+          "area": "Granite Springs Valley",
+          "n": 123,
+          "used": true,
+          "q75_F2mDAB": 0.75,
+          "positive_upper_quartile_n": 31
+        },
+        {
+          "area": "Hawthorne",
+          "n": 214,
+          "used": true,
+          "q75_F2mDAB": 0.8749999850988388,
+          "positive_upper_quartile_n": 54
+        },
+        {
+          "area": "HumboldtNSO",
+          "n": 20,
+          "used": true,
+          "q75_F2mDAB": 1.9749999940395355,
+          "positive_upper_quartile_n": 5
+        },
+        {
+          "area": "HumboldtTufa",
+          "n": 34,
+          "used": true,
+          "q75_F2mDAB": 0.7899999767541885,
+          "positive_upper_quartile_n": 9
+        },
+        {
+          "area": "Lee Hot Springs",
+          "n": 46,
+          "used": true,
+          "q75_F2mDAB": 6.137500047683716,
+          "positive_upper_quartile_n": 12
+        },
+        {
+          "area": "Monte Cristo Valley",
+          "n": 27,
+          "used": true,
+          "q75_F2mDAB": 1.1500000357627869,
+          "positive_upper_quartile_n": 7
+        },
+        {
+          "area": "MtTobin",
+          "n": 21,
+          "used": true,
+          "q75_F2mDAB": 1.7999999523162842,
+          "positive_upper_quartile_n": 6
+        },
+        {
+          "area": "Queen Valley",
+          "n": 12,
+          "used": true,
+          "q75_F2mDAB": 0.8999999910593033,
+          "positive_upper_quartile_n": 3
+        },
+        {
+          "area": "Rhodes Marsh",
+          "n": 59,
+          "used": true,
+          "q75_F2mDAB": 1.3499999642372131,
+          "positive_upper_quartile_n": 15
+        },
+        {
+          "area": "Salt Wells",
+          "n": 49,
+          "used": true,
+          "q75_F2mDAB": 4.300000190734863,
+          "positive_upper_quartile_n": 13
+        },
+        {
+          "area": "Silver Peak",
+          "n": 95,
+          "used": true,
+          "q75_F2mDAB": 0.6000000238418579,
+          "positive_upper_quartile_n": 30
+        },
+        {
+          "area": "Sou Hills",
+          "n": 42,
+          "used": true,
+          "q75_F2mDAB": 0.7500000149011612,
+          "positive_upper_quartile_n": 11
+        },
+        {
+          "area": "Toulon",
+          "n": 22,
+          "used": true,
+          "q75_F2mDAB": 0.4750000014901161,
+          "positive_upper_quartile_n": 6
+        },
+        {
+          "area": "Winemucca Lake",
+          "n": 21,
+          "used": true,
+          "q75_F2mDAB": 0.4000000059604645,
+          "positive_upper_quartile_n": 7
+        }
+      ]
+    },
+    "proxy_truth": "SGMC positive cells >300 m from provided catalogue; not hidden expert labels",
+    "official_binary_provenance_clear": false
+  },
+  "human_review_notes": [
+    "The `H50 prior seismicity` file is used only as a frozen comparator, not claimed as a novel validated strategy; H51-B seismicity controls/confounds remain unresolved.",
+    "No hidden test labels, live leaderboard page, or organizer score was accessed.",
+    "A local proxy result cannot establish that the user-provided 0.2778 or 0.3774 scores are correct or identify their TIFFs."
+  ]
+}

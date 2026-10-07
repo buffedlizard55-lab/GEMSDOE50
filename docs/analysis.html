@@ -1,158 +1,39 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Archived prior-work metric analysis — GEMSDOE50</title>
-<style>
- body{margin:0;font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:#111;background:#fff}
- header{border-bottom:1px solid #ddd;padding:18px 20px} main{max-width:900px;margin:0 auto;padding:0 20px 80px}
- h1{font-size:1.4rem;margin:0 0 6px} h2{font-size:1.1rem;margin:2em 0 .4em;border-bottom:1px solid #ddd;padding-bottom:.25em}
- table{border-collapse:collapse;width:100%;margin:.6em 0 1em;font-size:.9rem} th,td{border:1px solid #ddd;padding:6px 9px;text-align:left;vertical-align:top} th{background:#fafafa}
- code{font-family:ui-monospace,Menlo,monospace;font-size:.86em} .mut{color:#555}
- .warn{background:#fff8e6;border:1px solid #e8d9a0;border-radius:8px;padding:12px 14px} nav a{margin-right:14px}
- td.num{text-align:right;font-variant-numeric:tabular-nums}
-</style></head>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>H33-2-B2 score review — GEMSDOE50</title>
+  <style>
+    body{font:16px/1.6 system-ui,sans-serif;max-width:900px;margin:2.5rem auto;padding:0 1.25rem;color:#172a33;background:#f5f2e9}
+    .warning{padding:1.2rem 1.4rem;background:#f8e8e3;border-left:5px solid #8b382e;border-radius:6px}
+    a{color:#005d68} code{overflow-wrap:anywhere}
+  </style>
+</head>
 <body>
-<div role="note" style="margin:14px auto;padding:12px 16px;max-width:1100px;background:#fff1df;border-left:5px solid #a96519;border-radius:6px;font:600 15px/1.5 system-ui,sans-serif;color:#3b2b19">ARCHIVED, UNVERIFIED PRIOR WORK — this page describes earlier main-branch experiments/artifacts, not H50-S1. Do not upload files linked here. Historical local metrics and copied leaderboard notes are not a fresh independent official check, and no organizer receipt authenticates a score-to-TIFF mapping. See the <a href="../index.html">current H50-S1 project site</a>.</div>
-
-<header><h1>Historical metric analysis — not a current leaderboard report</h1>
-<nav class="mut"><a href="index.html">Overview</a><a href="executive-summary.html">How to submit</a>
-<a href="hypotheses.html">Hypotheses</a><a href="analysis.html">Why 0.2778 / what beats it</a><a href="sources.html">Sources</a></nav></header>
-<main>
-
-<h2>1. The metric is a budget, and the budget has a price</h2>
-<p>For a prediction <code>p</code> and truth <code>g</code> the organiser’s score is</p>
-<p style="text-align:center"><code>DTI = TPw / (TPw + 0.2·FPw + 0.8·FNw + ε)</code>, with
-<code>k(d) = max(1 − d/300 m, 0)</code>.</p>
-<p>Three identities were re-derived and tested here (<code>tests/test_metric.py</code>, 21 tests; exact
-value vs a brute-force transcription agree to 1e-6, the gap being float32 accumulation):</p>
-<ol>
-<li><code>FNw = |G| − TPw</code>, so with <code>T = TPw</code>, <code>S</code> the emitted mass and
-    <code>M</code> the part of that mass which best-covers some truth cell,
-    <code>DTI = T / (0.2·(T + S − M) + 0.8·|G|)</code>.</li>
-<li>Scaling a prediction by <em>s</em> gives <code>DTI(s) = sT / (0.2·s(T+S−M) + 0.8|G|)</code>, which is
-    increasing in <em>s</em> — so the optimum over <code>p ∈ [0,1]</code> is at a vertex: a binary raster
-    is the right representation. (This is why the family’s best files are sparse “dotted” rasters.)</li>
-<li>Adding a unit of mass whose kernel weight is <code>k</code> raises DTI <strong>iff
-    <code>k &gt; 0.2·DTI</code></strong>. At the incumbent’s 0.2778 the price of a pixel is
-    <strong>0.0556 credit</strong>.</li>
-</ol>
-
-<h2>2. Archived sibling-repository metric notes (reported, not independently verified)</h2>
-<p>Archived sibling-repository records contained 16 owner-reported scores with masses
-(<code>GEMSDOE40/docs/data/truth-inversion.json</code>, <code>instrument-recalibration.json</code>).
-These values are not a fresh independent official check and are not used in H50-S1. Solving the
-algebra under the legacy model's larger hidden-truth estimate (<code>|G| = 15,100</code>, §3)
-produces the following historical model inputs, not organizer-verified scores:</p>
-<table>
-<thead><tr><th>anchor (public score)</th><th class="num">mass</th><th class="num">credit / cell</th>
-<th class="num">score</th></tr></thead><tbody>
-<tr><td>uniform scatter control</td><td class="num">37,654</td><td class="num">0.041</td><td class="num">0.0778</td></tr>
-<tr><td>structural lattice, 5 px spacing</td><td class="num">204,504</td><td class="num">0.023</td><td class="num">0.0904</td></tr>
-<tr><td>“DTI-optimal emission” 10 %</td><td class="num">516,738</td><td class="num">0.017</td><td class="num">0.0748</td></tr>
-<tr><td>solid multi-line field H19-5</td><td class="num">121,131</td><td class="num">0.058</td><td class="num">0.1922</td></tr>
-<tr><td>dotted H19-5, 1.5 px spacing</td><td class="num">60,069</td><td class="num">0.099</td><td class="num">0.2477</td></tr>
-<tr><td>dotted H19-5, 2.8 px spacing</td><td class="num">44,090</td><td class="num">0.124</td><td class="num">0.2600</td></tr>
-<tr><td><strong>h27-4 (the 0.2778 file’s parent)</strong></td><td class="num">40,199</td><td class="num">0.136</td><td class="num">0.2708</td></tr>
-<tr><td><strong>h33-b2 = parent minus 2,545 ring dots</strong></td><td class="num">37,654</td><td class="num">0.145</td><td class="num">0.2778</td></tr>
-</tbody></table>
-<p>Read the first three rows against the last four. <strong>Mass alone is not the story; credit per cell
-is.</strong> A uniform scatter of exactly the best file’s mass scores 0.0778 while the structured file
-scores 0.2778 — arrangement is worth 0.20 of DTI at fixed mass. And within one family, cutting the
-emission from 121,131 to 44,090 cells raises credit per cell from 0.058 to 0.124 (+114 %) and the score
-from 0.1922 to 0.2600, because every removed cell had a realised credit below the 0.0556 price.</p>
-<p><strong>So why did 0.2778 win?</strong> Because it is the member of the family whose mass has been cut
-to the point where the marginal cell’s credit equals the metric’s own price, and whose remaining cells
-were then pruned of the two regions that earn nothing: the 200 m ring around the given catalogue (2,545
-dots removed, +0.0070 live) and the low-credit tail. Its credit per cell, 0.145, is the highest in the
-ledger — but only 1.5× the credit per cell of a uniform scatter’s <em>best possible</em> placement… which
-is exactly why beating it needs a better <em>field</em>, not a better thinning.</p>
-
-<h2>3. How big is the hidden truth? (This fixes the mass, and it is the weakest link)</h2>
-<table>
-<thead><tr><th>estimate</th><th class="num">|G| (100 m cells)</th><th>derivation</th></tr></thead><tbody>
-<tr><td>sibling forward model (H45 section of the GEMSDOE40 README)</td><td class="num">≈5,667</td>
-<td>fit of <code>DTI = T/(0.2M + 0.8G)</code> to four anchors with constant credit per unit mass</td></tr>
-<tr><td>controlled prune pair h27-4 → b2</td><td class="num">≈15,196</td>
-<td>the same file minus 2,545 dots that earn nothing, so <code>T</code> is unchanged and the score
-difference is purely the mass difference — the cleanest controlled comparison in the ledger</td></tr>
-<tr><td>Poisson bound from the scatter control</td><td class="num">15,000–31,000</td>
-<td>a random 37,654-cell field earns 0.0778; the expected kernel weight of a Poisson field at that
-density is 0.049–0.05, so <code>|G| = T/E[k]</code> — the upper end applies if the truth is spatially
-clustered, which it demonstrably is</td></tr>
-</tbody></table>
-<p>The estimates disagree by a factor of ~2.7 and the disagreement is not cosmetic: the 5,667 case
-penalises mass (its optimum sits near the incumbent’s 37,654 cells), the 15,100 case rewards it (the
-optimum is above 90,000). This submission therefore sits deliberately in the ledger’s own optimum
-neighbourhood — <strong>45,000 cells</strong>, 1.2× the incumbent’s mass — rather than at either
-estimate’s optimum, and the whole mass sweep (25,000 → 79,977) is published in
-<code>evidence/build_seis-ridge-v1.json</code> so the next session can re-decide it with one more
-organiser score.</p>
-
-<h2>4. Conditional metric arithmetic (not a leaderboard target)</h2>
-<p>For any assumed target score <code>s</code>, truth size <code>G</code>, and emitted mass <code>M</code>,
-use the metric identity <code>T = s(0.2M + 0.8G)/(1 − 0.2s)</code> to reason about required
-truth credit. This is an algebraic sensitivity calculation only. The prior sibling-repository proxy
-scores and instrument scalings below have not been independently authenticated as organizer results,
-and they do not predict a current score or identify which TIFF was scored.</p>
-<p>The prior local SGMC and rupture-trend analyses are retained in their original receipts for audit.
-They are not the H50-S1 spatial holdout, are not used to select its primary incumbent, and do not
-establish hidden-test performance. No fresh official leaderboard check is represented by this page.</p>
-
-<h2>5. The falsification test the brief demanded, run so it cannot be circular</h2>
-<p>The 2020 Mw 6.5 Monte Cristo Range earthquake ruptured a fault that no ground-truth raster in this
-competition contains — the one unmapped rupture in the survey area with independent ground truth. The
-detector is therefore given <strong>only earthquakes older than 2020-05-15</strong> (74,147 events, 1,207
-of them within 40 km of the rupture) and asked where the mass should go. Matched mass throughout,
-<code>scripts/falsification_test.py</code>, <code>evidence/falsification_test.json</code>:</p>
-<table>
-<thead><tr><th>field (pre-2020 input only)</th><th class="num">mass</th>
-<th class="num">credit/cell on the 2020 rupture trend</th><th class="num">fraction of the trend covered</th>
-<th class="num">credit/cell on the off-catalogue SGMC inventory</th>
-<th class="num">credit/cell on the given catalogue</th></tr></thead><tbody>
-<tr><td><strong>seismicity lineation corridors (this work)</strong></td><td class="num">5,243</td>
-    <td class="num"><strong>0.00126</strong></td><td class="num"><strong>0.024</strong></td>
-    <td class="num">0.0022</td><td class="num">0.0273</td></tr>
-<tr><td>smoothed earthquake density, σ = 10 px</td><td class="num">5,243</td><td class="num">0.00000</td>
-    <td class="num">0.000</td><td class="num">0.0000</td><td class="num">0.0385</td></tr>
-<tr><td>smoothed earthquake density, σ = 20 px</td><td class="num">5,243</td><td class="num">0.00000</td>
-    <td class="num">0.000</td><td class="num">0.0029</td><td class="num">0.0521</td></tr>
-<tr><td>uniform random</td><td class="num">5,243</td><td class="num">0.00000</td><td class="num">0.000</td>
-    <td class="num">0.1033</td><td class="num">0.1063</td></tr>
-</tbody></table>
-<p><strong>Verdict.</strong> (i) On the unmapped rupture, the corridor detector is the only field that
-places <em>any</em> mass within 300 m of the rupture — the two smoothed-density controls the brief named
-and the uniform-random control cover 0 % of it. (ii) On the <em>given</em> catalogue, the density fields
-beat the corridors (0.039–0.052 vs 0.027 credit per cell): the corridor detector is demonstrably not a
-better predictor of <em>mapped</em> faults, which is the honest negative half of the test. (iii) On the
-broad off-catalogue inventory at this very small mass, uniform random beats every structured field
-(0.103 vs ≤0.003) — a measured demonstration that the off-catalogue inventory instrument rewards
-dispersion at low mass, which is why every comparison in this repository is made at the ledger’s
-operating mass instead.</p>
-<p>With the full catalogue (2020–2022 events included, therefore circular for the rupture) the shipped
-field covers 36 % of the same trend at 0.0022 credit per cell, versus 11 % and 0.0008 for the incumbent
-and 11 % and 0.0006 for the previous best dotted file. The pre-2020 result is the one that counts as
-evidence; the circular one is a consistency check, labelled as such everywhere.</p>
-
-<h2>6. Irregularities and open risks, stated rather than smoothed</h2>
-<div class="warn">
-<ul style="margin:0">
-<li>The SGMC / QFaults compilations are USGS-family inventories and may be the organisers’ own label
-    source; using them as an <em>emission</em> layer would be indistinguishable from leakage. They are
-    used here only as a measurement instrument, and the one place where they are an input (H50-3) is
-    explicitly <em>not</em> shipped.</li>
-<li>The two hidden-truth-size estimates disagree by a factor of 2.7 (§3). If the true value is 5,667,
-    this file’s mass is 19 % above its optimum and the score is ~0.03 lower than it could have been.</li>
-<li>The corridor detector needs M ≥ 1.5 events at depth ≤ 20 km from 1970; the official catalogue is
-    complete at that level only from roughly the 2000s, so detection power decreases with fault age —
-    the opposite of the terrain evidence, which sees only cumulative displacement.</li>
-<li>The 3DEP lidar descriptor layer covers 75 % of the survey; corridors outside it are emitted
-    unsnapped. This is reported per-corridor in the build receipt.</li>
-</ul>
-</div>
-
-</main>
-<footer style="border-top:1px solid #ddd;padding:16px 20px;color:#555;font-size:.88rem">
-Reproduce: <code>python3 scripts/build_submission.py --name seis-ridge-v1 --mass 45000</code>;
-<code>python3 scripts/falsification_test.py</code>; <code>python3 scripts/audit_submission.py docs/downloads/gemsdoe50-seis-ridge-v1.tif</code>.
-</footer>
-</body></html>
+  <main>
+    <h1>H33-2-B2 score review</h1>
+    <div class="warning"><strong>0.2778 is a user-provided, unauthenticated score claim.</strong>
+      The pinned GEMSDOE32 audit labels the run UNSCORED and contains a projected DTI of 0.274673,
+      not an organizer score receipt. The user-provided 0.3774 high-score claim was not checked
+      against a live leaderboard.</div>
+    <h2>What may explain the reported score — conditionally</h2>
+    <p>The pinned audit describes pruning 2,545 catalogue-near dots from a 40,199-dot parent. Under
+      the binary-dot metric <code>DTI = T / (0.2·N + 0.8·G)</code>, removing a prediction with little
+      or no credit can reduce false-positive mass and raise DTI; at a claimed DTI of 0.2778, the
+      marginal credit threshold is approximately 0.0556. This is only a plausible mechanism. The
+      score, score-to-file mapping, removed-pixel credits, and possible simultaneous experiment
+      changes are not independently verified. Pruning could also remove useful truth credit.</p>
+    <p>This review therefore does not establish why a verified organizer score was high, nor whether a
+      strategy will beat 0.3774. H53-A failed its local blocked holdout (0.000000 versus 0.136074 for
+      its frozen local comparator) and is NO-GO / NO SLOT.</p>
+    <p>Read the full evidence-based review at
+      <a href="research/h33-score-review-20261007.md">docs/research/h33-score-review-20261007.md</a>,
+      or see the current <a href="../index.html">overview</a>,
+      <a href="../results.html">results</a>, and
+      <a href="../submission.html">submission guide</a>.</p>
+    <p>Official sources: <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">competition problem page</a> ·
+      <a href="https://www.drivendata.org/termsofuse/">DrivenData Terms of Use</a>.</p>
+  </main>
+</body>
+</html>

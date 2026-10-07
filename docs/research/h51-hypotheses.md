@@ -1,16 +1,19 @@
-# H51 candidate hypotheses, ranked
+# Historical H51 candidate hypotheses, ranked
 
-Ranking criterion, in the order the charter requires: **expected improvement in captured hidden
-truth `T`** (section 3 of `docs/research/h51-analysis.md` shows every point of leaderboard score is
-a point of coverage of the same ~12,226 hidden pixels), then implementation cost, then whether the
-required data is already in the repository and licence-clean.
+> **ARCHIVE ONLY — all H51/H52 rankings, expected-score estimates, and slot language below are superseded.** H51 artifacts are not current submission recommendations; H53-A is **NO-GO / NO SLOT**. The old score-corpus and hidden-truth calculations rely on owner/sibling records that are not authenticated to organizer receipts or TIFFs. They do not validate seismicity, predict the private test, or authorize a slot. See the [current four-hypothesis H53 ranking](h53-hypotheses-20261007.md), [current score review](h33-score-review-20261007.md), and [project overview](../../index.html).
+
+The ranking criterion below is preserved as historical context. Its hidden-truth `T` and expected
+score reasoning came from the conditional model in `docs/research/h51-analysis.md`; that model's
+inputs and score-to-TIFF mappings are unverified. It is not evidence about actual private-test truth
+or a current ordering. The active ranking is the H53 four-way review linked above.
 
 Every hypothesis must answer the same question: *why would this find a fault that the
 USGS/INGENIOUS catalogue does not already contain?* The catalogue pixels are masked out of
 scoring, so reproducing them is worth exactly nothing.
 
-Measured starting point (`evidence/h51_residual_alignment.json`, `evidence/h51_consensus.json`,
-25 hash-verified artifacts with owner-quoted scores):
+Historical exploratory starting point (`evidence/h51_residual_alignment.json`,
+`evidence/h51_consensus.json`, 25 raster hashes paired with owner-reported score values). The files
+are hash-identified, but scores and their organizer receipts/mappings were not independently verified; correlations below are corpus-internal, not predictive validation:
 
 * the fraction of an artifact's dots inside the TMI-lineament mask is the **only** layer alignment
   with a positive, robust association to score: raw `ρ = +0.566` (p = 0.003), partial controlling
@@ -39,9 +42,9 @@ Measured starting point (`evidence/h51_residual_alignment.json`, `evidence/h51_c
 * **Why it targets unmapped faults.** The TMI ridge is a *physical* lineament observable
   regardless of whether anyone has mapped a fault there; the published catalogue in this area is
   built mainly from geologic mapping and LiDAR morphology, so magnetic lineaments that lack a
-  surface scarp are exactly the population it under-represents. The score data agrees: artifacts
-  that happened to concentrate on TMI ridges scored ~0.03–0.04 above what their dot geography
-  predicts.
+  surface scarp are a population it might under-represent. In this historical corpus, ridge overlap
+  was associated with owner-reported scores, but the correlation does not establish causation or
+  hidden-test transfer.
 * **How it differs from everything already implemented.** H47-B's `TMI_up150` test used a
   *persistence* filter on the upward-continued field (a value threshold) and lost to a random
   control; H46 fused radiometrics as a density prior. Neither used the **multi-scale
@@ -49,15 +52,18 @@ Measured starting point (`evidence/h51_residual_alignment.json`, `evidence/h51_c
   metric-aware dot geometry. The corpus's scarp-quantile families (`ex95/ex99/step95/step99`) are
   a different physical quantity (surface relief), which is precisely the one that shows a
   *negative* association here.
-* **Expected DTI.** `+0.02 … +0.06` if a single previously unmapped strand of ≥40 km is hit
-  (`T` rises by ~1,000–1,400 of the 12,226 available, which is the whole 0.26 → 0.32 gap at
-  `N ≈ 30–40 k`); `−0.01` if the layers are noise, because 6–10 k exploratory dots cost
-  `0.2·ΔN/(0.2N + 0.8G)`.
+* **Historical expected DTI (unvalidated scenario, superseded).** The old model proposed
+  `+0.02 … +0.06` if a long unmapped strand were hit, with a possible negative delta if exploratory
+  dots were noise. These figures depend on unverified corpus inputs and are not empirical results,
+  current forecasts, or a basis for a slot.
 * **Cost.** Medium: the transform is implemented (`h51.gradient_lineament_response`), the layers
   are in-repo, and the only new work is threshold/corroboration calibration on the blocked holdout
   and a slot-sized emission.
-* **Data, licence, obtainability.** No new data. USGS public domain; DOI 10.5066/P93LGLVQ and the
-  state-map products are linked in `docs/sources.html`. Obtainable today: already committed.
+* **Data, licence, obtainability.** Official GeoDAWN metadata lists source data as CC0 1.0 (DOI
+  10.5066/P93LGLVQ), but the local quantized sibling mirror was not independently rebuilt or byte-
+  matched to the official files. The official licence does not settle provenance or sponsor-sharing
+  rights for the local derived raster; that remains a blocker. State-map products are historical
+  context, not cleared input for this proposal.
 
 ## H51-B (rank 2) — Cross-layer lineament conjunction (order-2 and order-3 conjunctions)
 
@@ -146,70 +152,61 @@ Measured starting point (`evidence/h51_residual_alignment.json`, `evidence/h51_c
 
 ---
 
-## What must be true before any of these spends a slot
+## Historical H51 slot gate — superseded; no authorization
 
-1. The frozen format and uniqueness gates pass (`scripts/check_submission.py`).
-2. The candidate beats the incumbent in the **instrument's** LOO-calibrated prediction, and the
-   repository replaces the current pre-registered proxy gate, which cannot rank the corpus
-   (`ρ = +0.196`, p = 0.35, `evidence/h51_proxy_ranking_power.json`).
-3. A geopolitically independent check is recorded: for any hypothesis whose evidence lies in
-   territory no prior artifact touched, **no local instrument can price it** (section 4 of the
-   analysis). The honest options are (a) submit and learn, with the score pre-registered here as a
-   prediction, or (b) hold the slot. This repository's rule is (b) unless the owner overrides it.
+The conditions below were an earlier H51-era proposal, not the current promotion rule. The old
+instrument and its proxy were not validated against hidden labels, and the suggested “submit and
+learn” path is withdrawn. H51/H52 proposals are not slot-eligible. H53-A is the current experiment
+and is **NO-GO / NO SLOT**; see the H53 preregistration and results before considering a distinct,
+newly registered study.
 
 ---
 
-# H52 update — re-ranking after the credit ledger, the blind inversion and the proxy audit
+# Historical H52-era re-ranking (superseded; not current evidence)
 
-Everything below supersedes the ranking of H51-A…E; the H51 blocks are kept because their
-"layers / signature / why off-catalogue / difference / ΔDTI / cost" fields are still the reference
-description of each idea. The new evidence that moves the ranking:
+This section records the older H52 re-ranking. Its score-derived quantities depend on the
+unverified owner/sibling corpus described above; the ranking, expected gains, and slot suggestions
+are all superseded by the current H53 four-way review. H51/H52 blocks are retained only to preserve
+the former description of the ideas.
 
-* the credit ledger (§8 of `h51-analysis.md`): the corpus converts at most **0.1097 credit/dot**,
-  covers at most **59.3 %** of the hidden truth, and the champion `d2.8` is **past its own family's
-  optimum** (`∂DTI/∂N < 0`, marginal dot worth 0.035 vs a 0.052 cost);
-* the truth-density inversion **fails leave-one-out** (§10) — the score history constrains
-  *efficiency*, not geography, so no hypothesis below can be selected by localising hidden truth;
-* the proxy audit (§12): the only independent geological frame in the repository ranks the
-  *archived seismicity-lineament artifact* far above every scored artifact, while ranking the live
-  scores at ρ = +0.196.
+* The credit ledger in `h51-analysis.md` is a conditional transformation of unverified score/file
+  records; it does not measure private-test coverage or prove a pruning gain.
+* The truth-density inversion is an internal fit to the same corpus and did not provide stable
+  spatial localization; it does not show where actual hidden faults are.
+* Historical seismicity point-pattern/corridor tests were not validated against the hidden labels.
+  The local off-catalogue proxy results were level with or below matched controls in the later H51
+  analysis; the earlier cross-frame ranking was proxy-dependent, not proof of a validated signal.
 
 | rank | hypothesis | lever | expected ΔDTI | cost | validated locally? |
 | ---: | --- | --- | ---: | --- | --- |
-| **1** | **P1 — dot-economy pruning of the champion structure** | `T/N` of the *same* structure | **+0.01 … +0.05** | **low (CPU, hours)** | marginal inequality measured; the gain itself is *not* measurable without a slot |
-| **2** | **P2 — magnetic-lineament corridors** (H51-A) | coverage of a strand no detector reaches | +0.02 … +0.06 if a strand is hit | medium | alignment ρ = +0.566 (p = 0.003), partial +0.534 (p = 0.006) |
-| **3** | **P3 — seismicity-lineament corridors** (H50-S1/H51 lineage, the owner's own method) | coverage on the 41 % the corpus misses | unknown, tail-heavy | medium | **best independent-frame result in the project** (sgmc_off 0.1464, 2.5× uniform; Monte Cristo hit with the density control beaten) |
-| **4** | **P4 — relay/step-over bridges between existing fault tips** (H51-C) | new location class, no new data | +0.005 … +0.03 | low | not yet run |
-| **5** | **P5 — 1 m LiDAR scarp curvature** (H51-D) | resolution the 30 m products cannot reach | unknown | high | not yet run; data obtainability verified below |
+| **1** | **P1 — dot-economy pruning of a historical structure** | `T/N` of the *same* structure | old model estimate +0.01 … +0.05; unvalidated | low (CPU) | only a corpus-conditional marginal hypothesis; no verified paired score |
+| **2** | **P2 — magnetic-lineament corridors** (H51-A) | potential coverage of a new strand | old model estimate +0.02 … +0.06; unvalidated | medium | association only within a corpus with unverified score provenance |
+| **3** | **P3 — seismicity point-pattern geometry** (historical H50/H51 lineage) | possible structural geometry, if independent signal exists | unknown | medium/high | not validated; later off-catalogue event-geometry test was level with or below matched controls, with confounds unresolved |
+| **4** | **P4 — relay/step-over bridges between existing fault tips** | new location class, no new data | old hypothesis only; unvalidated | low | not tested under a current frozen protocol |
+| **5** | **P5 — 1 m LiDAR scarp curvature** | resolution the 30 m products may not resolve | unknown | high | not tested under a current frozen protocol; obtainability/licence not independently verified |
 
 ## P1 — dot-economy pruning of the champion structure (rank 1)
 
-* **Layers**: none — this is an operation on the *existing* champion emission (`dotted-h19-5-d2.8`,
-  44,090 dots, live 0.2600). If a field is needed for the prune ranking, the consensus posterior
-  `q` of `evidence/h51_consensus.json` and the per-dot credit `qC = q ⊛ k`.
-* **Physical signature**: none (a *sparsity* transform, not a signal transform). The prune keeps
-  the dots whose 300 m kernel neighbourhood carries the most post-corpus credit and deletes the
-  rest; the emitted geometry stays a 2.8 px Poisson-disk lattice.
-* **Why it catches a fault the catalogue misses**: it does not. It raises the score by *spending
-  fewer false-positive pixels for the same credit* — the only term of the metric that the corpus
-  demonstrably allows us to improve.
-* **Difference from everything implemented**: every prior experiment chose a *field* or a
-  *spacing*; P1 keeps the field and the spacing of the live-best artifact and changes only the
-  *subset*, which the corpus shows is where the remaining score is (`d1.5` is a superset of `d2.8`
-  and scores 0.0123 lower *because of 15,979 extra dots*).
-* **Expected ΔDTI**: removing dots whose credit is below `0.2·s ≈ 0.052` raises `DTI`; at the
-  measured marginal rates (0.022–0.035) the champion is above its optimum, so the sign is known
-  and the magnitude is bounded by the number of dots whose credit is below 0.052 — plausibly
-  10–20 k dots, i.e. **+0.01 … +0.05**.
-* **Cost**: low. One CPU-day (the fields are already computed; a sweep over prune thresholds ×
-  budget × 4 holdout folds).
-* **Falsification test**: prune the champion to `k ∈ {10, 20, 30, 40} k` dots by `qC` and check
-  that the *sgmc_off* and *CatBlocked* proxy DTIs rise while the 2 px-proximity IoU stays < 0.5;
-  a prune that lowers both proxies is rejected. The decisive test is a slot (the corpus has no
-  scored subset of `d2.8`).
-* **Source/licence/obtainability**: no new data; the champion artifact is public in the sibling
-  `GEMSDOE25` repository and hash-pinned in `registry/h51_score_corpus.json` (SHA-256
-  `91eae1ca…`, verified this session).
+* **Layers**: none — this was a proposed operation on a historical `dotted-h19-5-d2.8` raster
+  (44,090 dots; its associated 0.2600 score is not authenticated here). The old proposal used
+  `evidence/h51_consensus.json` and per-dot credit `qC = q ⊛ k`.
+* **Physical signature**: none (a sparsity transform, not a geological signal). The historical
+  proposal would keep dots with higher modelled 300 m kernel credit and remove the rest.
+* **Why it might affect score**: under the DTI formula, reducing low-credit prediction mass can
+  improve the ratio. This does not identify which H33/H51 dots were false positives or prove that a
+  particular deletion caused an organizer-score increase.
+* **Difference from earlier work**: it would change the subset of an existing raster, not add a new
+  fault-detection signal. The claimed score relation between nested historical rasters is unverified.
+* **Expected ΔDTI**: the old `+0.01 … +0.05` estimate is an unvalidated model scenario based on
+  unverified score/file records. No sign or magnitude is established for a real held-out or private
+  test candidate.
+* **Cost**: historically estimated low CPU cost; this does not authorize a new run or slot.
+* **Historical falsification proposal**: compare preregistered pruning levels on blocked, spatially
+  separated holdout cores against a frozen incumbent and matched controls. No weekly slot is the
+  “decisive test” for this archive; a slot could only be considered for a distinct candidate after
+  all current gates and rights checks pass.
+* **Source/licence/obtainability**: the raster is hash-identified in a sibling repository; that
+  hash does not authenticate its owner-reported score or the score-to-file receipt.
 
 ## P2 — magnetic-lineament corridors on upward-continued TMI (rank 2)
 
@@ -219,47 +216,49 @@ description of each idea. The new evidence that moves the ranking:
 * **Physical signature**: second-derivative ridge detection (`ridge = 0` of the Hessian of the
   continued field, i.e. a *curvature* transform), then the same per-neighbourhood 2-D covariance /
   eigenvalue-ratio test already implemented for seismicity, applied to the lineament skeleton.
-* **Why it catches an unmapped fault**: the catalogue is built from *surface* expression and
-  published mapping; a steep basement fabric with no Quaternary scarp appears only in the
-  magnetics. The corpus's dots accumulate on DEM/radiometric ridges and avoid the TMI lineaments
-  (only ~5 % of corpus dots fall in the TMI-lineament mask), so this is the largest *unspent*
-  layer in the whole evidence stack.
+* **Why it might catch an unmapped fault**: a steep basement fabric without a Quaternary scarp
+  could still produce a magnetic lineament. The older corpus recorded a low share of dots near one
+  TMI-lineament mask, but score provenance and that association are not independently verified; it
+  does not establish a current unspent advantage.
 * **Difference from everything implemented**: H51-A, never emitted; every prior emission used DEM
   or radiometric geometry, and the previous session's TMI attempt (`TMI_up150`) lost to a random
   control at the wrong scale — this version uses 500/1,500 m continuation and a ridge (not
   amplitude) transform.
-* **Expected ΔDTI**: +0.02 … +0.06 if a strand is hit; the measured association is
-  ρ = +0.566 (p = 0.003) raw and +0.534 (p = 0.006) after controlling log₁₀N.
-* **Data source, licence, obtainability**: GeoDAWN/DOE airborne geophysics via the sibling
-  `GEMSDOE24` repository's committed raster (`data/external/geodawn_extensions_u8.tif`, 26 MB,
-  public GitHub). **Verified present in this environment**; the upstream USGS/DOE ScienceBase
-  hosts are network-blocked here, so the committed copy is the working source.
+* **Expected ΔDTI**: the old `+0.02 … +0.06` is a historical scenario estimate, not a measured
+  gain. The reported ρ values are same-corpus associations against unverified score records and do
+  not establish causal or hidden-test performance.
+* **Data source, licence, obtainability**: official GeoDAWN metadata lists CC0 1.0 (DOI
+  10.5066/P93LGLVQ), but the local quantized sibling raster was not independently rebuilt or
+  byte-matched to official files. Its provenance and sponsor-sharing basis remain blockers; a
+  public GitHub mirror is not, by itself, permission or source verification.
 
-## P3 — seismicity-lineament corridors (rank 3, the owner's own method)
+## P3 — seismicity point-pattern geometry (historical, unvalidated)
 
-* **Layers**: declustered relocated seismicity (ComCat extract already staged, 20,430 events),
-  thermal springs (1,873 in the footprint), magnetic/radiometric ridges as corroboration.
-* **Physical signature**: per-neighbourhood 2-D covariance eigenvalues on epicentres; keep
-  linear, well-sampled neighbourhoods; emit a corridor along the principal axis with width from
-  the catalog location error; the 3-D tetrahedron NN-volume test is the owner's 2-D adaptation.
-* **Why it catches an unmapped fault**: it requires *no* surface expression, only a
-  co-seismic alignment; the catalogue-only detectors used by the rest of the field cannot see it.
-* **Difference from everything implemented**: this is the repository's original H50-S1 line and
-  the archived `seislin-44709` artifact, not the corpus-consensus line.
-* **Evidence**: the *only* method in the project with a positive result on an independent
-  off-catalogue frame: `sgmc_off DTI 0.1464` vs uniform 0.0593 and vs its own translation control
-  0.0447, i.e. 2.5× the matched random baseline, and the Monte Cristo corridor hit that beat its
-  smoothed-density control. Against that, the consensus instrument prices the same artifact at
-  0.0422 — the unresolved conflict recorded in §12 of the analysis.
-* **Expected ΔDTI**: unknown and tail-heavy. This is the only hypothesis whose upside reaches the
-  §9 arithmetic (a corridor that lands on one 40–60 km unmapped strand adds 1,200+ credit px).
-* **Cost**: medium (the pipeline exists; the work is parameter selection under the frozen gate).
-* **Source/licence/obtainability**: the relocated Nevada catalog is CC-BY-4.0 (Zenodo DOI
-  `10.5281/zenodo.11167510`) — **network-blocked in this sandbox**; the ComCat extract used in
-  `data/external/` is a mixed-network USGS product whose source-specific rights are **not** yet
-  cleared for competition use (`data/external/README.md` de-authorises it), so a submission that
-  depends on it needs the rules question resolved first.
-
+* **Layers**: earlier drafts used relocated seismicity and/or a mixed-network ComCat extract,
+  sometimes with springs or potential-field ridges as corroboration. The ComCat extract's
+  contributor-specific rights are unresolved and it was not reused in H53-A.
+* **Physical signature**: an older method proposed local 2-D epicentre geometry and corridors along
+  principal axes. Its 2-D adaptation of a 3-D tetrahedron statistic is unverified. Point-pattern
+  geometry—not smoothed density alone—would need formal space-time declustering, location-uncertainty
+  handling, screening for injection/mining confounds, exclusion buffers around known faults, and
+  matched 1 km/2 km smoothed-density controls before any new test could be interpreted.
+* **Why it might detect an unmapped fault**: a coherent event pattern could reflect a structure with
+  no mapped surface trace, but it can also reflect aftershocks, induced seismicity, catalogue
+  completeness, and location error. The mechanism remains a hypothesis, not a demonstrated finding.
+* **Difference from earlier work**: event geometry is already represented in the H50/H51 lineage; it
+  is not a novel method in this repository. The current H53 ranking does not promote it as a
+  validated candidate.
+* **Evidence**: the earlier `seislin-44709` and H51 event-geometry outputs used different local
+  instruments. Later H51 event-geometry tests were level with or below matched controls, and no
+  hidden-label or organizer-score validation exists. The older 0.1464 proxy figure is frame- and
+  protocol-specific and is not evidence that this method beats a fair matched-density control.
+* **Expected ΔDTI**: unknown; no expected gain is supported by a current preregistered validation.
+* **Cost**: medium/high: a new, rights-cleared catalogue and explicit declustering, uncertainty,
+  confound, and control pipelines would be required.
+* **Source/licence/obtainability**: the relocated Nevada catalog is listed CC BY 4.0 (Zenodo DOI
+  `10.5281/zenodo.11167510`) but was network-blocked in the earlier sandbox. The staged ComCat
+  extract has unresolved record/contributor-level rights and is **not cleared** for challenge use
+  or sponsor sharing; do not use it unless that review is resolved.
 ## P4 — relay and step-over bridges between existing fault tips (rank 4)
 
 * **Layers**: existing catalogue fault traces (masked from scoring, usable as *geometry*), DEM
