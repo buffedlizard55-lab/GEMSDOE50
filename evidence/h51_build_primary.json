@@ -1,0 +1,96 @@
+{
+ "mode": "primary",
+ "spacing_px": 2.8,
+ "budget": 45000,
+ "grid": {
+  "shape": [
+   3730,
+   3292
+  ],
+  "crs": "EPSG:32611",
+  "transform": [
+   100.0,
+   0.0,
+   243350.0,
+   0.0,
+   -100.0,
+   4508550.0
+  ]
+ },
+ "seismicity_audit": {
+  "n_events": 20430,
+  "n_seeds": 6076,
+  "n_seeds_with_events": 458,
+  "n_corridors": 458,
+  "rows_read": 222939,
+  "dropped_non_earthquake": 539,
+  "dropped_depth": 11223,
+  "dropped_mag": 0,
+  "dropped_near_hot_well": 844,
+  "events_after_decluster": 20430,
+  "hot_feature_centres": 1873
+ },
+ "hot_features": 1873,
+ "layer_mag_mean": 0.031220908915449052,
+ "layer_mag_nonzero": 2592125,
+ "layer_rad_mean": 0.0482569899433809,
+ "layer_rad_nonzero": 2628634,
+ "layer_seis_mean": 0.032984858890039374,
+ "layer_seis_nonzero": 285926,
+ "layer_spring_mean": 0.0053131702515846774,
+ "layer_spring_nonzero": 351623,
+ "layer_scarp_mean": 0.008257147957035797,
+ "layer_scarp_nonzero": 67053,
+ "weights_source": "documented defaults (no calibration file)",
+ "weights": {
+  "mag": 0.4,
+  "seis": 0.25,
+  "spring": 0.15,
+  "rad": 0.2,
+  "scarp": 0.0
+ },
+ "n_dots": 24599,
+ "dots_on_catalogue": 0,
+ "outputs": {
+  "tif": "downloads/gemsdoe50-h51-lineament-corridors-20261006T2300Z.tif",
+  "sha256": "3844e4e4cce79b6461bd7a358334e13eead5e701b8e35f5b41ea0159eb30019e",
+  "bytes": 297002,
+  "allfinite_tif": "downloads/gemsdoe50-h51-lineament-corridors-20261006T2300Z-allfinite.tif",
+  "allfinite_sha256": "8badcc391baf42a9f6571e7eaa836eb8c65f39313d0373db4793a7aa61033e1e",
+  "zip": "downloads/gemsdoe50-h51-lineament-corridors-20261006T2300Z.zip",
+  "zip_sha256": "a2058c3b5940432d621f9a03ecac27d15bac7388f2f03edc69277bd8c6a93fd8"
+ },
+ "format": {
+  "driver": "GTiff",
+  "count": 1,
+  "dtype": "float32",
+  "crs": "EPSG:32611",
+  "shape": [
+   3730,
+   3292
+  ],
+  "transform": [
+   100.0,
+   0.0,
+   243350.0,
+   0.0,
+   -100.0,
+   4508550.0
+  ],
+  "bounds": [
+   243350.0,
+   4135550.0,
+   572550.0,
+   4508550.0
+  ],
+  "min": 0.0,
+  "max": 1.0,
+  "outside_footprint_all_nan": true,
+  "inside_footprint_all_finite": true,
+  "positive_px": 24599,
+  "unique_positive_values": [
+   1.0
+  ],
+  "values_in_0_1": true
+ }
+}

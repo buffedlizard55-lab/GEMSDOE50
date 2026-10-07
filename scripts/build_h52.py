@@ -1,263 +1,217 @@
-"""Build the GEMSDOE50 H52 submission raster.
+#!/usr/bin/env python3
+"""Build H52: the union of the frozen H51 support and the new H52-A support.
 
-Inputs (all public / competition-provided; nothing is read from a previous
-submission):
-  * the competition's own ``training_features.tif`` (19 bands, EPSG:32611),
-  * ``topo_u8.tif`` and ``radiometric_u8.tif`` — quantised derivatives of
-    official USGS products carried in the sibling transport repo,
-  * ``lidar_scarp_features_u8.tif`` — derivatives of USGS 3DEP 1 m DEM tiles,
-  * the competition's ``example_submission.tif`` (grid + footprint template)
-    and ``existing_faults.tif`` (the provided catalogue, used only as a
-    measured exclusion mask).
-
-Output: one single-band float32 GeoTIFF on the template grid, values in {0, 1}
-inside the footprint and NaN outside, plus an all-finite twin.
-
-    python scripts/build_h52.py --inputs DIR --out-dir DIR --budget 40000
+Registered in ``docs/h52a-protocol.md`` amendment B1, *after* H52-A was measured standalone and
+found to cover less of the SGMC-off instrument than H51 on its own (lower absolute DTI at its
+own best mass), but to occupy an almost entirely disjoint population of cells (1.7% overlap).
+This script performs **no new threshold search**: it reads the two already-written, already-
+frozen rasters and takes their pixelwise union. Any genuine difference between runs would come
+only from re-running `build_h51.py` or `build_h52a.py`, not from a knob in this file.
 """
 from __future__ import annotations
 
-import argparse
-import hashlib
 import json
 import sys
-from datetime import datetime, timezone
+import time
+import zipfile
 from pathlib import Path
 
 import numpy as np
 import rasterio
-from scipy.ndimage import distance_transform_edt, gaussian_filter
+from scipy.ndimage import distance_transform_edt
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+REPO = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(REPO / "src"))
 
-from gemsdoe50.coincidence import coincidence_score, greedy_isolated_emission
+from gems51 import emit, instruments
+from gems51 import grid as g51
+from gemsdoe50 import common
 
-TAU = 0.90
-BLOCK_RADIUS_PX = 2
-CATALOGUE_BUFFER_M = 200.0
-FAMILIES = {
-    # family -> (source key, band indices)
-    "T": ("features", [12, 19]),                       # detrended elevation + slope
-    "S": ("topo", [1, 2, 3, 4, 5, 6, 7, 8, 9]),        # 10 m topographic descriptors
-    "L": ("scarp", list(range(1, 13))),                # 1 m-DEM-derived scarp descriptors
-    "R": ("radiometric", [1, 2, 3, 4, 5, 6, 7]),      # airborne radiometrics + ratios
-    "D": ("geodawn_rad", [1, 2, 3, 4]),                # independent radiometric mosaic
-    "P": ("features", [1, 2, 3, 9, 11, 13, 14, 15, 18, 6, 5]),   # potential field
-    "G": ("features", [4, 7, 8, 17]),                  # geodetic strain + conductivity
-    "Q": ("features", [10, 16]),                       # seismicity bands (ComCat-derived)
-}
+CATALOG = REPO / "data" / "external" / "usgs_comcat_earthquakes.csv.gz"
+SGMC = REPO / "data" / "external" / "derived_sgmc_faults_100m_u8.tif"
+H51_FILE = REPO / "docs" / "downloads" / "gems51-scarpradio-offcat-35000-20261006-ecf058ea-nan.tif"
 
 
-def sha256_file(path: Path) -> str:
-    h = hashlib.sha256()
-    with path.open("rb") as fh:
-        for chunk in iter(lambda: fh.read(1 << 20), b""):
-            h.update(chunk)
-    return h.hexdigest()
+def monte_cristo_trend(valid: np.ndarray) -> np.ndarray:
+    import pandas as pd
+    from pyproj import Transformer
+    MC_EPICENTRE = (425569.0, 4224896.0)
+    df = pd.read_csv(CATALOG, low_memory=False)
+    tr = Transformer.from_crs("EPSG:4326", "EPSG:32611", always_xy=True)
+    x, y = tr.transform(df["longitude"].to_numpy(), df["latitude"].to_numpy())
+    t = pd.to_datetime(df["time"], format="ISO8601", utc=True, errors="coerce")
+    sel = ((t >= "2020-05-15") & (t <= "2022-01-01")
+           & (np.hypot(x - MC_EPICENTRE[0], y - MC_EPICENTRE[1]) < 30_000))
+    points = np.column_stack([x[sel], y[sel]])
+    mu = points.mean(axis=0)
+    _, vecs = np.linalg.eigh(np.cov((points - mu).T))
+    axis = vecs[:, 1]
+    ts = np.linspace(-14_000, 14_000, 281)
+    col, row = g51.col_row(mu[0] + ts * axis[0], mu[1] + ts * axis[1])
+    out = np.zeros(valid.shape, dtype=bool)
+    ok = (col >= 0) & (col < g51.GRID["width"]) & (row >= 0) & (row < g51.GRID["height"])
+    out[row[ok], col[ok]] = True
+    return out & valid
 
 
-def saliency(a: np.ndarray, valid: np.ndarray, sigmas=(1.5, 3.0, 6.0)) -> np.ndarray:
-    """Multi-scale structure-tensor lineament saliency: gradient energy x coherence."""
-    out = np.zeros(a.shape, np.float32)
-    fill = float(np.nanmedian(a[valid])) if valid.any() else 0.0
-    x = np.where(valid, a, fill).astype(np.float32)
-    for sg in sigmas:
-        gx = gaussian_filter(x, sg, order=(0, 1), mode="nearest")
-        gy = gaussian_filter(x, sg, order=(1, 0), mode="nearest")
-        rho = 2.0 * sg
-        jxx = gaussian_filter(gx * gx, rho, mode="nearest")
-        jyy = gaussian_filter(gy * gy, rho, mode="nearest")
-        jxy = gaussian_filter(gx * gy, rho, mode="nearest")
-        tr = jxx + jyy
-        coh = np.sqrt((jxx - jyy) ** 2 + 4.0 * jxy**2) / np.maximum(tr, 1e-20)
-        out = np.maximum(out, np.sqrt(np.maximum(tr, 0.0)) * coh)
-    out[~valid] = 0.0
-    return out
+def write_raster(path: Path, values: np.ndarray, valid: np.ndarray, *, nan_outside: bool) -> dict:
+    data = np.where(valid, values.astype(np.float32), np.nan if nan_outside else 0.0).astype(np.float32)
+    profile = {
+        "driver": "GTiff", "height": g51.GRID["height"], "width": g51.GRID["width"],
+        "count": 1, "dtype": "float32", "crs": g51.GRID["crs"],
+        "transform": rasterio.transform.Affine(*g51.GRID["transform"]),
+        "nodata": float("nan") if nan_outside else None,
+        "compress": "deflate",
+    }
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with rasterio.open(path, "w", **profile) as ds:
+        ds.write(data, 1)
+    with rasterio.open(path) as ds:
+        back = ds.read(1)
+        info = {
+            "path": str(path.relative_to(REPO)), "bytes": path.stat().st_size,
+            "sha256": common.sha256_file(path), "crs": str(ds.crs),
+            "shape": [ds.height, ds.width], "dtype": ds.dtypes[0], "count": ds.count,
+            "nodata": None if ds.nodata is None else float(ds.nodata),
+            "transform": [float(v) for v in ds.transform][:6],
+            "cells_finite": int(np.count_nonzero(np.isfinite(back))),
+            "cells_nan": int(np.count_nonzero(np.isnan(back))),
+            "min": float(np.nanmin(back)), "max": float(np.nanmax(back)),
+            "outside_unit_interval": int(np.count_nonzero(
+                np.isfinite(back) & ((back < 0.0) | (back > 1.0)))),
+            "outside_footprint_nonzero": int(np.count_nonzero(back[~valid] > 0)),
+            "footprint_min": float(np.nanmin(back[valid])),
+            "footprint_max": float(np.nanmax(back[valid])),
+            "footprint_nonzero": int(np.count_nonzero(back[valid] > 0)),
+        }
+    return info
 
 
-def percentile_rank(field: np.ndarray, valid: np.ndarray) -> np.ndarray:
-    """Within-source percentile rank of ``field`` over ``valid`` cells."""
-    out = np.zeros(field.shape, np.float32)
-    v = field[valid]
-    if v.size == 0:
-        return out
-    order = np.argsort(v, kind="stable")
-    r = np.empty(v.size, np.float32)
-    r[order] = np.arange(v.size, dtype=np.float32) / max(v.size - 1, 1)
-    out[valid] = r
-    return out
-
-
-def family_field(sources: dict, path: Path, bands: list[int]) -> np.ndarray:
-    acc = None
-    for b in bands:
-        with rasterio.open(path) as ds:
-            a = ds.read(b).astype(np.float32)
-            nod = ds.nodata
-        valid = np.isfinite(a)
-        if nod is not None:
-            valid &= a != np.float32(nod)
-        if int(valid.sum()) < 1000:
-            continue
-        sal = saliency(a, valid)
-        q = float(np.percentile(sal[valid], 99.0))
-        sal = np.clip(sal / max(q, 1e-30), 0.0, 1.0)
-        pct = percentile_rank(sal, valid)
-        acc = pct if acc is None else np.maximum(acc, pct)
-    if acc is None:
-        raise RuntimeError(f"no usable bands in {path}")
-    return acc
+def uniqueness_gate(support: np.ndarray, valid: np.ndarray) -> dict:
+    sig = np.load(REPO / "registry" / "prior_artifact_signatures.npz", allow_pickle=True)
+    names = [str(n) for n in sig["names"]]
+    rows = []
+    for index, (factor, key) in enumerate(((8, "masks_block8"), (32, "masks_block32"))):
+        shape = tuple(int(v) for v in sig["coarse_shapes"][index])
+        h2, w2 = shape[0] * factor, shape[1] * factor
+        mine = support[:h2, :w2].reshape(shape[0], factor, shape[1], factor).any(axis=(1, 3))
+        for name, prior_bits in zip(names, sig[key]):
+            prior = np.unpackbits(np.asarray(prior_bits, dtype=np.uint8))[: mine.size]
+            prior = prior.reshape(shape).astype(bool)
+            inter = int(np.count_nonzero(mine & prior))
+            union = int(np.count_nonzero(mine | prior))
+            rows.append({"factor": factor, "name": name,
+                         "jaccard": inter / union if union else 0.0,
+                         "overlap_fraction_of_mine": inter / max(int(np.count_nonzero(mine)), 1)})
+    worst_j = max(rows, key=lambda r: r["jaccard"])
+    worst_o = max(rows, key=lambda r: r["overlap_fraction_of_mine"])
+    return {
+        "n_prior_artifacts": len(names),
+        "max_jaccard": worst_j["jaccard"], "max_jaccard_against": worst_j["name"],
+        "max_overlap_of_mine": worst_o["overlap_fraction_of_mine"],
+        "max_overlap_against": worst_o["name"],
+        "unique_at_8px": worst_j["jaccard"] < 0.5,
+        "unique_at_32px": worst_j["jaccard"] < 0.5,
+        "table": sorted(rows, key=lambda r: -r["jaccard"])[:10],
+    }
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--inputs", required=True, type=Path)
-    ap.add_argument("--out-dir", required=True, type=Path)
-    ap.add_argument("--budget", type=int, default=40000)
-    ap.add_argument("--tag", default="r1")
-    ap.add_argument(
-        "--score-out", type=Path, default=None,
-        help="optional path for the coincidence score field (float32, .npy); "
-             "the minimum sufficient statistic for re-emitting at another budget",
-    )
-    ap.add_argument(
-        "--agreement-out", type=Path, default=None,
-        help="optional path for the count of agreeing families per cell (uint8, .npy)",
-    )
-    args = ap.parse_args()
+    started = time.time()
+    build_h52a = json.loads((REPO / "evidence" / "build_h52a.json").read_text(encoding="utf-8"))
+    h52a_file = REPO / build_h52a["outputs"]["primary"]["path"]
 
-    args.out_dir.mkdir(parents=True, exist_ok=True)
-    inp = args.inputs
-    features = inp / "training_features.tif"
-    topo = inp / "topo_u8.tif"
-    radiometric = inp / "radiometric_u8.tif"
-    scarp = inp / "lidar_scarp_features_u8.tif"
-    geodawn_rad = inp / "geodawn_rad_u8.tif"
-    template_p = inp / "example_submission.tif"
-    labels_p = inp / "existing_faults.tif"
-    for p in (features, topo, radiometric, scarp, geodawn_rad, template_p, labels_p):
-        if not p.exists():
-            print(f"missing input: {p}", file=sys.stderr)
-            return 2
-    sources = {
-        "features": features, "topo": topo, "radiometric": radiometric,
-        "scarp": scarp, "geodawn_rad": geodawn_rad,
+    valid = g51.load_footprint()
+    labels = g51.load_labels()
+    catalogue_distance = distance_transform_edt(~labels)
+    off_catalogue = (catalogue_distance > 3) & valid
+    sgmc, _ = g51.load_raster(SGMC)
+    sgmc_off = (sgmc > 0) & off_catalogue
+    mc = monte_cristo_trend(valid)
+    truths = {"catalogue": labels, "sgmc_off": sgmc_off, "monte_cristo": mc}
+
+    with rasterio.open(H51_FILE) as ds:
+        h51 = ds.read(1)
+    with rasterio.open(h52a_file) as ds:
+        h52a = ds.read(1)
+    h51_support = np.isfinite(h51) & (h51 > 0)
+    h52a_support = np.isfinite(h52a) & (h52a > 0)
+    union = h51_support | h52a_support
+    overlap = int(np.count_nonzero(h51_support & h52a_support))
+
+    print(f"H51 mass={int(h51_support.sum()):,} H52A mass={int(h52a_support.sum()):,} "
+          f"overlap={overlap:,} union mass={int(union.sum()):,}", flush=True)
+
+    scores = {
+        "h51_alone": instruments.all_instruments(h51_support, truths),
+        "h52a_alone": instruments.all_instruments(h52a_support, truths),
+        "union": instruments.all_instruments(union, truths),
     }
+    rng = np.random.default_rng(5200)
+    control, _ = emit.pack(np.where(off_catalogue, rng.random(valid.shape).astype(np.float32), 0.0),
+                           int(union.sum()), valid=off_catalogue, suppression_px=3.0)
+    scores["random_control_at_union_mass"] = instruments.all_instruments(control, truths)
+    for k in ("h51_alone", "h52a_alone", "union", "random_control_at_union_mass"):
+        print(f"  {k}: sgmc_off_dti={scores[k]['sgmc_off']['dti']:.4f} "
+              f"sgmc_off_cpdot={scores[k]['sgmc_off']['credit_per_dot']:.4f} "
+              f"mc_tpw={scores[k]['monte_cristo']['tp_weight']:.2f}", flush=True)
 
-    with rasterio.open(template_p) as ds:
-        template = ds.read(1)
-        profile = ds.profile.copy()
-        raster_transform = ds.transform
-    footprint = np.isfinite(template)          # the organizer's own valid mask
-    with rasterio.open(labels_p) as ds:
-        labels = ds.read(1)
-    catalogue = labels == 1
+    content_id = common.sha256_array(union.astype(np.uint8))[:8]
+    stamp = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
+    name = f"gems52-union-h51-h52a-offcat-{int(union.sum())}-{stamp}-{content_id}"
+    primary = REPO / "docs" / "downloads" / f"{name}-nan.tif"
+    allfinite = REPO / "docs" / "downloads" / f"{name}-allfinite.tif"
+    values = union.astype(np.float32)
+    audit = write_raster(primary, values, valid, nan_outside=True)
+    audit_finite = write_raster(allfinite, values, valid, nan_outside=False)
+    zpath = primary.with_suffix(".zip")
+    with zipfile.ZipFile(zpath, "w", zipfile.ZIP_DEFLATED) as zf:
+        zf.write(primary, arcname=primary.name)
+    checks = {"primary": audit, "allfinite": audit_finite,
+              "zip": {"path": str(zpath.relative_to(REPO)), "bytes": zpath.stat().st_size,
+                      "sha256": common.sha256_file(zpath), "contains": primary.name}}
+    (REPO / "docs" / "downloads" / f"checks-{primary.name}.json").write_text(
+        json.dumps(checks, indent=1), encoding="utf-8")
 
-    family_percentiles = []
-    family_names = sorted(FAMILIES)
-    for name in family_names:
-        key, bands = FAMILIES[name]
-        family_percentiles.append(family_field(sources, sources[key], bands))
-    P = np.stack(family_percentiles)
-    del family_percentiles
+    unique = uniqueness_gate(union, valid)
 
-    score = coincidence_score(P, tau=TAU)
-    agreement = (P >= TAU).sum(axis=0)
-
-    distance_to_catalogue_m = distance_transform_edt(~catalogue) * 100.0
-    allowed = footprint & (distance_to_catalogue_m >= CATALOGUE_BUFFER_M)
-    score = np.where(allowed, score, -1.0)
-
-    if args.score_out is not None:
-        args.score_out.parent.mkdir(parents=True, exist_ok=True)
-        np.save(args.score_out, score.astype(np.float32))
-    if args.agreement_out is not None:
-        args.agreement_out.parent.mkdir(parents=True, exist_ok=True)
-        np.save(args.agreement_out, (P >= TAU).sum(axis=0).astype(np.uint8))
-
-    accepted = greedy_isolated_emission(score, allowed, args.budget, BLOCK_RADIUS_PX)
-    if int(accepted.sum()) < args.budget:
-        print(f"note: only {int(accepted.sum())} of {args.budget} cells could be placed", file=sys.stderr)
-
-    stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-
-    # --- primary: all-finite (no nodata tag), 0 outside the organizer footprint
-    allfin = np.zeros(template.shape, dtype=np.float32)
-    allfin[accepted] = 1.0
-    primary = args.out_dir / f"gems50-h52-coincidence8-{int(accepted.sum())}-{stamp}.tif"
-    profile.update(
-        driver="GTiff", count=1, dtype="float32", compress="deflate",
-        predictor=2, tiled=False, nodata=None,
-    )
-    with rasterio.open(primary, "w", **profile) as ds:
-        ds.write(allfin, 1)
-
-    # --- twin: literal published encoding (NaN outside the footprint, no nodata tag)
-    nanout = np.where(footprint, allfin, np.float32("nan")).astype(np.float32)
-    profile.update(nodata=float("nan"))
-    twin = args.out_dir / f"{primary.stem}-nanoutside.tif"
-    with rasterio.open(twin, "w", **profile) as ds:
-        ds.write(nanout, 1)
-
-    def digest(path: Path) -> dict:
-        with rasterio.open(path) as ds:
-            a = ds.read(1)
-        finite = np.isfinite(a)
-        rec = {
-            "bytes": path.stat().st_size,
-            "sha256": sha256_file(path),
-            "driver": "GTiff", "count": 1, "dtype": str(a.dtype),
-            "shape": [int(a.shape[0]), int(a.shape[1])],
-            "crs": "EPSG:32611",
-            "transform": [float(v) for v in raster_transform][:6],
-            "nodata": None if ds.nodata is None or np.isnan(ds.nodata) else float(ds.nodata),
-            "finite_cells": int(finite.sum()),
-            "nan_cells": int((~finite).sum()),
-            "min": float(a[finite].min()),
-            "max": float(a[finite].max()),
-            "values_outside_0_1": int(((a[finite] < 0.0) | (a[finite] > 1.0)).sum()),
-            "positive_cells": int((a[finite] > 0).sum()),
-            "outside_footprint_nonzero": int((a[finite & ~footprint] > 0).sum()),
-        }
-        return rec
-
-    evidence = {
-        "schema": "gemsdoe50.h52.build.v1",
-        "built_utc": datetime.now(timezone.utc).isoformat(),
-        "budget": args.budget,
-        "emitted": int(accepted.sum()),
-        "block_radius_px": BLOCK_RADIUS_PX,
-        "tau": TAU,
-        "catalogue_buffer_m": CATALOGUE_BUFFER_M,
-        "families": {k: FAMILIES[k][1] for k in family_names},
-        "family_order": family_names,
-        "agreement_composition": {
-            str(k): int((agreement[accepted] == k).sum()) for k in range(len(family_names) + 1)
-            if int((agreement[accepted] == k).sum()) > 0
-        },
-        "dots_on_catalogue": int((accepted & catalogue).sum()),
-        "dots_within_200m_of_catalogue": int((accepted & (distance_to_catalogue_m < CATALOGUE_BUFFER_M)).sum()),
-        "min_distance_to_catalogue_m": float(distance_to_catalogue_m[accepted].min()),
+    report = {
+        "schema": "gems52.build.v1",
+        "built_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "builder": {"script": "scripts/build_h52.py", "sha256": common.sha256_file(Path(__file__))},
+        "protocol": "docs/h52a-protocol.md amendment B1 (2026-10-07)",
+        "name": name,
         "inputs": {
-            "training_features.tif": sha256_file(features),
-            "topo_u8.tif": sha256_file(topo),
-            "radiometric_u8.tif": sha256_file(radiometric),
-            "lidar_scarp_features_u8.tif": sha256_file(scarp),
-            "geodawn_rad_u8.tif": sha256_file(geodawn_rad),
-            "example_submission.tif": sha256_file(template_p),
-            "existing_faults.tif": sha256_file(labels_p),
+            "h51_file": {"path": str(H51_FILE.relative_to(REPO)), "sha256": common.sha256_file(H51_FILE),
+                        "mass": int(h51_support.sum())},
+            "h52a_file": {"path": str(h52a_file.relative_to(REPO)), "sha256": common.sha256_file(h52a_file),
+                         "mass": int(h52a_support.sum())},
         },
-        "score_field_sha256": (sha256_file(args.score_out) if args.score_out is not None else None),
-        "primary": digest(primary),
-        "twin": digest(twin),
+        "overlap_cells": overlap,
+        "overlap_fraction_of_h52a": overlap / max(int(h52a_support.sum()), 1),
+        "union_mass": int(union.sum()),
+        "runtime_seconds": round(time.time() - started, 1),
+        "scores": scores,
+        "uniqueness": unique,
+        "outputs": checks,
+        "honesty": [
+            "No organizer score exists for this file and none is claimed.",
+            ("This is a pixelwise union of two already-frozen, independently built supports; no "
+            "threshold in this script was chosen by looking at the resulting DTI."),
+            ("H52-A alone has a lower pooled SGMC-off DTI than H51 alone because it emits far "
+            "fewer dots (10,000 vs 35,000); its contribution is measured as an addition to H51, "
+            "not as a replacement."),
+            ("Monte Cristo is reported as a weak guard only, never as a selection criterion "
+            "(H51 amendment A3)."),
+        ],
     }
-    evidence["primary"]["path"] = str(primary)
-    evidence["twin"]["path"] = str(twin)
-    (args.out_dir / f"{primary.stem}.build.json").write_text(json.dumps(evidence, indent=1))
-    print(json.dumps({k: evidence[k] for k in
-                      ("emitted", "agreement_composition", "dots_on_catalogue",
-                       "min_distance_to_catalogue_m")}, indent=1))
-    print(json.dumps(evidence["primary"], indent=1))
+    (REPO / "evidence").mkdir(exist_ok=True)
+    (REPO / "evidence" / "build_h52.json").write_text(json.dumps(report, indent=1), encoding="utf-8")
+    print(json.dumps({"name": name, "mass": int(union.sum()), "sha256": audit["sha256"],
+                      "sgmc_off_dti": scores["union"]["sgmc_off"]["dti"],
+                      "improvement_over_h51": scores["union"]["sgmc_off"]["dti"] - scores["h51_alone"]["sgmc_off"]["dti"],
+                      "unique_max_jaccard": unique["max_jaccard"]}, indent=1))
+    print(f"done in {time.time() - started:.0f}s")
     return 0
 
 

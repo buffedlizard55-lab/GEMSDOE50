@@ -1,209 +1,358 @@
-# GEMSDOE50 — seismic-geometry research for the DOE GEMS Prize
+# GEMSDOE50 — earthquake point geometry for omitted-fault mapping
 
-**Project aim:** maximize the probability of a strong result in the [DOE Geologic Enhanced Mapping System (GEMS) Prize Challenge, DrivenData competition 306](https://www.drivendata.org/competitions/306/competition-doe-gems/), by finding defensible, previously unmapped fault traces in the GeoDAWN study area. Core values: **Maximize P(Win)** and **Own the Outcome**.
+**Project aim:** maximize the probability of a strong result in the
+[DOE Geologic Enhanced Mapping System (GEMS) Prize Challenge](https://www.drivendata.org/competitions/306/competition-doe-gems/)
+by finding defensible fault traces omitted from the supplied catalogue. Core values:
+**Maximize P(Win)** and **Own the Outcome**.
 
-> **Read this charter before each work session.** It is the standing project purpose and the acceptance criteria for every experiment and deliverable.
+> **Read this charter before every work session.** It governs the research, code, artifact, site,
+> and submission decision. A local proxy result is never an organizer score.
 
-## Standing project brief
+## Standing governing charter
 
-1. **Deliver a new, unique GeoTIFF prediction.** Generate it from this repository's documented method and pinned inputs. Never copy a previous submission's prediction pixels; earlier artifacts may be inspected only for education, controls, or comparison. The intended download must be a single-band float32 GeoTIFF on the actual competition grid, EPSG:32611, 100 m resolution, with the official shape, transform, and bounds. Predictions must be finite and within `[0, 1]` wherever data are valid; outside-footprint handling must follow the official sample/template and be tested against the reported portal error `Predicted values must be in range [0, 1]`.
-2. **Make the artifact easy to find and download.** Put a one-click download and a concise executive summary at the top of the site. Include a clear, numbered “how to submit” page, a unique submission name, and a short distinguishing note for the competition's optional note field. Do not imply portal acceptance when no upload receipt exists.
-3. **Do the science before implementation.** Before writing a detector, list and rank 3–5 genuinely distinct geological hypotheses. Each must state the exact layers/data, physical signature, why it could detect a fault missing from USGS/INGENIOUS, how it differs from prior GEMSDOE work, expected DTI direction/impact, implementation cost, and data/license requirements. See the current audit in [`docs/research/hypothesis-ranking-20261006.md`](docs/research/hypothesis-ranking-20261006.md), the preregistered candidates in [`docs/hypotheses-preregistered.md`](docs/hypotheses-preregistered.md), and exact H50-S1 implementation choices/controls in [`docs/h50s1-protocol-addendum.md`](docs/h50s1-protocol-addendum.md). Re-check old work before calling any variant new.
-4. **Protect the weekly submission budget.** Validate the leading hypothesis on a spatially blocked holdout against a frozen, same-fold incumbent and appropriate controls before using any of the competition's three weekly scoring slots. H50-S1 must also beat both smoothed-density baselines and pass formal aftershock, mine/injection-site, and event-location-uncertainty gates. A hypothesis that fails any gate is not slot-eligible. A local proxy score is not an organizer score or a prediction of private-test performance.
-5. **Use compliant, traceable evidence.** Prefer official and peer-reviewed primary sources; link sources directly, state evidence and license status, pin file hashes, and disclose attribution/changes. External data may be used only where the competition permits it, the license permits commercial use, and the data can be shared with the organizers for independent verification. Do not use the scratch mixed-network USGS ComCat extract until its source-specific rights and location uncertainty are resolved.
-6. **Do not overstate the literature.** H50-S1 is a 3-D local plane-fitting hypothesis on relocated Nevada events, but its catalog lacks per-event location covariance and it is not ACLUD. The already-implemented legacy H50-B method uses 2-D ComCat covariance/lineations; its 2-D triangle-area reduction of a 3-D tetrahedron statistic is explicitly **unverified**, and the builder does not apply the computed `keep` mask. Neither method is a validated transfer of the cited 3-D methods: [Ouillon et al. (2008)](https://doi.org/10.1029/2007JB005032), [Ouillon & Sornette (2011)](https://doi.org/10.1029/2010JB007752), and [Wang et al. (2013)](https://arxiv.org/abs/1304.6912).
-7. **Work autonomously and auditably.** Review rules, data, sources, prior attempts, and limitations; record every material decision and irregularity; run multiple implementation/review passes; fix defects found; and maintain a concise next-steps list. Do not ask the owner to do research or resolve issues the agent can verify independently.
-8. **Keep the score context honest.** The owner-quoted `0.3195` is historical, not the live leader. Prior sibling-repository notes contain conflicting historical leaderboard values and are not a fresh independent official check; do not repeat them as current official scores or map any score to a TIFF without organizer-verified provenance. DrivenData's Terms of Use prohibit automated monitoring/copying and manual monitoring/copying without prior written consent. This repository links to the official board but does not scrape, poll, or publish leaderboard snapshots.
-9. **Follow the prize rules.** The September 2026 NLR/DOE rules require an AI-use disclosure in the narrative, permit up to three feedback submissions per week, and require selection of one final submission for both prize rounds. Finalists must provide reproducible code/assets and documentation. The competition ends December 3, 2026 at 23:59 UTC (verify the official page before any deadline-dependent action).
-10. **Create and merge a PR when practical.** Keep all work on Arena's fixed branch `arena/c4f4db48-gemsdoe50`. Run tests and review the PR before merging. Do not switch branches or push elsewhere.
+1. **Review before building.** Review the complete repository, competition prompt, supplied
+   GEMSDOE results, source rights, and prior attempts. Explain at PhD level why GEMSDOE32 artifact
+   `h33-h33-2-b2-20261004T220000Z-e5eb6e7e` reportedly scored 0.2778 and whether a method could
+   exceed the owner-quoted historical 0.3195. Never turn an owner report into an authenticated
+   score without an organizer receipt/hash crosswalk.
+2. **Deliver a genuinely new raster.** Build a unique competition-grid GeoTIFF from documented
+   inputs and code. Never copy prior prediction pixels; prior files may be used only for learning,
+   controls, and comparison. Run full-resolution byte and pixel/proximity comparisons against every
+   listed prior artifact, not merely coarse signatures.
+3. **Use earthquake point geometry, not earthquake density, as the candidate.** Acquire a public,
+   eligible event catalogue; record official URL, attribution, license, exact bytes, and external-
+   data eligibility. Space-time thin/decluster it, screen known mining/injection or explicit
+   anthropogenic sites, compute local two-dimensional covariance eigenstructure, retain recurrent
+   well-sampled linear neighborhoods, broaden them under explicit location-width assumptions,
+   score only outside supplied-fault buffers, and snap placement across-axis to an independent
+   layer ridge. Smoothed density is a control, never the H55 prediction.
+4. **Do not overstate the literature.** The H55 normalized 2-D triangle-area background test is an
+   **unverified project adaptation**. It is not the published three-dimensional tetrahedron method
+   of Ouillon and Sornette and is not ACLUD. The relocated catalogue has no event-specific
+   covariance; width sensitivity is not measured location error.
+5. **Preregister 3–5 hypotheses before implementation.** Rank them by expected DTI improvement and
+   cost. For every row, identify exact layers, physical transform/signature, why it can expose an
+   omitted rather than catalogued fault, how it differs from repository methods, and any free
+   official external source/license. Do not call a repeated method novel.
+6. **Protect three weekly feedback slots.** Evaluate the top candidate on the frozen spatially
+   blocked holdout before a slot. Require matched density, random, translation, incumbent,
+   macrofold, bootstrap, format, scientific-validity, rights, and uniqueness gates. Do not submit
+   or recommend a slot unless it beats the frozen current best under the preregistered rules.
+7. **Honor the TIFF contract.** One float32 band; EPSG:32611; official shape, transform, resolution,
+   and bounds; probability values in closed interval `[0,1]`. Re-read the written file and
+   explicitly prevent recurrence of portal error `Predicted values must be in range [0, 1]`.
+   Preserve a NaN-outside sample-semantic file and an all-finite zero-outside twin when portal
+   behavior and the published local checker differ.
+8. **Put the decision before the download.** The GitHub Pages landing page must be clean, simple,
+   auditable, and begin with an obvious one-click TIFF link plus an executive summary and visible
+   slot decision. Include a numbered submission guide, unique name, short note, source/license
+   table, limitations/irregularities, evidence links, and required access. Do not imply portal
+   acceptance or a leaderboard score.
+9. **Make the result reproducible.** Commit source, tests, frozen parameters, source receipts,
+   checksums, direct-comparison evidence, and review notes. Keep large scratch corpora out of Git;
+   retain compact hash-pinned derivatives needed to reproduce final placement.
+10. **Run three passes.** Pass 1 implements and verifies. Pass 2 reviews bugs, assumptions, data
+    leakage, edge cases, format, and scientific claims and fixes defects. Pass 3 rechecks every
+    requirement and makes final quality improvements. Record negative results rather than tuning
+    them away.
+11. **Work autonomously and line by line.** Use official/trusted sources, link them for manual
+    review, flag irregularities, state limitations and required access, and never ask the owner to
+    perform research that can be completed in the repository.
+12. **Keep score context honest.** The 0.2778 artifact attribution and 0.3195 target are historical
+    owner reports, not current leaderboard observations. This project does not scrape/poll the
+    leaderboard or map a score to bytes without a receipt.
+13. **Follow competition rules.** External data must permit challenge use and sharing with the
+    sponsor. AI use must be disclosed as required by the current NLR/DOE rules. Finalists must
+    provide reproducible code/assets and documentation. Verify current official rules and deadline
+    immediately before any real submission.
+14. **Use Arena's fixed branch.** Work, commit, and push only on
+    `arena/38c5cc42-gemsdoe50`; open the pull request from that branch. Merge to `main` only when
+    repository/environment policy permits it. Never switch or push another branch from this
+    session.
 
-## Current evidence and decision (2026-10-07 UTC)
+## Current outcome — 2026-10-07 UTC
 
+### This session's own artifact — H52-C (eight-family coincidence)
 
-- **The H52 deliverable is the file offered first.** `docs/downloads/gems50-h52-coincidence8-80000-20261007T032938Z-nanoutside.tif`
-  (80,000 predicted pixels, sha256 `c8292db9e2c6d16b99a32ceae3d1652eb15019c8faa6f9d8b6d8b052d15dd582`) with an all-finite
-  twin (`a2ed87fac9fdb4b9604ab2850b5f750eefe51fa9795caa6a503fc4739de6475d`) and a single-file `.zip`. Single band
-  float32, EPSG:32611, 100 m, 3292 × 3730, values in `{0, 1}`, NaN outside the study footprint, no nodata sentinel;
-  every clause re-read from the written bytes by [`scripts/uniqueness_h52.py`](scripts/uniqueness_h52.py)
-  ([`evidence/h52_uniqueness.json`](evidence/h52_uniqueness.json), all format checks pass).
-- **What it is.** Eight evidence families — detrended elevation/slope, 10 m topographic descriptors, 3DEP-1 m lidar
-  scarp descriptors, airborne radiometrics from two independent mosaics, potential-field, geodetic-strain, and the
-  competition's own seismicity bands — each reduced to a within-family percentile rank by multi-scale
-  structure-tensor saliency, combined as `count of families ≥ 0.90 + 0.5 × mean normalised excess`, then emitted
-  greedily at ≥3 px separation with a 200 m buffer around the provided catalogue. Builder:
-  [`scripts/build_h52.py`](scripts/build_h52.py); inputs restored and hash-verified by
-  [`scripts/restore_inputs.sh`](scripts/restore_inputs.sh) (seven input SHA-256s in
-  [`evidence/h52_build_80000.json`](evidence/h52_build_80000.json)). Two independent builds produced byte-identical
-  output, so the artifact is reproducible from the pinned inputs.
-- **What it measures.** Instrument calibration reproduces the published ordering of known artifacts
-  (Spearman ρ = 0.805, p = 0.005, n = 10) on an independent off-catalogue USGS SGMC derivative scored with the
-  competition's own metric; H52 earns 0.1446 credit per dot, and **4/4** spatially blocked folds beat a
-  matched-mass random control (per-fold deltas `+0.0611, +0.0515, +0.0191, +0.0505`)
-  ([`evidence/h52_validation_80k.json`](evidence/h52_validation_80k.json)).
-- **What it is *not*.** No organizer score exists for this file, no slot is claimed, and the per-dot proxy quality
-  is below every incumbent-family artifact measured (0.1573–0.1704), so the file is an exploration of the truth
-  mass the incumbent family cannot reach, not an expected-score improvement. The instrument's own caveat is
-  recorded in the receipt: an SGMC-family submission scored 0.0512 on the hidden labels, i.e. below matched random.
-- **Novelty, stated narrowly.** Against 16 prior artifacts re-fetched and cell-count-verified before comparison,
-  the most similar prior covers 42.8% of H52's dots within 2 px, so 57.2% are ≥300 m from any prior dot and 87.8%
-  are outside the union of every prior support ([`evidence/h52_uniqueness.json`](evidence/h52_uniqueness.json),
-  provenance in [`registry/prior_artifact_sources.tsv`](registry/prior_artifact_sources.tsv)).
-- **The budget question is documented, not hidden.** Two owner-recorded organizer scores for a nested pair solve
-  the metric algebra exactly for truth mass `G = 14,088.75` px and weighted credit `T = 5,223.14` px; the same
-  algebra gives the marginal rule `bar = 0.0588` and a ≈283 m reach for a fresh pixel to pay for itself. The
-  ten-budget curve, the single transfer constant `r = 0.851`, the model optimum at 120k and the deliberate
-  choice of 80k inside the plateau are all in [`docs/h52-decision.md`](docs/h52-decision.md) and
-  [`evidence/h52_budget_curve.json`](evidence/h52_budget_curve.json).
-- **The H51 deliverable still exists and is verified.** `docs/downloads/gems51-scarpradio-offcat-35000-20261006-ecf058ea-nan.tif`
-  (35,000 predicted pixels, sha256 `8f8708d2872b66d71925707e0aede23eebcf217dfd2e57d6e61186f32e686f5d`) with an
-  all-finite twin and a one-file `.zip`. It is single band float32, EPSG:32611, 100 m, 3292 × 3730,
-  every finite value in `[0, 1]`, NaN only where the official template is NaN — re-read from the written
-  bytes by `scripts/verify_h51_raster.py` (`evidence/checks_h51_raster.json`, zero failed checks).
-- **What it is.** A corroborated lineament field: the measured-best blend of the scarp-focused 3DEP/LiDAR
-  topographic family and the airborne radiometric family (multi-scale structure tensor, 0.75/0.55 on
-  max-normalised families), greedily packed by expected marginal kernel credit with a 3 px suppression
-  radius, restricted to cells more than 300 m from every provided-catalogue pixel. The preregistration and
-  its three amendments are in [`docs/hypotheses-preregistered.md`](docs/hypotheses-preregistered.md); the
-  ranked untried candidates are in [`docs/h51-candidates.md`](docs/h51-candidates.md).
-- **What it measures.** On the off-catalogue SGMC instrument the file earns 0.189 credit per emitted dot
-  against 0.116–0.126 for 24 matched-mass random controls (±0.002 spread) — above every control seed at
-  every swept mass. On the frozen four-macrofold spatial holdout it beats its matched control in **4/4**
-  folds with a paired subtile bootstrap 95% CI of `[0.0406, 0.0785]`
-  ([`evidence/holdout_h51.json`](evidence/holdout_h51.json)).
-- **What it is *not*.** No organizer score exists for this file; no portal upload was performed; no weekly
-  slot is claimed. The 242-pixel Monte Cristo trend does **not** separate this file from random scatter at
-  these masses (71st percentile of 24 control seeds) and is reported as a weak guard, not as evidence
-  ([`evidence/mc_sensitivity_h51.json`](evidence/mc_sensitivity_h51.json)).
-- **The seismicity line (H51-B) is a recorded negative.** The event-geometry corridor field — declustered
-  with a space-time tetrahedron test, 1/σ²-weighted covariance axes, corridor width from a calibrated
-  location-uncertainty model — measured level with a matched random control on the off-catalogue instrument
-  and covered none of the Monte Cristo trend, so it received **no mass** in the shipped file. The
-  uncertainty model is this project's own construction (R² 0.715 in sample; footprint holdout within a
-  factor of two for 50.4 % of events) and is **not** from Wang et al. (arXiv:1304.6912).
-- **Uniqueness.** Worst-case block Jaccard against the 50 frozen prior artifacts is 0.66 at 32 px blocks —
-  *below* the median of the same statistic between genuinely independent prior artifacts (0.83), so the
-  block test is not informative at this scale. The audited statement is narrower: a new sha256, no prior
-  raster read into the belief field, and 2.7 % exact-pixel overlap with the only prior submission available
-  locally ([`evidence/uniqueness_h51.json`](evidence/uniqueness_h51.json)).
-- **H50-S1 remains blocked.** The waveform-relocated Nevada catalog has still not been fetched in this
-  sandbox (direct Zenodo egress fails TLS here), so the H50-S1 experiment has not run and no H50-S1 DTI is
-  claimed. The inherited mixed-network ComCat extract is used **only** as H51's own evidence line, with USGS
-  public-domain status recorded in [`registry/sources.json`](registry/sources.json).
-- **Score context stays honest.** The owner-quoted `0.3195` and sibling-repository leaderboard notes are
-  historical, not a live board. DrivenData's Terms of Use prohibit automated monitoring or copying; this
-  repository links to the official board but never polls, scrapes, or publishes a leaderboard snapshot, and
-  no score is mapped to a TIFF. One unintended automated request to the public leaderboard page occurred
-  during prior research; no rows/scores were saved or used, and no further automated access will be made.
-- This session's Arena branch is `arena/fe65fa32-gemsdoe50`; the older
-  [`h50s1-research.yml`](.github/workflows/h50s1-research.yml) workflow is pinned to
-  `arena/c6060a3e-gemsdoe50` and is not used by H51.
-- **Inherited H50-S1 status from `main` (still true).** The dispatch-only research workflow now returns
-  HTTP 403 `Resource not accessible by integration`, so no job ran and no data was fetched and the
-  experiment still has not run; the branch also carries two matched Gaussian-smoothed relocated-event density controls
-  (1 km and 2 km) as required comparators, plus the H50-prior fixed-incumbent rule. Inherited validation in
-  this checkout is now **89 tests passed, 0 skipped** (75/1 before the H51 close-out, 80/0 before H52), and the frozen split spec
-  (`78b6692155c6c6d5f9f19ccee6d595167c2065f1f25eb8d08636d1d9b285ff16`) plus the realized-mask report
-  (`981b42e6d0310bf77f79c7c7662a0569c8d2e79514ef4e4a3624a5b07583ae3f`) are unchanged.
-- **Inherited provenance caveat from `main` (still true).** The bridge manifest points at the official data
-  tab and public Dropbox mirrors, but no session has authenticated to DrivenData and re-downloaded the
-  official bytes; matching hashes establish consistency with the bridge manifest, not organizer provenance.
+The branch `arena/685c6059-gemsdoe50` also ships a file this session built and validated itself, kept
+separate from the H52/H52A/H53/H54/H55 artifacts that other sessions track (nothing here reads their
+pixels):
 
+* **Portal file (NaN outside the footprint):**
+  [`gems50-h52-coincidence8-80000-20261007T032938Z-nanoutside.tif`](docs/downloads/gems50-h52-coincidence8-80000-20261007T032938Z-nanoutside.tif), SHA-256
+  `c8292db9e2c6d16b99a32ceae3d1652eb15019c8faa6f9d8b6d8b052d15dd582`, 417,986 bytes, 80,000 positive cells.
+* **All-finite twin:** [`gems50-h52-coincidence8-80000-20261007T032938Z.tif`](docs/downloads/gems50-h52-coincidence8-80000-20261007T032938Z.tif), SHA-256 `a2ed87fac9fdb4b9604ab2850b5f750eefe51fa9795caa6a503fc4739de6475d`.
+* **Single-file zip:** [`gems50-h52-coincidence8-80000-20261007T032938Z-nanoutside.zip`](docs/downloads/gems50-h52-coincidence8-80000-20261007T032938Z-nanoutside.zip), SHA-256 `6dc41bd5598495748eee22f85fca2f82cb3c938afe6eaecf8c839e47768d498c`.
+* Format: one float32 band, EPSG:32611, 3,730 x 3,292, 100 m, values in `{0, 1}`, zero values outside
+  the study footprint, zero dots on the provided catalogue, no nodata sentinel — re-read from the written
+  bytes by `scripts/uniqueness_h52_coincidence.py` (`evidence/h52_uniqueness.json`, all checks pass).
+* Method: eight evidence families (detrended elevation and slope, 10 m topographic descriptors, USGS
+  3DEP-1 m lidar scarp descriptors, two independent radiometric mosaics, potential field, geodetic
+  strain, and the competition's own seismicity bands), each ranked within itself by multi-scale
+  structure-tensor saliency, combined as `families >= 0.90 + 0.5 x mean normalised excess`, emitted
+  greedily at >= 3 px separation with a 200 m catalogue buffer. Builder:
+  `scripts/build_h52_coincidence.py`; inputs restored and hash-verified by `scripts/restore_inputs.sh`;
+  two independent builds produced byte-identical output.
+* Evidence: instrument calibration reproduces the published ordering of ten known artifacts
+  (Spearman 0.805, p = 0.005) and 4/4 spatially blocked folds beat a matched-mass random control
+  (`evidence/h52_validation_80k.json`); 57.2% of the dots are >= 300 m from every dot of the 16 prior
+  artifacts compared and 87.8% lie outside the union of all prior supports
+  (`registry/prior_artifact_sources.tsv`).
+* Budget: the recorded nested pair solves the metric exactly (G = 14,088.75 px, T = 5,223.14 px), which
+  yields the marginal-value rule (bar = 0.0588) and the ten-budget curve; the modelled optimum at 120k
+  comes from a saturation cap, so the shipped 80k sits inside the measured plateau deliberately
+  (`docs/h52-decision.md`, `evidence/h52_budget_curve.json`).
+* Delivery: the H52-C band at the top of `index.html` (immediately below the other sessions' bands)
+  carries the download links, the unique portal name `GEMSDOE50-H52-COINCIDENCE8-OFFCAT-80000` and a
+  172-character note.
 
-- **Pass-3 re-check (2026-10-06).** Every clause of the original request is mapped to an artifact in
-  [`docs/pass3-review-20261006.md`](docs/pass3-review-20261006.md), together with the defects found in
-  Pass 2/3, the remaining work, and the limitations. The 5 ranked *untried* hypotheses now also appear
-  as a card on the executive-summary page (rank, layers, signature, why the catalogue can miss the
-  fault, difference from what is implemented, cost, expected gain, and the slot rule).
+> **Not organizer-scored, no slot used.** The per-dot proxy quality of H52-C (0.1446) is below every
+> incumbent-family artifact measured (0.1573-0.1704) and the receipt records that an SGMC-family
+> submission scored 0.0512 on the hidden labels, so nothing here licenses a score claim.
 
-## Executive summary and submission instructions
+### One-click H55 research artifact
 
-The site is generated at repository root by [`scripts/build_h50_site.py`](scripts/build_h50_site.py) and
-serves [`index.html`](index.html), [`results.html`](results.html), [`methods.html`](methods.html) and
-[`submission.html`](submission.html). The **first thing on the executive-summary page is a one-click
-download band** for the H52 file (GeoTIFF, all-finite twin, and zip), next to the unique portal name and
-the optional note; the H51 band is retained below it as the previous deliverable.
+**All-finite portal-range-safe TIFF:**
+[`gemsdoe50-h55-seisgeom-ridgesnap-13591-20261007-bcb60d89-zeros.tif`](docs/downloads/gemsdoe50-h55-seisgeom-ridgesnap-13591-20261007-bcb60d89-zeros.tif)
 
-Numbered manual upload path (this repository never uploads for you and holds no portal credentials):
+* SHA-256: `7a366b7bbe431533a9d4246cbcdde34eb379ebb34fa116a8667431916506498d`
+* 103,444 bytes; one float32 band; EPSG:32611; 3,730 x 3,292; 100 m
+* values exactly `{0,1}`; every one of 12,279,160 cells is finite and in `[0,1]`
+* 13,591 positive cells; zero exact positive-pixel overlap with the complete frozen prior union
 
-1. Download the GeoTIFF — or the zip containing it — from the band at the top of the site.
-2. Optionally confirm the bytes against the SHA-256 shown next to the link.
-3. Sign in to DrivenData manually and open *DOE GEMS Prize Challenge → Submit*.
-4. Choose the downloaded `.tif`.
-5. Use the unique name `GEMSDOE50-H52-COINCIDENCE8-OFFCAT-80000` and the note
-   “GEMSDOE50 H52 | eight-family lineament coincidence (topography, lidar scarp, radiometric, potential field); dots >200 m off-catalogue; proxy-validated, not organizer-scored” (172 characters; if the portal rejects NaN outside the study
-   area, upload the all-finite twin instead — same pixels, 0.0 elsewhere).
-6. Submit, then record the returned score next to the file hash before making any claim about it.
+**Sample-footprint-semantic twin:**
+[`gemsdoe50-h55-seisgeom-ridgesnap-13591-20261007-bcb60d89-nan.tif`](docs/downloads/gemsdoe50-h55-seisgeom-ridgesnap-13591-20261007-bcb60d89-nan.tif),
+SHA-256 `cd7f765a95ea9c71b22abffbf330434597c28057f8a80ed723b753cd0a32d3c6`.
+It uses NaN only outside the official footprint and passes the repository's published-format checker.
 
-A local pass is a proxy result, not an organizer score, and it licenses a manual upload decision only.
+> **Decision: NO SLOT. Do not spend a weekly submission on H55-S1.** The file is the requested
+> unique competition-format deliverable and a reproducible negative experiment, not a submission
+> recommendation. No portal upload or weekly slot was used.
 
-## Verified project references
+### Why the candidate did not pass
 
-| Source | Verified use | Link |
-|---|---|---|
-| Challenge overview and current deadline | Prize structure; external data must be appropriately licensed and shareable with organizers | [Competition page](https://www.drivendata.org/competitions/306/competition-doe-gems/) |
-| Problem, data, metric, and TIFF contract | EPSG:32611, 100 m, single float32 band, `[0,1]`, null/NaN outside; DTI uses 300 m support, α=0.2, β=0.8 | [Problem description](https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/) |
-| Prize rules | AI disclosure, 3 weekly feedback submissions, one final selection across both rounds, reproducible finalist package | [September 2026 official rules PDF](https://docs.nlr.gov/docs/fy26osti/96647.pdf) |
-| Competition-specific rules entry | Points to the NLR/DOE rules | [DrivenData rules page](https://www.drivendata.org/competitions/306/competition-doe-gems/rules/) |
-| Restrictions on leaderboard monitoring | No robot/automatic access for monitoring or copying; no manual monitoring/copying without written consent | [DrivenData Terms of Use](https://www.drivendata.org/termsofuse/) |
-| Nevada relocated earthquake catalog | Trugman (2024), CC BY 4.0; metadata and exact downloadable file/checksum | [Zenodo record](https://zenodo.org/records/11167510) · [record API/file metadata](https://zenodo.org/api/records/11167510) |
-| Catalog paper | 183,002 3-D-model locations; 103,976 additionally waveform-relocated; location quality depends on the regional velocity model | [Trugman (2024), DOI 10.1785/0220240106](https://doi.org/10.1785/0220240106) |
-| Seismicity-to-fault literature | 3-D anisotropic clustering, spatial clustering/segmentation, and explicit location-uncertainty methods | [Ouillon et al. 2008](https://doi.org/10.1029/2007JB005032) · [Ouillon & Sornette 2011](https://doi.org/10.1029/2010JB007752) · [Wang et al. 2013](https://arxiv.org/abs/1304.6912) |
-| Reference-solution notebook | Reviewed 2026-10-06: uses a Tversky training loss with α=0.2/β=0.8, but does not implement the official distance-weighted scoring evaluator; scoring authority is the problem-description page above. | [DrivenData reference solution](https://github.com/drivendataorg/gems-prize-reference-solution/blob/main/unet-mc-cv-reference-solution.ipynb) |
-| Prior GEMSDOE experiments | Educational evidence only; prior outputs are never copied into this project's deliverable | [GEMSDOE32](https://github.com/buffedlizard55-lab/GEMSDOE32) · [GEMSDOE47](https://github.com/buffedlizard55-lab/GEMSDOE47) · [GEMSDOE48](https://github.com/buffedlizard55-lab/GEMSDOE48) |
+The exact catalog has 183,002 source events. Filters retain 15,017 relocated, in-footprint,
+non-negative-depth events after site screens; 90-day/250 m sequence thinning leaves 7,325; the
+unverified normalized triangle test leaves 3,145; and covariance/recurrence/bootstrap gates accept
+299 local axes. Frozen 3-pixel spacing cannot supply the target 35,000 cells from those corridors,
+so the central 600 m realization emits 13,591.
+
+On the same SGMC-off proxy frame:
+
+| method | pooled DTI | credit / dot | dots |
+| --- | ---: | ---: | ---: |
+| H55-S1 300 m | 0.011069 | 0.068256 | 8,278 |
+| **H55-S1 600 m** | **0.019321** | **0.074141** | **13,591** |
+| H55-S1 1,000 m | 0.030960 | 0.078040 | 21,332 |
+| density 1 km | 0.046524 | 0.075258 | 35,000 |
+| density 2 km | 0.045898 | 0.074250 | 35,000 |
+| matched random, novelty-constrained | 0.028893 | 0.046676 | 35,000 |
+| **frozen Candidate B** | **0.115822** | **0.188856** | **35,000** |
+
+H55 loses to Candidate B in all four macrofolds. The paired 16-subtile credit-per-dot bootstrap
+95% interval is `[-0.118959, -0.037294]`. It fails mass, width consistency, density, random,
+incumbent, bootstrap, formal-declustering-validation, complete anthropogenic-inventory,
+event-uncertainty, and ComCat-rights gates.
+The negative sign is not ambiguous.
+
+## Why H33-B2 reportedly reached 0.2778
+
+The exact H33-B2 files are measurable: 37,654 binary cells, with verified zero-outside SHA-256
+`c55bafc...6fa9`. GEMSDOE32's own audit describes them as a 40,199-cell, owner-reported 0.2708 base
+with all 2,545 cells within two pixels of the supplied catalogue removed. That repository labels the
+candidate **UNSCORED** and projects **0.274673**. No organizer receipt links these bytes to 0.2778.
+
+Conditionally accepting the report, the mechanism is metric economy. The official triangular
+300 m distance-weighted Tversky score rewards only the maximum nearby prediction for each hidden
+truth cell. A redundant/no-credit binary dot adds false-positive mass; deleting it reduces the
+weighted denominator without lowering true-positive credit. B2 deleted locations close to known
+catalogue faults—the wrong target for omitted-fault scoring—while retaining its parent's sparse
+support. It was a pruning operation, not a new geological detector.
+
+Under the repository's explicit hidden-mass model (`G about 12,226`, matched-mass ratio 1.188), a
+37,654-dot result at 0.2778 corresponds to about 4,759 weighted credit pixels, 38.9% modeled
+coverage, and 0.1264 credit per dot. A 0.3195 result would need about 5,465 credits at the same mass
+(+14.8%), or about 4,982 credits / 0.166 per dot at 30,000 cells. **Exceeding 0.3195 is possible in
+principle but is not supported by a passing method here.** It requires genuinely new coverage and
+higher precision, not another blend or pruning sweep. Full derivation and evidentiary labels:
+[`docs/research/h55-final-analysis.md`](docs/research/h55-final-analysis.md).
+
+## H55 method and preregistration
+
+The five hypotheses were ranked before H55 scoring in
+[`docs/research/h55-hypotheses-preregistered.md`](docs/research/h55-hypotheses-preregistered.md).
+Exact constants were frozen in
+[`docs/research/h55-protocol-addendum.md`](docs/research/h55-protocol-addendum.md).
+
+H55-S1 uses only relocated earthquake points for its candidate geometry. It:
+
+1. checks the exact CC BY 4.0 Trugman catalog bytes and schema;
+2. filters depth/footprint, GDR hot-feature buffers, and explicit ComCat anthropogenic event sites;
+3. retains the largest event in each 250 m x 250 m x 90-day space-time cell;
+4. compares normalized nearest-neighbor triangle areas with 32 uniform-footprint catalogues;
+5. fits full local 2-D covariance eigenvectors and requires event/year/linearity/length/bootstrap
+   stability;
+6. dynamically snaps only cross-axis to a 70/30 3DEP scarp/radiometric ridge field;
+7. applies 300/600/1,000 m width sensitivity and a 300 m supplied-fault exclusion;
+8. packs binary dots and compares with density, random, translations, and Candidate B;
+9. excludes the positive-pixel union of every registered prior artifact from final placement.
+
+The implementation/review deviations are preserved in
+[`docs/research/h55-deviation-log.md`](docs/research/h55-deviation-log.md). In particular, Pass 2
+fixed an evaluator bug so the official-label realization—not SGMC truth—reconstructs the frozen
+fold geometry before SGMC-off scoring.
+
+## Direct novelty and format evidence
+
+The 50-row sibling registry was retrieved from GitHub and every expected SHA-256 was verified;
+15 in-repository H50/H51/H52/H52A/H53/H54 TIFF source paths were then added. In total, 65 source
+assertions represent 64 distinct source paths, 62 comparison filenames, 61 byte-distinct TIFFs,
+and 34 distinct positive masks. The receipt explicitly groups byte-identical copies and
+finite/NaN twins with equivalent positive support. The compact frozen union is
+`registry/prior_positive_union.npz` (SHA-256
+`bfaf83edf47bf7c48309f692a670f3b6d92f492081a120d85dedc30b462578a6`). H55 has zero exact
+intersection with its 1,405,451 positive cells.
+
+A second direct full-resolution check against all 62 comparison files reports:
+
+* no identical SHA-256;
+* maximum 200 m-proximity IoU `0.040107` (gate `<0.5`);
+* minimum per-file fraction of H55 dots more than 200 m away `0.475682`;
+* verdict `unique: true`;
+* NaN twin format checks all pass; finite values are exactly 0 and 1.
+
+Evidence:
+[`h55s1-full-corpus-check-20261007.json`](evidence/results/h55s1-full-corpus-check-20261007.json) and
+[`h55-prior-corpus-receipt-20261007.json`](evidence/results/h55-prior-corpus-receipt-20261007.json).
+
+## Integrated H54 research from latest main
+
+While this pull request was awaiting integration, main added a separate H54 corpus-calibrated field
+and metric-derived stratified emitter. Its file of record is
+[`gems50-h54-corpuscal-40000-20261007T032111Z-nan.tif`](docs/downloads/gems50-h54-corpuscal-40000-20261007T032111Z-nan.tif)
+(SHA-256 `2cdf7e705c867008b0dc86d3e7481bf43aef44240508312d270c97ebd192c81b`),
+with an [all-finite twin](docs/downloads/gems50-h54-corpuscal-40000-20261007T032111Z-zeros.tif).
+H54 emits 40,000 binary cells and passes its NaN-outside format receipt, but it did not beat its
+matched-mass random control in every frozen block. Its decision is therefore also **NO SLOT**; its
+model-implied DTI is not an organizer score.
+
+H54 exposed a real footprint-edge filtering artifact and measured a 3.7x credit-per-dot gain from
+stratified rather than dense top-N emission on the same proxy field. Its attempted calibration uses
+owner-reported sibling scores, has unresolved provenance contradictions, and did not produce a
+usable fit. See [`evidence/h54_validation.json`](evidence/h54_validation.json),
+[`evidence/h54_fit_status.json`](evidence/h54_fit_status.json), and
+[`evidence/h54_ship.json`](evidence/h54_ship.json). Both H54 TIFF twins are included in H55's strict
+prior corpus before the final H55 rerun.
+
+## Source and license ledger
+
+| source | exact use | rights / eligibility | official or review link |
+| --- | --- | --- | --- |
+| DrivenData DOE GEMS problem/rules | metric, grid, format, external-data and slot rules | competition terms; verify immediately before upload | [problem](https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/) · [competition](https://www.drivendata.org/competitions/306/competition-doe-gems/) |
+| Trugman, *Relocated Earthquake Catalog for Nevada (2008–2023)* | **candidate point geometry** | CC BY 4.0; commercial reuse/adaptation and sponsor sharing allowed with attribution; receipt pins exact file | [Zenodo 11167510](https://zenodo.org/records/11167510) · [receipt](registry/nvreloc_catalog_receipt.json) |
+| USGS 3DEP-derived scarp descriptors | independent placement ridge | U.S. public domain; inherited owner-derived raster, hash recorded in H55 report | [3DEP](https://www.usgs.gov/3d-elevation-program) |
+| USGS airborne K/Th/U/TC raster | independent placement ridge | U.S. public domain; inherited owner-derived raster, hash recorded in H55 report | [USGS copyright/credits](https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits) |
+| GDR submission 1391 hot features | conservative geothermal-operation exclusion | CC BY 4.0; incomplete inventory | [GDR 1391](https://gdr.openei.org/submissions/1391) |
+| USGS FDSN/ComCat mixed-network export | only explicit blast/mine/quarry **exclusion** locations | contributor-specific redistribution unresolved; therefore a scientific/compliance blocker, not claimed cleared | [FDSN event service](https://earthquake.usgs.gov/fdsnws/event/1/) |
+| USGS State Geologic Map Compilation | off-catalogue validation instrument only | U.S. public domain; not a prediction input | [SGMC product](https://ngmdb.usgs.gov/Prodesc/proddesc_99016.htm) |
+| competition template and supplied labels | grid, supplied-fault exclusion, frozen folds | competition terms; bytes match the repository's pinned public bridge, not a fresh authenticated portal download | [problem data description](https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/) |
+
+Catalog attribution: **Trugman, D. T. (2024), Relocated Earthquake Catalog for Nevada
+(2008–2023), Zenodo v2, DOI 10.5281/zenodo.11167510, CC BY 4.0.** The repository records all
+changes (projection, filtering, thinning, screening, and derived geometry).
+
+## Limitations and irregularities
+
+* The H33 0.2778 attribution is not organizer-confirmed; GEMSDOE32 itself says `UNSCORED` and
+  projects 0.274673.
+* The 250 m/90-day largest-event rule is deterministic sequence thinning, not a validated
+  ETAS/Reasenberg/Gardner-Knopoff aftershock-declustering model.
+* H55's mine/injection screen is conservative but incomplete. Explicit ComCat event types and GDR
+  hot features are not a dated statewide operations inventory.
+* The mixed-network ComCat export is publicly accessible but its contributor-specific competition
+  redistribution rights are unresolved. This alone prevents an unqualified eligibility claim.
+* The relocated catalog has no event-specific horizontal covariance. Decimal precision is not
+  location accuracy, bootstrap strike stability is not position uncertainty, and the three widths
+  are assumptions.
+* The normalized 2-D triangle test is unverified. It is not a published transfer of the 3-D
+  Ouillon/Sornette statistic.
+* Earthquake lineations can be dipping faults, swarms, induced sequences, depth trends, or
+  catalogue/network artifacts; they are not automatically surface traces.
+* SGMC-off is a real but incomplete mapped-fault proxy. It is not hidden expert truth, and local DTI
+  cannot be compared numerically with a leaderboard score.
+* The 35,000-cell target was infeasible under frozen 3-pixel spacing; the honest artifact has 13,591
+  cells and records the failure in its name and report.
+* The all-finite twin addresses the historical range-parser error, while the NaN twin follows the
+  sample footprint semantics. No portal receipt establishes which behavior the current portal
+  prefers.
+* No upload occurred. No result is a current leaderboard observation or prediction of a prize win.
+
+## Manual submission guide (not recommended for H55)
+
+Only if the owner explicitly overrides the frozen no-slot rule:
+
+1. Download the all-finite TIFF above and verify SHA-256
+   `7a366b7bbe431533a9d4246cbcdde34eb379ebb34fa116a8667431916506498d`.
+2. Open the official competition manually and confirm the current rules, deadline, remaining weekly
+   feedback slots, external-data disclosure requirements, and AI disclosure.
+3. Upload the single `.tif` unchanged; do not re-save, reproject, unzip into another raster, or alter
+   nodata metadata.
+4. Use unique name `GEMSDOE50-H55-SEISGEOM-RIDGESNAP-13591-BCB60D89`.
+5. Optional note: “H55-S1 research artifact: space-time-thinned CC BY 4.0 relocated earthquake
+   point geometry; recurrent local 2-D covariance axes; cross-axis 3DEP/radiometric ridge snap;
+   supplied-fault and complete prior-pixel exclusion; 13,591 binary cells; local gate NO SLOT.”
+6. Save the portal's submission ID/receipt and exact returned error or score before making any
+   score-to-file claim.
+
+The site has the same guide at [`submission.html`](submission.html).
 
 ## Reproduction
 
-New H50-S1 raw and large inputs belong in ignored `.arena/` or documented external storage, not Git. The inherited `main` history also contains legacy external/derived data and a prior submission; H50-S1 does not consume those files except the pinned prior raster as a same-fold comparator. New deliverables, source/license notes, code, tests, and evidence reports belong in the repository.
+Use the repository virtual environment in this sandbox (system Python is PEP-668 managed):
 
 ```bash
-python -m pip install -e '.[test]'
-python -m pytest -q
+# Tests
+PYTHONPATH=src .venv/bin/python -m pytest -q
 
-# Public raster mirrors and the CC BY 4.0 catalog; all input hashes are checked.
-scripts/download_inputs.sh .arena/run/inputs
+# Rebuild the hash-deduplicated prior union (requires the receipt-pinned scratch corpus)
+PYTHONPATH=src .venv/bin/python scripts/build_prior_union.py
 
-# Prior maps are retrieved through GitHub Contents API and checked against pinned commits/hashes.
-GH_TOKEN="$(gh auth token)" scripts/fetch_comparators.sh .arena/run/prior
+# Exact H55 build and local evaluation
+PYTHONPATH=src .venv/bin/python scripts/build_h55.py
 
-# Optional no-score reconstruction; write to scratch and compare with the committed freeze.
-python scripts/freeze_holdout.py \
-  --template .arena/run/inputs/example_submission.tif \
-  --labels .arena/run/inputs/existing_faults.tif \
-  --output .arena/run/recomputed-holdout.json
+# Full-resolution uniqueness (requires the scratch corpus whose acquisition receipt is committed)
+GEMS50_CORPUS=.arena/prior_corpus PYTHONPATH=src .venv/bin/python \
+  scripts/check_submission.py \
+  --submission docs/downloads/gemsdoe50-h55-seisgeom-ridgesnap-13591-20261007-bcb60d89-nan.tif \
+  --out evidence/results/h55s1-full-corpus-check-20261007.json
 
-# Reads the committed split and realized-mask hashes, then runs H50-S1, 20 time shuffles,
-# 32 translations, same-fold baselines, and byte-level GeoTIFF checks.
-python scripts/run_experiment.py \
-  --catalog .arena/run/inputs/nvreloc_catalog_newmag.txt \
-  --template .arena/run/inputs/example_submission.tif \
-  --labels .arena/run/inputs/existing_faults.tif \
-  --prior-dir .arena/run/prior
-python scripts/build_h50_site.py
+# Regenerate the four GitHub Pages files from the machine-readable H55 report
+PYTHONPATH=src .venv/bin/python scripts/build_h55_site.py
 ```
 
-The manually dispatched [H50-S1 research workflow](.github/workflows/h50s1-research.yml) runs on `arena/c4f4db48-gemsdoe50` only. It verifies tests and the already-frozen masks before scoring, downloads no hidden labels, does not use the feature stack for H50-S1, and commits only the result report/site/research-only TIFF back to this fixed branch. A numerical score-gate pass cannot authorize a slot while the aftershock, mine/injection, and location-uncertainty gates remain open; no raw data are committed.
+Primary evidence:
 
-## Open gates / next actions
+* [`evidence/results/h55s1-evaluation-20261007.json`](evidence/results/h55s1-evaluation-20261007.json)
+* [`evidence/results/h55s1-full-corpus-check-20261007.json`](evidence/results/h55s1-full-corpus-check-20261007.json)
+* [`evidence/results/h55-prior-corpus-receipt-20261007.json`](evidence/results/h55-prior-corpus-receipt-20261007.json)
+* [`registry/nvreloc_catalog_receipt.json`](registry/nvreloc_catalog_receipt.json)
+* [`docs/research/h55-final-analysis.md`](docs/research/h55-final-analysis.md)
+* [`docs/research/h55-deviation-log.md`](docs/research/h55-deviation-log.md)
 
-1. **Manual owner decision** on whether to spend one of the three weekly slots on the H52 file. Nothing is
-   uploaded by this repository: H52 has an artifact, calibrated proxy evidence and a documented budget curve,
-   but no organizer score. The decision record, including what a returned score would and would not prove, is
-   [`docs/h52-decision.md`](docs/h52-decision.md).
-2. If a slot is spent, record the returned score and the portal receipt next to the pinned sha256; never
-   restate proxy numbers as official.
-3. **Top untried candidate (H52-A: scarp-profile matched filter with drainage-deflection corroboration)**
-   must pass its own preregistration and the same spatially blocked test
-   ([`scripts/validate_h51_holdout.py`](scripts/validate_h51_holdout.py)) before it can be considered for a
-   slot. The ranked list is in [`docs/h51-candidates.md`](docs/h51-candidates.md) and in the site's
-   executive-summary card.
-4. **H50-S1 stays blocked.** The fixed-branch dispatch-only workflow returns HTTP 403 in this repository, so
-   the Nevada catalog still needs an auditable acquisition route; the hypothesis itself is unchanged and
-   unimplemented, and no H50-S1 DTI or raster is claimed.
-5. Re-verify the large snapshot-excluded input stack (`/home/user/.arena/inputs/`) before any rebuild; the
-   build regenerates deterministically from those pinned bytes
-   (`python scripts/build_h51.py`, then `scripts/verify_h51_raster.py`, `scripts/uniqueness_h51.py`,
-   `scripts/mc_sensitivity_h51.py`, `scripts/validate_h51_holdout.py`,
-   `scripts/update_registries_h51.py`, `python scripts/build_h50_site.py`).
-6. Any next iteration must independently re-open and byte-validate its GeoTIFF, refresh the
-   executive-summary/results/submission pages, and re-check source licenses, attribution, limitations, and
-   the AI-use disclosure before a slot is spent.
+## Three-pass review record
+
+* **Pass 1 — implementation/verification:** acquired and checksum-verified the exact CC BY catalog;
+  froze hypotheses and constants before score computation; implemented screening, time-space
+  thinning, 32-catalog background test, local eigensystems, recurrence/bootstrap gates, dynamic
+  independent-ridge snap, width sensitivity, controls, TIFF writer, and unit tests.
+* **Pass 2 — bugs/assumptions/edges:** found and fixed misuse of SGMC truth when reconstructing the
+  frozen split; corrected filenames/notes to use actual emitted mass; reviewed datetime thinning;
+  added a complete prior-positive exclusion union; reran every candidate/control/holdout score;
+  direct-checked all prior files; separated all-finite and NaN semantics; documented incomplete
+  anthropogenic and uncertainty gates.
+* **Pass 3 — full requirements/quality:** rechecked charter line by line; consolidated H33 score
+  attribution and 0.3195 algebra; added the source/license table, executive guide, obvious site
+  download, exact hashes, full-corpus receipt, negative decision, and reproducible commands;
+  integrated latest-main H52/H52A/H53/H54 priors, distinguished byte copies from
+  prediction-equivalent twins, rebuilt the strict exclusion and all H55 outputs; reran tests, deterministic build/hash
+  checks, format/range checks, and site-link validation before PR.

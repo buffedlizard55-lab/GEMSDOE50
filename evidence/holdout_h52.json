@@ -1,0 +1,174 @@
+{
+ "schema": "gems52.holdout-validation.v1",
+ "built_utc": "2026-10-07T02:15:28Z",
+ "candidate": "gems52-union-h51-h52a-offcat-44828-20261007T021528Z-990213fd",
+ "candidate_sha256": "15468475cc99b9106b9959c95add9966ad38678329435daa3a9cbf7e8ccc9a21",
+ "incumbent": "docs/downloads/gems51-scarpradio-offcat-35000-20261006-ecf058ea-nan.tif",
+ "incumbent_sha256": "8f8708d2872b66d71925707e0aede23eebcf217dfd2e57d6e61186f32e686f5d",
+ "frozen_split": {
+  "spec": "evidence/holdout-v1.json",
+  "split_sha256": "78b6692155c6c6d5f9f19ccee6d595167c2065f1f25eb8d08636d1d9b285ff16",
+  "macrofolds": [
+   "NW",
+   "NE",
+   "SW",
+   "SE"
+  ],
+  "subtiles": 11,
+  "rules": {
+   "macrofolds_are_half_open_pixel_bounds": true,
+   "heldout_core_erode_pixels": 100,
+   "heldout_core_erode_m": 10000,
+   "visible_training_label_buffer_pixels": 3,
+   "visible_training_label_buffer_m": 300,
+   "labels_in_heldout_core_are_scoring_truth_only": true,
+   "outside_valid_footprint_is_excluded": true,
+   "prediction_mass_total": 37612,
+   "mass_allocation": "proportional to valid eligible pixels per macrofold, largest-remainder rounding to exactly 37612"
+  }
+ },
+ "folds": [
+  {
+   "id": "NW",
+   "core_bounds": [
+    100,
+    1765,
+    100,
+    1546
+   ],
+   "h52_dots_in_core": 15510,
+   "h51_dots_in_core": 12015,
+   "offcatalogue_truth_cells_in_core": 19101,
+   "h52_credit_per_dot": 0.16258785948776094,
+   "h51_credit_per_dot": 0.14940231138789012,
+   "h52_dti": 0.10284713171010822,
+   "h51_dti": 0.07985415586284564,
+   "random_control_credit_per_dot": 0.08571714023180535,
+   "h52_minus_h51_credit_per_dot": 0.013185548099870825,
+   "h52_minus_h51_dti": 0.02299297584726258,
+   "h52_minus_control_credit_per_dot": 0.0768707192559556
+  },
+  {
+   "id": "NE",
+   "core_bounds": [
+    100,
+    1765,
+    1746,
+    3192
+   ],
+   "h52_dots_in_core": 9004,
+   "h51_dots_in_core": 6322,
+   "offcatalogue_truth_cells_in_core": 19576,
+   "h52_credit_per_dot": 0.26838920047312315,
+   "h51_credit_per_dot": 0.24943012993570057,
+   "h52_dti": 0.09708060529643753,
+   "h51_dti": 0.06905409045328212,
+   "random_control_credit_per_dot": 0.2038355919920437,
+   "h52_minus_h51_credit_per_dot": 0.018959070537422573,
+   "h52_minus_h51_dti": 0.02802651484315541,
+   "h52_minus_control_credit_per_dot": 0.06455360848107944
+  },
+  {
+   "id": "SW",
+   "core_bounds": [
+    1965,
+    3630,
+    100,
+    1546
+   ],
+   "h52_dots_in_core": 3614,
+   "h51_dots_in_core": 2905,
+   "offcatalogue_truth_cells_in_core": 1188,
+   "h52_credit_per_dot": 0.04961659112599873,
+   "h51_credit_per_dot": 0.052513450535330984,
+   "h52_dti": 0.018050262743072393,
+   "h51_dti": 0.019149388390011422,
+   "random_control_credit_per_dot": 0.027179695115854458,
+   "h52_minus_h51_credit_per_dot": -0.0028968594093322572,
+   "h52_minus_h51_dti": -0.0010991256469390295,
+   "h52_minus_control_credit_per_dot": 0.02243689601014427
+  },
+  {
+   "id": "SE",
+   "core_bounds": [
+    1965,
+    3630,
+    1746,
+    3192
+   ],
+   "h52_dots_in_core": 6529,
+   "h51_dots_in_core": 5484,
+   "offcatalogue_truth_cells_in_core": 11218,
+   "h52_credit_per_dot": 0.30611672625446595,
+   "h51_credit_per_dot": 0.28546899410956955,
+   "h52_dti": 0.11000264406449117,
+   "h51_dti": 0.09689747042924435,
+   "random_control_credit_per_dot": 0.17866286219677815,
+   "h52_minus_h51_credit_per_dot": 0.020647732144896402,
+   "h52_minus_h51_dti": 0.013105173635246825,
+   "h52_minus_control_credit_per_dot": 0.1274538640576878
+  }
+ ],
+ "folds_h52_beats_h51_on_dti": 3,
+ "folds_h52_beats_random_control": 4,
+ "folds_total": 4,
+ "pooled_offcatalogue": {
+  "h52": {
+   "dti": 0.1517650155431227,
+   "tp_weight": 8997.939127820904,
+   "fp_weight": 40789.186964834764,
+   "fn_weight": 52666.06087217909,
+   "truth_cells": 61664,
+   "prediction_cells": 44828,
+   "credit_per_dot": 0.20072140465380797,
+   "covered_fraction": 0.145918836400832
+  },
+  "h51": {
+   "dti": 0.11582196973039599,
+   "tp_weight": 6609.977055429728,
+   "fp_weight": 32084.767316124016,
+   "fn_weight": 55054.02294457027,
+   "truth_cells": 61664,
+   "prediction_cells": 35000,
+   "credit_per_dot": 0.18885648729799223,
+   "covered_fraction": 0.10719345250761754
+  },
+  "random_control": {
+   "dti": 0.0888490932751627,
+   "tp_weight": 5239.370168249656,
+   "fp_weight": 42951.20480035533,
+   "fn_weight": 56424.62983175034,
+   "truth_cells": 61664,
+   "prediction_cells": 44828,
+   "credit_per_dot": 0.11687717873315016,
+   "covered_fraction": 0.08496643370928995
+  },
+  "h52_mass": 44828,
+  "h51_mass": 35000
+ },
+ "subtile_bootstrap_vs_h51": {
+  "units": 11,
+  "paired_delta_mean": 0.011931875746552816,
+  "percentile_ci_95": [
+   0.006341017766618545,
+   0.01737810667944498
+  ],
+  "lower_bound_above_zero": true
+ },
+ "subtile_bootstrap_vs_control": {
+  "units": 11,
+  "paired_delta_mean": 0.06831876471595631,
+  "percentile_ci_95": [
+   0.049872474640297995,
+   0.08820073945946925
+  ],
+  "lower_bound_above_zero": true
+ },
+ "gate": {
+  "rule": "docs/h52a-protocol.md promotion gate: pooled SGMC-off credit-per-dot beats H51's; >=3/4 macrofolds positive vs a matched random control; uniqueness passes; byte-valid",
+  "pooled_beats_h51": true,
+  "folds_beats_h51_at_least_3_of_4": true,
+  "folds_beats_control_at_least_3_of_4": true
+ },
+ "honest_note": "The frozen harness scores held-out cores against the provided catalogue labels. H52 emits nothing within 300 m of those labels by design, so this is scored on the off-catalogue SGMC instrument, not on the frozen harness's own (catalogue) truth, exactly as H51 was. This is a local proxy, never an organizer score."
+}

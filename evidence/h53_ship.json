@@ -1,0 +1,71 @@
+{
+ "name": "gemsdoe50-h53-tmiconj",
+ "stamp": "20261007T0345Z",
+ "portal_name": "GEMSDOE50-H53-TMICONJ-OFFCAT",
+ "claim_note": "GEMSDOE50 H53 | TMI x K/U gradient-ridge conjunction, off-catalogue 300m-aware dots; proxy-validated vs uniform+translation, NOT organizer-scored",
+ "design": "TMI_up150 x radiometric-K/U gradient-ridge conjunction corridors (order>=2 of 3 families), off-catalogue, 300 m suppression packing on new ground",
+ "budgets": {
+  "n": 23598,
+  "suppression_px": 3,
+  "catalogue_clearance_px": 3,
+  "pack_domain_px": 4522699,
+  "prior_union_excluded_px": 225922,
+  "n_prior_files_excluded": 27
+ },
+ "instrument": {
+  "frame": "sgmc_off (>300 m from catalogue, unmasked domain, 61664 truth px)",
+  "dti": 0.05649250281066043,
+  "tp_per_dot": 0.13031380942573825,
+  "uniform_dti_mean": 0.04712208845417283,
+  "uniform_dti_max": 0.04950116996259098,
+  "translation_dti_max": 0.03969236212021709,
+  "quadrants_positive": 4,
+  "quadrants_total": 4,
+  "model_dti_est_at_G12226": 0.2120731341775793,
+  "model_warning": "dti_est is MODEL arithmetic (proxy credit mapped through the metric identity), NOT a leaderboard prediction and NOT comparable to the H51 consensus instrument"
+ },
+ "predicted": {
+  "note": "no consensus-instrument prediction exists for H53: the instrument prices resemblance to the 25-artifact corpus and H53 sits 82% on new ground by construction"
+ },
+ "gate": {
+  "threshold_iou2px": 0.5,
+  "measured_iou2px_max": 0.07669410554167279,
+  "worst_overlap_file": "gems51-scarpradio-offcat-35000-20261006-ecf058ea-nan.tif",
+  "pixels_shared_with_any_prior": 0,
+  "min_novel_fraction_at_2px": 0.8231206034409696,
+  "n_prior": 27,
+  "component_gates": {
+   "H53-C-tmi-conjunction": "PASS (beats uniform max, beats translation max, 4/4 quadrants)",
+   "H53-B-seismicity-v2": "FAIL proxy gate (beats density 2.8x and translation, 3/4 quadrants, but below uniform max) -- recorded, not shipped",
+   "H53-A-tip-bridges": "FAIL proxy gate (0.0441 vs uniform max 0.0453; 4/4 quadrants) -- recorded near-miss, not shipped"
+  }
+ },
+ "outputs": {
+  "tif": "downloads/gemsdoe50-h53-tmiconj-20261007T0345Z.tif",
+  "zip": "downloads/gemsdoe50-h53-tmiconj-20261007T0345Z.zip",
+  "allfinite": "downloads/gemsdoe50-h53-tmiconj-20261007T0345Z-allfinite.tif",
+  "docs_tif": "docs/downloads/gemsdoe50-h53-tmiconj-20261007T0345Z.tif",
+  "sha256": "3c22da583d5358b2986189a4ed3322182f39f562bdde14809f3300aeb6bd37ea",
+  "bytes": 159966,
+  "allfinite_sha256": "90026224ed74698bd623cae53c5d6f5fe3cb263cdae7d145060d813ea50ef0c4",
+  "zip_sha256": "cef30a9ee3905b583a08d078710de9622825f114bbd1de6df89b8bf18b038388"
+ },
+ "format": {
+  "dtype": "float32",
+  "crs": "EPSG:32611",
+  "shape": [3730, 3292],
+  "values_in_0_1": true,
+  "outside_footprint_all_nan": true,
+  "inside_footprint_all_finite": true,
+  "all_checks_pass": true
+ },
+ "evidence": [
+  "evidence/build_h53-20261007T0345Z.json",
+  "evidence/h53_validation_final.json",
+  "evidence/h53_check_submission.json",
+  "docs/research/h53-hypotheses.md",
+  "docs/research/h53-analysis.md",
+  "docs/research/comcat-license-review-20261007.md",
+  "docs/research/h33-02778-study-20261007.md"
+ ]
+}

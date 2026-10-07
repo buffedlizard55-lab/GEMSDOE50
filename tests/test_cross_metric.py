@@ -43,6 +43,7 @@ def test_agreement_on_the_real_grids():
 
     downloads = Path(__file__).resolve().parents[1] / "docs" / "downloads"
     candidates = [
+        "gemsdoe50-h51-corridor-consensus-mix-20261007T0200Z.tif",
         "gems51-scarpradio-offcat-35000-20261006-ecf058ea-nan.tif",
         "gemsdoe50-seis-ridge-v1.tif",
     ]

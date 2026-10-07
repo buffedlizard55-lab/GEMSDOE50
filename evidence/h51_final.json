@@ -1,0 +1,108 @@
+{
+ "name": "gemsdoe50-h51-novelseis-consensus",
+ "stamp": "20261007T0015Z",
+ "claim_note": "Consensus posterior over 25 hash-verified leaderboard-scored artifacts, emitted as a 2.8 px metric-optimal dot set; shares zero pixels with all 26 prior artifacts (max IoU 0.00). Construction, validation and provenance are documented in the repo.",
+ "design": "novelpx_q+w0.0",
+ "budget": 42000,
+ "spacing_px": 2.8,
+ "pool_factor": 8,
+ "instrument": {
+  "loo_spearman": 0.9730769230769231,
+  "loo_pearson": 0.9490662704422641,
+  "loo_mae": 0.019179468235463893,
+  "loo_rmse": 0.024814168966221493,
+  "n_artifacts": 25,
+  "G_obs": 12226.0,
+  "source": "evidence/h51_consensus.json"
+ },
+ "frontier": {
+  "source": "h51_frontier_novel.json",
+  "argmax_K": 42000,
+  "argmax_pred": 0.19894569335201723,
+  "measured_spacing_sweep": {
+   "2.0": 0.1953,
+   "2.8": 0.1989,
+   "3.2": 0.1922
+  },
+  "replica_class": {
+   "design": "consensus on the unrestricted domain",
+   "pred": 0.2559,
+   "K": 42000,
+   "dots_on_prior_pixels": 0.942,
+   "block8_iou_max": 0.729,
+   "rejected_because": "inside the frozen 0.75 near-copy screen"
+  }
+ },
+ "delivered": {
+  "n": 42000,
+  "pred": 0.19894573254972647,
+  "E_T": 3578.948723554611,
+  "E_MPw": 4535.085110545158
+ },
+ "novelty": {
+  "pixels_shared_with_any_prior": 0,
+  "prior_artifacts_compared": 26,
+  "max_iou": 0.0,
+  "max_iou_vs": "submission.tif",
+  "top5_iou": [
+   {
+    "iou": 0.0,
+    "file": "submission.tif"
+   },
+   {
+    "iou": 0.0,
+    "file": "gemsdoe9-PLACEHOLDER-2314b599.tif"
+   },
+   {
+    "iou": 0.0,
+    "file": "gemsdoe4-combined-237f0063.tif"
+   },
+   {
+    "iou": 0.0,
+    "file": "gemsdoe3-pindrop-ridge-4e03fc9705.tif"
+   },
+   {
+    "iou": 0.0,
+    "file": "gemsdoe3-pindrop-nodes-f347b70daa.tif"
+   }
+  ],
+  "max_block8_iou": 0.7415875060376751,
+  "max_block8_vs": "gems19-h19-5-powerlaw-budget-multiline-corroborated-20260930-e27054cf-nan.tif"
+ },
+ "format": {
+  "driver": "GTiff",
+  "count": 1,
+  "dtype": "float32",
+  "crs": "EPSG:32611",
+  "shape": [
+   3730,
+   3292
+  ],
+  "transform": [
+   100.0,
+   0.0,
+   243350.0,
+   0.0,
+   -100.0,
+   4508550.0
+  ],
+  "min": 0.0,
+  "max": 1.0,
+  "values_in_0_1": true,
+  "outside_footprint_all_nan": true,
+  "inside_footprint_all_finite": true,
+  "positive_px": 42000,
+  "unique_positive_values": [
+   1.0
+  ]
+ },
+ "outputs": {
+  "tif": "downloads/gemsdoe50-h51-novelseis-consensus-20261007T0015Z.tif",
+  "sha256": "fb34317f5dc51b29596414da2451c9be1b94c2a373ee4ecfe93a73016fff9f3f",
+  "bytes": 382739,
+  "allfinite": "downloads/gemsdoe50-h51-novelseis-consensus-20261007T0015Z-allfinite.tif",
+  "allfinite_sha256": "46f575495c5cc6f60430375656fd1d85094ac6cd8ce9e3942a48b6b713f3cfce",
+  "zip": "downloads/gemsdoe50-h51-novelseis-consensus-20261007T0015Z.zip",
+  "zip_sha256": "582038984728fdd11d96f4eddeb5e4cf540c740e443a77e4ffc2ee546fc299a8"
+ }
+}

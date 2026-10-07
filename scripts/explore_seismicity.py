@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
-"""Legacy exploratory analysis of the mixed-network USGS-hosted ComCat export.
+"""Archived exploratory analysis of the inherited mixed-network ComCat extract.
 
-This script is retained for audit/reproducibility only. It does not clear the
-export's contributor-specific rights, establish full location covariance, or
-implement an H50-S1 blocked-holdout test. Do not use its output as a current
-submission result.
+This utility is not part of H50-S1. Its raw ``horizontalError`` summary is descriptive
+only: source-specific units and statistical meaning have not been verified, so it must not
+be labeled as 1-sigma location uncertainty or used as a calibrated weight.
 """
 
 from __future__ import annotations
@@ -42,11 +41,12 @@ def main() -> int:
     he = raw.hor_err_km
     print(f"depth km: p10 {np.nanpercentile(d,10):.1f} median {np.nanmedian(d):.1f} "
           f"p90 {np.nanpercentile(d,90):.1f}")
-    print(f"horizontalError km: n={np.isfinite(he).sum()} "
+    print(f"horizontalError raw numeric values (unit/meaning unverified): n={np.isfinite(he).sum()} "
           f"p10 {np.nanpercentile(he,10):.2f} median {np.nanmedian(he):.2f} "
           f"p90 {np.nanpercentile(he,90):.2f}")
-    inerr = np.isfinite(he) & (he < 1.0)
-    print(f"  events with 1-sigma < 1 km: {inerr.sum()} ({inerr.mean()*100:.1f} %)")
+    raw_lt_one = np.isfinite(he) & (he < 1.0)
+    print(f"  rows with raw horizontalError < 1.0 (no unit or sigma interpretation): "
+          f"{raw_lt_one.sum()} ({raw_lt_one.mean()*100:.1f} %)")
 
     # --- the working catalogue --------------------------------------------------
     cat = seis.read_comcat(CAT, depth_max_km=30.0, mag_min=2.0)

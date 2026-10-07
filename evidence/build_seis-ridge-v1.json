@@ -158,17 +158,17 @@
  "layers": [
   {
    "layer": "USGS 3DEP 1 m DEM scarp descriptors (step_max, lapneg_max, coh100)",
-   "source": "GEMSDOE24 data/external/lidar_scarp_features_u8.tif, built from official 3DEP 1 m tiles; no use restrictions",
+   "source": "GEMSDOE24 data/external/lidar_scarp_features_u8.tif, built from 3DEP; derived-file reuse license unresolved and excluded from current H50-S1.",
    "transform": "sqrt(step_max)*(1+lapneg_max)*coh100, then max over 12 orientations of a 15 px oriented mean, min-max normalised over lidar coverage"
   },
   {
    "layer": "GeoDAWN airborne radiometrics K/Th/U/TC (USGS 22103)",
-   "source": "https://doi.org/10.5066/P93LGLVQ (public domain, USGS)",
+   "source": "https://doi.org/10.5066/P93LGLVQ (USGS GeoDAWN source); derived-raster reuse license unresolved and excluded from current H50-S1",
    "transform": "sum of |grad| over the four channels (sigma 2 px), then max over 12 orientations of a 15 px oriented mean, normalised over coverage"
   }
  ],
  "honesty": [
-  "No organizer score is authenticated for this file. Every local score here is a legacy instrument, not a receipt; sibling-repository score notes are historical, conflicting, and not a fresh independent official check.",
+  "No organizer score or receipt is authenticated for this file. Every local score here is an instrument, not a receipt; sibling-repository values are owner-reported historical context, not independently verified as current leaderboard scores.",
   "The Monte Cristo axis instrument is circular (derived from the sequence's own epicentres) and is reported only as a consistency check.",
   "The 2020 Monte Cristo rupture (Koehler et al. 2021, doi:10.1785/0220200371) is cited from the sibling repositories' quarantine note; it has NOT been re-verified against the primary source in this session."
  ]

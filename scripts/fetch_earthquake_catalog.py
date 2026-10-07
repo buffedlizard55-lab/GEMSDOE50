@@ -1,20 +1,32 @@
 #!/usr/bin/env python3
-"""Legacy fetcher for the USGS-hosted, mixed-network ComCat export.
+"""LEGACY ComCat fetch utility; not an approved H50-S1 data-acquisition path.
 
-This was used by the legacy 2-D seismicity-lineament research. The ComCat API is
-official, but source-specific contributor rights and competition shareability for
-a mixed-network export are unresolved. The data are not cleared for external
-competition use and are not an H50-S1 input. This fetcher is retained only for
-audit; downloading does not confer redistribution rights.
+The endpoint is hosted by USGS, but ComCat includes preferred-contributor records from
+multiple networks. The source-specific rights and challenge/sponsor-sharing status of the
+inherited mixed-network extract have not been established. USGS documents `net` as the
+preferred contributor and `sources` as contributing networks; neither field is a blanket
+license statement. Do not use this fetcher for current competition work until each source
+and reuse right has been reviewed.
+
+The script preserves `horizontalError` as a source field, but this project has not verified
+its unit or whether it denotes 1-sigma uncertainty for each network. Do not use it as a
+calibrated location-error weight. H50-S1 uses the separately licensed Nevada catalog and
+not this ComCat extract.
 """
 
 from __future__ import annotations
+
+if __name__ == "__main__":
+    raise SystemExit(
+        "Disabled legacy ComCat fetcher: source-specific reuse and challenge/sponsor-sharing "
+        "rights are unresolved. No data were fetched; see "
+        "docs/research/data-rights-audit-20261006.md."
+    )
 
 import argparse
 import csv
 import io
 import json
-import sys
 import time
 import urllib.error
 import urllib.parse
@@ -26,8 +38,8 @@ FDSN = "https://earthquake.usgs.gov/fdsnws/event/1/query"
 
 # Footprint of the competition grid (EPSG:32611, 100 m):
 #   left 243350, bottom 4135550, right 572550, top 4508550
-# -> WGS84 bounding box, padded outward by 0.06 deg (~6 km) so that events whose
-#    *location uncertainty ellipse* touches the footprint are not lost.
+# -> WGS84 bounding box, padded outward by 0.06 deg (~6 km) for legacy exploration;
+#    this padding is not derived from a validated location-uncertainty ellipse.
 BBOX = dict(minlatitude=37.27, maxlatitude=40.79, minlongitude=-120.10, maxlongitude=-116.08)
 
 CSV_COLUMNS = [
@@ -150,21 +162,14 @@ def main() -> int:
         "last": rows[-1]["time"] if rows else None,
         "event_types": dict(sorted(types.items(), key=lambda kv: -kv[1])),
         "networks": dict(sorted(nets.items(), key=lambda kv: -kv[1])[:15]),
+        "rights_status": "mixed-source; source-specific reuse and challenge/sponsor-sharing rights not established",
+        "analysis_status": "legacy exploratory extract; not an approved H50-S1 input",
         "notes": [
-            "Mixed-network ComCat export: contributor-specific rights and competition shareability "
-            "are unresolved. General USGS public-domain guidance does not clear each contribution; "
-            "do not reuse this extract externally before source-specific review.",
-            "Rows with type in {explosion, quarry blast, mining explosion, anthropogenic event} are "
-            "flagged, not silently deleted: the analysis removes them explicitly.",
-            "horizontalError is an optional scalar record field; it does not supply a full event-location "
-            "covariance. Legacy H50-B weighting/imputation is not a reproduction of an uncertainty-aware "
-            "3-D clustering method.",
+            "USGS hosts the ComCat API, but `net` is the preferred contributor and rows can originate from multiple networks; do not apply USGS public-domain status to every record.",
+            "Event type values are preserved as raw metadata. This summary does not certify that any downstream filter removed all anthropogenic or induced events.",
+            "The `horizontalError` unit and statistical meaning were not verified for each contributing network; do not call it 1-sigma or use as calibrated uncertainty without source-specific documentation.",
         ],
     }
     (out / "usgs_comcat_earthquakes.summary.json").write_text(json.dumps(summary, indent=1))
     print(json.dumps(summary, indent=1), flush=True)
     return 0
-
-
-if __name__ == "__main__":
-    sys.exit(main())

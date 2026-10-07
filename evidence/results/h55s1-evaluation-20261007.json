@@ -1,0 +1,1539 @@
+{
+  "artifacts": {
+    "positive_mask_sha256": "bcb60d8999e09254cbf2e54748fd06d759b10c07e333b051ca1c127cb1d64612",
+    "range_guard": "Every finite value re-read in [0,1]; zero-outside twin is entirely finite.",
+    "recommended_portal_safe_zero_outside": {
+      "all_values_finite": true,
+      "all_values_in_closed_unit_interval": true,
+      "bytes": 103444,
+      "count": 1,
+      "crs": "EPSG:32611",
+      "dtype": "float32",
+      "finite_cells": 12279160,
+      "finite_max": 1.0,
+      "finite_min": 0.0,
+      "nodata": null,
+      "nonfinite_cells": 0,
+      "path": "docs/downloads/gemsdoe50-h55-seisgeom-ridgesnap-13591-20261007-bcb60d89-zeros.tif",
+      "positive_cells": 13591,
+      "sha256": "7a366b7bbe431533a9d4246cbcdde34eb379ebb34fa116a8667431916506498d",
+      "shape": [
+        3730,
+        3292
+      ],
+      "transform": [
+        100.0,
+        0.0,
+        243350.0,
+        0.0,
+        -100.0,
+        4508550.0
+      ],
+      "unique_finite_values": [
+        0.0,
+        1.0
+      ]
+    },
+    "sample_semantics_nan_outside": {
+      "all_values_finite": false,
+      "all_values_in_closed_unit_interval": true,
+      "bytes": 244978,
+      "count": 1,
+      "crs": "EPSG:32611",
+      "dtype": "float32",
+      "finite_cells": 5167373,
+      "finite_max": 1.0,
+      "finite_min": 0.0,
+      "nodata": "NaN",
+      "nonfinite_cells": 7111787,
+      "path": "docs/downloads/gemsdoe50-h55-seisgeom-ridgesnap-13591-20261007-bcb60d89-nan.tif",
+      "positive_cells": 13591,
+      "sha256": "cd7f765a95ea9c71b22abffbf330434597c28057f8a80ed723b753cd0a32d3c6",
+      "shape": [
+        3730,
+        3292
+      ],
+      "transform": [
+        100.0,
+        0.0,
+        243350.0,
+        0.0,
+        -100.0,
+        4508550.0
+      ],
+      "unique_finite_values": [
+        0.0,
+        1.0
+      ]
+    },
+    "short_submission_note": "H55-S1: space-time-thinned relocated-earthquake point geometry; recurrent 2-D covariance axes, width sensitivity, and cross-axis LiDAR/radiometric ridge snap; known-fault 300 m exclusion; 13,591 binary cells (35,000-cell target not reached under frozen spacing)."
+  },
+  "axis_fit": {
+    "accepted_segments": 299,
+    "config": {
+      "anthropogenic_buffer_m": 3000.0,
+      "background_neighbour_k": 20,
+      "background_p_max": 0.2,
+      "background_surrogates": 32,
+      "bootstrap_replicates": 24,
+      "dedupe_cell_m": 250.0,
+      "dedupe_window_days": 90.0,
+      "geothermal_buffer_m": 2000.0,
+      "max_bootstrap_angle_p90_deg": 30.0,
+      "min_events": 10,
+      "min_length_m": 1500.0,
+      "min_linearity": 0.6,
+      "min_years": 3,
+      "neighbourhood_radius_m": 5000.0,
+      "random_seed": 5501,
+      "seed_cell_m": 1000.0
+    },
+    "events": 3145,
+    "limitation": "2-D epicentre axes are corridor priors, not mapped traces; the source table has no event-specific location covariance.",
+    "median_linearity": 0.7356194504813057,
+    "median_quality": 0.8644611554501743,
+    "median_segment_length_m": 6892.507208855512,
+    "method": "full 2-D covariance of recurrent local epicentre neighborhoods",
+    "rejected": {
+      "low_linearity": 439,
+      "short": 3,
+      "too_few_events": 205,
+      "too_few_years": 34,
+      "unstable_bootstrap": 5
+    },
+    "seed_cells": 985
+  },
+  "background_test": {
+    "events_in": 7325,
+    "events_kept": 3145,
+    "fraction_kept": 0.42935153583617747,
+    "method": "area(event, nn1, nn2) / distance(event, nn20)^2; reference CDF from uniform random catalogs on finite template cells",
+    "observed_stat_quantiles": [
+      5.6794878419296664e-05,
+      0.00663935391119779,
+      0.05872050257394852
+    ],
+    "p_threshold": 0.2,
+    "reference_stat_quantiles": [
+      0.0010101703501153075,
+      0.014099467571581942,
+      0.062279086278700505
+    ],
+    "status": "UNVERIFIED_2D_ADAPTATION",
+    "surrogate_catalogs": 32,
+    "surrogate_points_total": 234400
+  },
+  "catalog_processing": {
+    "anthropogenic_event_centres": 518,
+    "anthropogenic_type_counts": {
+      "chemical explosion": 15,
+      "explosion": 362,
+      "mine collapse": 9,
+      "mining explosion": 10,
+      "nuclear explosion": 42,
+      "quarry": 4,
+      "quarry blast": 88
+    },
+    "config": {
+      "anthropogenic_buffer_m": 3000.0,
+      "background_neighbour_k": 20,
+      "background_p_max": 0.2,
+      "background_surrogates": 32,
+      "bootstrap_replicates": 24,
+      "dedupe_cell_m": 250.0,
+      "dedupe_window_days": 90.0,
+      "geothermal_buffer_m": 2000.0,
+      "max_bootstrap_angle_p90_deg": 30.0,
+      "min_events": 10,
+      "min_length_m": 1500.0,
+      "min_linearity": 0.6,
+      "min_years": 3,
+      "neighbourhood_radius_m": 5000.0,
+      "random_seed": 5501,
+      "seed_cell_m": 1000.0
+    },
+    "events_after_site_screens": 15017,
+    "events_removed_anthropogenic_3km": 79,
+    "events_removed_hot_2km": 276,
+    "hot_centres": 1078,
+    "license": "CC BY 4.0",
+    "limitations": [
+      "GDR hot points are an incomplete geothermal-operation/injection screen.",
+      "ComCat explicit blast/mine/quarry event locations are an incomplete mining screen.",
+      "The mixed-network ComCat export's contributor-specific redistribution status is unresolved.",
+      "The relocated catalog has no event-specific location covariance."
+    ],
+    "relocated_in_finite_footprint_nonnegative_depth": 15369,
+    "sequence_thinning": {
+      "events_in": 15017,
+      "events_out": 7325,
+      "events_removed": 7692,
+      "rule": "largest magnitude per 250 m UTM cell per 90-day Unix-epoch window; event-id tie break"
+    },
+    "source": "Trugman (2024) Nevada relocated catalog, Zenodo 11167510",
+    "source_rows": 183002,
+    "template_crs": "EPSG:32611"
+  },
+  "corridors": {
+    "H55-S1-1000m": {
+      "continuity_penalty_per_pixel": 0.08,
+      "corridor_positive_cells_before_mask": 286008,
+      "field_positive_allowed_cells": 174718,
+      "half_width_m": 1000.0,
+      "maximum_offset_change_per_sample_pixels": 2,
+      "median_absolute_snap_m": 600.0,
+      "method": "cross-axis dynamic ridge snap plus Gaussian uncertainty corridor",
+      "offset_candidates": 21,
+      "orientation_weight": 0.25,
+      "p90_absolute_snap_m": 1000.0,
+      "path_samples": 20057,
+      "sample_spacing_m": 100.0,
+      "segments": 299,
+      "sigma_pixels": 4.246284501061571,
+      "unique_centerline_cells": 9999,
+      "valid_path_samples": 19998
+    },
+    "H55-S1-300m": {
+      "continuity_penalty_per_pixel": 0.08,
+      "corridor_positive_cells_before_mask": 93766,
+      "field_positive_allowed_cells": 58423,
+      "half_width_m": 300.0,
+      "maximum_offset_change_per_sample_pixels": 2,
+      "median_absolute_snap_m": 200.0,
+      "method": "cross-axis dynamic ridge snap plus Gaussian uncertainty corridor",
+      "offset_candidates": 7,
+      "orientation_weight": 0.25,
+      "p90_absolute_snap_m": 300.0,
+      "path_samples": 20057,
+      "sample_spacing_m": 100.0,
+      "segments": 299,
+      "sigma_pixels": 1.2738853503184713,
+      "unique_centerline_cells": 10406,
+      "valid_path_samples": 20035
+    },
+    "H55-S1-600m": {
+      "continuity_penalty_per_pixel": 0.08,
+      "corridor_positive_cells_before_mask": 171326,
+      "field_positive_allowed_cells": 105307,
+      "half_width_m": 600.0,
+      "maximum_offset_change_per_sample_pixels": 2,
+      "median_absolute_snap_m": 400.0,
+      "method": "cross-axis dynamic ridge snap plus Gaussian uncertainty corridor",
+      "offset_candidates": 13,
+      "orientation_weight": 0.25,
+      "p90_absolute_snap_m": 600.0,
+      "path_samples": 20057,
+      "sample_spacing_m": 100.0,
+      "segments": 299,
+      "sigma_pixels": 2.5477707006369426,
+      "unique_centerline_cells": 10300,
+      "valid_path_samples": 20007
+    }
+  },
+  "created_utc": "2026-10-07T03:30:04.660624+00:00",
+  "decision": {
+    "decision": "NO_SLOT",
+    "numeric_components": {
+      "all_widths_exact_matched_mass": false,
+      "all_widths_positive_credit_per_dot_vs_density_in_4_of_4_folds": false,
+      "all_widths_positive_pooled_delta_vs_density": false,
+      "paired_subtile_bootstrap_lower_bound_positive": false,
+      "primary_above_all_four_translations": true,
+      "primary_above_matched_random": false,
+      "primary_credit_per_dot_above_incumbent_in_at_least_3_of_4_folds": false,
+      "primary_pooled_dti_above_incumbent": false
+    },
+    "numeric_pass": false,
+    "pass": false,
+    "reason": "A unique TIFF is an audit artifact, not a recommendation. A slot is protected unless every frozen numeric and scientific/compliance gate passes.",
+    "scientific_components": {
+      "comcat_exclusion_redistribution_status_resolved": false,
+      "event_specific_uncertainty_available": false,
+      "external_geometry_license_verified": true,
+      "formal_aftershock_declustering_validated": false,
+      "mine_injection_inventory_complete": false
+    }
+  },
+  "git_commit_at_build": "6160c3ddec5759a9068ca52faf01d0120b316acc",
+  "holdout": {
+    "controls": {
+      "matched_random": {
+        "mass": 35000,
+        "score": {
+          "alpha": 0.2,
+          "beta": 0.8,
+          "covered_fraction": 0.026492866500157225,
+          "credit_per_dot": 0.046675889139019856,
+          "fn_weight": 60030.3438801343,
+          "fp_weight": 34417.422695030444,
+          "prediction_cells": 35000,
+          "radius_m": 300.0,
+          "score": 0.02889308832863203,
+          "tp_weight": 1633.656119865695,
+          "truth_cells": 61664
+        }
+      },
+      "translations": [
+        {
+          "col_shift_px": 0,
+          "mass": 8404,
+          "row_shift_px": -100,
+          "score": {
+            "alpha": 0.2,
+            "beta": 0.8,
+            "covered_fraction": 0.008688899115302788,
+            "credit_per_dot": 0.0637544353933878,
+            "fn_weight": 61128.20772495397,
+            "fp_weight": 8169.635018022423,
+            "prediction_cells": 8404,
+            "radius_m": 300.0,
+            "score": 0.010490861535464252,
+            "tp_weight": 535.7922750460311,
+            "truth_cells": 61664
+          },
+          "shift_m": [
+            -10000,
+            0
+          ]
+        },
+        {
+          "col_shift_px": 0,
+          "mass": 8096,
+          "row_shift_px": 100,
+          "score": {
+            "alpha": 0.2,
+            "beta": 0.8,
+            "covered_fraction": 0.012395969644302668,
+            "credit_per_dot": 0.0944151521919812,
+            "fn_weight": 60899.61492785372,
+            "fp_weight": 7757.233225243918,
+            "prediction_cells": 8096,
+            "radius_m": 300.0,
+            "score": 0.014977510121115556,
+            "tp_weight": 764.3850721462798,
+            "truth_cells": 61664
+          },
+          "shift_m": [
+            10000,
+            0
+          ]
+        },
+        {
+          "col_shift_px": -100,
+          "mass": 7678,
+          "row_shift_px": 0,
+          "score": {
+            "alpha": 0.2,
+            "beta": 0.8,
+            "covered_fraction": 0.008146788237706459,
+            "credit_per_dot": 0.0654289593500822,
+            "fn_weight": 61161.63645011007,
+            "fp_weight": 7462.881943822027,
+            "prediction_cells": 7678,
+            "radius_m": 300.0,
+            "score": 0.00986491816336527,
+            "tp_weight": 502.3635498899311,
+            "truth_cells": 61664
+          },
+          "shift_m": [
+            0,
+            -10000
+          ]
+        },
+        {
+          "col_shift_px": 100,
+          "mass": 9122,
+          "row_shift_px": 0,
+          "score": {
+            "alpha": 0.2,
+            "beta": 0.8,
+            "covered_fraction": 0.00935718275414221,
+            "credit_per_dot": 0.06325381685501263,
+            "fn_weight": 61086.99868264858,
+            "fp_weight": 8877.852823940642,
+            "prediction_cells": 9122,
+            "radius_m": 300.0,
+            "score": 0.011264679103234962,
+            "tp_weight": 577.0013173514253,
+            "truth_cells": 61664
+          },
+          "shift_m": [
+            0,
+            10000
+          ]
+        }
+      ]
+    },
+    "method_scores": {
+      "Candidate-B-incumbent": {
+        "folds": {
+          "NE": {
+            "alpha": 0.2,
+            "beta": 0.8,
+            "covered_fraction": 0.08055257874200547,
+            "credit_per_dot": 0.24943012993570057,
+            "fn_weight": 17999.1027185465,
+            "fp_weight": 5620.143019466769,
+            "prediction_cells": 6322,
+            "radius_m": 300.0,
+            "score": 0.0922150932844518,
+            "tp_weight": 1576.897281453499,
+            "truth_cells": 19576
+          },
+          "NW": {
+            "alpha": 0.2,
+            "beta": 0.8,
+            "covered_fraction": 0.09397773788416837,
+            "credit_per_dot": 0.14940231138789012,
+            "fn_weight": 17305.9312286745,
+            "fp_weight": 11213.200917970462,
+            "prediction_cells": 12015,
+            "radius_m": 300.0,
+            "score": 0.10038156829947338,
+            "tp_weight": 1795.0687713255,
+            "truth_cells": 19101
+          },
+          "SE": {
+            "alpha": 0.2,
+            "beta": 0.8,
+            "covered_fraction": 0.13955357137608124,
+            "credit_per_dot": 0.28546899410956955,
+            "fn_weight": 9652.488036303122,
+            "fp_weight": 4829.701266074873,
+            "prediction_cells": 5484,
+            "radius_m": 300.0,
+            "score": 0.15268159366107367,
+            "tp_weight": 1565.5119636968793,
+            "truth_cells": 11218
+          },
+          "SW": {
+            "alpha": 0.2,
+            "beta": 0.8,
+            "covered_fraction": 0.12841041566088932,
+            "credit_per_dot": 0.052513450535330984,
+            "fn_weight": 1035.4484261948635,
+            "fp_weight": 2832.8092197538854,
+            "prediction_cells": 2905,
+            "radius_m": 300.0,
+            "score": 0.09858114276642607,
+            "tp_weight": 152.5515738051365,
+            "truth_cells": 1188
+          }
+        },
+        "pooled": {
+          "alpha": 0.2,
+          "beta": 0.8,
+          "covered_fraction": 0.10719345250761754,
+          "credit_per_dot": 0.18885648729799223,
+          "fn_weight": 55054.02294457027,
+          "fp_weight": 32084.767316124016,
+          "prediction_cells": 35000,
+          "radius_m": 300.0,
+          "score": 0.11582196973039599,
+          "tp_weight": 6609.977055429728,
+          "truth_cells": 61664
+        }
+      },
+      "H55-S1-1000m": {
+        "folds": {
+          "NE": {
+            "alpha": 0.2,
+            "beta": 0.8,
+            "covered_fraction": 0.0,
+            "credit_per_dot": 0.0,
+            "fn_weight": 19576.0,
+            "fp_weight": 0.0,
+            "prediction_cells": 0,
+            "radius_m": 300.0,
+            "score": 0.0,
+            "tp_weight": 0.0,
+            "truth_cells": 19576
+          },
+          "NW": {
+            "alpha": 0.2,
+            "beta": 0.8,
+            "covered_fraction": 0.03952851654348984,
+            "credit_per_dot": 0.12674738870189683,
+            "fn_weight": 18345.965805502798,
+            "fp_weight": 5592.319315407509,
+            "prediction_cells": 5957,
+            "radius_m": 300.0,
+            "score": 0.04562065528068868,
+            "tp_weight": 755.0341944971995,
+            "truth_cells": 19101
+          },
+          "SE": {
+            "alpha": 0.2,
+            "beta": 0.8,
+            "covered_fraction": 0.029568549835683702,
+            "credit_per_dot": 0.12871555764714776,
+            "fn_weight": 10886.3000079433,
+            "fp_weight": 2423.1980639004278,
+            "prediction_cells": 2577,
+            "radius_m": 300.0,
+            "score": 0.034822758314739355,
+            "tp_weight": 331.6999920566998,
+            "truth_cells": 11218
+          },
+          "SW": {
+            "alpha": 0.2,
+            "beta": 0.8,
+            "covered_fraction": 0.18895112515409992,
+            "credit_per_dot": 0.036077456876096224,
+            "fn_weight": 963.5260633169294,
+            "fp_weight": 6117.5761674083105,
+            "prediction_cells": 6222,
+            "radius_m": 300.0,
+            "score": 0.10116861496784915,
+            "tp_weight": 224.47393668307072,
+            "truth_cells": 1188
+          }
+        },
+        "pooled": {
+          "alpha": 0.2,
+          "beta": 0.8,
+          "covered_fraction": 0.026997118619906824,
+          "credit_per_dot": 0.07804004887389529,
+          "fn_weight": 59999.24967742206,
+          "fp_weight": 20535.613354693698,
+          "prediction_cells": 21332,
+          "radius_m": 300.0,
+          "score": 0.030959845990036292,
+          "tp_weight": 1664.7503225779344,
+          "truth_cells": 61664
+        }
+      },
+      "H55-S1-300m": {
+        "folds": {
+          "NE": {
+            "alpha": 0.2,
+            "beta": 0.8,
+            "covered_fraction": 0.0,
+            "credit_per_dot": 0.0,
+            "fn_weight": 19576.0,
+            "fp_weight": 0.0,
+            "prediction_cells": 0,
+            "radius_m": 300.0,
+            "score": 0.0,
+            "tp_weight": 0.0,
+            "truth_cells": 19576
+          },
+          "NW": {
+            "alpha": 0.2,
+            "beta": 0.8,
+            "covered_fraction": 0.011893937749777244,
+            "credit_per_dot": 0.10802953160175707,
+            "fn_weight": 18873.81389504151,
+            "fp_weight": 1994.4635657300316,
+            "prediction_cells": 2103,
+            "radius_m": 300.0,
+            "score": 0.01444732767932696,
+            "tp_weight": 227.18610495849512,
+            "truth_cells": 19101
+          },
+          "SE": {
+            "alpha": 0.2,
+            "beta": 0.8,
+            "covered_fraction": 0.0076015482927884155,
+            "credit_per_dot": 0.082073309671319,
+            "fn_weight": 11132.7258312515,
+            "fp_weight": 998.5243103667251,
+            "prediction_cells": 1039,
+            "radius_m": 300.0,
+            "score": 0.009277846492782005,
+            "tp_weight": 85.27416874850044,
+            "truth_cells": 11218
+          },
+          "SW": {
+            "alpha": 0.2,
+            "beta": 0.8,
+            "covered_fraction": 0.075179375124275,
+            "credit_per_dot": 0.03642459121029311,
+            "fn_weight": 1098.6869023523614,
+            "fp_weight": 2408.910452852063,
+            "prediction_cells": 2452,
+            "radius_m": 300.0,
+            "score": 0.06159334055390709,
+            "tp_weight": 89.3130976476387,
+            "truth_cells": 1188
+          }
+        },
+        "pooled": {
+          "alpha": 0.2,
+          "beta": 0.8,
+          "covered_fraction": 0.009162925023357332,
+          "credit_per_dot": 0.06825593242815976,
+          "fn_weight": 61098.97739135969,
+          "fp_weight": 8008.784457789981,
+          "prediction_cells": 8278,
+          "radius_m": 300.0,
+          "score": 0.011068899340844493,
+          "tp_weight": 565.0226086403065,
+          "truth_cells": 61664
+        }
+      },
+      "H55-S1-600m": {
+        "folds": {
+          "NE": {
+            "alpha": 0.2,
+            "beta": 0.8,
+            "covered_fraction": 0.0,
+            "credit_per_dot": 0.0,
+            "fn_weight": 19576.0,
+            "fp_weight": 0.0,
+            "prediction_cells": 0,
+            "radius_m": 300.0,
+            "score": 0.0,
+            "tp_weight": 0.0,
+            "truth_cells": 19576
+          },
+          "NW": {
+            "alpha": 0.2,
+            "beta": 0.8,
+            "covered_fraction": 0.021171920642285548,
+            "credit_per_dot": 0.11388478067820228,
+            "fn_weight": 18696.595143811704,
+            "fp_weight": 3349.3423938267847,
+            "prediction_cells": 3551,
+            "radius_m": 300.0,
+            "score": 0.025225562722397673,
+            "tp_weight": 404.40485618829626,
+            "truth_cells": 19101
+          },
+          "SE": {
+            "alpha": 0.2,
+            "beta": 0.8,
+            "covered_fraction": 0.01811387454807985,
+            "credit_per_dot": 0.12124191210045332,
+            "fn_weight": 11014.79855531964,
+            "fp_weight": 1578.4063747716136,
+            "prediction_cells": 1676,
+            "radius_m": 300.0,
+            "score": 0.02177767745923545,
+            "tp_weight": 203.20144468035977,
+            "truth_cells": 11218
+          },
+          "SW": {
+            "alpha": 0.2,
+            "beta": 0.8,
+            "covered_fraction": 0.11801906954117035,
+            "credit_per_dot": 0.03461892706540997,
+            "fn_weight": 1047.7933453850897,
+            "fp_weight": 3982.032552976796,
+            "prediction_cells": 4050,
+            "radius_m": 300.0,
+            "score": 0.07899643639022477,
+            "tp_weight": 140.20665461491038,
+            "truth_cells": 1188
+          }
+        },
+        "pooled": {
+          "alpha": 0.2,
+          "beta": 0.8,
+          "covered_fraction": 0.016340942512868405,
+          "credit_per_dot": 0.07414081959484344,
+          "fn_weight": 60656.352120886484,
+          "fp_weight": 13095.651068688981,
+          "prediction_cells": 13591,
+          "radius_m": 300.0,
+          "score": 0.01932141793561126,
+          "tp_weight": 1007.6478791135172,
+          "truth_cells": 61664
+        }
+      },
+      "density-1000m": {
+        "folds": {
+          "NE": {
+            "alpha": 0.2,
+            "beta": 0.8,
+            "covered_fraction": 0.0,
+            "credit_per_dot": 0.0,
+            "fn_weight": 19576.0,
+            "fp_weight": 0.0,
+            "prediction_cells": 0,
+            "radius_m": 300.0,
+            "score": 0.0,
+            "tp_weight": 0.0,
+            "truth_cells": 19576
+          },
+          "NW": {
+            "alpha": 0.2,
+            "beta": 0.8,
+            "covered_fraction": 0.0525675606407379,
+            "credit_per_dot": 0.08461933050722524,
+            "fn_weight": 18096.907024201268,
+            "fp_weight": 11397.042224321594,
+            "prediction_cells": 11866,
+            "radius_m": 300.0,
+            "score": 0.05653349738931073,
+            "tp_weight": 1004.0929757987346,
+            "truth_cells": 19101
+          },
+          "SE": {
+            "alpha": 0.2,
+            "beta": 0.8,
+            "covered_fraction": 0.07041019729961771,
+            "credit_per_dot": 0.14229176604343569,
+            "fn_weight": 10428.138406692888,
+            "fp_weight": 5208.502888203724,
+            "prediction_cells": 5551,
+            "radius_m": 300.0,
+            "score": 0.0776347487734351,
+            "tp_weight": 789.8615933071115,
+            "truth_cells": 11218
+          },
+          "SW": {
+            "alpha": 0.2,
+            "beta": 0.8,
+            "covered_fraction": 0.25852804325019946,
+            "credit_per_dot": 0.03652846281889117,
+            "fn_weight": 880.8686846187632,
+            "fp_weight": 8258.427559168307,
+            "prediction_cells": 8408,
+            "radius_m": 300.0,
+            "score": 0.11531066551846203,
+            "tp_weight": 307.13131538123696,
+            "truth_cells": 1188
+          }
+        },
+        "pooled": {
+          "alpha": 0.2,
+          "beta": 0.8,
+          "covered_fraction": 0.042715784626866475,
+          "credit_per_dot": 0.0752578898066027,
+          "fn_weight": 59029.973856768906,
+          "fp_weight": 33794.610197989394,
+          "prediction_cells": 35000,
+          "radius_m": 300.0,
+          "score": 0.0465236506169145,
+          "tp_weight": 2634.0261432310945,
+          "truth_cells": 61664
+        }
+      },
+      "density-2000m": {
+        "folds": {
+          "NE": {
+            "alpha": 0.2,
+            "beta": 0.8,
+            "covered_fraction": 0.0,
+            "credit_per_dot": 0.0,
+            "fn_weight": 19576.0,
+            "fp_weight": 0.0,
+            "prediction_cells": 0,
+            "radius_m": 300.0,
+            "score": 0.0,
+            "tp_weight": 0.0,
+            "truth_cells": 19576
+          },
+          "NW": {
+            "alpha": 0.2,
+            "beta": 0.8,
+            "covered_fraction": 0.057004908793589874,
+            "credit_per_dot": 0.09627327699967818,
+            "fn_weight": 18012.14923713364,
+            "fp_weight": 10814.218686361839,
+            "prediction_cells": 11310,
+            "radius_m": 300.0,
+            "score": 0.061651392672040194,
+            "tp_weight": 1088.8507628663601,
+            "truth_cells": 19101
+          },
+          "SE": {
+            "alpha": 0.2,
+            "beta": 0.8,
+            "covered_fraction": 0.05687863851506915,
+            "credit_per_dot": 0.1237758616609206,
+            "fn_weight": 10579.935433137955,
+            "fp_weight": 4889.345826922197,
+            "prediction_cells": 5155,
+            "radius_m": 300.0,
+            "score": 0.06330079676295923,
+            "tp_weight": 638.0645668620457,
+            "truth_cells": 11218
+          },
+          "SW": {
+            "alpha": 0.2,
+            "beta": 0.8,
+            "covered_fraction": 0.24784346271642618,
+            "credit_per_dot": 0.03290913531989653,
+            "fn_weight": 893.5619662928857,
+            "fp_weight": 8809.328513573917,
+            "prediction_cells": 8947,
+            "radius_m": 300.0,
+            "score": 0.10625108062490657,
+            "tp_weight": 294.4380337071143,
+            "truth_cells": 1188
+          }
+        },
+        "pooled": {
+          "alpha": 0.2,
+          "beta": 0.8,
+          "covered_fraction": 0.04214387861209933,
+          "credit_per_dot": 0.07425028944961408,
+          "fn_weight": 59065.2398692635,
+          "fp_weight": 33849.058831262795,
+          "prediction_cells": 35000,
+          "radius_m": 300.0,
+          "score": 0.045897652321766735,
+          "tp_weight": 2598.760130736493,
+          "truth_cells": 61664
+        }
+      },
+      "matched-random": {
+        "folds": {
+          "NE": {
+            "alpha": 0.2,
+            "beta": 0.8,
+            "covered_fraction": 0.04322071698238721,
+            "credit_per_dot": 0.1036873475057858,
+            "fn_weight": 18729.911244352785,
+            "fp_weight": 7870.228936732015,
+            "prediction_cells": 8160,
+            "radius_m": 300.0,
+            "score": 0.04861443729946642,
+            "tp_weight": 846.0887556472121,
+            "truth_cells": 19576
+          },
+          "NW": {
+            "alpha": 0.2,
+            "beta": 0.8,
+            "covered_fraction": 0.020619710895224005,
+            "credit_per_dot": 0.02790739727978982,
+            "fn_weight": 18707.142902190328,
+            "fp_weight": 13965.951869535033,
+            "prediction_cells": 14113,
+            "radius_m": 300.0,
+            "score": 0.021696814087614764,
+            "tp_weight": 393.85709780967375,
+            "truth_cells": 19101
+          },
+          "SE": {
+            "alpha": 0.2,
+            "beta": 0.8,
+            "covered_fraction": 0.015479447511766484,
+            "credit_per_dot": 0.05260479920842061,
+            "fn_weight": 11044.351557813003,
+            "fp_weight": 3236.8518991185765,
+            "prediction_cells": 3301,
+            "radius_m": 300.0,
+            "score": 0.017982544499504986,
+            "tp_weight": 173.64844218699642,
+            "truth_cells": 11218
+          },
+          "SW": {
+            "alpha": 0.2,
+            "beta": 0.8,
+            "covered_fraction": 0.011549260289226225,
+            "credit_per_dot": 0.006363878118553226,
+            "fn_weight": 1174.2794787763992,
+            "fp_weight": 2151.0451876380366,
+            "prediction_cells": 2156,
+            "radius_m": 300.0,
+            "score": 0.009918307053549862,
+            "tp_weight": 13.720521223600755,
+            "truth_cells": 1188
+          }
+        },
+        "pooled": {
+          "alpha": 0.2,
+          "beta": 0.8,
+          "covered_fraction": 0.026492866500157225,
+          "credit_per_dot": 0.046675889139019856,
+          "fn_weight": 60030.3438801343,
+          "fp_weight": 34417.422695030444,
+          "prediction_cells": 35000,
+          "radius_m": 300.0,
+          "score": 0.02889308832863203,
+          "tp_weight": 1633.656119865695,
+          "truth_cells": 61664
+        }
+      }
+    },
+    "metric": "official 300 m distance-weighted Tversky proxy calculation",
+    "paired_subtile_bootstrap": {
+      "paired_mean_credit_per_dot": -0.07627665106234872,
+      "percentile_ci_95": [
+        -0.11895916335047656,
+        -0.037293768104158985
+      ],
+      "replicates": 5000,
+      "seed": 55007,
+      "subtiles": [
+        {
+          "candidate_credit_per_dot": 0.07096475226390275,
+          "candidate_dti": 0.02337053452732337,
+          "id": "NW-00",
+          "incumbent_credit_per_dot": 0.17229612418387466,
+          "incumbent_dti": 0.13800875930779719,
+          "paired_delta_credit_per_dot": -0.10133137191997191
+        },
+        {
+          "candidate_credit_per_dot": 0.0,
+          "candidate_dti": 0.0,
+          "id": "NW-01",
+          "incumbent_credit_per_dot": 0.19060150729556144,
+          "incumbent_dti": 0.12761622993857785,
+          "paired_delta_credit_per_dot": -0.19060150729556144
+        },
+        {
+          "candidate_credit_per_dot": 0.15755725998380385,
+          "candidate_dti": 0.05399085098848786,
+          "id": "NW-10",
+          "incumbent_credit_per_dot": 0.1915174479019464,
+          "incumbent_dti": 0.11374855087768253,
+          "paired_delta_credit_per_dot": -0.033960187918142565
+        },
+        {
+          "candidate_credit_per_dot": 0.029069377337083976,
+          "candidate_dti": 0.010523957958526137,
+          "id": "NW-11",
+          "incumbent_credit_per_dot": 0.10797586754115476,
+          "incumbent_dti": 0.07064069177257598,
+          "paired_delta_credit_per_dot": -0.07890649020407078
+        },
+        {
+          "candidate_credit_per_dot": 0.0,
+          "candidate_dti": 0.0,
+          "id": "NE-00",
+          "incumbent_credit_per_dot": 0.20379932291874406,
+          "incumbent_dti": 0.10069801928451264,
+          "paired_delta_credit_per_dot": -0.20379932291874406
+        },
+        {
+          "candidate_credit_per_dot": 0.0,
+          "candidate_dti": 0.0,
+          "id": "NE-01",
+          "incumbent_credit_per_dot": 0.26936807977071664,
+          "incumbent_dti": 0.09050981299347781,
+          "paired_delta_credit_per_dot": -0.26936807977071664
+        },
+        {
+          "candidate_credit_per_dot": 0.040157078306836826,
+          "candidate_dti": 0.00845847488943846,
+          "id": "NE-10",
+          "incumbent_credit_per_dot": 0.10753740010253346,
+          "incumbent_dti": 0.12944579230655845,
+          "paired_delta_credit_per_dot": -0.06738032179569664
+        },
+        {
+          "candidate_credit_per_dot": 0.0,
+          "candidate_dti": 0.0,
+          "id": "NE-11",
+          "incumbent_credit_per_dot": 0.0,
+          "incumbent_dti": 0.0,
+          "paired_delta_credit_per_dot": 0.0
+        },
+        {
+          "candidate_credit_per_dot": 0.0,
+          "candidate_dti": 0.0,
+          "id": "SW-00",
+          "incumbent_credit_per_dot": 0.0,
+          "incumbent_dti": 0.0,
+          "paired_delta_credit_per_dot": 0.0
+        },
+        {
+          "candidate_credit_per_dot": 0.04873841620426347,
+          "candidate_dti": 0.09026462738922193,
+          "id": "SW-01",
+          "incumbent_credit_per_dot": 0.07197951311079152,
+          "incumbent_dti": 0.12663106892450124,
+          "paired_delta_credit_per_dot": -0.023241096906528057
+        },
+        {
+          "candidate_credit_per_dot": 0.0,
+          "candidate_dti": 0.0,
+          "id": "SW-10",
+          "incumbent_credit_per_dot": 0.0,
+          "incumbent_dti": 0.0,
+          "paired_delta_credit_per_dot": 0.0
+        },
+        {
+          "candidate_credit_per_dot": 0.03804333318183611,
+          "candidate_dti": 0.08112076191099515,
+          "id": "SW-11",
+          "incumbent_credit_per_dot": 0.09254018797884309,
+          "incumbent_dti": 0.11917905159080273,
+          "paired_delta_credit_per_dot": -0.05449685479700698
+        },
+        {
+          "candidate_credit_per_dot": 0.09981958198927957,
+          "candidate_dti": 0.03701705709198079,
+          "id": "SE-00",
+          "incumbent_credit_per_dot": 0.11720125083697489,
+          "incumbent_dti": 0.09437670450436768,
+          "paired_delta_credit_per_dot": -0.01738166884769532
+        },
+        {
+          "candidate_credit_per_dot": 0.0,
+          "candidate_dti": 0.0,
+          "id": "SE-01",
+          "incumbent_credit_per_dot": 0.0,
+          "incumbent_dti": 0.0,
+          "paired_delta_credit_per_dot": 0.0
+        },
+        {
+          "candidate_credit_per_dot": 0.14830075665203762,
+          "candidate_dti": 0.02288063630128955,
+          "id": "SE-10",
+          "incumbent_credit_per_dot": 0.32826027127548285,
+          "incumbent_dti": 0.16130496637224642,
+          "paired_delta_credit_per_dot": -0.17995951462344523
+        },
+        {
+          "candidate_credit_per_dot": 0.0,
+          "candidate_dti": 0.0,
+          "id": "SE-11",
+          "incumbent_credit_per_dot": 0.0,
+          "incumbent_dti": 0.0,
+          "paired_delta_credit_per_dot": 0.0
+        }
+      ],
+      "units": "sixteen frozen spatial subtiles"
+    },
+    "primary_fold_credit_per_dot_delta_vs_incumbent": {
+      "NE": -0.24943012993570057,
+      "NW": -0.03551753070968784,
+      "SE": -0.16422708200911623,
+      "SW": -0.017894523469921014
+    },
+    "realization": {
+      "macrofolds": [
+        {
+          "cols": [
+            0,
+            1646
+          ],
+          "core_bounds": [
+            100,
+            1765,
+            100,
+            1546
+          ],
+          "eligible_cells": 2075898,
+          "eligible_mask_sha256": "b8e836a33f42d6f5219ef91ab0ba6bc2b573dc293cbbf4b7c0c63fc1943f2b07",
+          "id": "NW",
+          "rows": [
+            0,
+            1865
+          ],
+          "subtiles": [
+            {
+              "cols": [
+                0,
+                823
+              ],
+              "eligible_cells": 481818,
+              "eligible_mask_sha256": "1644c995424c795053a2b27d67b9c475df969bd5b5116ab4bf60916df469a32f",
+              "id": "NW-00",
+              "rows": [
+                0,
+                932
+              ],
+              "truth_cells": 4627,
+              "truth_mask_sha256": "adcda4e02e7ccea9aee4221139afbd8261071505a0e0af162e8c4c43211cc41e"
+            },
+            {
+              "cols": [
+                823,
+                1646
+              ],
+              "eligible_cells": 601528,
+              "eligible_mask_sha256": "7ef99372ad115cef94dcbe82475e7c6d5b2fdd9c5364913a005240e10c01f727",
+              "id": "NW-01",
+              "rows": [
+                0,
+                932
+              ],
+              "truth_cells": 5352,
+              "truth_mask_sha256": "aab0723e7930e93ce337ad59381d4d3873d91d8a6bd98ea458ba1418cb99bb46"
+            },
+            {
+              "cols": [
+                0,
+                823
+              ],
+              "eligible_cells": 404791,
+              "eligible_mask_sha256": "bd9d76c9897fab98c2fbb00e4e2fb1df640dea07b4ddcfc7f264ba78ad644a0b",
+              "id": "NW-10",
+              "rows": [
+                932,
+                1865
+              ],
+              "truth_cells": 7368,
+              "truth_mask_sha256": "7a8504dda92a20d69f229d9bd93f4d0abca19382e59815de3aa1e3fd261831c9"
+            },
+            {
+              "cols": [
+                823,
+                1646
+              ],
+              "eligible_cells": 587761,
+              "eligible_mask_sha256": "126edeb04e5736958b9c476a15ebdde8bbaa6e01618abd54fff9b72899303be1",
+              "id": "NW-11",
+              "rows": [
+                932,
+                1865
+              ],
+              "truth_cells": 7325,
+              "truth_mask_sha256": "c4669b167ed54c9f23353606af426e512184ab07f564a6aa18c3a5cf8a1ea7d8"
+            }
+          ],
+          "truth_cells": 24672,
+          "truth_mask_sha256": "f64085c79d49e4da294e9094d32c954758d0c28b2a6c3687dadd4ca1e4cbfd2f",
+          "visible_training_label_buffer_m": 300.0,
+          "visible_training_label_buffer_pixels": 3
+        },
+        {
+          "cols": [
+            1646,
+            3292
+          ],
+          "core_bounds": [
+            100,
+            1765,
+            1746,
+            3192
+          ],
+          "eligible_cells": 987533,
+          "eligible_mask_sha256": "386c36354541021b3e2306ef8af6b279fa51d7d7ab19003b998ea6b0a461b08c",
+          "id": "NE",
+          "rows": [
+            0,
+            1865
+          ],
+          "subtiles": [
+            {
+              "cols": [
+                1646,
+                2469
+              ],
+              "eligible_cells": 494929,
+              "eligible_mask_sha256": "3b83ba98fdb875436e219caf6997738c3e2c6b297350bfa762321866fbcbc226",
+              "id": "NE-00",
+              "rows": [
+                0,
+                932
+              ],
+              "truth_cells": 5035,
+              "truth_mask_sha256": "2db42fbf4b0900ef9add35bd0383fbe8cc0acadfa43aee3e43d1a6e90f8d275f"
+            },
+            {
+              "cols": [
+                2469,
+                3292
+              ],
+              "eligible_cells": 487404,
+              "eligible_mask_sha256": "e6f472f184e9901f374f0f5c3c8865e52bfe57d1c177c34db9791e641224d4a1",
+              "id": "NE-01",
+              "rows": [
+                0,
+                932
+              ],
+              "truth_cells": 4142,
+              "truth_mask_sha256": "0886d32f1f4dedd0b09b282134c2b4aeedd3bf6b1956dbfca37f0299cada86a1"
+            },
+            {
+              "cols": [
+                1646,
+                2469
+              ],
+              "eligible_cells": 5200,
+              "eligible_mask_sha256": "092ebd746c10dfa44ae8e0eb077aa6b542cfdd00fbaab8bc013690c9882ef4ad",
+              "id": "NE-10",
+              "rows": [
+                932,
+                1865
+              ],
+              "truth_cells": 98,
+              "truth_mask_sha256": "6e160b097888a0e527f000a107d5ffde295c2d1f9bcf5d962974ff342ae479fd"
+            },
+            {
+              "cols": [
+                2469,
+                3292
+              ],
+              "eligible_cells": 0,
+              "eligible_mask_sha256": "ff5f9fea48f2ce25808bd22e84368814404f0dd85a1a2bf7438b45c5e6df20d6",
+              "id": "NE-11",
+              "rows": [
+                932,
+                1865
+              ],
+              "truth_cells": 0,
+              "truth_mask_sha256": "ff5f9fea48f2ce25808bd22e84368814404f0dd85a1a2bf7438b45c5e6df20d6"
+            }
+          ],
+          "truth_cells": 9275,
+          "truth_mask_sha256": "c60d5e4fe3b38cd0d76d239f52dbf2d41911619b2c44ea806090cd28675ea086",
+          "visible_training_label_buffer_m": 300.0,
+          "visible_training_label_buffer_pixels": 3
+        },
+        {
+          "cols": [
+            0,
+            1646
+          ],
+          "core_bounds": [
+            1965,
+            3630,
+            100,
+            1546
+          ],
+          "eligible_cells": 375029,
+          "eligible_mask_sha256": "fb114fd4732bf612cfc28dc8c6fd624d7a1c0ff994d9aa498035efae3d6c9844",
+          "id": "SW",
+          "rows": [
+            1865,
+            3730
+          ],
+          "subtiles": [
+            {
+              "cols": [
+                0,
+                823
+              ],
+              "eligible_cells": 0,
+              "eligible_mask_sha256": "ff5f9fea48f2ce25808bd22e84368814404f0dd85a1a2bf7438b45c5e6df20d6",
+              "id": "SW-00",
+              "rows": [
+                1865,
+                2797
+              ],
+              "truth_cells": 0,
+              "truth_mask_sha256": "ff5f9fea48f2ce25808bd22e84368814404f0dd85a1a2bf7438b45c5e6df20d6"
+            },
+            {
+              "cols": [
+                823,
+                1646
+              ],
+              "eligible_cells": 295209,
+              "eligible_mask_sha256": "d967a38428c328aab3d059df1a8d9036d67aee97dd8b5546853bb616acf69073",
+              "id": "SW-01",
+              "rows": [
+                1865,
+                2797
+              ],
+              "truth_cells": 3816,
+              "truth_mask_sha256": "b41b70aa6840cac57741a17af99acb619e62f3c22443d7f4a0ff458a1d49a210"
+            },
+            {
+              "cols": [
+                0,
+                823
+              ],
+              "eligible_cells": 0,
+              "eligible_mask_sha256": "ff5f9fea48f2ce25808bd22e84368814404f0dd85a1a2bf7438b45c5e6df20d6",
+              "id": "SW-10",
+              "rows": [
+                2797,
+                3730
+              ],
+              "truth_cells": 0,
+              "truth_mask_sha256": "ff5f9fea48f2ce25808bd22e84368814404f0dd85a1a2bf7438b45c5e6df20d6"
+            },
+            {
+              "cols": [
+                823,
+                1646
+              ],
+              "eligible_cells": 79820,
+              "eligible_mask_sha256": "e78297e1cb374c235bb01dedcb2dd9b2fd140b27cd36a0ece078dad126afdbe6",
+              "id": "SW-11",
+              "rows": [
+                2797,
+                3730
+              ],
+              "truth_cells": 2698,
+              "truth_mask_sha256": "e7d0b33a6aec1a967e69cdc77423949939eb6a5d9af0eb823d764fe42ec2b48e"
+            }
+          ],
+          "truth_cells": 6514,
+          "truth_mask_sha256": "a83661c5069265e4c9422aaff1b28ca67a4941047f2bce2c87e332bac5b1c155",
+          "visible_training_label_buffer_m": 300.0,
+          "visible_training_label_buffer_pixels": 3
+        },
+        {
+          "cols": [
+            1646,
+            3292
+          ],
+          "core_bounds": [
+            1965,
+            3630,
+            1746,
+            3192
+          ],
+          "eligible_cells": 600955,
+          "eligible_mask_sha256": "45a25d753b4ef28098c58b93752a900e03feb8521c599c0f210e5e4dfe32c0d8",
+          "id": "SE",
+          "rows": [
+            1865,
+            3730
+          ],
+          "subtiles": [
+            {
+              "cols": [
+                1646,
+                2469
+              ],
+              "eligible_cells": 205867,
+              "eligible_mask_sha256": "4d403c0e396f07b7d72eb86008b38bd457e58209ed238980b9bf48c0c0f05656",
+              "id": "SE-00",
+              "rows": [
+                1865,
+                2797
+              ],
+              "truth_cells": 2530,
+              "truth_mask_sha256": "eae5bbb6adaaede1fb46da64971ba44eb2b5ab8b51b247e7bc0e8ccfc8b815f3"
+            },
+            {
+              "cols": [
+                2469,
+                3292
+              ],
+              "eligible_cells": 0,
+              "eligible_mask_sha256": "ff5f9fea48f2ce25808bd22e84368814404f0dd85a1a2bf7438b45c5e6df20d6",
+              "id": "SE-01",
+              "rows": [
+                1865,
+                2797
+              ],
+              "truth_cells": 0,
+              "truth_mask_sha256": "ff5f9fea48f2ce25808bd22e84368814404f0dd85a1a2bf7438b45c5e6df20d6"
+            },
+            {
+              "cols": [
+                1646,
+                2469
+              ],
+              "eligible_cells": 395088,
+              "eligible_mask_sha256": "71429f3ffe1e33297e7fa5d988b29fbcb18255a9421249c4262408ce69804d63",
+              "id": "SE-10",
+              "rows": [
+                2797,
+                3730
+              ],
+              "truth_cells": 4094,
+              "truth_mask_sha256": "f98037946a66fd61826028111a586793d3073d97fa96d42bcc8d14b2ed0432f9"
+            },
+            {
+              "cols": [
+                2469,
+                3292
+              ],
+              "eligible_cells": 0,
+              "eligible_mask_sha256": "ff5f9fea48f2ce25808bd22e84368814404f0dd85a1a2bf7438b45c5e6df20d6",
+              "id": "SE-11",
+              "rows": [
+                2797,
+                3730
+              ],
+              "truth_cells": 0,
+              "truth_mask_sha256": "ff5f9fea48f2ce25808bd22e84368814404f0dd85a1a2bf7438b45c5e6df20d6"
+            }
+          ],
+          "truth_cells": 6624,
+          "truth_mask_sha256": "e9bb7763671f4568c150aefc900c4dadf1ca699f25530e4f6870aa3c62cb74de",
+          "visible_training_label_buffer_m": 300.0,
+          "visible_training_label_buffer_pixels": 3
+        }
+      ],
+      "shape": [
+        3730,
+        3292
+      ],
+      "truth_raster_mask_sha256": "d8b86f12ef44973501b3bced26105efa40fe311767166dc8fa7d4d5182122902",
+      "valid_mask_sha256": "c075e765e015e44f8da6b85aff1f5daa9c39d70d8fc3601d4811984fabe687cf"
+    },
+    "split_spec_sha256": "78b6692155c6c6d5f9f19ccee6d595167c2065f1f25eb8d08636d1d9b285ff16",
+    "truth": "derived SGMC fault cells more than 300 m from the supplied catalogue",
+    "truth_cells": 61664,
+    "width_gates": {
+      "H55-S1-1000m": {
+        "exact_mass": false,
+        "fold_credit_per_dot_delta_vs_best_density": {
+          "NE": 0.0,
+          "NW": 0.030474111702218656,
+          "SE": -0.013576208396287925,
+          "SW": -0.00045100594279494366
+        },
+        "pooled_delta_vs_best_density": -0.015563804626878206,
+        "pooled_dti": 0.030959845990036292,
+        "positive_density_delta_all_four_folds": false
+      },
+      "H55-S1-300m": {
+        "exact_mass": false,
+        "fold_credit_per_dot_delta_vs_best_density": {
+          "NE": 0.0,
+          "NW": 0.011756254602078894,
+          "SE": -0.06021845637211669,
+          "SW": -0.00010387160859805927
+        },
+        "pooled_delta_vs_best_density": -0.03545475127607001,
+        "pooled_dti": 0.011068899340844493,
+        "positive_density_delta_all_four_folds": false
+      },
+      "H55-S1-600m": {
+        "exact_mass": false,
+        "fold_credit_per_dot_delta_vs_best_density": {
+          "NE": 0.0,
+          "NW": 0.0176115036785241,
+          "SE": -0.021049853942982366,
+          "SW": -0.001909535753481198
+        },
+        "pooled_delta_vs_best_density": -0.02720223268130324,
+        "pooled_dti": 0.01932141793561126,
+        "positive_density_delta_all_four_folds": false
+      }
+    }
+  },
+  "hypothesis": "H55-S1 \u2014 thinned epicentre triangle/covariance axes snapped across-axis to independent ridges",
+  "input_sha256": {
+    "catalog": "51a0c6cfdc248c3ca1ab170f0d925b000f9676f73180b32473436cd21df1b8a3",
+    "comcat": "19e726c8d0640ad0bdf9c239ae4a855dc1fef18956cfcc7ec9f34b45eb314c82",
+    "hot_points": "122718e65bdf55aab0ee12ad20d80062f0deb1de957225a61ad880dd5dc196ea",
+    "incumbent": "8f8708d2872b66d71925707e0aede23eebcf217dfd2e57d6e61186f32e686f5d",
+    "labels": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
+    "lidar": "d580bb8bdcdb941e32fefb8b38044bc5bf04e199bf2e83498c3576e6fc465568",
+    "prior_union": "bfaf83edf47bf7c48309f692a670f3b6d92f492081a120d85dedc30b462578a6",
+    "radiometric": "c22420f75999030d7cc65c9e31e50d232ea6158423bca051613a18a8b20ba682",
+    "sgmc": "26d142c4c93282cd94f6950ab96f22aeff59fbbea523d43d662e76fa1b161b5c",
+    "split": "78b6692155c6c6d5f9f19ccee6d595167c2065f1f25eb8d08636d1d9b285ff16",
+    "template": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc"
+  },
+  "limitations": [
+    "The SGMC raster is an imperfect public proxy, not hidden competition truth.",
+    "The 250 m/90-day largest-event rule is deterministic sequence thinning, not a validated ETAS/Reasenberg/Gardner-Knopoff declustering model.",
+    "The relocated catalog contains no per-event covariance; corridor widths are sensitivity assumptions.",
+    "GDR hot features and explicit ComCat anthropogenic events do not form a complete mine/injection inventory.",
+    "Mixed-network ComCat contributor-specific redistribution status remains unresolved.",
+    "A 2-D epicentre axis is not proof of a surface fault or geothermal productivity.",
+    "Complete prior-corpus byte/pixel novelty must still be run before any slot review."
+  ],
+  "novelty_local_comparators": {
+    "Candidate-B-incumbent": {
+      "exact_pixel_match": false,
+      "intersection_positive_cells": 0,
+      "jaccard": 0.0
+    },
+    "density-1000m": {
+      "exact_pixel_match": false,
+      "intersection_positive_cells": 1601,
+      "jaccard": 0.034071078952968716
+    },
+    "density-2000m": {
+      "exact_pixel_match": false,
+      "intersection_positive_cells": 1385,
+      "jaccard": 0.029339490742702198
+    }
+  },
+  "packing": {
+    "H55-S1-1000m": {
+      "belief_max": 1.0,
+      "mass": 21332,
+      "suppression_px": 3.0
+    },
+    "H55-S1-300m": {
+      "belief_max": 1.0,
+      "mass": 8278,
+      "suppression_px": 3.0
+    },
+    "H55-S1-600m": {
+      "belief_max": 1.0,
+      "mass": 13591,
+      "suppression_px": 3.0
+    },
+    "density-1000m": {
+      "pack": {
+        "belief_max": 1.0,
+        "mass": 35000,
+        "suppression_px": 3.0
+      },
+      "sigma_m": 1000.0
+    },
+    "density-2000m": {
+      "pack": {
+        "belief_max": 1.0,
+        "mass": 35000,
+        "suppression_px": 3.0
+      },
+      "sigma_m": 2000.0
+    },
+    "matched-random": {
+      "belief_max": 0.9999997615814209,
+      "mass": 35000,
+      "suppression_px": 3.0
+    }
+  },
+  "prior_pixel_exclusion": {
+    "candidate_exact_overlap_with_union": 0,
+    "registered_file_hashes": 61,
+    "rule": "Prior predictions are comparison-only; every prior positive pixel is excluded from final candidate placement.",
+    "source": "registry/prior_positive_union.npz",
+    "union_positive_cells": 1405451
+  },
+  "project": "GEMSDOE50",
+  "registered_protocol": {
+    "config": {
+      "anthropogenic_buffer_m": 3000.0,
+      "background_neighbour_k": 20,
+      "background_p_max": 0.2,
+      "background_surrogates": 32,
+      "bootstrap_replicates": 24,
+      "dedupe_cell_m": 250.0,
+      "dedupe_window_days": 90.0,
+      "geothermal_buffer_m": 2000.0,
+      "max_bootstrap_angle_p90_deg": 30.0,
+      "min_events": 10,
+      "min_length_m": 1500.0,
+      "min_linearity": 0.6,
+      "min_years": 3,
+      "neighbourhood_radius_m": 5000.0,
+      "random_seed": 5501,
+      "seed_cell_m": 1000.0
+    },
+    "exact_addendum": "docs/research/h55-protocol-addendum.md",
+    "prediction_mass": 35000,
+    "preregistration": "docs/research/h55-hypotheses-preregistered.md",
+    "primary_width_m": 600.0,
+    "unverified_adaptation_notice": "The normalized 2-D triangle-area test is unverified and is not the published 3-D tetrahedron test of Ouillon/Sornette.",
+    "width_sensitivities_m": [
+      300.0,
+      600.0,
+      1000.0
+    ]
+  },
+  "ridge_evidence": {
+    "finite_radiometric_cells": 5166085,
+    "finite_topographic_cells": 3882902,
+    "method": "independent terrain/radiometric ridge evidence",
+    "radiometric_bands": [
+      "K",
+      "Th",
+      "U",
+      "TC"
+    ],
+    "radiometric_p99_scale": 0.06358211487531662,
+    "radiometric_scales_pixels": [
+      1.5,
+      3.0
+    ],
+    "robust_percentile": 99.0,
+    "terrain_bands": [
+      "step_max",
+      "lapneg_max",
+      "relief",
+      "coh100",
+      "strike"
+    ],
+    "terrain_p99_scale": 0.3820178210735321,
+    "weights": {
+      "radiometric": 0.3,
+      "topographic": 0.7
+    }
+  },
+  "schema": "gemsdoe50.h55-evaluation.v1",
+  "status": "UNIQUE_RESEARCH_ARTIFACT_NOT_SUBMITTED",
+  "submission_status": "No DrivenData upload or weekly slot was used."
+}

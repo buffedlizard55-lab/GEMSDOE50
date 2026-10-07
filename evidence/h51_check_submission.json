@@ -1,0 +1,213 @@
+{
+ "format": {
+  "driver": "GTiff",
+  "count_is_1": true,
+  "dtype_is_float32": true,
+  "crs_is_epsg32611": true,
+  "same_shape": true,
+  "same_transform": true,
+  "same_bounds": true,
+  "min": 0.0,
+  "max": 1.0,
+  "nan_count": 7111787,
+  "values_in_0_1": true,
+  "nan_only_outside_footprint": true,
+  "positive_px": 30000,
+  "unique_positive_values": [
+   1.0
+  ],
+  "compression": "Compression.deflate",
+  "nodata": null,
+  "footprint_source": "registry/footprint_mask.npz",
+  "footprint_px": 5167373,
+  "outside_footprint_all_nan": true,
+  "all_checks_pass": true
+ },
+ "uniqueness": {
+  "n_prior": 25,
+  "identical_sha256": [],
+  "max_iou": 0.42190918512263464,
+  "worst_overlap_file": "gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-nan.tif",
+  "min_novel_fraction_at_2px": 0.20026666666666668,
+  "corpus_entries": [
+   {
+    "file": "12GEMSDOE_r7-nms3-dem10-scarp_0c9199f14e62.tif",
+    "prior_dots": 103347,
+    "novel_fraction_at_2px": 0.5632666666666667,
+    "reproduced_prior": 0.13388874374679477,
+    "iou_2px": 0.10896087155391077
+   },
+   {
+    "file": "13gems_20261001_r13-lattice-s5_v2_nan-outside.tif",
+    "prior_dots": 206895,
+    "novel_fraction_at_2px": 0.5964333333333334,
+    "reproduced_prior": 0.052703061939631216,
+    "iou_2px": 0.05385963663540758
+   },
+   {
+    "file": "17GEMSDOE_F-ensemble-2pct_20260930T050626Z.tif",
+    "prior_dots": 103347,
+    "novel_fraction_at_2px": 0.9755,
+    "reproduced_prior": 0.020010256707983783,
+    "iou_2px": 0.005542484843000633
+   },
+   {
+    "file": "gems-structural-area06-v1.tif",
+    "prior_dots": 343526,
+    "novel_fraction_at_2px": 0.8560333333333333,
+    "reproduced_prior": 0.040887734843941946,
+    "iou_2px": 0.011698044728296051
+   },
+   {
+    "file": "gems-tso1-20260929T005627Z-conj_alteration_mag.tif",
+    "prior_dots": 99999,
+    "novel_fraction_at_2px": 0.7946333333333333,
+    "reproduced_prior": 0.05928059280592806,
+    "iou_2px": 0.0497504804664158
+   },
+   {
+    "file": "gems10-h16-continuation-20260927T065521077735Z-3431b83c7c.tif",
+    "prior_dots": 310042,
+    "novel_fraction_at_2px": 0.7952333333333333,
+    "reproduced_prior": 0.06134975261416195,
+    "iou_2px": 0.018397778969089455
+   },
+   {
+    "file": "gems10-h20-dem10-scarp-thin-20260927T155223039488Z-ffc91a1686.tif",
+    "prior_dots": 153957,
+    "novel_fraction_at_2px": 0.7509666666666667,
+    "reproduced_prior": 0.10674409088251914,
+    "iou_2px": 0.04233196967464841
+   },
+   {
+    "file": "gems10-h25-ctx-ridge-20260927T232947704150Z-6452ae1d00.tif",
+    "prior_dots": 174232,
+    "novel_fraction_at_2px": 0.6046666666666667,
+    "reproduced_prior": 0.1412025345516323,
+    "iou_2px": 0.06165138377726488
+   },
+   {
+    "file": "gems10-h28-dotted-ridge-20260928T020256236880Z-6452ae1d00.tif",
+    "prior_dots": 69281,
+    "novel_fraction_at_2px": 0.675,
+    "reproduced_prior": 0.133687446774729,
+    "iou_2px": 0.10890082764629011
+   },
+   {
+    "file": "gems16-h16-1-topo-geophys-baseline-ridges-20260930-df20f65e-nan.tif",
+    "prior_dots": 123939,
+    "novel_fraction_at_2px": 0.2209,
+    "reproduced_prior": 0.5074109037510388,
+    "iou_2px": 0.17901291300951244
+   },
+   {
+    "file": "gems19-h19-4-multiline-corroborated-openness-thermal-pop-20260930-691e4dfa-nan.tif",
+    "prior_dots": 123779,
+    "novel_fraction_at_2px": 0.20403333333333334,
+    "reproduced_prior": 0.5429596296625437,
+    "iou_2px": 0.18382602001539647
+   },
+   {
+    "file": "gems24-h24-0-mirror-h19-5-group-best-20261002-e27054cf-nan.tif",
+    "prior_dots": 121131,
+    "novel_fraction_at_2px": 0.20026666666666668,
+    "reproduced_prior": 0.5649008098670035,
+    "iou_2px": 0.18870684841000795
+   },
+   {
+    "file": "gems24-h25-1-dotted-h19-5-d1-5-20261002-989f59505db1-nan.tif",
+    "prior_dots": 60069,
+    "novel_fraction_at_2px": 0.2105,
+    "reproduced_prior": 0.5499009472440027,
+    "iou_2px": 0.3567877801879971
+   },
+   {
+    "file": "gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-nan.tif",
+    "prior_dots": 44090,
+    "novel_fraction_at_2px": 0.2672,
+    "reproduced_prior": 0.5231571784985257,
+    "iou_2px": 0.42190918512263464
+   },
+   {
+    "file": "gems26-dilcond-oof-v1-20261003-47629f496133-nan.tif",
+    "prior_dots": 60068,
+    "novel_fraction_at_2px": 0.7728333333333334,
+    "reproduced_prior": 0.14012452553772392,
+    "iou_2px": 0.08185891199115948
+   },
+   {
+    "file": "gems27-topo-gap-closure-t-v2-on-d1-5-20261002-5512495c6bd1-nan.tif",
+    "prior_dots": 61328,
+    "novel_fraction_at_2px": 0.2105,
+    "reproduced_prior": 0.5387751108792069,
+    "iou_2px": 0.35014709578226866
+   },
+   {
+    "file": "gems6-hgb88-topk03-33cec71ff0.tif",
+    "prior_dots": 155021,
+    "novel_fraction_at_2px": 0.9308666666666666,
+    "reproduced_prior": 0.03269879564704137,
+    "iou_2px": 0.01133661661574117
+   },
+   {
+    "file": "gems7-lidarscarp-ridge-top2pct-36c3a3f341c8.tif",
+    "prior_dots": 76859,
+    "novel_fraction_at_2px": 0.6829333333333333,
+    "reproduced_prior": 0.2300966705265486,
+    "iou_2px": 0.09771230751846487
+   },
+   {
+    "file": "gemsdoe2-dual-union-f68e590f.tif",
+    "prior_dots": 183642,
+    "novel_fraction_at_2px": 0.5529,
+    "reproduced_prior": 0.17983903464349113,
+    "iou_2px": 0.06698829839833391
+   },
+   {
+    "file": "gemsdoe3-pindrop-discovery-37f9d5b855.tif",
+    "prior_dots": 155021,
+    "novel_fraction_at_2px": 0.6668666666666667,
+    "reproduced_prior": 0.05890169718941305,
+    "iou_2px": 0.05709976175104412
+   },
+   {
+    "file": "gemsdoe3-pindrop-nodes-f347b70daa.tif",
+    "prior_dots": 155021,
+    "novel_fraction_at_2px": 0.6161333333333333,
+    "reproduced_prior": 0.06642970952322588,
+    "iou_2px": 0.06637272701074896
+   },
+   {
+    "file": "gemsdoe3-pindrop-ridge-4e03fc9705.tif",
+    "prior_dots": 155021,
+    "novel_fraction_at_2px": 0.7357333333333334,
+    "reproduced_prior": 0.11588752491597913,
+    "iou_2px": 0.04476743857747059
+   },
+   {
+    "file": "gemsdoe4-combined-237f0063.tif",
+    "prior_dots": 264247,
+    "novel_fraction_at_2px": 0.8775666666666667,
+    "reproduced_prior": 0.03692757155237335,
+    "iou_2px": 0.012640497773372703
+   },
+   {
+    "file": "gemsdoe9-PLACEHOLDER-2314b599.tif",
+    "prior_dots": 343816,
+    "novel_fraction_at_2px": 0.969,
+    "reproduced_prior": 0.01327163366451823,
+    "iou_2px": 0.002494059846709182
+   },
+   {
+    "file": "submission.tif",
+    "prior_dots": 172974,
+    "novel_fraction_at_2px": 0.5605333333333333,
+    "reproduced_prior": 0.1794547157376253,
+    "iou_2px": 0.06946625217345487
+   }
+  ],
+  "my_dots": 30000,
+  "my_sha256": "a26055834f8e6cc57cc33e96a4a5a26a1adeaafbeec490135af84c6ccd4d1da0",
+  "verdict_unique": true
+ }
+}

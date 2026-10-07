@@ -14,11 +14,11 @@ is reproduced by a script in this repository; nothing is quoted from a previous 
 | zip (single GeoTIFF inside) | `docs/downloads/gems50-h52-coincidence8-80000-20261007T032938Z-nanoutside.zip` |
 | predicted pixels | 80,000 isolated cells, ≥3 px (300 m) apart |
 | format | GTiff, 1 band, float32, EPSG:32611, 3292 × 3730, 100 m, values in {0, 1}, NaN (or 0.0 in the twin) outside the study footprint, no nodata sentinel |
-| builder | `scripts/build_h52.py` (input SHA-256s in `evidence/h52_build_80000.json`) |
+| builder | `scripts/build_h52_coincidence.py` (input SHA-256s in `evidence/h52_build_80000.json`) |
 | receipts | `evidence/h52_validation_80k.json`, `evidence/h52_uniqueness.json`, `evidence/h52_budget_curve.json` |
 
 Reproduction: `scripts/restore_inputs.sh .arena/inputs` (28 s, eight SHA-256 checks) then
-`python scripts/build_h52.py --inputs .arena/inputs --out-dir .arena/out --budget 80000`
+`python scripts/build_h52_coincidence.py --inputs .arena/inputs --out-dir .arena/out --budget 80000`
 (≈6–13 min). Two independent runs on 2026-10-07 produced byte-identical output for the all-finite
 file — the builder is deterministic given the pinned inputs.
 
@@ -57,7 +57,7 @@ s = T / (alpha * n + beta * G)        alpha = 0.2, beta = 0.8
 ```
 
 solve exactly for the two unknowns: **G = 14,088.75 truth pixels** and **T = 5,223.14 weighted
-credit** (re-derived in `scripts/h52_budget_curve.py`; unit-tested in `tests/test_h52_emission.py`).
+credit** (re-derived in `scripts/h52_coincidence_budget.py`; unit-tested in `tests/test_h52_coincidence.py`).
 The champion therefore reaches only 37 % of the truth mass, and the bar for adding a fresh pixel
 follows from the same algebra: a dot is worth adding only if its expected credit exceeds
 `bar × (1 − k)`, with `bar = alpha·s/(1 − alpha·s) = 0.0588` at `s = 0.2778`. In distance terms a
@@ -71,7 +71,7 @@ coincidence-of-independent-families score are for.
 
 ## 4. The emission budget: one measurement, one extrapolation
 
-`scripts/h52_budget_curve.py` emits the same field at ten budgets and reports, for each, the
+`scripts/h52_coincidence_budget.py` emits the same field at ten budgets and reports, for each, the
 *measured* instrument credit per dot, the metric evaluated with the proxy inventory standing in for
 the truth, and the model implied by the single transfer constant
 `r = 0.8510 = T_champion / (instrument credit per dot × dots)` at the anchor
