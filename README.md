@@ -60,9 +60,9 @@
   repository links to the official board but never polls, scrapes, or publishes a leaderboard snapshot, and
   no score is mapped to a TIFF. One unintended automated request to the public leaderboard page occurred
   during prior research; no rows/scores were saved or used, and no further automated access will be made.
-- This session's Arena branch is `arena/fe65fa32-gemsdoe50`; the older
+- This session's Arena branch is `arena/a51bdd46-gemsdoe50`; the older
   [`h50s1-research.yml`](.github/workflows/h50s1-research.yml) workflow is pinned to
-  `arena/c6060a3e-gemsdoe50` and is not used by H51.
+  `arena/c6060a3e-gemsdoe50` and is not used by H51/H52.
 - **Inherited H50-S1 status from `main` (still true).** The dispatch-only research workflow now returns
   HTTP 403 `Resource not accessible by integration`, so no job ran and no data was fetched and the
   experiment still has not run; the branch also carries two matched Gaussian-smoothed relocated-event density controls
@@ -80,14 +80,38 @@
   Pass 2/3, the remaining work, and the limitations. The 5 ranked *untried* hypotheses now also appear
   as a card on the executive-summary page (rank, layers, signature, why the catalogue can miss the
   fault, difference from what is implemented, cost, expected gain, and the slot rule).
+- **H52-A implemented and validated (2026-10-07); H52 is now the top-billed recommendation.** The
+  rank-1 untried candidate (scarp-profile matched filter + independent drainage-deflection
+  corroboration) was built as `scripts/build_h52a.py` / `src/gems51/scarpmf.py` /
+  `src/gems51/drainage.py`, with 8 new passing unit tests. Standalone it scores a lower SGMC-off DTI
+  than H51 (0.0550 vs 0.1158, because it emits only 10,000 dots) but only 1.7% of its cells overlap
+  H51's — the lowest overlap of any candidate measured in this project. Unioned with H51
+  (`scripts/build_h52.py`, `docs/downloads/gems52-union-h51-h52a-offcat-44828-20261007T021528Z-990213fd-nan.tif`,
+  sha256 `15468475cc99b9106b9959c95add9966ad38678329435daa3a9cbf7e8ccc9a21`), pooled SGMC-off DTI rises
+  to **0.1518** (+31% over H51 alone), beating H51 in 3/4 frozen spatial macrofolds and a matched
+  random control in 4/4, with a paired subtile bootstrap 95% CI entirely positive
+  (`[0.0063, 0.0174]`) — see [`evidence/holdout_h52.json`](evidence/holdout_h52.json) and
+  [`docs/h52a-protocol.md`](docs/h52a-protocol.md) Amendments B1–B2 for the full promotion-gate record.
+  **Mandatory disclosure:** the union (H52) is a literal pixel superset of H51 — about 78% of its
+  44,828 predicted pixels are H51's own prior output, only ~22% (9,828 pixels) is new from H52-A.
+  H51 has never been uploaded to the DrivenData portal (`organizer_score: null` in
+  [`registry/submissions.json`](registry/submissions.json)), so this is not "copying a previous
+  *submission's* pixels" in the sense this project's own rule prohibits, but it is a transparent
+  internal fusion of this project's own prior and new work and must always be described that way —
+  **H52-A standalone** (`docs/downloads/gems52a-scarpdrainage-offcat-10000-20261007T021452Z-5c377a13-nan.tif`,
+  sha256 `150620f57160ee7f755fb2b2c77928bb36850b5b38547dfc4b77516346483efd`) is the genuinely
+  independently-derived new artifact from this session, offered as an alternative on the submission
+  page for anyone who does not want a fused file.
 
 ## Executive summary and submission instructions
 
 The site is generated at repository root by [`scripts/build_h50_site.py`](scripts/build_h50_site.py) and
 serves [`index.html`](index.html), [`results.html`](results.html), [`methods.html`](methods.html) and
 [`submission.html`](submission.html). The **first thing on the executive-summary page is a one-click
-download band** for the H51 file (GeoTIFF, all-finite twin, and zip), next to the unique portal name and
-the optional note.
+download band** for the current recommended file, **H52** (GeoTIFF, all-finite twin, and zip), next to
+the unique portal name, the optional note, and a prominent disclosure banner; H51 (the prior incumbent,
+never itself uploaded to the portal) and H52-A (the standalone, non-fused new method) remain downloadable
+further down the same pages for comparison.
 
 Numbered manual upload path (this repository never uploads for you and holds no portal credentials):
 
@@ -95,9 +119,12 @@ Numbered manual upload path (this repository never uploads for you and holds no 
 2. Optionally confirm the bytes against the SHA-256 shown next to the link.
 3. Sign in to DrivenData manually and open *DOE GEMS Prize Challenge → Submit*.
 4. Choose the downloaded `.tif`.
-5. Use the unique name `GEMSDOE50-H51-SCARPRADIO-OFFCAT` and the note
-   “GEMSDOE50 H51 | corroborated 3DEP-scarp + radiometric lineaments, all dots >300 m from the given
-   catalogue, metric-matched sparse emission; proxy-validated, NOT organizer-scored”.
+5. Use the unique name `GEMSDOE50-H52-UNION-OFFCAT` and the note
+   “GEMSDOE50 H52 | H51 scarp+radiometric UNION H52-A scarp-matched-filter+drainage; disclosed fusion of
+   this project's own validated prior work, not an independently new method; beats H51 in 3/4 spatial
+   holdout macrofolds and 4/4 vs random control; proxy-validated, NOT organizer-scored” — or, to submit
+   the non-fused standalone artifact instead, `GEMSDOE50-H52A-SCARPDRAINAGE-OFFCAT` with the note shown
+   on the submission page.
 6. Submit, then record the returned score next to the file hash before making any claim about it.
 
 A local pass is a proxy result, not an organizer score, and it licenses a manual upload decision only.
@@ -151,23 +178,34 @@ The manually dispatched [H50-S1 research workflow](.github/workflows/h50s1-resea
 
 ## Open gates / next actions
 
-1. **Manual owner decision** on whether to spend one of the three weekly slots on the H51 file. Nothing is
-   uploaded by this repository: H51 has an artifact and local proxy evidence, but no organizer score.
+1. **Manual owner decision** on whether to spend one of the three weekly slots, and on which file: H52
+   (best-validated, but a disclosed 78%-H51 fusion) or H52-A standalone (fully independent new method,
+   lower standalone coverage, never validated to beat H51 on its own). Nothing is uploaded by this
+   repository: both have an artifact and local proxy evidence, but no organizer score.
 2. If a slot is spent, record the returned score and the portal receipt next to the pinned sha256; never
    restate proxy numbers as official.
-3. **Top untried candidate (H52-A: scarp-profile matched filter with drainage-deflection corroboration)**
-   must pass its own preregistration and the same spatially blocked test
-   ([`scripts/validate_h51_holdout.py`](scripts/validate_h51_holdout.py)) before it can be considered for a
-   slot. The ranked list is in [`docs/h51-candidates.md`](docs/h51-candidates.md) and in the site's
-   executive-summary card.
+3. **Next untried candidates (H52-B basement-depth step, H52-C spring/well conduits, H52-D nodal-plane
+   seismicity)** remain unimplemented — see [`docs/h51-candidates.md`](docs/h51-candidates.md) Part 2.
+   H52-B needs `training_features.tif`, which is confirmed **permanently unobtainable** in this sandbox
+   (see `docs/h52a-protocol.md`); do not re-attempt fetching it without a new access path (e.g. a
+   DrivenData-authenticated session the user runs manually).
 4. **H50-S1 stays blocked.** The fixed-branch dispatch-only workflow returns HTTP 403 in this repository, so
    the Nevada catalog still needs an auditable acquisition route; the hypothesis itself is unchanged and
    unimplemented, and no H50-S1 DTI or raster is claimed.
 5. Re-verify the large snapshot-excluded input stack (`/home/user/.arena/inputs/`) before any rebuild; the
    build regenerates deterministically from those pinned bytes
-   (`python scripts/build_h51.py`, then `scripts/verify_h51_raster.py`, `scripts/uniqueness_h51.py`,
-   `scripts/mc_sensitivity_h51.py`, `scripts/validate_h51_holdout.py`,
-   `scripts/update_registries_h51.py`, `python scripts/build_h50_site.py`).
+   (`python scripts/build_h51.py`, then `python scripts/build_h52a.py`, `python scripts/build_h52.py`,
+   `scripts/verify_h51_raster.py` against both evidence files, `scripts/uniqueness_h52.py`,
+   `scripts/validate_h52_holdout.py`, `python scripts/build_h50_site.py`).
 6. Any next iteration must independently re-open and byte-validate its GeoTIFF, refresh the
    executive-summary/results/submission pages, and re-check source licenses, attribution, limitations, and
    the AI-use disclosure before a slot is spent.
+7. **Still outstanding from the standing brief, flagged honestly rather than hidden:** (a) embedding the
+   full original mega-prompt verbatim into this README — the session memory available to this agent
+   preserves a condensed/paraphrased form of the user's original instructions, not the literal original
+   message text, so a "verbatim" embed cannot be produced without risking fabrication; the standing
+   project brief above is the faithful distilled version actually re-read each session, and the exact
+   original text should be pasted in by the user if a literal verbatim copy is required; (b) a dedicated,
+   deep, source-linked geothermal-vent research writeup (a 2026-10-07 TODO, not yet started this session);
+   (c) 2–3 forward-looking H53+ candidate ideas beyond the ranked H52-B/C/D list already in
+   `docs/h51-candidates.md`.

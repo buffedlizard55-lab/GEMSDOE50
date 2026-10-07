@@ -1,0 +1,68 @@
+{
+ "primary": {
+  "path": "docs/downloads/gems52-union-h51-h52a-offcat-44828-20261007T021528Z-990213fd-nan.tif",
+  "bytes": 355561,
+  "sha256": "15468475cc99b9106b9959c95add9966ad38678329435daa3a9cbf7e8ccc9a21",
+  "crs": "EPSG:32611",
+  "shape": [
+   3730,
+   3292
+  ],
+  "dtype": "float32",
+  "count": 1,
+  "nodata": NaN,
+  "transform": [
+   100.0,
+   0.0,
+   243350.0,
+   0.0,
+   -100.0,
+   4508550.0
+  ],
+  "cells_finite": 5167373,
+  "cells_nan": 7111787,
+  "min": 0.0,
+  "max": 1.0,
+  "outside_unit_interval": 0,
+  "outside_footprint_nonzero": 0,
+  "footprint_min": 0.0,
+  "footprint_max": 1.0,
+  "footprint_nonzero": 44828
+ },
+ "allfinite": {
+  "path": "docs/downloads/gems52-union-h51-h52a-offcat-44828-20261007T021528Z-990213fd-allfinite.tif",
+  "bytes": 301949,
+  "sha256": "f0d697490fc27e9aa1e0c440c69497240f3d8ea70329b398a99902097846feed",
+  "crs": "EPSG:32611",
+  "shape": [
+   3730,
+   3292
+  ],
+  "dtype": "float32",
+  "count": 1,
+  "nodata": null,
+  "transform": [
+   100.0,
+   0.0,
+   243350.0,
+   0.0,
+   -100.0,
+   4508550.0
+  ],
+  "cells_finite": 12279160,
+  "cells_nan": 0,
+  "min": 0.0,
+  "max": 1.0,
+  "outside_unit_interval": 0,
+  "outside_footprint_nonzero": 0,
+  "footprint_min": 0.0,
+  "footprint_max": 1.0,
+  "footprint_nonzero": 44828
+ },
+ "zip": {
+  "path": "docs/downloads/gems52-union-h51-h52a-offcat-44828-20261007T021528Z-990213fd-nan.zip",
+  "bytes": 277909,
+  "sha256": "abaf1485121bb81cfa58d003d25abc68f1b581ed5f19aededdb47200383f5eb4",
+  "contains": "gems52-union-h51-h52a-offcat-44828-20261007T021528Z-990213fd-nan.tif"
+ }
+}

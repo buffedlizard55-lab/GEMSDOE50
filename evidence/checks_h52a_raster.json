@@ -1,0 +1,65 @@
+{
+ "file": "docs/downloads/gems52a-scarpdrainage-offcat-10000-20261007T021452Z-5c377a13-nan.tif",
+ "sha256": "150620f57160ee7f755fb2b2c77928bb36850b5b38547dfc4b77516346483efd",
+ "checks": {
+  "single_band": true,
+  "float32": true,
+  "crs_matches_template": true,
+  "shape_matches_template": true,
+  "transform_matches_template": true,
+  "values_finite_in_range": true,
+  "nan_only_where_template_is_nan": true,
+  "nonzero_only_inside_template": true,
+  "has_predictions": true,
+  "sha256_matches_build_evidence": true
+ },
+ "errors": [],
+ "predicted_cells": 10000,
+ "finite_cells": 5167373,
+ "nan_cells": 7111787,
+ "profile": {
+  "crs": "EPSG:32611",
+  "transform": [
+   100.0,
+   0.0,
+   243350.0,
+   0.0,
+   -100.0,
+   4508550.0
+  ],
+  "height": 3730,
+  "width": 3292,
+  "dtype": "float32",
+  "count": 1,
+  "nodata": NaN
+ },
+ "template": {
+  "crs": "EPSG:32611",
+  "transform": [
+   100.0,
+   0.0,
+   243350.0,
+   0.0,
+   -100.0,
+   4508550.0
+  ],
+  "height": 3730,
+  "width": 3292,
+  "dtype": "float32",
+  "count": 1
+ },
+ "mass_matches_evidence": true,
+ "allfinite_twin": {
+  "file": "gems52a-scarpdrainage-offcat-10000-20261007T021452Z-5c377a13-allfinite.tif",
+  "all_finite": true,
+  "outside_footprint_nonzero": 0
+ },
+ "zip": {
+  "entries": [
+   "gems52a-scarpdrainage-offcat-10000-20261007T021452Z-5c377a13-nan.tif"
+  ],
+  "single_geotiff": true,
+  "bytes_match_tif": true,
+  "sha256": "7e27f0d555f6a5dcfc1f3a4d86ca05fa8ea07a11399b6cb9eb7fd651047a2cee"
+ }
+}

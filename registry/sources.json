@@ -128,9 +128,66 @@
     "used_for": "off-catalogue scoring instrument only"
    }
   ],
+ "caveats": [
+  "no organizer score or upload receipt exists for this file",
+  "the location-uncertainty model is this project's own construction, not from arXiv:1304.6912"
+ ]
+}
+,
+"h52_submission": {
+ "note": "Two files from the H52-A hypothesis: the standalone new-method artifact and the H51-union best-validated candidate. See docs/h52a-protocol.md Amendments B1-B2 for the full promotion-gate record and the required H51-superset disclosure before either is treated as a submission.",
+ "h52a_standalone": {
+  "file": "docs/downloads/gems52a-scarpdrainage-offcat-10000-20261007T021452Z-5c377a13-nan.tif",
+  "sha256": "150620f57160ee7f755fb2b2c77928bb36850b5b38547dfc4b77516346483efd",
+  "bytes": 253701,
+  "mass": 10000,
+  "crs": "EPSG:32611",
+  "dtype": "float32",
+  "size": "3730x3292",
+  "nodata": "NaN outside the official template footprint (all-finite twin also written)",
+  "portal_name": "GEMSDOE50-H52A-SCARPDRAINAGE-OFFCAT",
+  "portal_note": "GEMSDOE50 H52-A | scarp matched-filter corroborated by independent drainage-deflection test, all dots >300 m from the given catalogue; genuinely new method vs all prior GEMSDOE submissions; proxy-validated, NOT organizer-scored",
+  "organizer_score": null,
+  "cell_overlap_with_h51_fraction": 0.0172,
+  "sources": [
+   {
+    "name": "3DEP / LiDAR scarp and topographic descriptors (competition feature stack)",
+    "licence": "U.S. public domain (USGS)",
+    "url": "https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits",
+    "used_for": "scarp matched-filter template input"
+   },
+   {
+    "name": "pysheds (open-source D8 flow-routing library)",
+    "licence": "BSD-3-Clause",
+    "url": "https://github.com/mdbartos/pysheds",
+    "used_for": "channel-deflection/knickpoint corroboration from the already-licensed topo_u8 DEM; no new third-party data, a software dependency only"
+   }
+  ],
   "caveats": [
    "no organizer score or upload receipt exists for this file",
-   "the location-uncertainty model is this project's own construction, not from arXiv:1304.6912"
+   "training_features.tif bands 12/19 (det_elev, det_elev_slope) originally proposed in docs/h51-candidates.md were permanently unobtainable this session; topo_u8 + pysheds D8 routing substituted instead",
+   "standalone SGMC-off DTI (0.0550) is lower than H51's (0.1158) because far fewer dots are emitted; the candidate's strength is in being almost entirely non-overlapping with H51 (98.3%), not in matching H51's coverage alone"
+  ]
+ },
+ "h52_union": {
+  "file": "docs/downloads/gems52-union-h51-h52a-offcat-44828-20261007T021528Z-990213fd-nan.tif",
+  "sha256": "15468475cc99b9106b9959c95add9966ad38678329435daa3a9cbf7e8ccc9a21",
+  "bytes": 355561,
+  "mass": 44828,
+  "crs": "EPSG:32611",
+  "dtype": "float32",
+  "size": "3730x3292",
+  "nodata": "NaN outside the official template footprint (all-finite twin also written)",
+  "portal_name": "GEMSDOE50-H52-UNION-OFFCAT",
+  "portal_note": "GEMSDOE50 H52 | H51 scarp+radiometric UNION H52-A scarp-matched-filter+drainage; disclosed fusion of this project's own validated prior work, not an independently new method; beats H51 in 3/4 spatial holdout macrofolds and 4/4 vs random control; proxy-validated, NOT organizer-scored",
+  "organizer_score": null,
+  "sources": "identical to h51_submission and h52a_standalone above; H52 is the pixel union of those two already-sourced files, no additional third-party data",
+  "disclosure": "H52 is a literal pixel superset of H51: all 35,000 of H51's dots are unchanged, plus 9,828 genuinely new dots from H52-A (172 of H52-A's 10,000 dots already coincided with H51). Roughly 78% of H52's mass is H51's own prior output. H51 itself has never been uploaded to the DrivenData portal (organizer_score null, submitted_utc null in registry/submissions.json), so this is not copying a previous *submission's* pixels in the sense the project rule prohibits, but it is an internal fusion of this project's own prior and new work and must always be described that way, never as independently derived from scratch.",
+  "caveats": [
+   "no organizer score or upload receipt exists for this file",
+   "best-validated candidate by every local proxy instrument and the only one to pass the full spatially blocked holdout gate (3/4 macrofolds beat H51, 4/4 beat random control, pooled beats H51, bootstrap 95% CI entirely positive)",
+   "naive 32px block-Jaccard uniqueness gate against prior artifacts reads 0.7314 (fails the naive threshold) but sits below this project's own measured null-distribution median (0.825) for the same statistic between genuinely independent prior artifacts -- the block test is not informative at this scale, exactly as documented for H51"
   ]
  }
+}
 }
