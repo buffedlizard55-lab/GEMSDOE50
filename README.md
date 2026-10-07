@@ -132,6 +132,44 @@ python scripts/h56_holdout.py --n-boot 200        # frozen macrofold split
 
 ## Current outcome — 2026-10-07 UTC
 
+### This session's own artifact — H52-C (eight-family coincidence)
+
+The branch `arena/685c6059-gemsdoe50` also ships a file this session built and validated itself, kept
+separate from the H52/H52A/H53/H54/H55 artifacts that other sessions track (nothing here reads their
+pixels):
+
+* **Portal file (NaN outside the footprint):**
+  [`gems50-h52-coincidence8-80000-20261007T032938Z-nanoutside.tif`](docs/downloads/gems50-h52-coincidence8-80000-20261007T032938Z-nanoutside.tif), SHA-256
+  `c8292db9e2c6d16b99a32ceae3d1652eb15019c8faa6f9d8b6d8b052d15dd582`, 417,986 bytes, 80,000 positive cells.
+* **All-finite twin:** [`gems50-h52-coincidence8-80000-20261007T032938Z.tif`](docs/downloads/gems50-h52-coincidence8-80000-20261007T032938Z.tif), SHA-256 `a2ed87fac9fdb4b9604ab2850b5f750eefe51fa9795caa6a503fc4739de6475d`.
+* **Single-file zip:** [`gems50-h52-coincidence8-80000-20261007T032938Z-nanoutside.zip`](docs/downloads/gems50-h52-coincidence8-80000-20261007T032938Z-nanoutside.zip), SHA-256 `6dc41bd5598495748eee22f85fca2f82cb3c938afe6eaecf8c839e47768d498c`.
+* Format: one float32 band, EPSG:32611, 3,730 x 3,292, 100 m, values in `{0, 1}`, zero values outside
+  the study footprint, zero dots on the provided catalogue, no nodata sentinel — re-read from the written
+  bytes by `scripts/uniqueness_h52_coincidence.py` (`evidence/h52_uniqueness.json`, all checks pass).
+* Method: eight evidence families (detrended elevation and slope, 10 m topographic descriptors, USGS
+  3DEP-1 m lidar scarp descriptors, two independent radiometric mosaics, potential field, geodetic
+  strain, and the competition's own seismicity bands), each ranked within itself by multi-scale
+  structure-tensor saliency, combined as `families >= 0.90 + 0.5 x mean normalised excess`, emitted
+  greedily at >= 3 px separation with a 200 m catalogue buffer. Builder:
+  `scripts/build_h52_coincidence.py`; inputs restored and hash-verified by `scripts/restore_inputs.sh`;
+  two independent builds produced byte-identical output.
+* Evidence: instrument calibration reproduces the published ordering of ten known artifacts
+  (Spearman 0.805, p = 0.005) and 4/4 spatially blocked folds beat a matched-mass random control
+  (`evidence/h52_validation_80k.json`); 57.2% of the dots are >= 300 m from every dot of the 16 prior
+  artifacts compared and 87.8% lie outside the union of all prior supports
+  (`registry/prior_artifact_sources.tsv`).
+* Budget: the recorded nested pair solves the metric exactly (G = 14,088.75 px, T = 5,223.14 px), which
+  yields the marginal-value rule (bar = 0.0588) and the ten-budget curve; the modelled optimum at 120k
+  comes from a saturation cap, so the shipped 80k sits inside the measured plateau deliberately
+  (`docs/h52-decision.md`, `evidence/h52_budget_curve.json`).
+* Delivery: the H52-C band at the top of `index.html` (immediately below the other sessions' bands)
+  carries the download links, the unique portal name `GEMSDOE50-H52-COINCIDENCE8-OFFCAT-80000` and a
+  172-character note.
+
+> **Not organizer-scored, no slot used.** The per-dot proxy quality of H52-C (0.1446) is below every
+> incumbent-family artifact measured (0.1573-0.1704) and the receipt records that an SGMC-family
+> submission scored 0.0512 on the hidden labels, so nothing here licenses a score claim.
+
 ### One-click H55 research artifact
 
 **All-finite portal-range-safe TIFF:**

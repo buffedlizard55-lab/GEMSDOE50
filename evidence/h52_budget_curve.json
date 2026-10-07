@@ -1,0 +1,137 @@
+{
+ "schema": "gemsdoe50.h52.budget_curve.v1",
+ "instrument": {
+  "name": "off-catalogue USGS SGMC fault inventory (>=200 m from the provided catalogue)",
+  "truth_cells": 68641,
+  "caveat": "Proxy inventory, not the organizer's hidden labels. It orders known artifacts correctly (Spearman 0.80, p = 0.005, n = 10 in evidence/h52_validation.json) but an SGMC-family submission scored 0.0512 on the hidden labels, below matched random. Absolute values here must not be read as expected organizer scores."
+ },
+ "inversion": {
+  "parent_dots": 44090,
+  "parent_score": 0.26,
+  "child_dots": 37654,
+  "child_score": 0.2778,
+  "truth_mass_G": 14088.747191011276,
+  "child_weighted_credit_T": 5223.139415730347,
+  "parent_dti_recomputed": 0.26,
+  "child_dti_recomputed": 0.2778,
+  "note": "closed-form solve of two organizer scores for nested submissions"
+ },
+ "transfer_constant_r": 0.851007,
+ "transfer_constant_definition": "r = T_champion / (instrument_credit_per_dot x dots) at the anchor",
+ "anchor_credit_per_dot": 0.163,
+ "model": "T(n) = min(r * instrument_credit_per_dot(n) * n, G); DTI(n) = T / (0.2n + 0.8G)",
+ "model_status": "EXTRAPOLATION. Measured only at the anchor (the nested pair). Applying r to other budgets assumes the proxy-to-hidden credit ratio is budget-independent, which no available evidence tests.",
+ "curve": [
+  {
+   "budget": 20000,
+   "dots": 20000,
+   "instrument_credit_per_dot": 0.158277,
+   "instrument_credit_per_dot_vs_matched_random": null,
+   "instrument_dti": 0.053433,
+   "model_T": 2693.896,
+   "model_T_capped_by_G": false,
+   "model_dti": 0.176406
+  },
+  {
+   "budget": 30000,
+   "dots": 30000,
+   "instrument_credit_per_dot": 0.157454,
+   "instrument_credit_per_dot_vs_matched_random": null,
+   "instrument_dti": 0.076913,
+   "model_T": 4019.823,
+   "model_T_capped_by_G": false,
+   "model_dti": 0.23275
+  },
+  {
+   "budget": 37654,
+   "dots": 37654,
+   "instrument_credit_per_dot": 0.156752,
+   "instrument_credit_per_dot_vs_matched_random": null,
+   "instrument_dti": 0.093587,
+   "model_T": 5022.945,
+   "model_T_capped_by_G": false,
+   "model_dti": 0.267152
+  },
+  {
+   "budget": 40000,
+   "dots": 40000,
+   "instrument_credit_per_dot": 0.156948,
+   "instrument_credit_per_dot_vs_matched_random": null,
+   "instrument_dti": 0.098745,
+   "model_T": 5342.542,
+   "model_T_capped_by_G": false,
+   "model_dti": 0.277232
+  },
+  {
+   "budget": 50000,
+   "dots": 50000,
+   "instrument_credit_per_dot": 0.15504,
+   "instrument_credit_per_dot_vs_matched_random": null,
+   "instrument_dti": 0.117937,
+   "model_T": 6596.992,
+   "model_T_capped_by_G": false,
+   "model_dti": 0.31014
+  },
+  {
+   "budget": 60000,
+   "dots": 60000,
+   "instrument_credit_per_dot": 0.150884,
+   "instrument_credit_per_dot_vs_matched_random": null,
+   "instrument_dti": 0.1334,
+   "model_T": 7704.22,
+   "model_T_capped_by_G": false,
+   "model_dti": 0.331065
+  },
+  {
+   "budget": 80000,
+   "dots": 80000,
+   "instrument_credit_per_dot": 0.144591,
+   "instrument_credit_per_dot_vs_matched_random": null,
+   "instrument_dti": 0.160392,
+   "model_T": 9843.806,
+   "model_T_capped_by_G": false,
+   "model_dti": 0.360962
+  },
+  {
+   "budget": 100000,
+   "dots": 100000,
+   "instrument_credit_per_dot": 0.138052,
+   "instrument_credit_per_dot_vs_matched_random": null,
+   "instrument_dti": 0.180834,
+   "model_T": 11748.274,
+   "model_T_capped_by_G": false,
+   "model_dti": 0.375692
+  },
+  {
+   "budget": 120000,
+   "dots": 120000,
+   "instrument_credit_per_dot": 0.13474,
+   "instrument_credit_per_dot_vs_matched_random": null,
+   "instrument_dti": 0.200637,
+   "model_T": 13759.749,
+   "model_T_capped_by_G": false,
+   "model_dti": 0.390115
+  },
+  {
+   "budget": 160000,
+   "dots": 160000,
+   "instrument_credit_per_dot": 0.126191,
+   "instrument_credit_per_dot_vs_matched_random": null,
+   "instrument_dti": 0.226948,
+   "model_T": 14088.747,
+   "model_T_capped_by_G": true,
+   "model_dti": 0.325593
+  }
+ ],
+ "model_optimum": {
+  "budget": 120000,
+  "dots": 120000,
+  "instrument_credit_per_dot": 0.13474,
+  "instrument_credit_per_dot_vs_matched_random": null,
+  "instrument_dti": 0.200637,
+  "model_T": 13759.749,
+  "model_T_capped_by_G": false,
+  "model_dti": 0.390115
+ },
+ "score_field": ".arena/fields/h52_score.npy"
+}

@@ -81,6 +81,104 @@ def load_h54() -> dict:
     return {"ship": ship, "validation": validation}
 
 
+# ---------------------------------------------------------------------------
+# H52-C: this session's own artifact (branch arena/685c6059-gemsdoe50).
+# Receipts are produced by scripts/build_h52_coincidence.py,
+# validate_h52_coincidence.py, uniqueness_h52_coincidence.py and
+# h52_coincidence_budget.py.  Nothing here reads another session's pixels, and
+# the strings the H55 page tests assert on ("Download portal-safe TIFF", "NO
+# SLOT", "UNSCORED", ...) are left untouched.
+# ---------------------------------------------------------------------------
+H52C_STEM = "gems50-h52-coincidence8-80000-20261007T032938Z"
+H52C_DIR = Path("docs/downloads")
+H52C_PORTAL_NAME = "GEMSDOE50-H52-COINCIDENCE8-OFFCAT-80000"
+H52C_NOTE = ("GEMSDOE50 H52 | eight-family lineament coincidence (topography, lidar scarp, "
+             "radiometric, potential field); dots >200 m off-catalogue; proxy-validated, "
+             "not organizer-scored")
+_H52C_CACHE: dict[str, str] | None = None
+
+
+def h52c_parts() -> dict[str, str]:
+    """Build the H52-C cards; return empty strings when the receipts are absent."""
+    global _H52C_CACHE
+    if _H52C_CACHE is not None:
+        return _H52C_CACHE
+    empty = {"ov": "", "res": "", "sub": ""}
+    build = json.loads((ROOT / "evidence/h52_build_80000.json").read_text()) if (
+        ROOT / "evidence/h52_build_80000.json").exists() else None
+    if not build or "twin" not in build:
+        _H52C_CACHE = empty
+        return empty
+    validation_path = ROOT / "evidence/h52_validation_80k.json"
+    uniqueness_path = ROOT / "evidence/h52_uniqueness.json"
+    curve_path = ROOT / "evidence/h52_budget_curve.json"
+    validation = json.loads(validation_path.read_text()) if validation_path.exists() else None
+    uniqueness = json.loads(uniqueness_path.read_text()) if uniqueness_path.exists() else None
+    curve = json.loads(curve_path.read_text()) if curve_path.exists() else None
+
+    nan, zero = build["twin"], build["primary"]
+    nan_name = Path(nan["path"]).name
+    zero_name = Path(zero["path"]).name
+    nan_sha, zero_sha = nan["sha256"], zero["sha256"]
+
+    fold_line = ""
+    if validation:
+        hold = validation["blocked_holdout"]
+        cal = validation["calibration"]
+        fold_line = (
+            f'<li><b>Calibrated instrument:</b> orders the ten artifacts with owner-recorded scores at '
+            f'Spearman {f(cal["spearman_vs_published"], 3)} (p = {f(cal["p_value"], 4)}); '
+            f'{hold["folds_positive"]}/{hold["n_folds"]} spatially blocked folds beat a matched-mass random '
+            f'control ({", ".join(f"{d:+.4f}" for d in hold["deltas"])}).</li>')
+    uniq_line = ""
+    if uniqueness:
+        u = uniqueness["uniqueness"]
+        uniq_line = (
+            f'<li><b>Unique:</b> {100 * (1 - u["worst_prior_overlap_within_2px_fraction"]):.0f}% of dots are '
+            f'&ge;300 m from every dot of the {u["n_priors_compared"]} prior artifacts compared, and '
+            f'{100 * (1 - u["reproduced_from_prior_union_fraction"]):.0f}% are outside the union of all prior '
+            f'supports.</li>')
+
+    ov = f"""<article class="card span-12" style="border-left:6px solid #164b66"><h2>This session's own artifact — H52-C (eight-family coincidence, {nan["positive_cells"]:,} dots)</h2>
+<p>A separate deliverable built and validated on this branch, not a variant of the H55/H54/H53/H52A files. Eight evidence families (detrended elevation and slope, 10 m topographic descriptors, USGS 3DEP-1 m lidar scarp descriptors, two independent radiometric mosaics, potential field, geodetic strain, seismicity) ranked within themselves by multi-scale structure-tensor saliency, combined where at least four agree, emitted at &ge;3 px separation with a 200 m catalogue buffer.</p>
+<p><a class="download" href="{esc(H52C_DIR.as_posix())}/{esc(nan_name)}" download>Download H52-C NaN-outside TIFF</a> <a class="download alt" href="{esc(H52C_DIR.as_posix())}/{esc(zero_name)}" download style="color:#17252b">all-finite twin</a></p>
+<p class="fine">SHA-256 <span class="hash">{esc(nan_sha)}</span> · {nan["bytes"]:,} bytes · all-finite twin SHA-256 <span class="hash">{esc(zero_sha)}</span><br>
+Unique portal name <code>{esc(H52C_PORTAL_NAME)}</code> · note ({len(H52C_NOTE)} characters) <q>{esc(H52C_NOTE)}</q></p>
+<ul class="list">{fold_line}{uniq_line}<li><b>Budget:</b> the recorded nested pair solves the metric exactly (G = 14,088.75 px, T = 5,223.14 px), giving the marginal-value rule at bar = 0.0588; the ten-budget curve and its labelled extrapolation are in <a href="docs/h52-decision.md">docs/h52-decision.md</a>.</li>
+<li><b>Not organizer-scored and no slot recommended:</b> per-dot proxy quality {f(validation["this_work"]["credit_per_dot"], 4) if validation else "—"} sits below every incumbent-family artifact, and the receipt records an SGMC-family submission scoring below matched random on the hidden labels.</li></ul></article>
+"""
+
+    res = ""
+    if validation or uniqueness or curve:
+        rows = "".join(
+            f"<tr><td>{esc(r['name'])}</td><td class=num>{f(r['published'], 4)}</td>"
+            f"<td class=num>{f(r['credit_per_dot'], 4)}</td><td class=num>{r['dots']:,}</td></tr>"
+            for r in sorted(validation["calibration"]["table"], key=lambda r: -r["credit_per_dot"])
+        ) if validation else ""
+        budget_rows = "".join(
+            f"<tr><td class=num>{row['dots']:,}</td><td class=num>{f(row['instrument_credit_per_dot'], 4)}</td>"
+            f"<td class=num>{f(row['instrument_dti'], 4)}</td><td class=num>{f(row['model_T'], 1)}</td>"
+            f"<td class=num>{f(row['model_dti'], 4)}</td></tr>"
+            for row in curve["curve"]
+        ) if curve else ""
+        res = f"""<article class="card span-12"><h2>H52-C — calibration, blocked holdout, uniqueness and budget</h2>
+<p>The instrument is an independent off-catalogue USGS SGMC derivative scored with the competition's own distance-weighted metric. It reproduces the published ordering of the artifacts that have organizer scores — which licenses it as an ordering device, not as a score predictor.</p>
+<div class="wide"><table><thead><tr><th>artifact</th><th class=num>owner-recorded score</th><th class=num>instrument credit / dot</th><th class=num>dots</th></tr></thead><tbody>{rows}</tbody></table></div>
+<p><b>H52-C:</b> {f(validation["this_work"]["credit_per_dot"], 4) if validation else "—"} credit per dot over {validation["this_work"]["dots"]:,} dots; blocked holdout {validation["blocked_holdout"]["folds_positive"]}/{validation["blocked_holdout"]["n_folds"]} folds positive against matched-mass random. Format re-read from the written bytes: one float32 band, all values in [0, 1], no nodata sentinel, zero dots on the provided catalogue. Uniqueness: worst prior covers {100 * uniqueness["uniqueness"]["worst_prior_overlap_within_2px_fraction"]:.1f}% of dots within 2 px, so {100 * uniqueness["uniqueness"]["min_novel_fraction_at_2px"]:.1f}% are &ge;300 m from any prior dot and {100 * (1 - uniqueness["uniqueness"]["reproduced_from_prior_union_fraction"]):.1f}% are outside every prior support (<a href="registry/prior_artifact_sources.tsv">provenance</a>, <a href="evidence/h52_uniqueness.json">receipt</a>).</p>
+<div class="wide"><table><thead><tr><th class=num>dots</th><th class=num>instr. credit/dot (measured)</th><th class=num>instr. DTI (measured)</th><th class=num>model T (extrapolated)</th><th class=num>model DTI (extrapolated)</th></tr></thead><tbody>{budget_rows}</tbody></table></div>
+<p class="fine">The measured columns improve monotonically with mass; the model peaks only because it caps credit at the total truth mass, so the shipped 80,000 dots sit inside the measured plateau deliberately. Full derivation: <a href="docs/h52-decision.md">docs/h52-decision.md</a> · receipts <a href="evidence/h52_validation_80k.json">validation</a>, <a href="evidence/h52_budget_curve.json">budget curve</a>.</p></article>
+"""
+
+    sub = f"""<article class="card span-12"><h2>This session's H52-C file — manual steps (no slot recommended)</h2>
+<p>Same no-automated-upload policy as the rest of this repository. H52-C passed its local gates but carries no organizer score, and its proxy quality is below the incumbent family, so the slot decision is the owner's.</p>
+<ol class="steps"><li><b>Download unchanged.</b> <a href="{esc(H52C_DIR.as_posix())}/{esc(nan_name)}" download>NaN-outside H52-C TIFF</a> or, if the portal objects to NaN outside the study area, the <a href="{esc(H52C_DIR.as_posix())}/{esc(zero_name)}" download>all-finite twin</a>.</li><li><b>Verify SHA-256.</b> NaN-outside <code>{esc(nan_sha)}</code>; all-finite <code>{esc(zero_sha)}</code>.</li><li><b>Manual sign-in.</b> Open the DOE GEMS competition on DrivenData yourself and check the current rules, deadline and remaining weekly slots.</li><li><b>Name and note.</b> Use <code>{esc(H52C_PORTAL_NAME)}</code> with the {len(H52C_NOTE)}-character note <q>{esc(H52C_NOTE)}</q>.</li><li><b>Record the receipt.</b> Save the returned score next to the hash in <a href="registry/submissions.json">registry/submissions.json</a> before making any claim.</li></ol>
+<p class="fine">Decision record: <a href="docs/h52-decision.md">docs/h52-decision.md</a> — including the exact inversion of the recorded nested pair, the marginal-value rule, and everything that remains unproven.</p></article>
+"""
+
+    _H52C_CACHE = {"ov": ov, "res": res, "sub": sub}
+    return _H52C_CACHE
+
+
 def overview(report: dict, unique: dict, artifacts: dict) -> str:
     zero, nan = artifacts["zero"], artifacts["nan"]
     receipt = json.loads(PRIOR_RECEIPT.read_text(encoding="utf-8"))
@@ -90,9 +188,11 @@ def overview(report: dict, unique: dict, artifacts: dict) -> str:
     mass = zero["positive_cells"]
     zero_link = esc(zero["path"])
     nan_link = esc(nan["path"])
+    h52c_ov = h52c_parts()["ov"]
     body = h56_band(load_h56()) + f"""<main id="main"><section class="hero"><div class="shell"><div class="hero-grid"><div><div class="eyebrow">Unique H55 research TIFF · built 2026-10-07</div><h1>Download the earthquake-geometry artifact.</h1><p>Recurrent relocated-earthquake covariance axes, snapped across-axis to independent LiDAR/radiometric ridges. Single-band competition grid; all values re-read in [0,1]; every prior positive pixel excluded.</p><div class="actions"><a class="download" href="{zero_link}" download>Download portal-safe TIFF · {mass:,} cells</a><a class="download alt" href="{nan_link}" download>NaN-outside twin</a></div><p class="fine" style="color:#d8e7e3">SHA-256 <span class="hash">{esc(zero["sha256"])}</span> · {zero["bytes"]:,} bytes</p></div><aside class="hero-card"><span class="tag fail">Frozen decision</span><strong>NO SLOT</strong><p>This is the requested unique deliverable—not a recommendation. It loses the blocked proxy test to the frozen incumbent. No weekly slot was used.</p><p><a href="results.html">See the falsification evidence →</a></p></aside></div></div></section>
 <section class="main"><div class="shell"><div class="grid">
 <article class="card span-12"><h2>Executive summary</h2><div class="metrics"><div class="metric"><b>{mass:,}</b><small>binary predicted cells</small></div><div class="metric"><b>{f(primary["score"])}</b><small>H55 pooled local proxy DTI</small></div><div class="metric"><b>{f(incumbent["score"])}</b><small>frozen incumbent, same frame</small></div><div class="metric"><b>{unique["uniqueness"]["n_prior"]}</b><small>unique prior files directly checked</small></div></div><div class="warning" style="margin-top:18px"><b>Do not submit under the frozen rule.</b> H55 loses in all four macrofolds; the 16-subtile candidate-minus-incumbent credit/dot interval is [{f(report["holdout"]["paired_subtile_bootstrap"]["percentile_ci_95"][0])}, {f(report["holdout"]["paired_subtile_bootstrap"]["percentile_ci_95"][1])}]. It also fails matched mass, density, random, uncertainty, inventory-completeness, and ComCat-rights gates.</div></article>
+{h52c_ov}
 <article class="card span-7"><h2>What is genuinely new</h2><p>The candidate uses the CC BY 4.0 Trugman relocated catalog, not the old smoothed seismicity band. After source/site filters and 90-day/250 m sequence thinning, a normalized triangle test removes Poisson-like background; recurrent local 2-D covariance axes must pass event, year, linearity, length, and bootstrap gates. Placement may move only across each axis toward an independent ridge.</p><p>All {receipt["all_source_assertions"]} prior source assertions were hash-verified: {receipt["unique_sha256"]} byte-distinct TIFFs and {receipt["unique_positive_masks"]} distinct positive masks. Byte-identical copies and finite/NaN semantic twins are explicitly inventoried. A frozen union of every prior positive cell is an output exclusion: final exact overlap is <b>0</b>. Full comparison across {unique["uniqueness"]["n_prior"]} filenames finds no identical candidate hash and maximum 200 m-proximity IoU <b>{f(unique["uniqueness"]["max_iou"])}</b>.</p><p><a href="methods.html">Read methods, source rights, and limitations →</a></p></article>
 <aside class="card span-5"><h2>Format facts</h2><ul class="list"><li>one float32 band, EPSG:32611</li><li>3,730 × 3,292 at 100 m</li><li>predictions exactly 0 or 1</li><li>all-finite twin: {zero["finite_cells"]:,} finite cells</li><li>sample twin: NaN only outside footprint</li><li>known-fault exclusion: &gt;300 m</li></ul><div class="good"><b>Range guard passed.</b> The all-finite file re-read with min 0, max 1, and no NaN/Inf—the direct guard against the historical portal range error.</div></aside>
 <article class="card span-6"><h2>Why “0.2778” reportedly worked</h2><p>H33-B2 inherited a 40,199-dot owner-reported 0.2708 base and removed 2,545 dots within 200 m of the supplied catalogue. Under the 300 m distance-weighted metric, deleting low-credit dots lowers false-positive cost while preserving hidden-truth maxima. It was efficient pruning, not a new geological detector.</p><p><b>Irregularity:</b> GEMSDOE32 labels those exact bytes <code>UNSCORED</code> and projects 0.274673. No organizer receipt proves the 0.2778 mapping. <a href="results.html#h33">Read the conditional derivation.</a></p></article>
@@ -134,6 +234,7 @@ def results_page(report: dict, unique: dict, h54: dict) -> str:
         f"<tr><td>{esc(name.replace('_', ' '))}</td><td><span class='tag {'good' if passed else 'fail'}'>{'PASS' if passed else 'FAIL'}</span></td></tr>"
         for name, passed in gates.items()
     )
+    h52c_res = h52c_parts()["res"]
     body = f"""<main id="main"><section class="pagehead"><div class="shell"><div class="eyebrow">Measured, not organizer-scored</div><h1>Results and decision</h1><p>The top-ranked preregistered hypothesis was run once under its frozen gate, corrected for an evaluator bug during review, then rerun with strict prior-pixel exclusion. It did not beat the incumbent.</p></div></section><section class="main"><div class="shell"><div class="grid">
 <article class="card span-12"><div class="warning"><b>NO SLOT.</b> Pooled and blocked evidence point in the same direction. No portal upload occurred.</div><h2 style="margin-top:22px">Same-frame SGMC-off proxy</h2><div class="wide"><table><thead><tr><th>method</th><th class=num>DTI</th><th class=num>credit / dot</th><th class=num>dots</th></tr></thead><tbody>{rows}</tbody></table></div><p class="fine">SGMC-off is a necessary local instrument under the project rule, not hidden competition truth. Scores here are not numerically comparable with a leaderboard score.</p></article>
 <article class="card span-6"><h2>Four frozen macrofolds</h2><p>Central 600 m H55 minus incumbent, credit per dot:</p><table><thead><tr><th>fold</th><th class=num>delta</th><th>sign</th></tr></thead><tbody>{fold_rows}</tbody></table><p>Paired 16-subtile bootstrap 95% CI: <b>[{f(report["holdout"]["paired_subtile_bootstrap"]["percentile_ci_95"][0])}, {f(report["holdout"]["paired_subtile_bootstrap"]["percentile_ci_95"][1])}]</b>.</p></article>
@@ -142,7 +243,7 @@ def results_page(report: dict, unique: dict, h54: dict) -> str:
 <article class="card span-6"><h2>Novelty</h2><ul class="list"><li>{unique["uniqueness"]["n_prior"]} unique filenames compared directly</li><li>0 exact prior-positive pixels by construction</li><li>max 200 m-proximity IoU {f(unique["uniqueness"]["max_iou"])}</li><li>closest file: <code>{esc(unique["uniqueness"]["worst_overlap_file"])}</code></li><li>identical hashes: 0</li></ul></article>
 <article class="card span-6"><h2>Interpretation</h2><p>Broader corridors recover more SGMC credit, but even 1,000 m remains below density and far below Candidate B. The axes are too selective and too weakly tied to mapped surface traces; ridge snapping does not repair that mismatch. This falsifies slot readiness, not every possible use of seismic geometry.</p></article>
 <article class="card span-12"><h2>Latest-main H54 integration</h2><p>H54 is a separate corpus-calibrated field and metric-derived stratified emitter merged from another audited session. Its 40,000-cell artifact is now also in H55's strict prior-positive exclusion corpus. H54 did not beat its matched-mass random control in every frozen block, so it is likewise <b>NO SLOT</b>; its model-implied DTI is not an organizer score.</p><p><a href="{esc(h54_primary["path"])}" download>Download the H54 NaN-outside research TIFF</a> · SHA-256 <code>{esc(h54_primary["sha256"])}</code> · <a href="evidence/h54_validation.json">validation evidence</a> · <a href="evidence/h54_ship.json">build receipt</a></p><p class="fine">Audited comparison-only H51 consensus twins: <a href="docs/downloads/gemsdoe50-h51-corridor-consensus-mix-20261007T0200Z.tif">NaN-outside</a> · <a href="docs/downloads/gemsdoe50-h51-corridor-consensus-mix-20261007T0200Z-allfinite.tif">all-finite</a>. They are prior artifacts, not H55 outputs.</p></article>
-</div></div></section></main>"""
+{h52c_res}</div></div></section></main>"""
     return chrome(
         "Results",
         "results",
@@ -188,6 +289,7 @@ def submission_page(report: dict, artifacts: dict, h54: dict) -> str:
         "GEMSDOE50-H55-SEISGEOM-RIDGESNAP-"
         f"{zero['positive_cells']}-{report['artifacts']['positive_mask_sha256'][:8].upper()}"
     )
+    h52c_sub = h52c_parts()["sub"]
     body = f"""<main id="main"><section class="pagehead"><div class="shell"><div class="eyebrow">Manual guide · no automated upload</div><h1>Submission guide</h1><p>The artifact is easy to download and technically valid. The frozen evidence says not to spend a slot on it.</p></div></section><section class="main"><div class="shell"><div class="grid">
 <article class="card span-12"><div class="warning"><b>Current decision: NO SLOT.</b> Use this page for audit or only after an explicit owner override. There is no portal receipt and no organizer score.</div></article>
 <article class="card span-7"><h2>If the owner overrides the gate</h2><ol class="steps"><li><b>Download unchanged.</b> <a href="{esc(zero["path"])}" download>All-finite portal-safe TIFF</a> (recommended for the historical range parser) or <a href="{esc(nan["path"])}" download>NaN-outside twin</a> (sample semantics).</li><li><b>Verify SHA-256.</b> All-finite: <code>{esc(zero["sha256"])}</code>. NaN twin: <code>{esc(nan["sha256"])}</code>.</li><li><b>Check current rules manually.</b> Sign in at <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">DrivenData</a>; confirm deadline, remaining weekly slots, external-data disclosures, and AI disclosure. Do not rely on this dated page for live status.</li><li><b>Upload one TIFF.</b> Do not re-save, reproject, rename bands, or alter nodata metadata.</li><li><b>Record the receipt.</b> Preserve submission ID, exact file hash, timestamp, portal response, and any returned error/score before making a score claim.</li></ol></article>
@@ -196,7 +298,7 @@ def submission_page(report: dict, artifacts: dict, h54: dict) -> str:
 <article class="card span-6"><h2>NaN-outside twin</h2><p><a class="download" href="{esc(nan["path"])}" download>Download {esc(Path(nan["path"]).name)}</a></p><ul class="list"><li>{nan["bytes"]:,} bytes</li><li>{nan["positive_cells"]:,} positive cells</li><li>finite values only 0/1</li><li>NaN only outside official footprint</li><li>local published-format checker PASS</li></ul><p class="fine">No receipt establishes which twin the current portal prefers; that irregularity is disclosed rather than guessed away.</p></article>
 <article class="card span-12"><h2>Integrated H54 artifact — also NO SLOT</h2><p>H54 is retained for audit and is not an alternative slot recommendation. <a href="{esc(h54_nan["path"])}" download>NaN-outside TIFF</a> (SHA-256 <code>{esc(h54_nan["sha256"])}</code>) · <a href="{esc(h54_zero["path"])}" download>all-finite twin</a> (SHA-256 <code>{esc(h54_zero["sha256"])}</code>). See <a href="evidence/h54_validation.json">its failed frozen gate</a>.</p></article>
 <article class="card span-12"><h2>Required disclosure/access</h2><ul class="list"><li>Manual DrivenData account access and an available weekly feedback slot.</li><li>External-data attribution for Trugman (2024), Zenodo 11167510, CC BY 4.0.</li><li>Disclosure of 3DEP/radiometric/GDR inputs and the unresolved mixed-network ComCat exclusion mask.</li><li>AI-assistance disclosure as required by the current NLR/DOE rules.</li><li>Reproducible repository commit, environment, source receipts, and exact artifact hash.</li></ul></article>
-</div></div></section></main>"""
+{h52c_sub}</div></div></section></main>"""
     return chrome(
         "Submission guide",
         "submission",

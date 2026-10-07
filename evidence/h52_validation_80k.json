@@ -1,0 +1,195 @@
+{
+ "schema": "gemsdoe50.h52.validation.v1",
+ "instrument": {
+  "name": "off-catalogue USGS SGMC fault inventory (>=200 m from provided catalogue)",
+  "truth_cells": 68641,
+  "density_of_footprint": 0.013283538850398452,
+  "source": "data/external/derived_sgmc_faults_100m_u8.tif",
+  "caveat": "This instrument measures a DIFFERENT inventory from the organizer's hidden new-fault labels. A submission built from SGMC-family evidence scored 0.0512 on the real hidden truth (owner-reported), i.e. BELOW matched random, so this instrument cannot be assumed to predict the organizer's score. It is used because it is the only independent off-catalogue truth raster available here."
+ },
+ "calibration": {
+  "spearman_vs_published": 0.8048780487804879,
+  "p_value": 0.0049741358107084285,
+  "n": 10,
+  "table": [
+   {
+    "credit_per_dot": 0.1610251175608922,
+    "credit": 6256.469917710905,
+    "dots": 38854,
+    "dti": 0.09869364003758861,
+    "name": "anderson_pinn",
+    "published": 0.275
+   },
+   {
+    "credit_per_dot": 0.1290054541973964,
+    "credit": 7749.228628183404,
+    "dots": 60069,
+    "dti": 0.11464096024648601,
+    "name": "d15_dotted",
+    "published": 0.2477
+   },
+   {
+    "credit_per_dot": 0.15725784747127067,
+    "credit": 6933.4984950083235,
+    "dots": 44090,
+    "dti": 0.10753751988610452,
+    "name": "d28_poisson",
+    "published": 0.26
+   },
+   {
+    "credit_per_dot": 0.15725784747127067,
+    "credit": 6933.4984950083235,
+    "dots": 44090,
+    "dti": 0.10753751988610452,
+    "name": "g25_dotted_02600",
+    "published": 0.26
+   },
+   {
+    "credit_per_dot": 0.1630028638722926,
+    "credit": 6137.709836247305,
+    "dots": 37654,
+    "dti": 0.09720783586414519,
+    "name": "g32_h33b2_02778",
+    "published": 0.2778
+   },
+   {
+    "credit_per_dot": 0.07540617361773178,
+    "credit": 9134.025216489468,
+    "dots": 121131,
+    "dti": 0.11547141852459805,
+    "name": "h19_5",
+    "published": 0.1922
+   },
+   {
+    "credit_per_dot": 0.16481269083553554,
+    "credit": 6625.305358897693,
+    "dots": 40199,
+    "dti": 0.10403071483937001,
+    "name": "h274_solo",
+    "published": 0.2708
+   },
+   {
+    "credit_per_dot": 0.1614207161405699,
+    "credit": 6827.127768449264,
+    "dots": 42294,
+    "dti": 0.10648505740053486,
+    "name": "h32_prethin",
+    "published": 0.2649
+   },
+   {
+    "credit_per_dot": 0.16206538571745954,
+    "credit": 6784.867373061444,
+    "dots": 41865,
+    "dti": 0.10596463441711262,
+    "name": "h33d_stepover",
+    "published": 0.2632
+   },
+   {
+    "credit_per_dot": 0.17036257578668784,
+    "credit": 6415.854604126664,
+    "dots": 37660,
+    "dti": 0.10155959522392097,
+    "name": "h36_blind",
+    "published": 0.271
+   }
+  ],
+  "verdict": "instrument reproduces the published ordering"
+ },
+ "this_work": {
+  "credit_per_dot": 0.14459063673138406,
+  "credit": 11567.250938510724,
+  "dots": 80000,
+  "dti": 0.1603921354846971,
+  "name": "H52 coincidence (this work)"
+ },
+ "prediction_source": {
+  "artifact": ".arena/out/gems50-h52-coincidence8-80000-20261007T032938Z.tif",
+  "dots": 80000
+ },
+ "blocked_holdout": {
+  "folds": [
+   {
+    "fold": 0,
+    "core_cells": 2315783,
+    "truth_cells": 26229,
+    "h52": {
+     "credit_per_dot": 0.14169026364407689,
+     "credit": 4430.654544150284,
+     "dots": 31270,
+     "dti": 0.15997597716813952
+    },
+    "matched_random": {
+     "credit_per_dot": 0.08059018097187301,
+     "credit": 6061.509871618457,
+     "dots": 75214,
+     "dti": 0.1652336940353772
+    },
+    "dots_in_fold": 31270
+   },
+   {
+    "fold": 1,
+    "core_cells": 1296527,
+    "truth_cells": 24595,
+    "h52": {
+     "credit_per_dot": 0.18647524194727252,
+     "credit": 2806.2659160645044,
+     "dots": 15049,
+     "dti": 0.12211274262578081
+    },
+    "matched_random": {
+     "credit_per_dot": 0.1349030763213292,
+     "credit": 5634.496788712957,
+     "dots": 41767,
+     "dti": 0.19658383497227175
+    },
+    "dots_in_fold": 15049
+   },
+   {
+    "fold": 2,
+    "core_cells": 517586,
+    "truth_cells": 2836,
+    "h52": {
+     "credit_per_dot": 0.060740153142320924,
+     "credit": 970.2632062954344,
+     "dots": 15974,
+     "dti": 0.17464133614370572
+    },
+    "matched_random": {
+     "credit_per_dot": 0.04165329303474155,
+     "credit": 703.3991594776805,
+     "dots": 16887,
+     "dti": 0.1229860816148001
+    },
+    "dots_in_fold": 15974
+   },
+   {
+    "fold": 3,
+    "core_cells": 744865,
+    "truth_cells": 14224,
+    "h52": {
+     "credit_per_dot": 0.1918496053420972,
+     "credit": 3147.2927756371046,
+     "dots": 16405,
+     "dti": 0.20984273458058905
+    },
+    "matched_random": {
+     "credit_per_dot": 0.14133596303980772,
+     "credit": 3434.746573793407,
+     "dots": 24302,
+     "dti": 0.20652066150956686
+    },
+    "dots_in_fold": 16405
+   }
+  ],
+  "deltas": [
+   0.061100082672203876,
+   0.05157216562594333,
+   0.019086860107579373,
+   0.05051364230228947
+  ],
+  "folds_positive": 4,
+  "n_folds": 4,
+  "note": "Truth is the independent off-catalogue inventory restricted to each fold's core; all fields are emitted at matched mass with the same 3 px separation rule, so only placement is compared."
+ },
+ "budget": 40000
+}
