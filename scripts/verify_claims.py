@@ -48,8 +48,9 @@ def main() -> int:
     check("registry carries no copied leaderboard rows", "public_leaderboard_2026_10_06" not in submissions)
     check(
         "README treats 0.2778 as unresolved and 0.3195 as historical",
-        "`0.2778` score-to-artifact association remains unresolved" in README
-        and "not independently verified" in README,
+        "not current leaderboard observations" in README
+        and "without an organizer receipt/hash crosswalk" in README
+        and "No organizer receipt links these bytes to 0.2778" in README,
     )
     check(
         "prior-work notes require organizer receipt for score-to-file mapping",
@@ -124,17 +125,24 @@ def main() -> int:
         "smoothed-density controls" in site_builder and "aftershock" in site_builder,
     )
     check(
-        "research workflow is pinned to this Arena branch",
-        "arena/2e04de3b-gemsdoe50" in research_workflow
+        "archived research workflow is disabled and pinned to this Arena branch",
+        "if: ${{ false }}" in research_workflow
+        and "arena/38c5cc42-gemsdoe50" in research_workflow
+        and "arena/2e04de3b-gemsdoe50" not in research_workflow
         and "arena/5e2ce8c3-gemsdoe50" not in research_workflow,
     )
     check(
-        "leaderboard irregularity and non-use are documented",
-        "unintended automated request" in README and "no rows/scores were saved or used" in README,
+        "leaderboard non-use and score-attribution irregularity are documented",
+        "does not scrape/poll" in README
+        and "No organizer receipt links these bytes to 0.2778" in README,
     )
+    h55_report_path = ROOT / "evidence/results/h55s1-evaluation-20261007.json"
+    h55_report = json.loads(h55_report_path.read_text(encoding="utf-8"))
     check(
-        "blocked H50-S1 dispatch and no-run status are documented",
-        "HTTP 403" in README and "no job ran and no catalog" in README,
+        "H55 run is documented without claiming an upload or organizer score",
+        h55_report.get("status") == "UNIQUE_RESEARCH_ARTIFACT_NOT_SUBMITTED"
+        and h55_report.get("submission_status") == "No DrivenData upload or weekly slot was used."
+        and h55_report.get("decision", {}).get("decision") == "NO_SLOT",
     )
 
     marker_paths = [

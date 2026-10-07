@@ -266,7 +266,7 @@ def main() -> int:
                                      "prior makes extra mass look free") if args.fixed_mass else
                                     ("the model's own break-even bar, trusted only once the corpus "
                                      "fit has passed its leave-one-file-out gate"),
-                   
+
                    "model_bar_mass_if_run_free": None},
         "prior": {"source": prior_source, "exponent_if_field": args.exponent, "n_hat": args.n_hat,
                   "cells_positive": int((q > 0).sum()), "sum": float(q.sum()), "peak": float(q.max())},

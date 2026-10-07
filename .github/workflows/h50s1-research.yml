@@ -12,7 +12,9 @@ concurrency:
 
 jobs:
   research:
-    if: github.ref_name == 'arena/2e04de3b-gemsdoe50'
+    # Archived after H55 superseded H50. Keep disabled unless a future session explicitly
+    # re-preregisters and modernizes this commit-producing workflow.
+    if: ${{ false }}
     runs-on: ubuntu-latest
     timeout-minutes: 180
     env:
@@ -21,7 +23,7 @@ jobs:
       - name: Check out the fixed Arena branch
         uses: actions/checkout@v4
         with:
-          ref: arena/2e04de3b-gemsdoe50
+          ref: arena/38c5cc42-gemsdoe50
           fetch-depth: 1
 
       - name: Set up Python
@@ -101,4 +103,4 @@ jobs:
             exit 0
           fi
           git commit -m 'experiment: report preregistered H50-S1 holdout results'
-          git push origin HEAD:arena/2e04de3b-gemsdoe50
+          git push origin HEAD:arena/38c5cc42-gemsdoe50
