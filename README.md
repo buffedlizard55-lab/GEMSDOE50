@@ -68,7 +68,7 @@ by finding defensible fault traces omitted from the supplied catalogue. Core val
     provide reproducible code/assets and documentation. Verify current official rules and deadline
     immediately before any real submission.
 14. **Use Arena's fixed branch.** Each Arena session must stay on its assigned branch. This
-    session works, commits, and pushes only on `arena/d284137f-gemsdoe50`; open the pull request from
+    session works, commits, and pushes only on `arena/71ff0271-gemsdoe50`; open the pull request from
     that branch. This name is session-scoped, not a repository default for future sessions. Merge
     to `main` only when repository/environment policy permits it. Never switch or push another
     branch from this session.
@@ -134,6 +134,72 @@ python scripts/build_h56.py --layers .arena/work/g24/data/external --out docs/do
 python scripts/validate_h56.py --truth-mode sgmc_off --out evidence/h56_holdout_offcat.json
 python scripts/h56_uniqueness.py --novel-threshold 0.45
 python scripts/h56_holdout.py --n-boot 200        # frozen macrofold split
+```
+
+## H58 — the owner-mandated unique ComCat point-geometry artifact (this session)
+
+**H58-S1** is the unique submission generated as the session's mandated deliverable: **declustered
+USGS ComCat epicentre point geometry as the primary prediction field** — a genuinely new artifact,
+not a variant of any prior file. H55 used the *relocated* catalogue (and failed its gate); H56
+used ComCat lineations only as a 0.25-weight corroboration on the LiDAR scarp belief; no shipped
+artifact made ComCat point geometry the primary field. (Renumbered from H57 to H58 because the
+parallel H57 session's scarpstep artifact merged to `main` first via PRs #22/#23 and owns the H57
+number; the repo convention is one unique number per hypothesis.) Preregistration (five ranked
+hypotheses, frozen before any scoring):
+[`docs/research/h58-hypotheses-preregistered.md`](docs/research/h58-hypotheses-preregistered.md).
+
+**One-click download (site band below the H56 band):**
+`docs/downloads/gemsdoe50-h58-seislineage-98598-20261007T180223Z-c4ff6db9-allfinite.tif` — 98,598
+predicted cells, values `{0, 1}`, `float32`, EPSG:32611, 3730x3292, identical bounds and transform
+to the official template, **every one of the 12,279,160 cells finite and inside `[0, 1]`** (the
+portal-safe variant that cannot reproduce `Predicted values must be in range [0, 1]`). A `-nan.tif`
+twin keeps the official sample's footprint semantics and passes `all_checks_pass`, and a `.zip`
+carries the all-finite GeoTIFF.
+
+**Measured (frozen gates, all recorded in `evidence/h58_build.json`).** 222,939 ComCat rows →
+93,934 in-grid → 68,645 after the tectonic/magnitude/depth/location screens, the 3 km
+anthropogenic-site buffer (522 explicit blast/mine centres), and the 2-D triangle-area
+declustering (unverified adaptation of Ouillon & Sornette 2011) → 1,374 linear, well-sampled 2-D
+covariance lineations → corridors whose half-width is the catalogue's own `horizontalError`
+(median 0.88 km — a corridor prior, not a trace) → blue-noise emission at the metric's own 300 m
+support (support caps at 98,598 cells) → placement step measured (identity kept; no ridge snap
+improved the proxy). Pooled off-catalogue proxy DTI **0.0997** vs smoothed-density control
+**0.1078**, matched random **0.1329**, H56 incumbent **0.1874**; the paired 16-subtile bootstrap
+for candidate-minus-incumbent credit per dot is **[-0.1107, -0.0250]** — the candidate loses in
+**all four** macrofolds, and its 1-pixel enrichment against proxy truth is 1.03x (chance level).
+Uniqueness gate: worst full-pixel IoU **0.0166** against every prior artifact on disk, minimum
+novel fraction at 2 px **0.7537**, zero exact overlap with the frozen 1,405,451-cell prior union,
+no identical SHA-256 — **unique: true**. Format gate: NaN twin `all_checks_pass: true`; all-finite
+twin entirely finite in [0, 1].
+
+> **Decision: NO SLOT.** This is the requested unique deliverable and a recorded negative result,
+> not a submission recommendation — exactly as the prior measurements predicted (H55 failed as a
+> primary seismicity detector with a better-located catalogue; H56's ComCat-lineation component
+> measured neutral, lift 0.96-0.99). H56 remains the best-measured candidate on this branch. No
+> weekly slot was used; do not upload H58-S1.
+
+**Defect found and fixed in shared code (disclosed, not hidden).** The H58 build exposed a latent
+bug in `gemsdoe50.h56.emit_blue_noise`: its tie-breaker jitter was an *absolute* `1e-6`, so in
+blocks whose belief spread is below ~1e-6 (H58 corridor tails) the jitter dominated the values and
+`argmax` could pick a cell **outside** the emission domain — 5,631 of 98,598 emitted dots landed on
+prior-union/catalogue cells before the fix. The jitter now scales with each block's own maximum
+(`src/gemsdoe50/h56.py`), with a regression test (`tests/test_h56.py`). **H56's and H55's shipped
+bytes are unaffected** (verified: 0 dots outside their domains); a future H56 rebuild would differ
+in low-belief/near-tie blocks. This is recorded here because the shared emitter changed.
+
+**Reproduce:**
+
+```bash
+python3 -m venv .venv && .venv/bin/pip install numpy scipy rasterio pyproj pandas pytest ruff
+.venv/bin/pip install -e . --no-deps
+bash scripts/restore_inputs.sh .arena/inputs        # hash-pinned LiDAR/radiometric rasters
+PYTHONPATH=src .venv/bin/python scripts/build_h58.py
+PYTHONPATH=src .venv/bin/python scripts/h58_uniqueness.py
+PYTHONPATH=src .venv/bin/python scripts/check_submission.py \
+  --submission docs/downloads/gemsdoe50-h58-seislineage-98598-20261007T180223Z-c4ff6db9-nan.tif \
+  --out docs/downloads/checks-gemsdoe50-h58-seislineage-98598-20261007T180223Z-c4ff6db9-nan.tif.json
+python scripts/build_h55_site.py && python scripts/build_h58_site.py
+PYTHONPATH=src .venv/bin/python -m pytest -q
 ```
 
 ## Current outcome — 2026-10-07 UTC
@@ -493,3 +559,51 @@ The corpus's top seven artifacts all sit in the narrow mass band 37,654–44,090
 Full working: [`docs/research/h57-verdict-20261007.md`](docs/research/h57-verdict-20261007.md)
 (§7 lists the flagged irregularities, including the F2 name collision between this repository's
 catalogue-holdout frame and the H52 register's INGENIOUS-holdout frame).
+## Standing project prompt — read at the start of every session (2026-10-07)
+
+This is the owner's standing instruction for this project, kept verbatim in summary so it is read
+every time the project is worked on. It sits above the session-scoped charter items where they
+differ.
+
+1. **The goal is to place at the top of the DrivenData #306 DOE GEMS Prize leaderboard**
+   (<https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/>). The verified
+   public leader on 2026-10-07 is **0.3774 (xiaofanhu)**; the design target is to beat it. The
+   metric is the distance-weighted Tversky index (alpha=0.2, beta=0.8, R=300 m); for binary dots
+   it reduces exactly to `DTI = T / (0.2N + 0.8G)`.
+2. **MUST GENERATE A UNIQUE TIF SUBMISSION for the competition.** Never copy a previous submission;
+   prior files are for learning, controls, and comparison only. The generated submission must be
+   **obvious to download** (one click, top of the site / executive summary) and **it must be
+   obvious whether it is OK to download and submit** (an unmissable gate decision on the file's
+   band). A unique entry name and a short note are required on the submission form.
+3. **The mandated method for this session's artifact** is seismicity lineation from the point
+   pattern, not the density band: epicentres from a public catalogue (USGS ComCat; record the
+   official URL and licence first and confirm the external-data rule allows it), decluster,
+   remove known injection and mining sites, compute eigenvalues of the 2-D covariance per
+   epicentre neighbourhood, keep linear well-sampled neighbourhoods, output a corridor oriented
+   along the principal axis with width set by catalog location error (a corridor prior, not a
+   trace), score only corridors outside existing-fault buffers, falsify against smoothed
+   earthquake density, normalize to [0, 1], write the required GeoTIFF, run the uniqueness gate
+   against all prior submissions, and snap the corridor to another layer's ridge in the placement
+   step. The 2-D reduction of Ouillon & Sornette's 3-D tetrahedron test is our adaptation and is
+   unverified; say so everywhere.
+4. **Answer at PhD level, from verified sources, with links for manual review**: why the
+   group's best artifact reportedly scored 0.2778, and whether a submission can exceed the
+   leader. Never turn an owner/user report into an authenticated score without an organizer
+   receipt. Flag irregularities; no hallucinations; verify line by line.
+5. **Protect the weekly feedback slots.** Preregister 3-5 hypotheses before implementing; rank
+   them by expected DTI improvement and cost; validate the top candidate on the frozen
+   spatially-blocked holdout before touching a slot; do not spend a slot on an idea that has not
+   beaten the current holdout best. If a candidate needs new external data, name the specific
+   free official source and check it is obtainable first.
+6. **Site requirements.** A clean, simple GitHub Pages site: the one-click download and the
+   executive summary at the very top; an executive-summary/submission subpage explaining exactly
+   how to submit (including the historical `Predicted values must be in range [0, 1]` portal
+   error and how the shipped bytes avoid it); official verified source links; limitations and
+   irregularities; no implication of portal acceptance or a leaderboard score.
+7. **Core values.** Maximize P(Win): weigh tradeoffs and choose the path that maximizes the
+   probability of winning. Own the Outcome: own results end to end, act without waiting for
+   permission, treat failure and success as signals. Work autonomously; no manual input; work
+   line by line; verify everything; run three passes (implement, review/fix, re-check).
+8. **Session mechanics.** Work, commit, and push only on this session's assigned branch
+   (`arena/71ff0271-gemsdoe50`); open the pull request from it; merge to `main` when the checks
+   pass. Keep large scratch data out of Git; keep hash-pinned derivatives needed to reproduce.
