@@ -29,11 +29,11 @@ This is the acceptance record for the H53-A work from this Arena branch. The rem
 | External-data rules, permissions, and provenance | Official DrivenData format/rights page and September 2026 DOE/NLR rules are linked. GDR and GeoDAWN local bytes are not independently matched to official assets; conductance per-asset rights and mixed-network ComCat rights remain unresolved. These remain blockers, not assumed permissions. |
 | Site download, short note, and submission guide | H56 remains the current root-page one-click candidate and numbered guide. H53-A is retained as a separate audit-only, do-not-upload no-go record; its research name/note are not portal metadata. |
 | Three passes, tests, and review fixes | This document records all three passes. Final integrated checks: `pytest` **174 passed, 2 skipped** (both optional flow-routing/`pysheds` tests); scoped Ruff **All checks passed**; `scripts/verify_claims.py` all guardrails passed; Python compilation, `git diff --check`, and H53 frozen-baseline re-audit passed. The five H56/H55/H53-A root-site outputs were byte-idempotent. |
-| PR and merge | GitHub state must be checked after final validation. Do not report a PR or merge until confirmed; if permissions or CI block it, report the exact blocker. |
+| PR and merge | [PR #20](https://github.com/buffedlizard55-lab/GEMSDOE50/pull/20) was merged to `main` on 2026-10-07 after `checks-and-site`, `pytest`, and `tests-and-artifacts` all passed. Merge commit: `0f2f7e8d0603fb7eef28df0abb0de2d715ff3662`. The repository merge does not authorize a competition upload or slot. |
 
 ## Remaining blockers and next steps
 
 1. Keep H53-A and all H50/H51 artifacts **NO SLOT / historical**. Do not upload the all-zero TIFF.
 2. Do not submit H53-A: it is all-zero and its GDR/GeoDAWN mirrors are not byte-matched to official assets. H56 remains blocked from a slot until mixed-network ComCat contributor rights and sponsor-sharing eligibility are cleared; verify rights for every source used by any future candidate.
 3. Any new experiment requires a distinct preregistered hypothesis, controls, frozen spatial holdout, incumbent comparison, and a fresh review before slot authorization. Do not tune H53-A thresholds after its observed failure.
-4. Check remote branch and CI state, open a PR from the fixed Arena branch, and merge only if access and required checks permit. No live leaderboard polling is authorized.
+4. PR #20 merged the code and research record only; it does not authorize spending a competition slot. No live leaderboard polling or competition upload was performed.
