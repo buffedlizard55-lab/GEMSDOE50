@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Uniqueness gate for the H52 submission.
+"""Uniqueness gate for the H56 submission.
 
 The standing constraint on this project is that the submitted raster must be *generated*, not a
 copy of any prior submission.  This gate measures that directly, against every prior artifact it
@@ -97,10 +97,10 @@ def main() -> int:
     ap.add_argument("--submission", default=None)
     ap.add_argument("--iou-threshold", type=float, default=0.5)
     ap.add_argument("--novel-threshold", type=float, default=0.5)
-    ap.add_argument("--out", default="evidence/h52_uniqueness.json")
+    ap.add_argument("--out", default="evidence/h56_uniqueness.json")
     args = ap.parse_args()
 
-    build = json.loads((REPO / "evidence/h52_build.json").read_text(encoding="utf-8"))
+    build = json.loads((REPO / "evidence/h56_build.json").read_text(encoding="utf-8"))
     name = build["checks"]["name"]
     n = build["checks"]["n_dots"]
     sub = Path(args.submission) if args.submission else \

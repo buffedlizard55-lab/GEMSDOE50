@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""H52 validation on the frozen spatially blocked holdout, with matched controls.
+"""H56 validation on the frozen spatially blocked holdout, with matched controls.
 
 The frozen split is evidence/holdout-v1.json (schema gemsdoe50.spatial-holdout.v1,
 registered 2026-10-06, hash-pinned masks).  Four contiguous macrofolds; each held-out core
@@ -34,7 +34,7 @@ import rasterio
 REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO / "src"))
 
-from gemsdoe50 import h52
+from gemsdoe50 import h56
 from gemsdoe50.holdout import build_spatial_blocks, load_split_spec
 
 
@@ -47,7 +47,7 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--candidate", default=None)
     ap.add_argument("--split", default="evidence/holdout-v1.json")
-    ap.add_argument("--out", default="evidence/h52_holdout.json")
+    ap.add_argument("--out", default="evidence/h56_holdout.json")
     ap.add_argument("--truth-mode", choices=("sgmc_off", "labels"), default="sgmc_off",
                     help="sgmc_off = independent inventory outside the given catalogue (matches "
                          "the real task); labels = the frozen spec's own truth, which is made of "
@@ -74,14 +74,14 @@ def main() -> int:
     if args.candidate:
         cand = read(Path(args.candidate)) > 0
     else:
-        build = json.loads((REPO / "evidence/h52_build.json").read_text(encoding="utf-8"))
+        build = json.loads((REPO / "evidence/h56_build.json").read_text(encoding="utf-8"))
         name = build["checks"]["name"]
         n = build["checks"]["n_dots"]
         cand = read(REPO / f"docs/downloads/{name}-{n}-allfinite.tif") > 0
     n_cand = int(cand.sum())
     print(f"candidate {n_cand:,} dots; {len(blocks)} macrofolds")
 
-    results = {"candidate": str(args.candidate or "h52 default"), "n_dots": n_cand,
+    results = {"candidate": str(args.candidate or "h56 default"), "n_dots": n_cand,
                "truth_mode": args.truth_mode,
                "split_spec": args.split, "split_valid_mask_sha256": realized["valid_mask_sha256"],
                "folds": {}, "controls": {}}
@@ -96,7 +96,7 @@ def main() -> int:
         c_rows, c_cols = np.nonzero(cand & elig)
         dots = np.zeros_like(valid)
         dots[c_rows, c_cols] = True
-        s_cand = h52.score_dots(tr, c_rows, c_cols)
+        s_cand = h56.score_dots(tr, c_rows, c_cols)
 
         rng = np.random.default_rng(hash(blk.block_id) % 2**31)
         uni = []
@@ -104,12 +104,12 @@ def main() -> int:
             flat = np.flatnonzero(elig.ravel())
             pick = rng.choice(flat, size=min(int(dots.sum()), flat.size), replace=False)
             rr, cc = np.unravel_index(pick, elig.shape)
-            uni.append(h52.score_dots(tr, rr, cc)["dti"])
+            uni.append(h56.score_dots(tr, rr, cc)["dti"])
         tr_scores = []
         for dr, dc in ((17, 23), (-17, 23), (17, -23), (-17, -23)):
             sh = np.roll(np.roll(cand, dr, axis=0), dc, axis=1) & elig
             rr, cc = np.nonzero(sh)
-            tr_scores.append(h52.score_dots(tr, rr, cc)["dti"])
+            tr_scores.append(h56.score_dots(tr, rr, cc)["dti"])
 
         sub_rows = []
         for tid, (sr0, sr1), (sc0, sc1), tile_elig, tile_truth in blk.subtile_masks:
@@ -117,13 +117,13 @@ def main() -> int:
             cell[sr0:sr1, sc0:sc1] = True
             m = cand & tile_elig
             rr, cc = np.nonzero(m)
-            sc = h52.score_dots(tile_truth, rr, cc)["dti"]
+            sc = h56.score_dots(tile_truth, rr, cc)["dti"]
             ru = np.zeros_like(valid)
             flat = np.flatnonzero(tile_elig.ravel())
             if flat.size and rr.size:
                 pick = rng.choice(flat, size=min(rr.size, flat.size), replace=False)
                 a, b = np.unravel_index(pick, valid.shape)
-                su = h52.score_dots(tile_truth, a, b)["dti"]
+                su = h56.score_dots(tile_truth, a, b)["dti"]
             else:
                 su = float("nan")
             sub_rows.append((tid, sc, su))

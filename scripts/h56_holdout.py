@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Frozen spatially blocked holdout for the H52 submission.
+"""Frozen spatially blocked holdout for the H56 submission.
 
 Reconstructs the frozen four-macrofold split (``evidence/holdout-v1.json``,
 schema ``gemsdoe50.spatial-holdout.v1``) and scores the shipped artifact inside each held-out
@@ -16,7 +16,7 @@ designed around), never over pixels.
 Truth here is the held-out catalogue itself, so a candidate that deliberately never places a dot
 inside any visible-catalogue pixel scores exactly 0.0000 by construction -- that is a property of
 this instrument, not a result, and the off-catalogue instrument
-(``scripts/validate_h52.py --truth-mode sgmc_off``) is the one that can move.  Both are recorded.
+(``scripts/validate_h56.py --truth-mode sgmc_off``) is the one that can move.  Both are recorded.
 """
 from __future__ import annotations
 
@@ -31,7 +31,7 @@ import rasterio
 
 REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO / "src"))
-from gemsdoe50 import h52
+from gemsdoe50 import h56
 from gemsdoe50.holdout import build_spatial_blocks, load_split_spec
 
 R_PX = 3.0
@@ -46,14 +46,14 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--split", default="evidence/holdout-v1.json")
     ap.add_argument("--submission", default=None,
-                    help="defaults to the artifact recorded in evidence/h52_build.json")
+                    help="defaults to the artifact recorded in evidence/h56_build.json")
     ap.add_argument("--seeds", default="11,12,13")
     ap.add_argument("--translations", type=int, default=4)
     ap.add_argument("--n-boot", type=int, default=2000)
-    ap.add_argument("--out", default="evidence/h52_holdout.json")
+    ap.add_argument("--out", default="evidence/h56_holdout.json")
     args = ap.parse_args()
 
-    build = json.loads((REPO / "evidence/h52_build.json").read_text(encoding="utf-8"))
+    build = json.loads((REPO / "evidence/h56_build.json").read_text(encoding="utf-8"))
     name = build["checks"]["name"]
     n = build["checks"]["n_dots"]
     sub = Path(args.submission) if args.submission else \
@@ -81,13 +81,13 @@ def main() -> int:
         rr0, rr1 = (max(blk.rows[0] - 4, 0), min(blk.rows[1] + 4, t.shape[0]))
         cc0, cc1 = (max(blk.cols[0] - 4, 0), min(blk.cols[1] + 4, t.shape[1]))
         sub_t = t[rr0:rr1, cc0:cc1]
-        s_c = h52.score_dots(sub_t, cr[:, 0] - rr0, cr[:, 1] - cc0)
+        s_c = h56.score_dots(sub_t, cr[:, 0] - rr0, cr[:, 1] - cc0)
         sub_elig = elig[rr0:rr1, cc0:cc1]
         uni = []
         for sd in (int(x) for x in args.seeds.split(",")):
-            u = h52.emit_blue_noise(np.ones(sub_elig.shape), sub_elig, n_target=n_fold,
+            u = h56.emit_blue_noise(np.ones(sub_elig.shape), sub_elig, n_target=n_fold,
                                     min_sep_px=R_PX, seed=sd)
-            uni.append(h52.score_dots(sub_t, u.rows, u.cols))
+            uni.append(h56.score_dots(sub_t, u.rows, u.cols))
         tr_ = []
         for k in range(int(args.translations)):
             d = 17 * (k + 1)
@@ -96,13 +96,13 @@ def main() -> int:
             keep = elig[rr, cc]
             if keep.sum() == 0:
                 continue
-            tr_.append(h52.score_dots(sub_t, rr[keep] - rr0, cc[keep] - cc0))
+            tr_.append(h56.score_dots(sub_t, rr[keep] - rr0, cc[keep] - cc0))
 
         # Paired block bootstrap over the fold's 2x2 subtiles.  The uniform reference is
         # resampled with the same subtile draw, so the difference is paired by construction --
         # re-emitting a uniform field inside the loop would make this O(n_boot) full-grid
         # emissions and would not change the estimand.
-        u = h52.emit_blue_noise(np.ones(sub_elig.shape), sub_elig, n_target=n_fold,
+        u = h56.emit_blue_noise(np.ones(sub_elig.shape), sub_elig, n_target=n_fold,
                                 min_sep_px=R_PX, seed=99991)
         sub_idx = []
         for _, _, _, sub_m, _tr_m in blk.subtile_masks:
@@ -123,8 +123,8 @@ def main() -> int:
             uk = boot[u.rows, u.cols]
             if ck.sum() == 0 or uk.sum() == 0:
                 continue
-            sc = h52.score_dots(sub_t, cr[ck, 0] - rr0, cr[ck, 1] - cc0)["dti"]
-            su = h52.score_dots(sub_t, u.rows[uk], u.cols[uk])["dti"]
+            sc = h56.score_dots(sub_t, cr[ck, 0] - rr0, cr[ck, 1] - cc0)["dti"]
+            su = h56.score_dots(sub_t, u.rows[uk], u.cols[uk])["dti"]
             deltas.append(sc - su)
         deltas = np.asarray(deltas, dtype=float)
         rows.append({
@@ -156,7 +156,7 @@ def main() -> int:
         "instrument": "frozen four-macrofold spatial holdout; truth = held-out catalogue labels",
         "note": "A detector that never places a dot inside a visible-catalogue pixel scores 0.0000 "
                 "on this instrument by construction; that is a property of the split, not a result. "
-                "The off-catalogue instrument is scripts/validate_h52.py --truth-mode sgmc_off.",
+                "The off-catalogue instrument is scripts/validate_h56.py --truth-mode sgmc_off.",
         "folds": rows,
         "summary": {
             "n_macrofolds": len(rows),

@@ -1,8 +1,8 @@
-"""H52 — coverage-optimal emission of seismicity lineaments corroborated by geophysical ridges.
+"""H56 — coverage-optimal emission of seismicity lineaments corroborated by geophysical ridges.
 
 Why this module exists
 ----------------------
-``docs/research/h52-diagnosis.md`` measures two things that decide this design:
+``docs/research/h56-diagnosis.md`` measures two things that decide this design:
 
 1.  The official metric, with binary dots, is exactly
 
@@ -44,7 +44,7 @@ Two independent evidence classes, each turned into a *density* (never a max):
     This is the 2-D adaptation of the anisotropic-clustering line of Ouillon, Ducorbier &
     Sornette (2008), Ouillon & Sornette (2011) and Wang, Ouillon, Woessner, Sornette & Husen
     (2013); the 2-D reduction and the corridor rendering are this project's own and are
-    flagged as unverified in ``docs/research/h52-diagnosis.md``.
+    flagged as unverified in ``docs/research/h56-diagnosis.md``.
 
 ``ridge``
     GeoDAWN airborne total magnetic intensity, radiometric K/Th and the USGS 3DEP LiDAR
@@ -157,7 +157,7 @@ def triangle_area_keep(xy_m: np.ndarray, *, n_random: int | None = None, quantil
     a **randomized catalogue**.  The 2-D reduction used here replaces the tetrahedron volume by
     the triangle area of (event, nn1, nn2); the reduction is this project's own and is
     **unverified against published results** -- it is measured, not assumed
-    (``docs/research/h52-diagnosis.md``).
+    (``docs/research/h56-diagnosis.md``).
 
     Returns ``(keep, diagnostics)`` with keep = True for events classified as *clustered*.
     """
@@ -641,7 +641,7 @@ def emit_blue_noise(density: np.ndarray, domain: np.ndarray, *, n_target: int,
 
     Why this geometry and not "the top-N pixels"
     --------------------------------------------
-    ``docs/research/h52-diagnosis.md`` measures the geometry of every hash-pinned prior
+    ``docs/research/h56-diagnosis.md`` measures the geometry of every hash-pinned prior
     artifact and finds that the best off-catalogue performer of the group's whole history
     (``gems50-seislin-44709``) is:
 
@@ -710,7 +710,7 @@ def snap_to_ridge(rows: np.ndarray, cols: np.ndarray, ridge: np.ndarray,
     The input arrays are **not** modified; the returned positions are a fresh array.  (An
     earlier revision mutated the caller's array through ``np.asarray`` and silently turned a
     rejected snap into a 16 % pixel collision rate downstream -- see
-    ``tests/test_h52.py::test_snap_to_ridge_does_not_mutate_its_inputs``.)
+    ``tests/test_h56.py::test_snap_to_ridge_does_not_mutate_its_inputs``.)
     """
     r = np.array(rows, dtype=np.int64, copy=True)   # copy: this function rewrites positions
     c = np.array(cols, dtype=np.int64, copy=True)

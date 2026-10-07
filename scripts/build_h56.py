@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Build the H52 submission GeoTIFF.
+"""Build the H56 submission GeoTIFF.
 
 Design (all of it measured, none of it assumed; raw numbers in
-``evidence/h52_layer_screen.json`` and ``evidence/h52_enrichment.json``):
+``evidence/h56_layer_screen.json`` and ``evidence/h56_enrichment.json``):
 
 1. **Detector — the LiDAR surface-morphology family.**  Rank mean of five independent USGS 3DEP
    1 m DEM descriptors (excess, step, lap-negative, down-face, relief).  The corrected channel
@@ -11,7 +11,7 @@ Design (all of it measured, none of it assumed; raw numbers in
    every magnetic and radiometric residual).  The belief is used at **full strength** — the
    measurements are monotone in the sharpening exponent (``scarp**4`` beats ``scarp**2`` beats
    ``scarp`` at every mass), which means a very sharp detector, not a smoothed one, is what the
-   metric wants (``docs/research/h52-diagnosis.md`` sections 3-4).
+   metric wants (``docs/research/h56-diagnosis.md`` sections 3-4).
 
 2. **Owner-mandated seismicity corroboration.**  ``--seis-corroborate`` multiplies the scarp belief
    by ``(1 + w * corridor)`` where the corridor is the declustered-epicentre 2-D covariance
@@ -19,7 +19,7 @@ Design (all of it measured, none of it assumed; raw numbers in
    **multiplicatively as corroboration** rather than as an additive mixture, because the same screen
    measures a plain additive mixture as strictly worse than either component.
 
-3. **Emission — variable-density blue noise at exactly the metric's support.**  ``h52.emit_blue_noise``
+3. **Emission — variable-density blue noise at exactly the metric's support.**  ``h56.emit_blue_noise``
    places at most one dot per 3 x 3 block, keeps the block probability proportional to its belief
    mass, and picks the highest-belief pixel inside the chosen block.  The 3 px separation is the
    metric's own optimum: it is the coarsest spacing at which two dots never compete for the same
@@ -39,7 +39,7 @@ Design (all of it measured, none of it assumed; raw numbers in
 Outputs (``--out``): ``<name>-<N>-nan.tif`` (portal-convention, NaN outside the study footprint),
 ``<name>-<N>-allfinite.tif`` (every cell finite, the version that cannot reproduce the portal's
 "Predicted values must be in range [0, 1]" rejection), ``<name>-<N>-allfinite.zip``, and
-``<evidence>/h52_build.json``.
+``<evidence>/h56_build.json``.
 """
 from __future__ import annotations
 
@@ -57,10 +57,10 @@ import scipy.ndimage as ndi
 
 REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO / "src"))
-from gemsdoe50 import h52
+from gemsdoe50 import h56
 
 G_HIDDEN = 12_226          # calibrated hidden truth mass, docs/research/h51-analysis.md section 2
-TRANSFER = 4.2             # transfer-calibrated proxy factor, evidence/h52_transfer_calibration.json
+TRANSFER = 4.2             # transfer-calibrated proxy factor, evidence/h56_transfer_calibration.json
 R_PX = 3.0                 # the metric's own 300 m support at 100 m pixels
 
 SCARP_BANDS = ((0, "ex_max"), (2, "step_max"), (3, "lapneg_max"),
@@ -172,16 +172,16 @@ def seismic_belief(layers_dir: Path, lab_shape, grid_transform):
     x = col[ok] * 100.0 + grid_transform.c
     y = grid_transform.f - row[ok] * 100.0
     xy = np.column_stack([x, y])
-    sigma_km = h52.epicentral_sigma_km(df[ok])
+    sigma_km = h56.epicentral_sigma_km(df[ok])
 
     from gems50.decluster import triangle_area_filter
     keep, tri_diag = triangle_area_filter(xy, seed=52)
     xy_k = xy[keep]
     sig_k = sigma_km[keep]
 
-    lin = h52.neighbourhood_lineations(xy_k, sig_k * 1000.0, k=10, min_events=6,
+    lin = h56.neighbourhood_lineations(xy_k, sig_k * 1000.0, k=10, min_events=6,
                                         min_elongation=3.0, min_sigma1_m=800.0)
-    corr = h52.corridor_density(lin, lab_shape, grid_transform)
+    corr = h56.corridor_density(lin, lab_shape, grid_transform)
     return corr, {
         "catalog_rows": n_rows, "events_in_footprint": int(ok.sum()),
         "decluster": "triangle_area_filter (2-D adaptation of the Ouillon-Sornette 2011 "
@@ -194,7 +194,7 @@ def seismic_belief(layers_dir: Path, lab_shape, grid_transform):
 
 
 def matched_uniform(n: int, allowed: np.ndarray, seed: int):
-    return h52.emit_blue_noise(np.ones(allowed.shape), allowed, n_target=int(n),
+    return h56.emit_blue_noise(np.ones(allowed.shape), allowed, n_target=int(n),
                                min_sep_px=R_PX, seed=seed)
 
 
@@ -203,7 +203,7 @@ def modelled_hidden_dti(c_per_dot_sgmc: float, n: int, transfer: float = TRANSFE
 
     ``T_hidden = transfer * (T_sgmc / N) * N * G_hidden / G_sgmc`` with the density ratio applied
     once, then capped at ``G_hidden`` (the physical ceiling).  This is a *model*, not a
-    measurement; ``docs/research/h52-diagnosis.md`` section 5 states its assumption.
+    measurement; ``docs/research/h56-diagnosis.md`` section 5 states its assumption.
     """
     density_ratio = G_HIDDEN / 61_664.0
     c_hidden = c_per_dot_sgmc * density_ratio * transfer
@@ -218,7 +218,7 @@ def modelled_hidden_dti(c_per_dot_sgmc: float, n: int, transfer: float = TRANSFE
 def main() -> int:
     t0 = time.time()
     ap = argparse.ArgumentParser()
-    ap.add_argument("--name", default="gemsdoe50-h52-scarpdisperse")
+    ap.add_argument("--name", default="gemsdoe50-h56-scarpdisperse")
     ap.add_argument("--layers", default="data/external")
     ap.add_argument("--out", default="docs/downloads")
     ap.add_argument("--evidence", default="evidence")
@@ -257,7 +257,7 @@ def main() -> int:
 
     # the seismicity corridor enters as a multiplicative corroboration on the scarp field, never
     # as an additive mixture: the channel screen measured additive mixtures as strictly worse
-    # than either component (evidence/h52_layer_screen.json).
+    # than either component (evidence/h56_layer_screen.json).
     c = corr.astype(np.float64)
     c_norm = c / max(float(c.max()), 1e-12)
     scarp_sharp = scarp ** float(args.scarp_power)
@@ -272,9 +272,9 @@ def main() -> int:
     masses = [int(m) for m in args.masses.split(",")]
     sweep: dict[str, dict] = {}
     for n in masses:
-        em = h52.emit_blue_noise(belief, domain, n_target=n, min_sep_px=R_PX, seed=args.seed)
-        s = h52.score_dots(sgmc_off, em.rows, em.cols)
-        ctrl = [h52.score_dots(sgmc_off, u.rows, u.cols)["dti"]
+        em = h56.emit_blue_noise(belief, domain, n_target=n, min_sep_px=R_PX, seed=args.seed)
+        s = h56.score_dots(sgmc_off, em.rows, em.cols)
+        ctrl = [h56.score_dots(sgmc_off, u.rows, u.cols)["dti"]
                 for u in (matched_uniform(n, domain, sd) for sd in (1, 2, 3))]
         uni = float(np.mean(ctrl))
         model = modelled_hidden_dti(s["credit_per_dot"], n)
@@ -291,9 +291,9 @@ def main() -> int:
     print(f"frozen rule selects N={best_n} "
           f"(modelled hidden DTI {sweep[best_n]['model']['dti_modelled']:.3f})")
 
-    em = h52.emit_blue_noise(belief, domain, n_target=int(best_n), min_sep_px=R_PX,
+    em = h56.emit_blue_noise(belief, domain, n_target=int(best_n), min_sep_px=R_PX,
                              seed=args.seed)
-    before = h52.score_dots(sgmc_off, em.rows, em.cols)["dti"]
+    before = h56.score_dots(sgmc_off, em.rows, em.cols)["dti"]
     # Placement step: candidate snap targets are evaluated, and the *identity* placement is
     # kept if no snap improves the metric's own instrument.  The requirement is that the step be
     # performed and measured, not that a particular target be hard-coded.
@@ -305,8 +305,8 @@ def main() -> int:
     snap_rows = {"none": {"dti": before, "moved": 0}}
     best_target, best_dti, best_rc, best_info = "none", before, (em.rows, em.cols), {"snapped": 0}
     for tname, tfield in snap_targets.items():
-        r, c, info = h52.snap_to_ridge(em.rows, em.cols, tfield, max_snap_px=R_PX)
-        d = h52.score_dots(sgmc_off, r, c)["dti"]
+        r, c, info = h56.snap_to_ridge(em.rows, em.cols, tfield, max_snap_px=R_PX)
+        d = h56.score_dots(sgmc_off, r, c)["dti"]
         snap_rows[tname] = {"dti": float(d), "moved": int(info["snapped"]),
                             "fraction_moved": float(info["snap_fraction"])}
         if d > best_dti:
@@ -317,7 +317,7 @@ def main() -> int:
     snap_info = {"chosen": best_target, "before": float(before), "after": float(best_dti),
                  "used": best_target != "none", "moved": int(best_info["snapped"]),
                  "candidates": snap_rows}
-    rows, cols = h52.dedupe(rows, cols)
+    rows, cols = h56.dedupe(rows, cols)
     print(f"placement step: unsnapped {before:.4f}; candidates "
           + ", ".join(f"{k} {v['dti']:.4f}" for k, v in snap_rows.items())
           + f"; chosen {best_target}; {rows.size:,} dots")
@@ -361,12 +361,12 @@ def main() -> int:
 
     files = {nan_path.name: audit(nan_path), fin_path.name: audit(fin_path),
              zip_path.name: {"bytes": zip_path.stat().st_size, "sha256": sha256_file(zip_path)}}
-    s_final = h52.score_dots(sgmc_off, rows, cols)
+    s_final = h56.score_dots(sgmc_off, rows, cols)
 
     evidence = {
         "name": args.name, "stamp": stamp, "stamp_source": "time.strftime(gmtime)",
         "claim_note": (
-            "H52 scarp-dispersion submission: a full-strength rank mean of five independent USGS "
+            "H56 scarp-dispersion submission: a full-strength rank mean of five independent USGS "
             "3DEP 1 m LiDAR terrain descriptors, corroborated multiplicatively by declustered "
             "USGS ComCat epicentre lineaments, emitted as dots at the metric's own 300 m "
             "separation with no quantile threshold and no footprint shrinkage. Validated on an "
@@ -378,7 +378,7 @@ def main() -> int:
                       f"seismicity_corridor_norm)",
             "scarp": scarp_info, "geophysics": geo_info, "seismicity": seis_info,
         },
-        "emitter": {"function": "gemsdoe50.h52.emit_blue_noise", "min_sep_px": R_PX,
+        "emitter": {"function": "gemsdoe50.h56.emit_blue_noise", "min_sep_px": R_PX,
                     "why": "R is the coarsest spacing at which two dots never compete for the "
                            "same truth pixel; measured on the group's best off-catalogue prior "
                            "artifact, whose dots are 100% isolated at a 3.0 px NN median",
@@ -386,7 +386,7 @@ def main() -> int:
         "mass_selection": {"rule": "argmax of the transfer-calibrated modelled hidden DTI, "
                                    "subject to the physical cap T <= G_hidden",
                            "G_hidden_px": G_HIDDEN, "transfer_factor": TRANSFER,
-                           "transfer_source": "evidence/h52_transfer_calibration.json",
+                           "transfer_source": "evidence/h56_transfer_calibration.json",
                            "transfer_band": [3.97, 4.59], "selected_n": int(best_n)},
         "sweep": sweep,
         "checks": {
@@ -411,7 +411,7 @@ def main() -> int:
             },
         },
     }
-    (ev_dir / "h52_build.json").write_text(json.dumps(evidence, indent=1) + "\n", encoding="utf-8")
+    (ev_dir / "h56_build.json").write_text(json.dumps(evidence, indent=1) + "\n", encoding="utf-8")
     print(json.dumps({k: evidence["checks"][k] for k in
                       ("n_dots", "all_finite_primary", "values_in_unit_interval_primary",
                        "lift_over_uniform")}, indent=1))
