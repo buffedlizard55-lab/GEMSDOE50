@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""H59 post-hoc sensitivity (exploratory; NOT used for any decision).
+"""H61 post-hoc sensitivity (exploratory; NOT used for any decision).
 
-The frozen H59-S screens kept only 31 lineations, so a negative result could be
+The frozen H61-S screens kept only 31 lineations, so a negative result could be
 an artifact of over-screening. This script relaxes the screens one at a time and
 re-measures the two quantities that carry the conclusion:
 
@@ -12,7 +12,7 @@ re-measures the two quantities that carry the conclusion:
 
 Variants: frozen; no triangle screen; no declustering and no triangle screen;
 lenient lineation rules (H58-S1-like: elongation >= 2, length >= 0.5 km,
-no thickness rule). The frozen decision in ``evidence/h59_build.json`` is not
+no thickness rule). The frozen decision in ``evidence/h61_build.json`` is not
 changed by anything here.
 """
 from __future__ import annotations
@@ -28,7 +28,7 @@ from scipy import ndimage
 
 REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO / "src"))
-from gemsdoe50 import h59
+from gemsdoe50 import h61
 
 
 def main() -> int:
@@ -43,14 +43,14 @@ def main() -> int:
     with rasterio.open(REPO / "data/external/derived_sgmc_faults_100m_u8.tif") as ds:
         truth = domain & (ds.read(1) > 0)
     belief = np.load(REPO / ".arena/cache/h57_belief.npy")
-    k_field = h59.kernel_credit_field(truth)
+    k_field = h61.kernel_credit_field(truth)
     base_rate = float(k_field[domain].mean())
 
-    events, _ = h59.load_events(REPO / "data/external/usgs_comcat_earthquakes.csv.gz",
+    events, _ = h61.load_events(REPO / "data/external/usgs_comcat_earthquakes.csv.gz",
                                 REPO / "data/grid/sample_submission.tif")
-    keep_zbz, _ = h59.zbz_decluster(events)
+    keep_zbz, _ = h61.zbz_decluster(events)
     bg = events.subset(keep_zbz)
-    keep_tri, _ = h59.triangle_keep(np.column_stack([bg.x, bg.y]))
+    keep_tri, _ = h61.triangle_keep(np.column_stack([bg.x, bg.y]))
 
     variants = {
         "frozen": bg.subset(keep_tri),
@@ -58,18 +58,18 @@ def main() -> int:
         "no_decluster_no_triangle": events,
     }
     out = {"base_rate_meanK_domain": base_rate, "variants": {}}
-    saved = (h59.LIN_THICKNESS_FACTOR, h59.LIN_MIN_HALF_KM, h59.LIN_MIN_ELONGATION)
+    saved = (h61.LIN_THICKNESS_FACTOR, h61.LIN_MIN_HALF_KM, h61.LIN_MIN_ELONGATION)
     runs = [(name, ev, False) for name, ev in variants.items()] + [("lenient_rules_no_triangle", bg, True)]
     for name, ev, lenient in runs:
         if lenient:
-            h59.LIN_THICKNESS_FACTOR, h59.LIN_MIN_HALF_KM, h59.LIN_MIN_ELONGATION = 1e9, 0.5, 2.0
-        lins, lr = h59.neighbourhood_lineations(ev)
-        h59.LIN_THICKNESS_FACTOR, h59.LIN_MIN_HALF_KM, h59.LIN_MIN_ELONGATION = saved
-        cors = h59.corridor_geometry(lins)
-        union = h59.corridor_union(cors, shape, transform)
-        enr = h59.stratified_corridor_enrichment(k_field, belief, union, domain)
-        cand = h59.snap_corridor_dots(cors, belief, domain, transform)
-        acc = h59.greedy_spaced(cand["rows"], cand["cols"], cand["vals"], shape, max_dots=10**7)
+            h61.LIN_THICKNESS_FACTOR, h61.LIN_MIN_HALF_KM, h61.LIN_MIN_ELONGATION = 1e9, 0.5, 2.0
+        lins, lr = h61.neighbourhood_lineations(ev)
+        h61.LIN_THICKNESS_FACTOR, h61.LIN_MIN_HALF_KM, h61.LIN_MIN_ELONGATION = saved
+        cors = h61.corridor_geometry(lins)
+        union = h61.corridor_union(cors, shape, transform)
+        enr = h61.stratified_corridor_enrichment(k_field, belief, union, domain)
+        cand = h61.snap_corridor_dots(cors, belief, domain, transform)
+        acc = h61.greedy_spaced(cand["rows"], cand["cols"], cand["vals"], shape, max_dots=10**7)
         kk = k_field[cand["rows"][acc], cand["cols"][acc]] if acc.size else np.zeros(0)
         kinds = cand["kind"][acc] if acc.size else np.zeros(0, dtype=np.int8)
         out["variants"][name] = {
@@ -79,7 +79,7 @@ def main() -> int:
             "snapped_dots": int(acc.size),
             "meanK_at_dots": float(kk.mean()) if kk.size else None,
             "meanK_at_dots_by_kind": {n: (float(kk[kinds == i].mean()) if (kinds == i).any() else None)
-                                      for i, n in enumerate(h59.KIND_NAMES)},
+                                      for i, n in enumerate(h61.KIND_NAMES)},
             "enrichment_median_ratio": enr["median_ratio"],
             "enrichment_strata_gt_1": enr["strata_with_ratio_gt_1"],
             "enrichment_top3": enr["top3_strata_ratio"],
@@ -93,7 +93,7 @@ def main() -> int:
     out["note"] = ("Exploratory and post-hoc: relaxations chosen after seeing the frozen result. "
                    "Snapped dots here use the off-catalogue domain without the uniqueness exclusions, "
                    "so they are an upper bound on what the seismic corridors can place.")
-    (REPO / "evidence/h59_sensitivity.json").write_text(json.dumps(out, indent=1) + "\n", encoding="utf-8")
+    (REPO / "evidence/h61_sensitivity.json").write_text(json.dumps(out, indent=1) + "\n", encoding="utf-8")
     return 0
 
 

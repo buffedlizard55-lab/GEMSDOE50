@@ -1,13 +1,13 @@
 # H52 diagnosis — why 0.2778 topped the corpus, and what beating 0.3774 actually requires
 
-> **Erratum (2026-10-07, H59).** This document states that, for binary dots at
+> **Erratum (2026-10-07, H61).** This document states that, for binary dots at
 > least 3 px apart, the official score reduces *exactly* to `DTI = T/(0.2N + 0.8G)`
 > and that such dots do not compete. Both statements are false: the official score is
 > `DTI = T/(0.2N + 0.8G + 0.2(T − M))` with `M = Σ K(dot)` (exact only when T = M), and
 > dots compete for shared truth whenever they are < 6 px apart. Required-credit figures
 > derived from the collapse are understated by ≈ 4–5 % near s = 0.38, and the hidden-G
 > estimates shift (≈ 13,343 under the corrected algebra). See
-> [`h59-verdict-20261007.md` §4–5](h59-verdict-20261007.md) and `tests/test_h59.py`.
+> [`h61-verdict-20261007.md` §4–5](h61-verdict-20261007.md) and `tests/test_h61.py`.
 
 
 **Written** 2026-10-07 UTC, before the H52 build. Every number is labelled:

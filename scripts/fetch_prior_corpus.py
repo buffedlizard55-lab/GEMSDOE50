@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Rebuild the full prior-submission corpus for the uniqueness gate (H59).
+"""Rebuild the full prior-submission corpus for the uniqueness gate (H61).
 
 Two sources, both fetched through the authenticated GitHub API (``gh api``),
 which is the only route this sandbox has to the owner's sibling repositories:
@@ -82,7 +82,7 @@ def list_gemsdoe_repos() -> list[dict]:
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--out", default=".arena/prior_corpus")
-    ap.add_argument("--receipt", default="evidence/h59_prior_corpus_receipt.json")
+    ap.add_argument("--receipt", default="evidence/h61_prior_corpus_receipt.json")
     ap.add_argument("--max-bytes", type=int, default=8_000_000)
     ap.add_argument("--skip-discovery", action="store_true")
     args = ap.parse_args()
@@ -181,7 +181,7 @@ def main() -> int:
             print(f"[{time.time()-t0:6.1f}s] {full}: {len(tifs)} tif blobs, {new} new", flush=True)
 
     receipt = {
-        "schema": "gemsdoe50.h59-prior-corpus.v1",
+        "schema": "gemsdoe50.h61-prior-corpus.v1",
         "created_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "pinned_source": str(RECEIPT_IN.relative_to(REPO)),
         "pinned_verified": sum(1 for x in records if x["origin"] == "pinned-h55-receipt"),

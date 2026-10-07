@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
-"""H59 build: mandated seismic-lineation artifact + frozen holdout decision.
+"""H61 build: mandated seismic-lineation artifact + frozen holdout decision.
 
-Preregistration: ``docs/research/h59-hypotheses-preregistered.md``.
+Preregistration: ``docs/research/h61-hypotheses-preregistered.md``.
 
 Arms (all scored on the same frozen holdout with the same instrument):
 
-* **H59-S**  up-dip seismic corridors snapped to the H57 ridge (``src/gemsdoe50/h59.py``);
+* **H61-S**  up-dip seismic corridors snapped to the H57 ridge (``src/gemsdoe50/h61.py``);
   eligible cells exclude the prior-positive union *and* every positive pixel of
   the H56/H57/H58 files, so exact overlap with any registered prior is zero by
   construction. Controls at matched mass: density supports (sigma 1 / 2 km) and
   corridor geometry translated by 10 km, both with the identical ridge
   emission; H57 at matched mass; matched uniform random.
-* **H59-H**  hybrid: the corridor-snapped dots replace H57's lowest-ranked dots
+* **H61-H**  hybrid: the corridor-snapped dots replace H57's lowest-ranked dots
   at the incumbent's 80,000 mass.
-* **H59-M**  H57's own field re-emitted at Chebyshev spacing 4 and 5 px (the
+* **H61-M**  H57's own field re-emitted at Chebyshev spacing 4 and 5 px (the
   repo believed 3 px was competition-free; it is not, see section 1 of the
   preregistration).
 
@@ -49,7 +49,7 @@ sys.path.insert(0, str(REPO / "scripts"))
 
 import build_h57
 
-from gemsdoe50 import h59
+from gemsdoe50 import h61
 from gemsdoe50.common import sha256_file
 from gemsdoe50.holdout import build_spatial_blocks, load_split_spec
 from gemsdoe50.metric import distance_weighted_tversky
@@ -170,10 +170,10 @@ def _translate_corridors(cors: list[dict], dx: float, dy: float) -> list[dict]:
 
 
 def _snap_select(cors, belief, eligible, transform, shape, cap):
-    cand = h59.snap_corridor_dots(cors, belief, eligible, transform)
+    cand = h61.snap_corridor_dots(cors, belief, eligible, transform)
     if cand["rows"].size == 0:
         return np.zeros(shape, dtype=bool), cand, np.zeros(0, dtype=np.int64)
-    acc = h59.greedy_spaced(cand["rows"], cand["cols"], cand["vals"], shape, max_dots=cap)
+    acc = h61.greedy_spaced(cand["rows"], cand["cols"], cand["vals"], shape, max_dots=cap)
     return _mask_from(cand["rows"][acc], cand["cols"][acc], shape), cand, acc
 
 
@@ -246,28 +246,28 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     log(f"H57 reproduction: {reproduction}; incumbent on prior union: {incumbent_overlap}")
     del reproduce
 
-    # ---- H59-S pipeline ------------------------------------------------------------------
-    events, ev_report = h59.load_events(paths["comcat"], paths["template"])
-    keep_zbz, zbz_report = h59.zbz_decluster(events)
+    # ---- H61-S pipeline ------------------------------------------------------------------
+    events, ev_report = h61.load_events(paths["comcat"], paths["template"])
+    keep_zbz, zbz_report = h61.zbz_decluster(events)
     ev_bg = events.subset(keep_zbz)
-    keep_tri, tri_report = h59.triangle_keep(np.column_stack([ev_bg.x, ev_bg.y]))
+    keep_tri, tri_report = h61.triangle_keep(np.column_stack([ev_bg.x, ev_bg.y]))
     ev_cl = ev_bg.subset(keep_tri)
-    lins, lin_report = h59.neighbourhood_lineations(ev_cl)
-    cors = h59.corridor_geometry(lins)
+    lins, lin_report = h61.neighbourhood_lineations(ev_cl)
+    cors = h61.corridor_geometry(lins)
     log(f"events {len(events):,} -> ZBZ background {len(ev_bg):,} -> triangle {len(ev_cl):,} "
         f"-> lineations {len(lins)} -> corridors {len(cors)}")
 
-    cand_mask, cand, acc = _snap_select(cors, belief, novel_strict, transform, shape, h59.MAX_DOTS)
+    cand_mask, cand, acc = _snap_select(cors, belief, novel_strict, transform, shape, h61.MAX_DOTS)
     mass = int(cand_mask.sum())
     kinds = cand["kind"][acc] if acc.size else np.zeros(0, dtype=np.int8)
-    union = h59.corridor_union(cors, shape, transform)
+    union = h61.corridor_union(cors, shape, transform)
     area = int((union & novel_strict).sum())
-    log(f"H59-S: {mass:,} dots (candidates {cand['rows'].size:,}); corridor union "
+    log(f"H61-S: {mass:,} dots (candidates {cand['rows'].size:,}); corridor union "
         f"{int(union.sum()):,} cells, eligible {area:,}")
     if mass == 0:
-        raise ValueError("H59-S produced no dots")
+        raise ValueError("H61-S produced no dots")
     if np.any(cand_mask & ~novel_strict):
-        raise ValueError("H59-S support leaves the strict-novel domain")
+        raise ValueError("H61-S support leaves the strict-novel domain")
 
     # ---- frame A instruments -------------------------------------------------------------
     scorer = FastScorer(truth)
@@ -308,11 +308,11 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             f"c/dot {arms[name]['pooled']['credit_per_dot']:.4f}")
 
     add("H57-incumbent-80k", incumbent)
-    add("H59-S", cand_mask)
-    add("H59-S-support-emit", build_h57.metric_emit(belief, novel_strict & union, mass))
+    add("H61-S", cand_mask)
+    add("H61-S-support-emit", build_h57.metric_emit(belief, novel_strict & union, mass))
     for sigma in (1_000.0, 2_000.0):
-        dens = h59.density_field(ev_bg, shape, transform, sigma)
-        sup = h59.top_area_support(dens, novel_strict, area)
+        dens = h61.density_field(ev_bg, shape, transform, sigma)
+        sup = h61.top_area_support(dens, novel_strict, area)
         add(f"density-{int(sigma)}m", build_h57.metric_emit(belief, novel_strict & sup, mass))
     for dx, dy in TRANSLATIONS_M:
         tmask, _c, _a = _snap_select(_translate_corridors(cors, dx, dy), belief, novel_strict,
@@ -326,26 +326,26 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     rnd.ravel()[rng.choice(flat, size=mass, replace=False)] = True
     add("uniform-random-matched", rnd)
 
-    # ---- H59-H hybrid and H59-M spacing (80k, novel_h57) ---------------------------------
+    # ---- H61-H hybrid and H61-M spacing (80k, novel_h57) ---------------------------------
     h57r = build_h57.metric_emit(belief, novel_h57, INCUMBENT_MASS)
     add("H57-reemit-80k-on-novel", h57r)
-    hyb_seed, _c, _a = _snap_select(cors, belief, novel_h57, transform, shape, h59.MAX_DOTS)
+    hyb_seed, _c, _a = _snap_select(cors, belief, novel_h57, transform, shape, h61.MAX_DOTS)
     blocked = ndimage.binary_dilation(hyb_seed, structure=np.ones((5, 5), dtype=bool))
     fill = build_h57.metric_emit(belief, novel_h57 & ~blocked, INCUMBENT_MASS - int(hyb_seed.sum()))
-    add("H59-H-hybrid-80k", hyb_seed | fill)
+    add("H61-H-hybrid-80k", hyb_seed | fill)
     for s in SPACINGS:
-        add(f"H59-M-spacing{s}-80k", build_h57.metric_emit(belief, novel_h57, INCUMBENT_MASS, spacing=s))
+        add(f"H61-M-spacing{s}-80k", build_h57.metric_emit(belief, novel_h57, INCUMBENT_MASS, spacing=s))
 
     # ---- frame B: withheld catalogue per macrofold (seismic arms) -------------------------
     frame_b: dict[str, Any] = {}
-    sums = {k: {"tp": 0.0, "fp": 0.0, "fn": 0.0} for k in ("H59-S", "density-best", "translated-mean", "H57-matched")}
-    dens_fields = {s: h59.density_field(ev_bg, shape, transform, s) for s in (1_000.0, 2_000.0)}
+    sums = {k: {"tp": 0.0, "fp": 0.0, "fn": 0.0} for k in ("H61-S", "density-best", "translated-mean", "H57-matched")}
+    dens_fields = {s: h61.density_field(ev_bg, shape, transform, s) for s in (1_000.0, 2_000.0)}
     for bid, core in cores.items():
         cat_out = catalogue & ~core
         elig = valid & core & (ndimage.distance_transform_edt(~cat_out) > R_PX)
         truth_b = catalogue & core
         sc = FastScorer(truth_b)
-        cm, _c, _a = _snap_select(cors, belief, elig, transform, shape, h59.MAX_DOTS)
+        cm, _c, _a = _snap_select(cors, belief, elig, transform, shape, h61.MAX_DOTS)
         mf = int(cm.sum())
         row: dict[str, Any] = {"mass": mf, "truth_cells": int(truth_b.sum()), "eligible": int(elig.sum())}
         if mf == 0:
@@ -356,10 +356,10 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         def sco(pred, sc=sc, elig=elig):
             return sc.components(pred, sc.best(pred), None, elig)
 
-        row["H59-S"] = sco(cm)
+        row["H61-S"] = sco(cm)
         dens_rows = {}
         for s, fld in dens_fields.items():
-            sup = h59.top_area_support(fld, elig, a_f)
+            sup = h61.top_area_support(fld, elig, a_f)
             dens_rows[f"density-{int(s)}m"] = sco(build_h57.metric_emit(belief, elig & sup, mf))
         row["density"] = dens_rows
         best_d = max(dens_rows.values(), key=lambda d: d["score"])
@@ -369,21 +369,21 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             trans.append(sco(tm))
         row["translated"] = trans
         row["H57-matched"] = sco(build_h57.metric_emit(belief, elig, mf))
-        for k, v in (("H59-S", row["H59-S"]), ("density-best", best_d), ("H57-matched", row["H57-matched"])):
+        for k, v in (("H61-S", row["H61-S"]), ("density-best", best_d), ("H57-matched", row["H57-matched"])):
             for c in ("tp", "fp", "fn"):
                 sums[k][c] += v[c]
         for c in ("tp", "fp", "fn"):
             sums["translated-mean"][c] += float(np.mean([t[c] for t in trans]))
         frame_b[bid] = row
-        log(f"  frame B {bid}: N={mf}  H59-S {row['H59-S']['score']:.4f}  density {best_d['score']:.4f}  "
+        log(f"  frame B {bid}: N={mf}  H61-S {row['H61-S']['score']:.4f}  density {best_d['score']:.4f}  "
             f"translated-mean {np.mean([t['score'] for t in trans]):.4f}  H57-matched {row['H57-matched']['score']:.4f}")
     frame_b_pooled = {k: v["tp"] / (v["tp"] + ALPHA * v["fp"] + BETA * v["fn"] + 1e-9) for k, v in sums.items()}
 
     # ---- diagnostics -----------------------------------------------------------------------
-    enrichment = h59.stratified_corridor_enrichment(scorer.k, belief, union, novel_strict)
+    enrichment = h61.stratified_corridor_enrichment(scorer.k, belief, union, novel_strict)
     kind_rows = {}
     k_at = scorer.k[cand["rows"][acc], cand["cols"][acc]] if acc.size else np.zeros(0)
-    for kind, name in enumerate(h59.KIND_NAMES):
+    for kind, name in enumerate(h61.KIND_NAMES):
         sel = kinds == kind
         kind_rows[name] = {"dots": int(sel.sum()),
                            "mean_K_at_dot": float(k_at[sel].mean()) if sel.any() else None}
@@ -406,27 +406,27 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             trans_best = max(arms[k]["pooled"]["score"] for k in arms if k.startswith("translated-"))
             g["pooled_above_best_density"] = a["pooled"]["score"] > dens_best
             g["pooled_above_every_translation"] = a["pooled"]["score"] > trans_best
-            g["frame_b_above_density"] = frame_b_pooled["H59-S"] > frame_b_pooled["density-best"]
+            g["frame_b_above_density"] = frame_b_pooled["H61-S"] > frame_b_pooled["density-best"]
             g["comcat_rights_resolved"] = False
         return {"gates": g, "fold_wins": fold_wins, "bootstrap_vs_incumbent": boot,
                 "numeric_pass": all(v for k, v in g.items() if k != "comcat_rights_resolved"),
                 "slot_eligible_pending_uniqueness": all(g.values())}
 
     decisions = {
-        "H59-S": gates("H59-S", True),
-        "H59-H-hybrid-80k": gates("H59-H-hybrid-80k", True),
-        **{f"H59-M-spacing{s}-80k": gates(f"H59-M-spacing{s}-80k", False) for s in SPACINGS},
+        "H61-S": gates("H61-S", True),
+        "H61-H-hybrid-80k": gates("H61-H-hybrid-80k", True),
+        **{f"H61-M-spacing{s}-80k": gates(f"H61-M-spacing{s}-80k", False) for s in SPACINGS},
     }
     for k, v in decisions.items():
         log(f"decision {k}: numeric_pass={v['numeric_pass']} eligible(pending uniqueness)="
             f"{v['slot_eligible_pending_uniqueness']} gates={v['gates']}")
 
-    # ---- write the H59-S artifact (do-not-submit unless every gate passes) --------------------
+    # ---- write the H61-S artifact (do-not-submit unless every gate passes) --------------------
     slug = hashlib.sha256(np.packbits(cand_mask.ravel()).tobytes()).hexdigest()[:8]
     stamp = args.stamp or time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
     out = REPO / args.output_dir
     out.mkdir(parents=True, exist_ok=True)
-    stem = f"gemsdoe50-h59-updipseis-{mass}-{stamp}-{slug}"
+    stem = f"gemsdoe50-h61-updipseis-{mass}-{stamp}-{slug}"
     zero = _write_tiff(paths["template"], out / f"{stem}-allfinite.tif", cand_mask, valid, zero_outside=True)
     nanm = _write_tiff(paths["template"], out / f"{stem}-nan.tif", cand_mask, valid, zero_outside=False)
     zpath = out / f"{stem}-allfinite.zip"
@@ -449,10 +449,10 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                 "subtiles": a["subtiles"]}
 
     report = {
-        "schema": "gemsdoe50.h59-build.v1",
+        "schema": "gemsdoe50.h61-build.v1",
         "generated_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "git_commit": _git("rev-parse", "HEAD"),
-        "preregistration": "docs/research/h59-hypotheses-preregistered.md",
+        "preregistration": "docs/research/h61-hypotheses-preregistered.md",
         "inputs": {k: {"path": str(p.relative_to(REPO)), "sha256": hashes[k]} for k, p in paths.items()},
         "gemsdoe50_prior_files_excluded": [str(Path(f).relative_to(REPO)) for f in g50_files],
         "masks": {"valid": int(valid.sum()), "domain_gt_300m": int(domain.sum()),
@@ -473,7 +473,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "artifact": {"all_finite": zero, "nan_outside": nanm,
                      "zip": {"path": str(zpath.relative_to(REPO)), "sha256": sha256_file(zpath),
                              "bytes": zpath.stat().st_size},
-                     "entry_name": f"GEMSDOE50-H59-UPDIPSEIS-{mass}-{slug.upper()}"},
+                     "entry_name": f"GEMSDOE50-H61-UPDIPSEIS-{mass}-{slug.upper()}"},
         "seconds": round(time.time() - t0, 1),
     }
     dest = REPO / args.report
@@ -496,9 +496,9 @@ def main() -> None:
     ap.add_argument("--split", default="evidence/holdout-v1.json")
     ap.add_argument("--prior-union", default="registry/prior_positive_union.npz")
     ap.add_argument("--belief-cache", default=".arena/cache/h57_belief.npy")
-    ap.add_argument("--supports-cache", default=".arena/cache/h59_supports.npz")
+    ap.add_argument("--supports-cache", default=".arena/cache/h61_supports.npz")
     ap.add_argument("--output-dir", default="docs/downloads")
-    ap.add_argument("--report", default="evidence/h59_build.json")
+    ap.add_argument("--report", default="evidence/h61_build.json")
     ap.add_argument("--stamp", default=None)
     run(ap.parse_args())
 

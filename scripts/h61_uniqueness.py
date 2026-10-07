@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Full-resolution uniqueness gate over the complete prior corpus (H59).
+"""Full-resolution uniqueness gate over the complete prior corpus (H61).
 
-Candidates are binary rasters (or packed supports from the H59 build cache).
+Candidates are binary rasters (or packed supports from the H61 build cache).
 The corpus is every raster in ``.arena/prior_corpus`` (re-fetched by
 ``scripts/fetch_prior_corpus.py``: 50 hash-verified pins + every TIFF found in
 the 54 sibling ``GEMSDOE`` repositories) plus ``docs/downloads`` and
@@ -98,7 +98,7 @@ def main() -> int:
     ap.add_argument("--exempt", action="append", default=[],
                     help="candidate_label_substring=prior_filename_substring")
     ap.add_argument("--corpus", action="append", default=[".arena/prior_corpus", "docs/downloads", "downloads"])
-    ap.add_argument("--out", default="evidence/h59_uniqueness.json")
+    ap.add_argument("--out", default="evidence/h61_uniqueness.json")
     args = ap.parse_args()
 
     cands = [_candidate(c) for c in args.candidate]
@@ -208,10 +208,10 @@ def main() -> int:
         print(json.dumps({lab: summary[lab]}, indent=1))
 
     out = {
-        "schema": "gemsdoe50.h59-uniqueness.v1",
+        "schema": "gemsdoe50.h61-uniqueness.v1",
         "generated_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "corpus_dirs": list(dict.fromkeys(args.corpus)),
-        "corpus_receipt": "evidence/h59_prior_corpus_receipt.json",
+        "corpus_receipt": "evidence/h61_prior_corpus_receipt.json",
         "files_seen": len(files),
         "distinct_submission_like_priors": len(rows),
         "skipped": skipped,

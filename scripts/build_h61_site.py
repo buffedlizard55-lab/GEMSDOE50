@@ -1,22 +1,22 @@
 #!/usr/bin/env python3
-"""Add the H59 "start here" band, the H59 result cards and the errata to the site.
+"""Add the H61 "start here" band, the H61 result cards and the errata to the site.
 
 Runs after ``scripts/build_h55_site.py`` and ``scripts/build_h58_site.py`` (same
 order as ``.github/workflows/site.yml``). It
 
 * puts a single **start-here** band at the very top of ``index.html``: one-click
   download of the recommended file, the YES/NO verdict, the entry name and note,
-  a link to the step-by-step submission page, today's H59 decision and the flags;
+  a link to the step-by-step submission page, today's H61 decision and the flags;
 * points the skip link at that band (it used to jump past every download band);
 * corrects the false "reduces exactly to T/(0.2N + 0.8G)" wording in the
   generated bands and retires the stale 0.386 / 0.3774 card;
-* inserts the H59 result table into ``results.html`` and the H59 methods/sources
+* inserts the H61 result table into ``results.html`` and the H61 methods/sources
   card into ``methods.html``;
 * regenerates ``docs/how-to-submit.html``, ``docs/executive-summary.html`` and
   ``docs/index.html`` (they were withdrawn stubs that still pointed at H51).
 
-Every number comes from committed evidence (``evidence/h59_build.json``,
-``evidence/h59_uniqueness.json``, ``evidence/h59_sensitivity.json``,
+Every number comes from committed evidence (``evidence/h61_build.json``,
+``evidence/h61_uniqueness.json``, ``evidence/h61_sensitivity.json``,
 ``evidence/build_h57-scarpstep.json``) and every advertised file's SHA-256 is
 re-verified on disk before anything is written. Output is deterministic and the
 script refuses to insert a band twice.
@@ -29,9 +29,9 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-BUILD = ROOT / "evidence/h59_build.json"
-UNIQUE = ROOT / "evidence/h59_uniqueness.json"
-SENS = ROOT / "evidence/h59_sensitivity.json"
+BUILD = ROOT / "evidence/h61_build.json"
+UNIQUE = ROOT / "evidence/h61_uniqueness.json"
+SENS = ROOT / "evidence/h61_sensitivity.json"
 H57 = ROOT / "evidence/build_h57-scarpstep.json"
 
 H57_NAME = "GEMSDOE50-H57-SCARPSTEP"
@@ -42,7 +42,7 @@ H57_NOTE = (
 COMPETITION = "https://www.drivendata.org/competitions/306/competition-doe-gems/"
 FORMAT_PAGE = "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/"
 RULES_PDF = "https://docs.nlr.gov/docs/fy26osti/96647.pdf"
-VERDICT = "docs/research/h59-verdict-20261007.md"
+VERDICT = "docs/research/h61-verdict-20261007.md"
 
 START_MARK = '<section class="main" id="start">'
 H57_SECTION = '<section class="main" id="h57">'
@@ -53,9 +53,9 @@ METHODS_ANCHOR = '<article class="card span-12"><h2>Auditable source table</h2>'
 COLLAPSE_OLD = "reduces exactly to <code>DTI = T / (0.2N + 0.8G)</code>"
 COLLAPSE_NEW = (
     "is <code>DTI = T / (0.2N + 0.8G + 0.2(T &minus; M))</code> with <code>M = &Sigma; K(dot)</code> "
-    "(<b>erratum, H59:</b> this band originally said it &ldquo;reduces exactly to "
+    "(<b>erratum, H61:</b> this band originally said it &ldquo;reduces exactly to "
     "<code>T / (0.2N + 0.8G)</code>&rdquo;; that is exact only when T = M, and dots closer than "
-    f'6 px do compete &mdash; <a href="{VERDICT}">H59 verdict &sect;4</a>)'
+    f'6 px do compete &mdash; <a href="{VERDICT}">H61 verdict &sect;4</a>)'
 )
 NOCOPY_OLD = (
     "No pixel of any prior submission is copied: against the 26 pinned prior artifacts the maximum "
@@ -92,7 +92,7 @@ def load() -> dict:
     art = build["artifact"]
     for key in ("all_finite", "nan_outside", "zip"):
         if sha256(ROOT / art[key]["path"]) != art[key]["sha256"]:
-            raise SystemExit(f"H59 artifact hash drift: {art[key]['path']}")
+            raise SystemExit(f"H61 artifact hash drift: {art[key]['path']}")
     return {"build": build, "uniq": uniq, "sens": sens, "h57": h57}
 
 
@@ -108,19 +108,19 @@ def numbers(ev: dict) -> dict:
     fa = b["frame_a"]
     dec = b["decisions"]
     h57u = _u(ev, "gemsdoe50-h57-scarpstep")
-    h59u = _u(ev, "gemsdoe50-h59-updipseis")
+    h61u = _u(ev, "gemsdoe50-h61-updipseis")
     enr = b["stratified_corridor_enrichment"]
     sens = ev["sens"]["variants"]
     return {
         "inc": fa["H57-incumbent-80k"]["pooled"]["score"],
         "inc_folds": {k: v["score"] for k, v in fa["H57-incumbent-80k"]["folds"].items()},
-        "h59s": fa["H59-S"]["pooled"]["score"],
-        "h59s_n": fa["H59-S"]["mass"],
-        "h59s_cpd": fa["H59-S"]["pooled"]["credit_per_dot"],
+        "h61s": fa["H61-S"]["pooled"]["score"],
+        "h61s_n": fa["H61-S"]["mass"],
+        "h61s_cpd": fa["H61-S"]["pooled"]["credit_per_dot"],
         "rand_cpd": fa["uniform-random-matched"]["pooled"]["credit_per_dot"],
-        "hyb": fa["H59-H-hybrid-80k"]["pooled"]["score"],
-        "sp4": fa["H59-M-spacing4-80k"]["pooled"]["score"],
-        "sp5": fa["H59-M-spacing5-80k"]["pooled"]["score"],
+        "hyb": fa["H61-H-hybrid-80k"]["pooled"]["score"],
+        "sp4": fa["H61-M-spacing4-80k"]["pooled"]["score"],
+        "sp5": fa["H61-M-spacing5-80k"]["pooled"]["score"],
         "reemit": fa["H57-reemit-80k-on-novel"]["pooled"]["score"],
         "fb": b["frame_b"]["pooled"],
         "enr_median": enr["median_ratio"],
@@ -136,8 +136,8 @@ def numbers(ev: dict) -> dict:
         "h57_c": h57u["max_containment"]["value"],
         "h57_e": h57u["max_excess_2px"]["value"],
         "h57_e_prior": Path(h57u["max_excess_2px"]["prior"]).name,
-        "h59_j": h59u["max_jaccard"]["value"],
-        "h59_e": h59u["max_excess_2px"]["value"],
+        "h61_j": h61u["max_jaccard"]["value"],
+        "h61_e": h61u["max_excess_2px"]["value"],
         "priors": ev["uniq"]["distinct_submission_like_priors"],
         "on_union": b["h57_incumbent_prior_union_overlap"]["dots_on_prior_union"],
         "union_frac": b["h57_incumbent_prior_union_overlap"]["fraction_on_prior_union"],
@@ -154,21 +154,21 @@ def start_band(ev: dict, prefix: str = "") -> str:
 <div class="hero" style="border-radius:10px;padding:18px 20px;margin-bottom:14px"><div class="actions"><a class="download" href="{prefix}{esc(f['all_finite']['path'])}" download>Download the recommended GeoTIFF (H57, portal-safe)</a><a class="download alt" href="{prefix}{esc(f['zip']['path'])}" download>same file as .zip</a></div>
 <p class="fine" style="color:#d8e7e3">File <code>{esc(Path(f['all_finite']['path']).name)}</code> &middot; SHA-256 <span class="hash">{esc(f['all_finite']['sha256'])}</span> &middot; {f['all_finite']['bytes']:,} bytes &middot; 80,000 predicted cells &middot; float32, EPSG:32611, 3,730 &times; 3,292, values exactly 0 or 1, no NaN anywhere.</p>
 <p class="fine" style="color:#d8e7e3"><b>Entry name:</b> <code>{H57_NAME}</code> &middot; <b>note to paste:</b> <q>{esc(H57_NOTE)}</q></p></div>
-<p><span class="tag">YES</span> <b>OK to download and submit</b> (it uses one of your weekly slots). H57 is still the best file this repository has measured on its frozen spatially-blocked holdout (pooled DTI <b>{f4(n['inc'])}</b>; NW {f4(n['inc_folds']['NW'])}, NE {f4(n['inc_folds']['NE'])}, SW {f4(n['inc_folds']['SW'])}, SE {f4(n['inc_folds']['SE'])}); nothing built since, including today&rsquo;s H59 run, beats it. Rebuilding H57 from its code reproduces the shipped pixels exactly: <b>{'yes' if n['repro'] else 'NO'}</b>. It uses no earthquake catalogue, so the unresolved ComCat rights question does not apply. <a href="{prefix}docs/how-to-submit.html"><b>Exactly how to submit, step by step &rarr;</b></a></p>
+<p><span class="tag">YES</span> <b>OK to download and submit</b> (it uses one of your weekly slots). H57 is still the best file this repository has measured on its frozen spatially-blocked holdout (pooled DTI <b>{f4(n['inc'])}</b>; NW {f4(n['inc_folds']['NW'])}, NE {f4(n['inc_folds']['NE'])}, SW {f4(n['inc_folds']['SW'])}, SE {f4(n['inc_folds']['SE'])}); nothing built since, including today&rsquo;s H61 run, beats it. Rebuilding H57 from its code reproduces the shipped pixels exactly: <b>{'yes' if n['repro'] else 'NO'}</b>. It uses no earthquake catalogue, so the unresolved ComCat rights question does not apply. <a href="{prefix}docs/how-to-submit.html"><b>Exactly how to submit, step by step &rarr;</b></a></p>
 <p class="warning"><b>Expectation, not a promise.</b> The holdout scores a proxy (USGS SGMC faults away from the given catalogue), not the organizers&rsquo; hidden expert labels. The calibrated expectation for H57 is about <b>0.23</b> (P(&gt;&nbsp;0.2778)&nbsp;&asymp;&nbsp;29&nbsp;%, P(&gt;&nbsp;0.3774)&nbsp;&asymp;&nbsp;4&nbsp;%). Under the corrected metric algebra, beating the public best 0.3774 with 80,000 dots needs about 10,500 hidden-truth credit (credit/dot &gt; 0.13). No organizer score exists for any GEMSDOE50 file.</p>
 <p><b>Uniqueness, measured against the full prior corpus ({n['priors']} distinct submission-like files from all 54 sibling repositories plus this one).</b> H57 is not a copy: its largest exact-pixel overlap (Jaccard) with any prior file is {f4(n['h57_j'])}, and that file is our own never-submitted H56; at most 31&nbsp;% of its dots sit on any single prior file. But {n['on_union']:,} of its 80,000 dots ({n['union_frac']*100:.0f}&nbsp;%) land on a pixel that at least one of the 61 registered prior files also used, and its chance-corrected 2-pixel proximity to the dense 13GEMSDOE r8-ensemble is {f4(n['h57_e'])} (borderline against a 0.5 screen), because every scarp-based file follows the same LiDAR scarps. A version with zero exact overlap was tested and scores lower ({f4(n['reemit'])}), so it is not recommended.</p>
-<h3>Today&rsquo;s run (H59): the required seismic-lineation map &mdash; <span class="tag fail">NO SLOT</span></h3>
-<p>Built as specified: {n['events']:,} screened USGS ComCat earthquakes, declustered with the Zaliapin&ndash;Ben-Zion nearest-neighbour method ({n['bg']:,} background events kept), a 2-D triangle test (my unverified adaptation of the Ouillon&ndash;Sornette 3-D tetrahedron test), local 2-D covariance with location-error removal, corridors as wide as the catalogue location error plus up-dip copies, and dots snapped to the H57 ridge. Result: only {n['lin']} lineations and <b>{n['h59s_n']} dots</b>; holdout DTI <b>{f4(n['h59s'])}</b>, credit/dot {f4(n['h59s_cpd'])} versus {f4(n['rand_cpd'])} for random dots. On withheld catalogue faults the corridors lose to smoothed density ({f4(n['fb']['H59-S'])} vs {f4(n['fb']['density-best'])}). Within every H57-strength decile, the corridors hold <i>less</i> fault credit than the cells outside them (median ratio {n['enr_median']:.3f}, {n['enr_gt1']}/10 deciles above 1). Loosening every screen (up to {n['sens_max_lin']:,} lineations) never lifts that ratio above {n['sens_max_enr']:.2f}. Two variants were also rejected: mixing the corridor dots into H57 ({f4(n['hyb'])}) and spacing H57&rsquo;s dots 4 or 5 px apart ({f4(n['sp4'])}, {f4(n['sp5'])}). The H59 file is unique (Jaccard &le; {n['h59_j']:.4f}) and valid, but <b>do not submit it</b>: <a href="{prefix}{esc(a['all_finite']['path'])}" download>H59 research file</a> (SHA-256 <span class="hash">{esc(a['all_finite']['sha256'][:16])}&hellip;</span>, entry name if ever used <code>{esc(a['entry_name'])}</code>).</p>
+<h3>Today&rsquo;s run (H61): the required seismic-lineation map &mdash; <span class="tag fail">NO SLOT</span></h3>
+<p>Built as specified: {n['events']:,} screened USGS ComCat earthquakes, declustered with the Zaliapin&ndash;Ben-Zion nearest-neighbour method ({n['bg']:,} background events kept), a 2-D triangle test (my unverified adaptation of the Ouillon&ndash;Sornette 3-D tetrahedron test), local 2-D covariance with location-error removal, corridors as wide as the catalogue location error plus up-dip copies, and dots snapped to the H57 ridge. Result: only {n['lin']} lineations and <b>{n['h61s_n']} dots</b>; holdout DTI <b>{f4(n['h61s'])}</b>, credit/dot {f4(n['h61s_cpd'])} versus {f4(n['rand_cpd'])} for random dots. On withheld catalogue faults the corridors lose to smoothed density ({f4(n['fb']['H61-S'])} vs {f4(n['fb']['density-best'])}). Within every H57-strength decile, the corridors hold <i>less</i> fault credit than the cells outside them (median ratio {n['enr_median']:.3f}, {n['enr_gt1']}/10 deciles above 1). Loosening every screen (up to {n['sens_max_lin']:,} lineations) never lifts that ratio above {n['sens_max_enr']:.2f}. Two variants were also rejected: mixing the corridor dots into H57 ({f4(n['hyb'])}) and spacing H57&rsquo;s dots 4 or 5 px apart ({f4(n['sp4'])}, {f4(n['sp5'])}). The H61 file is unique (Jaccard &le; {n['h61_j']:.4f}) and valid, but <b>do not submit it</b>: <a href="{prefix}{esc(a['all_finite']['path'])}" download>H61 research file</a> (SHA-256 <span class="hash">{esc(a['all_finite']['sha256'][:16])}&hellip;</span>, entry name if ever used <code>{esc(a['entry_name'])}</code>).</p>
 <h3>Flags for manual review</h3>
 <ul class="list">
-<li><b>Metric algebra:</b> earlier pages said the score &ldquo;reduces exactly&rdquo; to <code>T/(0.2N+0.8G)</code> and that dots 3&nbsp;px apart do not compete. Both are false (tested in <code>tests/test_h59.py</code>); errata added.</li>
+<li><b>Metric algebra:</b> earlier pages said the score &ldquo;reduces exactly&rdquo; to <code>T/(0.2N+0.8G)</code> and that dots 3&nbsp;px apart do not compete. Both are false (tested in <code>tests/test_h61.py</code>); errata added.</li>
 <li><b>Leaderboard coincidence:</b> five owner-reported corpus scores (0.2778, 0.2750, 0.2710, 0.2708, 0.2600) equal the public scores of five different leaderboard accounts. Please check this against <a href="{RULES_PDF}">rules &sect;3.4</a> (limits per participating entity).</li>
 <li><b>Sample file:</b> the local <code>sample_submission.tif</code> holds 1.0 on exactly the 60,988 training-label cells, not &ldquo;total fault absence&rdquo;.</li>
 <li><b>Reference solution</b> writes float64; the <a href="{FORMAT_PAGE}">format page</a> asks for float32 (our files are float32).</li>
-<li><b>ComCat contributor rights</b> are unresolved, so no catalogue-derived file (H56, H58, H59) can be cleared for a slot.</li>
+<li><b>ComCat contributor rights</b> are unresolved, so no catalogue-derived file (H56, H58, H61) can be cleared for a slot.</li>
 <li><b>H33 parent conflict:</b> 44,090&nbsp;&minus;&nbsp;6,436 vs 40,199&nbsp;&minus;&nbsp;2,545 dots, unresolved.</li>
 </ul>
-<p class="muted">Full working: <a href="{prefix}{VERDICT}">H59 verdict</a> &middot; <a href="{prefix}docs/research/h59-hypotheses-preregistered.md">preregistration</a> &middot; <a href="{prefix}evidence/h59_build.json">build evidence</a> &middot; <a href="{prefix}evidence/h59_uniqueness.json">uniqueness</a> &middot; <a href="{prefix}evidence/h59_sensitivity.json">sensitivity</a> &middot; <a href="{prefix}docs/executive-summary.html">executive summary</a>. Older candidates follow below for the record; none of them is recommended.</p>
+<p class="muted">Full working: <a href="{prefix}{VERDICT}">H61 verdict</a> &middot; <a href="{prefix}docs/research/h61-hypotheses-preregistered.md">preregistration</a> &middot; <a href="{prefix}evidence/h61_build.json">build evidence</a> &middot; <a href="{prefix}evidence/h61_uniqueness.json">uniqueness</a> &middot; <a href="{prefix}evidence/h61_sensitivity.json">sensitivity</a> &middot; <a href="{prefix}docs/executive-summary.html">executive summary</a>. Older candidates follow below for the record; none of them is recommended.</p>
 </article></div></div></section>
 """
 
@@ -176,8 +176,8 @@ def start_band(ev: dict, prefix: str = "") -> str:
 def results_card(ev: dict) -> str:
     b = ev["build"]
     fa = b["frame_a"]
-    order = ["H57-incumbent-80k", "H57-reemit-80k-on-novel", "H59-H-hybrid-80k", "H59-M-spacing4-80k",
-             "H59-M-spacing5-80k", "H59-S", "H59-S-support-emit", "density-1000m", "density-2000m",
+    order = ["H57-incumbent-80k", "H57-reemit-80k-on-novel", "H61-H-hybrid-80k", "H61-M-spacing4-80k",
+             "H61-M-spacing5-80k", "H61-S", "H61-S-support-emit", "density-1000m", "density-2000m",
              "translated-10km-0km", "translated--10km-0km", "translated-0km-10km", "translated-0km--10km",
              "H57-matched-mass-strict", "uniform-random-matched"]
     rows = "".join(
@@ -196,18 +196,18 @@ def results_card(ev: dict) -> str:
     fb = b["frame_b"]["pooled"]
     a = b["artifact"]
     files = (
-        f'<p class="fine"><span class="tag fail">DO NOT SUBMIT</span> H59-S research files: '
+        f'<p class="fine"><span class="tag fail">DO NOT SUBMIT</span> H61-S research files: '
         f'<a href="{esc(a["all_finite"]["path"])}" download>all-finite .tif</a> &middot; '
         f'<a href="{esc(a["nan_outside"]["path"])}" download>NaN-outside twin</a> &middot; '
         f'<a href="{esc(a["zip"]["path"])}" download>.zip</a> &middot; SHA-256 (all-finite) '
         f'<span class="hash">{esc(a["all_finite"]["sha256"])}</span></p>'
     )
-    return f"""<article class="card span-12" id="h59"><h2>H59 &mdash; frozen holdout result (NO SLOT)</h2>{files}
-<p>Frame A: SGMC-off proxy in the four frozen macrofold cores; every pooled score cross-checked against <code>distance_weighted_tversky</code>. Preregistered before any H59 code: <a href="docs/research/h59-hypotheses-preregistered.md">h59-hypotheses-preregistered.md</a>.</p>
+    return f"""<article class="card span-12" id="h61"><h2>H61 &mdash; frozen holdout result (NO SLOT)</h2>{files}
+<p>Frame A: SGMC-off proxy in the four frozen macrofold cores; every pooled score cross-checked against <code>distance_weighted_tversky</code>. Preregistered before any H61 code: <a href="docs/research/h61-hypotheses-preregistered.md">h61-hypotheses-preregistered.md</a>.</p>
 <div style="overflow-x:auto"><table><thead><tr><th>Arm</th><th>N</th><th>pooled DTI</th><th>credit/dot</th><th>NW</th><th>NE</th><th>SW</th><th>SE</th></tr></thead><tbody>{rows}</tbody></table></div>
 <h3>Decision gates vs the H57 incumbent</h3>
 <div style="overflow-x:auto"><table><thead><tr><th>Candidate</th><th>fold wins</th><th>16-subtile bootstrap 95&nbsp;% CI (candidate &minus; H57)</th><th>numeric gates pass</th></tr></thead><tbody>{drows}</tbody></table></div>
-<p>Frame B (supplied catalogue withheld per macrofold): H59-S {f4(fb['H59-S'])}, best density {f4(fb['density-best'])}, translated corridors {f4(fb['translated-mean'])}, H57 at matched mass {f4(fb['H57-matched'])}. Diagnostics, sensitivity and the corrected metric algebra: <a href="{VERDICT}">H59 verdict</a>.</p></article>
+<p>Frame B (supplied catalogue withheld per macrofold): H61-S {f4(fb['H61-S'])}, best density {f4(fb['density-best'])}, translated corridors {f4(fb['translated-mean'])}, H57 at matched mass {f4(fb['H57-matched'])}. Diagnostics, sensitivity and the corrected metric algebra: <a href="{VERDICT}">H61 verdict</a>.</p></article>
 """
 
 
@@ -216,14 +216,14 @@ def methods_card(ev: dict) -> str:
     z = b["pipeline"]["zbz"]["gmm_log10_eta"]
     t = b["pipeline"]["triangle"]
     lr = b["pipeline"]["lineations"]
-    return f"""<article class="card span-12" id="h59-methods"><h2>H59 seismic-lineation method and sources</h2>
+    return f"""<article class="card span-12" id="h61-methods"><h2>H61 seismic-lineation method and sources</h2>
 <ul class="list">
 <li><b>Catalogue:</b> USGS ANSS ComCat via the FDSN event service (<code>https://earthquake.usgs.gov/fdsnws/event/1/query</code>), hash-pinned extract SHA-256 <span class="hash">{esc(b['inputs']['comcat']['sha256'])}</span>. Field list: <a href="https://earthquake.usgs.gov/earthquakes/feed/v1.0/csv.php">USGS CSV format page</a>; <b>flag:</b> its <code>horizontalError</code> link (<code>data/comcat/data-eventterms.php#horizontalError</code>) currently redirects to the GeoJSON feed page, so the definition quoted in the preregistration (&ldquo;largest projection of the three principal errors on a horizontal plane&rdquo;, in km) could not be re-read at a live official URL on 2026-10-07. USGS-authored data are public domain (<a href="https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits">USGS copyrights and credits</a>); contributions from non-USGS networks are not necessarily USGS-authored, so challenge-use rights remain unresolved.</li>
 <li><b>Declustering:</b> Zaliapin &amp; Ben-Zion (2013), JGR 118, 2847&ndash;2864, doi:10.1002/jgrb.50179 &mdash; nearest-neighbour proximity with d<sub>f</sub>&nbsp;=&nbsp;1.6, b&nbsp;=&nbsp;1; two-component Gaussian mixture threshold log<sub>10</sub>&eta;<sub>0</sub>&nbsp;=&nbsp;{z['threshold']:.3f}.</li>
 <li><b>Background screen:</b> 2-D triangle areas vs a coordinate-permuted reference (5th percentile, {t['kept']:,} of {t['events_in']:,} kept). <b>Unverified</b> 2-D adaptation of Ouillon &amp; Sornette (2011), JGR 116, B02306, doi:10.1029/2010JB007752.</li>
 <li><b>Lineations:</b> 12-neighbour inverse-variance covariance minus the mean squared horizontal error (2-D analogue of Ouillon, Ducorbier &amp; Sornette 2008, JGR 113, B01306, doi:10.1029/2007JB005032); {lr['accepted_neighbourhoods']} neighbourhoods accepted, {lr['merged_lineations']} after merging. Not an ACLUD reproduction (Wang et al. 2013, arXiv:1304.6912): ComCat gives a scalar horizontal error, not a covariance.</li>
 <li><b>Corridors:</b> epicentral (half-width = location error, 0.2&ndash;1&nbsp;km) and two up-dip copies offset by z/tan&nbsp;60&deg; (half-width propagates depth error and &plusmn;10&deg; dip, 0.2&ndash;2&nbsp;km); dots snapped every 300&nbsp;m to the H57 ridge across the corridor.</li>
-<li><b>Prior corpus:</b> <code>scripts/fetch_prior_corpus.py</code> &mdash; 50 hash-verified pins plus every TIFF in the 54 sibling repositories (receipt <a href="evidence/h59_prior_corpus_receipt.json">h59_prior_corpus_receipt.json</a>).</li>
+<li><b>Prior corpus:</b> <code>scripts/fetch_prior_corpus.py</code> &mdash; 50 hash-verified pins plus every TIFF in the 54 sibling repositories (receipt <a href="evidence/h61_prior_corpus_receipt.json">h61_prior_corpus_receipt.json</a>).</li>
 </ul></article>
 """
 
@@ -265,10 +265,10 @@ def executive_summary(ev: dict) -> str:
     body = start_band(ev, prefix="../") + f"""<section class="main"><div class="shell"><div class="grid"><article class="card span-12"><h2>Executive summary</h2>
 <ol class="list">
 <li><b>Submit H57</b> (download above). It is the best file on the frozen holdout ({f4(n['inc'])}); expectation &asymp;0.23 on the hidden labels, not a promise.</li>
-<li><b>The mandated seismic-lineation map was built and failed</b> its preregistered tests: {n['h59s_n']} dots, DTI {f4(n['h59s'])}; loses to random dots, to translated corridors, and to smoothed density on withheld faults.</li>
+<li><b>The mandated seismic-lineation map was built and failed</b> its preregistered tests: {n['h61s_n']} dots, DTI {f4(n['h61s'])}; loses to random dots, to translated corridors, and to smoothed density on withheld faults.</li>
 <li><b>Why 0.2778 happened (GEMSDOE32 H33-B2):</b> removing 6,436 dots that sat next to the given faults removed false-positive cost without losing credit &mdash; a dot-economy gain, not a better detector. With the corrected algebra it implies about 5,220 hidden credit and about 13,340 hidden truth cells.</li>
 <li><b>Can 0.3774 be beaten?</b> Not with anything measured so far: it needs about 10,500 hidden credit at 80,000 dots. P(H57 &gt; 0.3774) &asymp; 4&nbsp;%.</li>
-<li><b>Next:</b> hydrothermal-feature proximity and fault step-over priors on top of H57, and an emitter that prices the corrected metric &mdash; see the <a href="../{VERDICT}">H59 verdict &sect;8</a>.</li>
+<li><b>Next:</b> hydrothermal-feature proximity and fault step-over priors on top of H57, and an emitter that prices the corrected metric &mdash; see the <a href="../{VERDICT}">H61 verdict &sect;8</a>.</li>
 </ol></article></div></div></section>"""
     return _page("Executive summary", body)
 
@@ -295,7 +295,7 @@ def main() -> int:
         n = numbers(ev)
         text = text.replace(
             NOCOPY_OLD,
-            "<b>Erratum (H59, full corpus):</b> this band originally said that no pixel of any prior "
+            "<b>Erratum (H61, full corpus):</b> this band originally said that no pixel of any prior "
             "submission is copied (maximum full-pixel IoU 0.0248 against 26 pinned artifacts). Against all "
             f"{n['priors']} distinct prior files H57 is still not a copy (largest Jaccard {f4(n['h57_j'])}, with "
             f"our own never-submitted H56), but {n['union_frac']*100:.0f}&nbsp;% of its dots share a pixel with "
@@ -309,7 +309,7 @@ def main() -> int:
             "which the scored corpus refutes (fitted R&sup2; = &minus;0.87); it is retracted. The best validated "
             f"file, H57 (holdout {f4(n['inc'])}), has an expected hidden score of about 0.23 with P(&gt;&nbsp;0.3774) "
             "&asymp; 4&nbsp;%; beating 0.3774 at 80,000 dots needs about 10,500 hidden credit under the corrected "
-            "metric algebra. H55, H53-A, H58-S1 and every H59 arm failed their frozen gates.",
+            "metric algebra. H55, H53-A, H58-S1 and every H61 arm failed their frozen gates.",
         )
     index.write_text(text, encoding="utf-8")
 
@@ -336,7 +336,7 @@ def main() -> int:
     (ROOT / "docs/how-to-submit.html").write_text(how_to_submit(ev), encoding="utf-8")
     (ROOT / "docs/executive-summary.html").write_text(executive_summary(ev), encoding="utf-8")
     (ROOT / "docs/index.html").write_text(docs_index(ev), encoding="utf-8")
-    print("H59 start band, result/method cards, errata and docs/ pages written.")
+    print("H61 start band, result/method cards, errata and docs/ pages written.")
     return 0
 
 

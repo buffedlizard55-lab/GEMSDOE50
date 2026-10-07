@@ -1,8 +1,15 @@
-# H59 — preregistration (frozen before any H59 code was run)
+# H61 — preregistration (frozen before any H61 code was run)
+
+> **Numbering note (merge time).** This series was developed and frozen as "H59" and was
+> renumbered **H61** when merging, because two other Arena sessions merged their own H59
+> (topographic-scarp scatter) and H60 (official-stack belief field) series to `main` while this
+> branch was in flight. The relabel is mechanical (H59 → H61 in names and text); no frozen
+> constant, rule or number changed, and the raster bytes are unchanged (rebuilt with the same
+> `--stamp`).
 
 Date: 2026-10-07 (UTC). Branch `arena/5550c3e4-gemsdoe50`, parent commit `09fdee9`.
-Everything in this file was written **before** `src/gemsdoe50/h59.py` or
-`scripts/build_h59.py` existed. Edits after the run are only allowed in the
+Everything in this file was written **before** `src/gemsdoe50/h61.py` or
+`scripts/build_h61.py` existed. Edits after the run are only allowed in the
 "Post-run" section at the bottom and must be marked as such.
 
 ## 0. What is being decided
@@ -10,12 +17,12 @@ Everything in this file was written **before** `src/gemsdoe50/h59.py` or
 The holdout best is still **H57 scarpstep 80k**
 (`docs/downloads/gemsdoe50-h57-scarpstep-80000-20261007T1830Z-allfinite.tif`,
 SHA-256 `8027c4e9…`). The standing rule is: **do not spend a weekly slot on an
-idea that has not beaten the current holdout best.** H59 decides, under
+idea that has not beaten the current holdout best.** H61 decides, under
 frozen rules, whether (a) the mandated seismic-lineation method, (b) a hybrid
 of it with H57, or (c) a metric-algebra-motivated change of H57's emission
 spacing beats H57 on the same frozen holdout.
 
-## 1. Corrections that motivate H59 (verified numerically this session)
+## 1. Corrections that motivate H61 (verified numerically this session)
 
 1. **The repo's metric collapse is wrong.** `docs/research/h56-diagnosis.md`
    eq. 1 and several docstrings state that, for dots spaced ≥ 3 px, the
@@ -30,7 +37,7 @@ spacing beats H57 on the same frozen holdout.
    Per-dot credit on a straight truth line at spacing *s* px is
    1.0 / 1.667 / 2.333 / 2.667 / 3.0 / 3.0 for s = 1…6. Dots *on* truth cost no
    false-positive weight at any spacing, so the best spacing depends on how
-   certain the placement is — which is exactly what H59-M tests.
+   certain the placement is — which is exactly what H61-M tests.
 
 Neither correction changes a frozen holdout number already reported (those
 were computed with the official-equivalent implementation); they change the
@@ -40,19 +47,19 @@ were computed with the official-equivalent implementation); they change the
 
 | Rank | ID | Hypothesis | Expected Δ vs H57 on frozen holdout | P(beat H57) | Cost |
 |---|---|---|---|---|---|
-| 1 | **H59-M** | H57's own field, emitted with Chebyshev spacing 4 or 5 px instead of 3 (same 80k mass). Motivated by correction 2: a high-precision ridge chain wastes credit at 3 px. | +0.000 … +0.010 | 0.25 | very low (re-emission only) |
-| 2 | **H59-H** | Hybrid: corridor-snapped seismic dots replace the *lowest-ranked* H57 dots at the same 80k mass. Wins iff seismic-corridor dots are more precise than H57's marginal dots. | −0.005 … +0.005 | 0.15 | low |
-| 3 | **H59-S** | Mandated method, standalone: published nearest-neighbour declustering, location-error-deconvolved 2-D covariance lineations, epicentral **and up-dip-projected** corridors, ridge snap inside the corridor. | −0.10 … −0.02 (prior: H55, H58-S1 both lost) | 0.05 | medium |
-| 4 | H59-T | Hydrothermal-proximity gate on H57 (experts may map preferentially near geothermal systems; fault-controlled upflow). Needs an official hot-spring/geothermal-feature inventory with coordinates (NOAA/USGS/GDR). | unknown | 0.15 | medium (data provenance) |
-| 5 | H59-D | Step-over / fault-termination prior (Faulds & Hinz favourable structural settings) built from the supplied catalogue's fault tips. | unknown | 0.10 | medium |
+| 1 | **H61-M** | H57's own field, emitted with Chebyshev spacing 4 or 5 px instead of 3 (same 80k mass). Motivated by correction 2: a high-precision ridge chain wastes credit at 3 px. | +0.000 … +0.010 | 0.25 | very low (re-emission only) |
+| 2 | **H61-H** | Hybrid: corridor-snapped seismic dots replace the *lowest-ranked* H57 dots at the same 80k mass. Wins iff seismic-corridor dots are more precise than H57's marginal dots. | −0.005 … +0.005 | 0.15 | low |
+| 3 | **H61-S** | Mandated method, standalone: published nearest-neighbour declustering, location-error-deconvolved 2-D covariance lineations, epicentral **and up-dip-projected** corridors, ridge snap inside the corridor. | −0.10 … −0.02 (prior: H55, H58-S1 both lost) | 0.05 | medium |
+| 4 | H61-T | Hydrothermal-proximity gate on H57 (experts may map preferentially near geothermal systems; fault-controlled upflow). Needs an official hot-spring/geothermal-feature inventory with coordinates (NOAA/USGS/GDR). | unknown | 0.15 | medium (data provenance) |
+| 5 | H61-D | Step-over / fault-termination prior (Faulds & Hinz favourable structural settings) built from the supplied catalogue's fault tips. | unknown | 0.10 | medium |
 
-H59-T and H59-D are **not run** in this session (recorded as next work).
+H61-T and H61-D are **not run** in this session (recorded as next work).
 
 ### Why each could catch faults the catalogue misses, and how it differs from the repo
-* **H59-M** — no new physics; it removes self-competition among H57's dots so
+* **H61-M** — no new physics; it removes self-competition among H57's dots so
   the same evidence covers more distinct truth length. The repo never tested
   spacing because it believed 3 px was competition-free.
-* **H59-H / H59-S** — blind or young faults that have not broken the surface
+* **H61-H / H61-S** — blind or young faults that have not broken the surface
   still localise micro-seismicity at 2–15 km depth. On a dipping normal fault
   the surface trace sits `Δ = z / tan δ` up-dip of the hypocentral lineation
   (≈ 2.9 km for z = 5 km, δ = 60°), outside every epicentral corridor the repo
@@ -60,7 +67,7 @@ H59-T and H59-D are **not run** in this session (recorded as next work).
   The ridge snap then puts dots where a scarp or slope break exists inside the
   projected corridor.
 
-## 3. H59-S construction (frozen constants)
+## 3. H61-S construction (frozen constants)
 
 Input: `data/external/usgs_comcat_earthquakes.csv.gz` (SHA-256 `19e726c8…`;
 USGS ComCat via FDSN event service, https://earthquake.usgs.gov/fdsnws/event/1/).
@@ -126,7 +133,7 @@ pixels inside the core; predictions may not use the in-fold catalogue
 (exclusion buffer from the out-of-fold catalogue only).
 
 All arms are scored with the repository's `distance_weighted_tversky`
-(official-equivalent) at matched mass `M` = H59-S's realised dot count:
+(official-equivalent) at matched mass `M` = H61-S's realised dot count:
 * **density control** — same declustered events, Gaussian density σ = 1 and
   2 km; the top-density eligible cells with the *same area* as the corridor
   union, then the same H57-ridge emission inside that support;
@@ -150,11 +157,11 @@ A candidate is **SLOT-ELIGIBLE** only if all hold on frame A:
    H57-derived candidate may share (reported, not gated);
 6. compliance: ComCat-derived files additionally need the ComCat contributor
    rights question resolved (it is **not** resolved; see
-   `docs/research/comcat-license-review-20261007.md` and README) — so H59-S
-   and H59-H cannot be slot-eligible this session even if 1–5 pass.
+   `docs/research/comcat-license-review-20261007.md` and README) — so H61-S
+   and H61-H cannot be slot-eligible this session even if 1–5 pass.
 
 If no candidate is slot-eligible: **NO SLOT**; H57 remains the recommended
-file, and the H59-S file is shipped as a clearly labelled *do-not-submit*
+file, and the H61-S file is shipped as a clearly labelled *do-not-submit*
 research artifact (it is the mandated deliverable and is unique).
 
 ## 6. Post-run
@@ -162,9 +169,9 @@ research artifact (it is the mandated deliverable and is unique).
 *Added after the frozen run (2026-10-07). Nothing above this heading was changed.*
 
 * **Outcome: NO SLOT.** Every arm fails gates 1–3 against the H57 incumbent
-  (frame-A pooled DTI 0.2178): H59-S 0.0002 (326 dots), H59-H 0.2088,
-  spacing 4 → 0.1866, spacing 5 → 0.1786. H59-S also loses to density on frame B
-  (0.0007 vs 0.0093). Full table: `docs/research/h59-verdict-20261007.md`.
+  (frame-A pooled DTI 0.2178): H61-S 0.0002 (326 dots), H61-H 0.2088,
+  spacing 4 → 0.1866, spacing 5 → 0.1786. H61-S also loses to density on frame B
+  (0.0007 vs 0.0093). Full table: `docs/research/h61-verdict-20261007.md`.
 * **Deviation 1 (instrument).** Scoring used a vectorised re-implementation of
   `distance_weighted_tversky`; every pooled score was asserted equal to the
   original to 1e-9 (and a unit test covers masked folds).
@@ -175,10 +182,10 @@ research artifact (it is the mandated deliverable and is unique).
 * **Design flaw found.** The frozen lineation rules (k = 12, deconvolved
   half-length ≥ 1 km) reject dense linear sequences by construction (2,008 of
   2,307 neighbourhoods failed on length). A post-hoc lenient variant
-  (`evidence/h59_sensitivity.json`) removes it; the conclusion is unchanged.
+  (`evidence/h61_sensitivity.json`) removes it; the conclusion is unchanged.
 * **Determinism.** Two rebuilds with `--stamp 20261007T205554Z` reproduce the
   TIFs and the zip byte for byte.
 * **Citation note.** The `index.php#horizontalError` URL in §3 no longer reaches the
   field definition (the page is now a landing page; the CSV format page's own
   `data-eventterms.php#horizontalError` link redirects to the GeoJSON feed page).
-  See flag F9 in `docs/research/h59-verdict-20261007.md`.
+  See flag F9 in `docs/research/h61-verdict-20261007.md`.

@@ -1,6 +1,6 @@
-"""H59-S — up-dip seismic lineation corridors, snapped to an independent ridge.
+"""H61-S — up-dip seismic lineation corridors, snapped to an independent ridge.
 
-Preregistration: ``docs/research/h59-hypotheses-preregistered.md`` (frozen before
+Preregistration: ``docs/research/h61-hypotheses-preregistered.md`` (frozen before
 this module existed). Every constant below is copied from section 3 of that file.
 
 What is new relative to H55 / H58-S1 (both of which lost to density controls)
@@ -114,7 +114,7 @@ class Events:
 
 
 def load_events(comcat_path: str | Path, template_path: str | Path) -> tuple[Events, dict[str, Any]]:
-    """Read the hash-pinned ComCat extract and apply the frozen H59 screens."""
+    """Read the hash-pinned ComCat extract and apply the frozen H61 screens."""
     df, cat_report = h58.load_comcat(comcat_path)
     report: dict[str, Any] = {"catalog": cat_report, "rows_in": len(df)}
     df = df[df["type"].astype(str) == "earthquake"]
