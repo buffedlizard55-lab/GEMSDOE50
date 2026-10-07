@@ -1,0 +1,431 @@
+{
+ "my_sha256": "8027c4e9fe0f789e2d7180a7ccc031abec90b391cf9e42ebcc125752af9fb696",
+ "my_dots": 80000,
+ "instrument": "EXACT pixel-set equality + IoU on the full grid; novelty = fraction of my dots with no prior dot within 2 px (the metric's own tolerance is 3 px)",
+ "rows": [
+  {
+   "file": "downloads/gemsdoe50-h56-scarpdisperse-90000-allfinite.tif",
+   "identical_pixels": false,
+   "iou": 0.17163001302576897,
+   "novel_fraction_at_2px": 0.428425,
+   "their_novel_fraction_at_2px": 0.36336666666666667,
+   "n_prior_dots": 90000
+  },
+  {
+   "file": "downloads/gemsdoe50-h56-scarpdisperse-90000-nan.tif",
+   "identical_pixels": false,
+   "iou": 0.17163001302576897,
+   "novel_fraction_at_2px": 0.428425,
+   "their_novel_fraction_at_2px": 0.36336666666666667,
+   "n_prior_dots": 90000
+  },
+  {
+   "file": "prior/greedy_mp.tif",
+   "identical_pixels": false,
+   "iou": 0.02476432218304746,
+   "novel_fraction_at_2px": 0.3149125,
+   "their_novel_fraction_at_2px": 0.7626524172356544,
+   "n_prior_dots": 272853
+  },
+  {
+   "file": "prior/gemsdoe4_combined.tif",
+   "identical_pixels": false,
+   "iou": 0.018726381174186714,
+   "novel_fraction_at_2px": 0.8256125,
+   "their_novel_fraction_at_2px": 0.710085639572067,
+   "n_prior_dots": 264247
+  },
+  {
+   "file": "downloads/gems50-seislin-44709-20261006T2041Z-79e260ae.tif",
+   "identical_pixels": false,
+   "iou": 0.0185232070956624,
+   "novel_fraction_at_2px": 0.7364625,
+   "their_novel_fraction_at_2px": 0.4466662193294415,
+   "n_prior_dots": 44709
+  },
+  {
+   "file": "downloads/gems50-seislin-44709-20261006T2041Z-79e260ae.tif",
+   "identical_pixels": false,
+   "iou": 0.0185232070956624,
+   "novel_fraction_at_2px": 0.7364625,
+   "their_novel_fraction_at_2px": 0.4466662193294415,
+   "n_prior_dots": 44709
+  },
+  {
+   "file": "prior/lidarscarp_top2pct.tif",
+   "identical_pixels": false,
+   "iou": 0.018320273700474562,
+   "novel_fraction_at_2px": 0.8071375,
+   "their_novel_fraction_at_2px": 0.6120298208407604,
+   "n_prior_dots": 76859
+  },
+  {
+   "file": "prior/pindrop_ridge.tif",
+   "identical_pixels": false,
+   "iou": 0.01741573520117057,
+   "novel_fraction_at_2px": 0.7711375,
+   "their_novel_fraction_at_2px": 0.6972281174808574,
+   "n_prior_dots": 155021
+  },
+  {
+   "file": "prior/h19_5.tif",
+   "identical_pixels": false,
+   "iou": 0.016162116282359598,
+   "novel_fraction_at_2px": 0.806375,
+   "their_novel_fraction_at_2px": 0.7124270417977231,
+   "n_prior_dots": 121131
+  },
+  {
+   "file": "prior/dual_union.tif",
+   "identical_pixels": false,
+   "iou": 0.016000616594088406,
+   "novel_fraction_at_2px": 0.7564125,
+   "their_novel_fraction_at_2px": 0.7261301880833361,
+   "n_prior_dots": 183642
+  },
+  {
+   "file": "prior/ens12.tif",
+   "identical_pixels": false,
+   "iou": 0.015890481372757684,
+   "novel_fraction_at_2px": 0.7595625,
+   "their_novel_fraction_at_2px": 0.7221952432157434,
+   "n_prior_dots": 172974
+  },
+  {
+   "file": "prior/halo15.tif",
+   "identical_pixels": false,
+   "iou": 0.015048917757435781,
+   "novel_fraction_at_2px": 0.604425,
+   "their_novel_fraction_at_2px": 0.8118777338424749,
+   "n_prior_dots": 1828699
+  },
+  {
+   "file": "prior/pindrop_disc.tif",
+   "identical_pixels": false,
+   "iou": 0.014718581075246533,
+   "novel_fraction_at_2px": 0.5732625,
+   "their_novel_fraction_at_2px": 0.7916540339695912,
+   "n_prior_dots": 155021
+  },
+  {
+   "file": "prior/sgmc_gap.tif",
+   "identical_pixels": false,
+   "iou": 0.013210124662952287,
+   "novel_fraction_at_2px": 0.8925125,
+   "their_novel_fraction_at_2px": 0.643681888946549,
+   "n_prior_dots": 61664
+  },
+  {
+   "file": "downloads/gems50-h52-coincidence8-80000-20261007T032938Z-nanoutside.tif",
+   "identical_pixels": false,
+   "iou": 0.013158394650523677,
+   "novel_fraction_at_2px": 0.7250125,
+   "their_novel_fraction_at_2px": 0.689775,
+   "n_prior_dots": 80000
+  },
+  {
+   "file": "downloads/gems50-h52-coincidence8-80000-20261007T032938Z.tif",
+   "identical_pixels": false,
+   "iou": 0.013158394650523677,
+   "novel_fraction_at_2px": 0.7250125,
+   "their_novel_fraction_at_2px": 0.689775,
+   "n_prior_dots": 80000
+  },
+  {
+   "file": "prior/pindrop_nodes.tif",
+   "identical_pixels": false,
+   "iou": 0.012201319620307682,
+   "novel_fraction_at_2px": 0.5775625,
+   "their_novel_fraction_at_2px": 0.7935763541713703,
+   "n_prior_dots": 155021
+  },
+  {
+   "file": "prior/d15_dotted.tif",
+   "identical_pixels": false,
+   "iou": 0.011891087463788532,
+   "novel_fraction_at_2px": 0.82865,
+   "their_novel_fraction_at_2px": 0.7088514874560922,
+   "n_prior_dots": 60069
+  },
+  {
+   "file": "prior/edge_hybrid80k.tif",
+   "identical_pixels": false,
+   "iou": 0.011505879377923885,
+   "novel_fraction_at_2px": 0.75235,
+   "their_novel_fraction_at_2px": 0.7334375,
+   "n_prior_dots": 80000
+  },
+  {
+   "file": "prior/lattice_s5.tif",
+   "identical_pixels": false,
+   "iou": 0.011490078833434402,
+   "novel_fraction_at_2px": 0.477,
+   "their_novel_fraction_at_2px": 0.8109862490635347,
+   "n_prior_dots": 206895
+  },
+  {
+   "file": "prior/anderson_pinn.tif",
+   "identical_pixels": false,
+   "iou": 0.010534370615992859,
+   "novel_fraction_at_2px": 0.84505,
+   "their_novel_fraction_at_2px": 0.6605497503474546,
+   "n_prior_dots": 38854
+  },
+  {
+   "file": "prior/g32_h33b2_02778.tif",
+   "identical_pixels": false,
+   "iou": 0.010269796836627798,
+   "novel_fraction_at_2px": 0.8505375,
+   "their_novel_fraction_at_2px": 0.6623466298401233,
+   "n_prior_dots": 37654
+  },
+  {
+   "file": "prior/h33d_stepover.tif",
+   "identical_pixels": false,
+   "iou": 0.010246292350927224,
+   "novel_fraction_at_2px": 0.84795,
+   "their_novel_fraction_at_2px": 0.6921294637525379,
+   "n_prior_dots": 41865
+  },
+  {
+   "file": "downloads/gems52-union-h51-h52a-offcat-44828-20261007T021528Z-990213fd-allfinite.tif",
+   "identical_pixels": false,
+   "iou": 0.010139591341290714,
+   "novel_fraction_at_2px": 0.819375,
+   "their_novel_fraction_at_2px": 0.6472071027036673,
+   "n_prior_dots": 44828
+  },
+  {
+   "file": "downloads/gems52-union-h51-h52a-offcat-44828-20261007T021528Z-990213fd-nan.tif",
+   "identical_pixels": false,
+   "iou": 0.010139591341290714,
+   "novel_fraction_at_2px": 0.819375,
+   "their_novel_fraction_at_2px": 0.6472071027036673,
+   "n_prior_dots": 44828
+  },
+  {
+   "file": "prior/h36_blind.tif",
+   "identical_pixels": false,
+   "iou": 0.010087135682705927,
+   "novel_fraction_at_2px": 0.8534375,
+   "their_novel_fraction_at_2px": 0.6820764737121614,
+   "n_prior_dots": 37660
+  },
+  {
+   "file": "prior/h274_solo.tif",
+   "identical_pixels": false,
+   "iou": 0.010050166802517583,
+   "novel_fraction_at_2px": 0.8493125,
+   "their_novel_fraction_at_2px": 0.6800169158436777,
+   "n_prior_dots": 40199
+  },
+  {
+   "file": "prior/h32_prethin.tif",
+   "identical_pixels": false,
+   "iou": 0.009884637934878652,
+   "novel_fraction_at_2px": 0.8492375,
+   "their_novel_fraction_at_2px": 0.6955123658202109,
+   "n_prior_dots": 42294
+  },
+  {
+   "file": "prior/d28_poisson.tif",
+   "identical_pixels": false,
+   "iou": 0.009731964131690725,
+   "novel_fraction_at_2px": 0.8493125,
+   "their_novel_fraction_at_2px": 0.7082558403266047,
+   "n_prior_dots": 44090
+  },
+  {
+   "file": "prior/h28_dotted_ridge.tif",
+   "identical_pixels": false,
+   "iou": 0.008239847090050722,
+   "novel_fraction_at_2px": 0.8274875,
+   "their_novel_fraction_at_2px": 0.7980831685454887,
+   "n_prior_dots": 69281
+  },
+  {
+   "file": "downloads/gems51-scarpradio-offcat-35000-20261006-ecf058ea-allfinite.tif",
+   "identical_pixels": false,
+   "iou": 0.008152888577189444,
+   "novel_fraction_at_2px": 0.865,
+   "their_novel_fraction_at_2px": 0.6678,
+   "n_prior_dots": 35000
+  },
+  {
+   "file": "downloads/gems51-scarpradio-offcat-35000-20261006-ecf058ea-nan.tif",
+   "identical_pixels": false,
+   "iou": 0.008152888577189444,
+   "novel_fraction_at_2px": 0.865,
+   "their_novel_fraction_at_2px": 0.6678,
+   "n_prior_dots": 35000
+  },
+  {
+   "file": "prior/r7_nms3_dem10_scarp.tif",
+   "identical_pixels": false,
+   "iou": 0.006731788206741671,
+   "novel_fraction_at_2px": 0.7445875,
+   "their_novel_fraction_at_2px": 0.7868152921710354,
+   "n_prior_dots": 103347
+  },
+  {
+   "file": "downloads/gemsdoe50-h51-corridor-consensus-mix-20261007T0200Z-allfinite.tif",
+   "identical_pixels": false,
+   "iou": 0.00635835506152509,
+   "novel_fraction_at_2px": 0.897425,
+   "their_novel_fraction_at_2px": 0.716,
+   "n_prior_dots": 30000
+  },
+  {
+   "file": "downloads/gemsdoe50-h51-corridor-consensus-mix-20261007T0200Z.tif",
+   "identical_pixels": false,
+   "iou": 0.00635835506152509,
+   "novel_fraction_at_2px": 0.897425,
+   "their_novel_fraction_at_2px": 0.716,
+   "n_prior_dots": 30000
+  },
+  {
+   "file": "downloads/gemsdoe50-h51-corridor-consensus-mix-20261007T0200Z-allfinite.tif",
+   "identical_pixels": false,
+   "iou": 0.00635835506152509,
+   "novel_fraction_at_2px": 0.897425,
+   "their_novel_fraction_at_2px": 0.716,
+   "n_prior_dots": 30000
+  },
+  {
+   "file": "downloads/gemsdoe50-h51-corridor-consensus-mix-20261007T0200Z.tif",
+   "identical_pixels": false,
+   "iou": 0.00635835506152509,
+   "novel_fraction_at_2px": 0.897425,
+   "their_novel_fraction_at_2px": 0.716,
+   "n_prior_dots": 30000
+  },
+  {
+   "file": "downloads/gems50-h54-corpuscal-40000-20261007T032111Z-nan.tif",
+   "identical_pixels": false,
+   "iou": 0.00601091521843012,
+   "novel_fraction_at_2px": 0.9045875,
+   "their_novel_fraction_at_2px": 0.78275,
+   "n_prior_dots": 40000
+  },
+  {
+   "file": "downloads/gems50-h54-corpuscal-40000-20261007T032111Z-zeros.tif",
+   "identical_pixels": false,
+   "iou": 0.00601091521843012,
+   "novel_fraction_at_2px": 0.9045875,
+   "their_novel_fraction_at_2px": 0.78275,
+   "n_prior_dots": 40000
+  },
+  {
+   "file": "prior/hgb88_topk03.tif",
+   "identical_pixels": false,
+   "iou": 0.005768745212326627,
+   "novel_fraction_at_2px": 0.9489,
+   "their_novel_fraction_at_2px": 0.883938305132853,
+   "n_prior_dots": 155021
+  },
+  {
+   "file": "downloads/gemsdoe50-h53-tmiconj-20261007T0345Z-allfinite.tif",
+   "identical_pixels": false,
+   "iou": 0.005161741020317078,
+   "novel_fraction_at_2px": 0.9208125,
+   "their_novel_fraction_at_2px": 0.7409102466310704,
+   "n_prior_dots": 23598
+  },
+  {
+   "file": "downloads/gemsdoe50-h53-tmiconj-20261007T0345Z.tif",
+   "identical_pixels": false,
+   "iou": 0.005161741020317078,
+   "novel_fraction_at_2px": 0.9208125,
+   "their_novel_fraction_at_2px": 0.7409102466310704,
+   "n_prior_dots": 23598
+  },
+  {
+   "file": "downloads/gemsdoe50-h53-tmiconj-20261007T0345Z-allfinite.tif",
+   "identical_pixels": false,
+   "iou": 0.005161741020317078,
+   "novel_fraction_at_2px": 0.9208125,
+   "their_novel_fraction_at_2px": 0.7409102466310704,
+   "n_prior_dots": 23598
+  },
+  {
+   "file": "downloads/gemsdoe50-h53-tmiconj-20261007T0345Z.tif",
+   "identical_pixels": false,
+   "iou": 0.005161741020317078,
+   "novel_fraction_at_2px": 0.9208125,
+   "their_novel_fraction_at_2px": 0.7409102466310704,
+   "n_prior_dots": 23598
+  },
+  {
+   "file": "prior/h33f_analog.tif",
+   "identical_pixels": false,
+   "iou": 0.004240648722140395,
+   "novel_fraction_at_2px": 0.8968625,
+   "their_novel_fraction_at_2px": 0.8012928101610343,
+   "n_prior_dots": 44090
+  },
+  {
+   "file": "prior/strike30x3.tif",
+   "identical_pixels": false,
+   "iou": 0.0040357314744138,
+   "novel_fraction_at_2px": 0.8676875,
+   "their_novel_fraction_at_2px": 0.9075723191694708,
+   "n_prior_dots": 575055
+  },
+  {
+   "file": "downloads/gems52a-scarpdrainage-offcat-10000-20261007T021452Z-5c377a13-allfinite.tif",
+   "identical_pixels": false,
+   "iou": 0.0036577750022303507,
+   "novel_fraction_at_2px": 0.9472375,
+   "their_novel_fraction_at_2px": 0.5746,
+   "n_prior_dots": 10000
+  },
+  {
+   "file": "downloads/gems52a-scarpdrainage-offcat-10000-20261007T021452Z-5c377a13-nan.tif",
+   "identical_pixels": false,
+   "iou": 0.0036577750022303507,
+   "novel_fraction_at_2px": 0.9472375,
+   "their_novel_fraction_at_2px": 0.5746,
+   "n_prior_dots": 10000
+  },
+  {
+   "file": "downloads/gemsdoe50-h55-seisgeom-ridgesnap-13591-20261007-bcb60d89-nan.tif",
+   "identical_pixels": false,
+   "iou": 0.0030867174688916756,
+   "novel_fraction_at_2px": 0.9612375,
+   "their_novel_fraction_at_2px": 0.7544698697667575,
+   "n_prior_dots": 13591
+  },
+  {
+   "file": "downloads/gemsdoe50-h55-seisgeom-ridgesnap-13591-20261007-bcb60d89-zeros.tif",
+   "identical_pixels": false,
+   "iou": 0.0030867174688916756,
+   "novel_fraction_at_2px": 0.9612375,
+   "their_novel_fraction_at_2px": 0.7544698697667575,
+   "n_prior_dots": 13591
+  }
+ ],
+ "max_iou": 0.17163001302576897,
+ "worst_overlap_file": "downloads/gemsdoe50-h56-scarpdisperse-90000-allfinite.tif",
+ "min_novel_fraction_at_2px": 0.3149125,
+ "min_novel_vs": "prior/greedy_mp.tif",
+ "n_prior_compared": 50,
+ "verdict_unique": false,
+ "gate": {
+  "max_iou": 0.5,
+  "min_novel_fraction_at_2px": 0.5
+ },
+ "corpus_dirs": ".arena/prior:docs/downloads:downloads",
+ "per_dir": {
+  "downloads": {
+   "n": 24,
+   "max_iou": 0.1716,
+   "min_novel_fraction_at_2px": 0.4284
+  },
+  "prior": {
+   "n": 26,
+   "max_iou": 0.0248,
+   "min_novel_fraction_at_2px": 0.3149
+  }
+ },
+ "verdict_unique_vs_pinned_corpus": false
+}

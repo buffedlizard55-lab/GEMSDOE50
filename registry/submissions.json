@@ -283,8 +283,78 @@
    "status": "H52-C deliverable (branch arena/685c6059-gemsdoe50); local proxy instruments only; no organizer score exists for this file and no portal upload was performed by this repository.",
    "submitted_utc": null,
    "organizer_score": null
+  },
+  {
+   "name": "gemsdoe50-h57-scarpstep-80000-20261007T1830Z",
+   "portal_name": "GEMSDOE50-H57-SCARPSTEP",
+   "file": "docs/downloads/gemsdoe50-h57-scarpstep-80000-20261007T1830Z-allfinite.tif",
+   "role_of_primary": "all-finite portal-safe upload (recommended); the NaN-outside twin keeps the official sample's convention",
+   "bytes": 395743,
+   "sha256": "8027c4e9fe0f789e2d7180a7ccc031abec90b391cf9e42ebcc125752af9fb696",
+   "nan_twin": "docs/downloads/gemsdoe50-h57-scarpstep-80000-20261007T1830Z.tif",
+   "nan_twin_sha256": "7625f34335cc48fb05dbe851f03950ae61ae49f8db93dd27ac7f516a3349b980",
+   "nan_twin_bytes": 435936,
+   "zip": "docs/downloads/gemsdoe50-h57-scarpstep-80000-20261007T1830Z-allfinite.zip",
+   "zip_sha256": "ea553d844f8391ea62573356a493101062e60b234b83a52056b342d80b6da60d",
+   "mass": 80000,
+   "format": {
+    "crs": "EPSG:32611",
+    "shape": [
+     3730,
+     3292
+    ],
+    "dtype": "float32",
+    "count": 1,
+    "transform": [
+     100.0,
+     0.0,
+     243350.0,
+     0.0,
+     -100.0,
+     4508550.0
+    ],
+    "cells_finite": 12279160,
+    "cells_nan": 0,
+    "outside_unit_interval": 0,
+    "min": 0.0,
+    "max": 1.0,
+    "nodata_sentinel": null,
+    "min_chebyshev_spacing_px": 3,
+    "dots_within_300m_of_catalogue": 0
+   },
+   "receipts": {
+    "build": "evidence/build_h57-scarpstep.json",
+    "f1_validation": "evidence/h57_validation.json",
+    "stratified_control": "evidence/h57_stratified.json",
+    "frozen_gate_80k": "evidence/h57_holdout_80k.json",
+    "frozen_gate_60k": "evidence/h57_holdout_60000.json",
+    "frozen_gate_40k": "evidence/h57_holdout_40000.json",
+    "uniqueness": "evidence/h57_uniqueness.json",
+    "hidden_frame_model": "evidence/h57_hidden_model.json",
+    "verdict": "docs/research/h57-verdict-20261007.md"
+   },
+   "expected_score_statement": {
+    "frozen_gate_pooled_dti": 0.2025,
+    "frozen_gate_matched_uniform": 0.1053,
+    "frozen_gate_paired_ci95": [
+     0.0626,
+     0.133
+    ],
+    "corpus_calibrated_hidden_dti_central": 0.2286,
+    "corpus_calibrated_hidden_dti_band95": [
+     0.046,
+     0.411
+    ],
+    "p_above_0_2778": 0.29,
+    "p_above_0_3774": 0.043,
+    "note": "Modelled, not a score. The earlier 0.385-0.394 figure came from an assumed frame-transfer factor (1.8-2.0) that the scored corpus refutes (fitted ratio model R^2 = -0.872); it is retracted in the verdict document. No page claims H57 beats the public best 0.3774."
+   },
+   "provenance": "Built by deterministic scripts/build_h57.py from LiDAR scarp descriptors (USGS 3DEP 1 m DEM derivatives, DOI 10.5066/P93LGLVQ) and topographic composite bands restored and hash-verified by scripts/restore_inputs.sh. No earthquake catalogue is used. No prior submission's pixels are read by the builder; the prior corpus is used only as a novelty comparison in scripts/h56_uniqueness.py.",
+   "status": "H57 deliverable (branch arena/34413d7e-gemsdoe50); independent inventory (F1) and frozen spatially-blocked gate results only; no organizer score exists for this file and no portal upload was performed by this repository.",
+   "submitted_utc": null,
+   "organizer_score": null
   }
  ],
- "updated_utc": "2026-10-07T04:20:00Z",
+ "updated_utc": "2026-10-07T19:30:00Z",
  "policy": "No entry may claim an organizer score without a recorded portal receipt. An artifact is 'submitted' only when the owner says so. Every entry must be linked from the published pages or be flagged here as superseded/legacy."
 }
