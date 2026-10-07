@@ -39,7 +39,8 @@ def test_h55_site_regeneration_is_deterministic_and_download_first():
     before = {path: path.read_bytes() for path in tracked}
     # The committed pages are produced by the two generators in sequence (the same
     # order as the site workflow): build_h55_site.py regenerates from committed
-    # evidence, then build_h57_site.py inserts this session's H57 band.
+    # evidence, then build_h58_site.py reproduces the H57-scarpstep session's
+    # preserved band (docs/fragments/) and inserts this session's H58 band.
     subprocess.run(
         [sys.executable, str(ROOT / "scripts/build_h55_site.py")],
         cwd=ROOT,
@@ -48,7 +49,7 @@ def test_h55_site_regeneration_is_deterministic_and_download_first():
         text=True,
     )
     subprocess.run(
-        [sys.executable, str(ROOT / "scripts/build_h57_site.py")],
+        [sys.executable, str(ROOT / "scripts/build_h58_site.py")],
         cwd=ROOT,
         check=True,
         capture_output=True,
@@ -59,9 +60,13 @@ def test_h55_site_regeneration_is_deterministic_and_download_first():
     index = (ROOT / "index.html").read_text(encoding="utf-8")
     assert "Download portal-safe TIFF" in index
     # Charter rule: a one-click download and the executive summary sit at the very top of the
-    # site.  A later session may legitimately place its own download band above this one, so the
+    # site.  Later sessions may legitimately place their own download band above this one, so the
     # assertion is about ordering and presence, not about which session's artifact is first.
-    first_download = index.index("Download the current research candidate GeoTIFF (H56)")
+    # The current top band is the H57-scarpstep session's; the H56 band below it was reworded
+    # to "Previous candidate (H56)" by that session, and this session's H58 band follows it.
+    first_download = index.index("Download the current research candidate GeoTIFF (H57)")
+    assert "Previous candidate (H56)" in index
+    assert "GEMSDOE50-H58-SEISLINEAGE-98598-C4FF6DB9" in index
     assert first_download < index.index("Executive summary")
     assert index.index("Download portal-safe TIFF") > first_download
     assert "NO SLOT" in index

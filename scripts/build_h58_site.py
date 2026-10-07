@@ -198,6 +198,43 @@ def methods_card(ev: dict) -> str:
 <p class="fine">The 2-D triangle-area test is an <b>unverified project adaptation</b>, not the published 3-D tetrahedron method, and <code>horizontalError</code> is a scalar, not a per-event covariance (not an ACLUD reproduction, Wang et al. 2013). Mixed-network ComCat contributor rights are a flagged intra-repo conflict; see <a href="docs/research/comcat-license-review-20261007.md">the ComCat rights review</a> and <a href="docs/research/h58-hypotheses-preregistered.md">the H58 preregistration</a>.</p></article>"""
 
 
+def load_h57_scarpstep_band(fragment: Path) -> str:
+    """Return the preserved H57-scarpstep band after verifying its artifact bytes."""
+    evidence = json.loads(H57_EVIDENCE.read_text(encoding="utf-8"))
+    expected = evidence["files"]["all_finite"]["sha256"]
+    if not H57_SCARPSTEP_TIF.is_file() or sha256(H57_SCARPSTEP_TIF) != expected:
+        raise ValueError("H57-scarpstep artifact drift: refusing to publish its band")
+    if not fragment.is_file():
+        raise FileNotFoundError(f"missing preserved band fragment: {fragment}")
+    return fragment.read_text(encoding="utf-8")
+
+
+def apply_h57_scarpstep_index(text: str, band: str) -> str:
+    """Reproduce the H57 session's hand edits to index.html (idempotent)."""
+    if INDEX_META_BASE in text:
+        text = text.replace(INDEX_META_BASE, INDEX_META_H57, 1)
+    if INDEX_H56_H2_BASE in text:
+        text = text.replace(INDEX_H56_H2_BASE, INDEX_H56_H2_H57, 1)
+    if band.strip() not in text:
+        if H56_SECTION_ANCHOR not in text or text.count(H56_SECTION_ANCHOR) != 1:
+            raise ValueError("H56 section anchor missing or not unique in index.html")
+        text = text.replace(H56_SECTION_ANCHOR, band + "\n" + H56_SECTION_ANCHOR, 1)
+    return text
+
+
+def apply_h57_scarpstep_submission(text: str, band: str) -> str:
+    """Reproduce the H57 session's hand edits to submission.html (idempotent)."""
+    if SUBMISSION_META_BASE in text:
+        text = text.replace(SUBMISSION_META_BASE, SUBMISSION_META_H57, 1)
+    if SUBMISSION_TITLE_BASE in text:
+        text = text.replace(SUBMISSION_TITLE_BASE, SUBMISSION_TITLE_H57, 1)
+    if band.strip() not in text:
+        if H56_SECTION_ANCHOR not in text or text.count(H56_SECTION_ANCHOR) != 1:
+            raise ValueError("H56 section anchor missing or not unique in submission.html")
+        text = text.replace(H56_SECTION_ANCHOR, band + "\n" + H56_SECTION_ANCHOR, 1)
+    return text
+
+
 def insert_before(path: Path, anchor: str, block: str) -> None:
     text = path.read_text(encoding="utf-8")
     if block.strip() in text:
@@ -211,11 +248,26 @@ def insert_before(path: Path, anchor: str, block: str) -> None:
 
 def main() -> int:
     ev = load()
-    insert_before(ROOT / "index.html", INDEX_ANCHOR, index_band(ev))
-    insert_before(ROOT / "submission.html", SUBMISSION_ANCHOR, submission_card(ev))
+    h57_index_band = load_h57_scarpstep_band(H57_BAND_INDEX)
+    h57_submission_band = load_h57_scarpstep_band(H57_BAND_SUBMISSION)
+    index_path = ROOT / "index.html"
+    index_path.write_text(
+        apply_h57_scarpstep_index(index_path.read_text(encoding="utf-8"), h57_index_band),
+        encoding="utf-8",
+    )
+    submission_path = ROOT / "submission.html"
+    submission_path.write_text(
+        apply_h57_scarpstep_submission(
+            submission_path.read_text(encoding="utf-8"), h57_submission_band
+        ),
+        encoding="utf-8",
+    )
+    insert_before(index_path, INDEX_ANCHOR, index_band(ev))
+    insert_before(submission_path, SUBMISSION_ANCHOR, submission_card(ev))
     insert_before(ROOT / "results.html", RESULTS_ANCHOR, results_card(ev))
     insert_before(ROOT / "methods.html", METHODS_ANCHOR, methods_card(ev))
-    print("H58 band inserted into index.html, submission.html, results.html, methods.html")
+    print("H57-scarpstep band reproduced; H58 band inserted into index.html, "
+          "submission.html, results.html, methods.html")
     return 0
 
 
