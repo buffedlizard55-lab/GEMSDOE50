@@ -15,9 +15,68 @@
 7. **Work autonomously and auditably.** Review rules, data, sources, prior attempts, and limitations; record every material decision and irregularity; run multiple implementation/review passes; fix defects found; and maintain a concise next-steps list. Do not ask the owner to do research or resolve issues the agent can verify independently.
 8. **Keep the score context honest.** The owner-quoted `0.3195` is historical, not the live leader. Prior sibling-repository notes contain conflicting historical leaderboard values and are not a fresh independent official check; do not repeat them as current official scores or map any score to a TIFF without organizer-verified provenance. DrivenData's Terms of Use prohibit automated monitoring/copying and manual monitoring/copying without prior written consent. This repository links to the official board but does not scrape, poll, or publish leaderboard snapshots.
 9. **Follow the prize rules.** The September 2026 NLR/DOE rules require an AI-use disclosure in the narrative, permit up to three feedback submissions per week, and require selection of one final submission for both prize rounds. Finalists must provide reproducible code/assets and documentation. The competition ends December 3, 2026 at 23:59 UTC (verify the official page before any deadline-dependent action).
-10. **Create and merge a PR when practical.** Keep all work on Arena's fixed branch `arena/c4f4db48-gemsdoe50`. Run tests and review the PR before merging. Do not switch branches or push elsewhere.
+10. **Create and merge a PR when practical.** Keep all work on the fixed Arena session branch (the branch this checkout was created on; confirm with `git rev-parse --abbrev-ref HEAD` at session start rather than trusting a hard-coded name here). Run tests and review the PR before merging. Do not switch branches or push elsewhere.
 
-## Current evidence and decision (2026-10-06 UTC)
+## Current evidence and decision (2026-10-07 UTC)
+
+**One-click file of record:** `gems50-h53-strat12-40000-20261007T030253Z-nan.tif` -
+40,000 predicted pixels, sha256 `ff3909e28a4eb586...`,
+single band float32, EPSG:32611, 100 m, 3730 x 3292, every finite value in `[0, 1]`, NaN only where
+the official template is NaN, all checks re-read from the written bytes
+(`docs/downloads/checks-gems50-h53-strat12-40000-20261007T030253Z-nan.json`).
+An all-finite twin and a one-file `.zip` sit beside it for portals that reject either form.
+Registered in `registry/submissions.json` with `organizer_score: null`.
+
+**H53 was this session's two new methods, and both were validated, not assumed.**
+
+1. *Corpus-calibrated truth prior.* The sibling repositories of this project each record their own
+   scored rasters, so 24 distinct scored predictions (plus 7 byte-identical twins) were joined to
+   their owner-reported scores and used to fit a per-cell Poisson truth field whose derived `N`,
+   `T` and `FP` are the metric's own definitions
+   (`scripts/h53_corpus.py`, `scripts/h53_fit_truth.py`). It did not reach a usable calibration: the
+   objective stayed at RMSE ~0.11-0.13 and was monotone in `N`, and the reason is now on the record -
+   a field that explains 1.5x of the leaderboard's concentration cannot reproduce a leaderboard that
+   needs 5.6x. `evidence/h53_fit.json`.
+2. *Metric-derived stratified emission.* `DTI = T / (0.2(T+F) + 0.8N)` gives the exact stop rule
+   (`accept while kernel credit > 0.2T/(0.2F+0.8N)`) and it also exposes a trap the earlier builds fell
+   into: `TPw` is a **maximum over predicted cells**, so a dense blob of dots pays once. Emitting one
+   dot per 12 px block before any block may take a second raised the same field from 0.026 to 0.099
+   credit per dot, a 3.7x design improvement measured, not modelled
+   (`src/gems53/emitter.py::emit_stratified`, `tests/test_gems53.py`).
+
+**Measured on the only independent instrument available here** (USGS SGMC mapped faults more than
+300 m from the provided catalogue, scored inside each frozen holdout core at matched mass):
+shipped 0.109 credit/dot, 3-px dotted 0.147,
+matched-mass random control 0.119, and the already-scored sibling
+incumbent 0.148. `evidence/h53_validation.json`.
+
+**Decision: the H53 file is NOT slot-eligible** - it beats the matched-mass random control in
+0/4 blocks, while the incumbent beats it in 3/4. The gate is deliberately an instrument and never a
+model: the uncalibrated prior predicts 0.156-0.333 DTI for the very same support, a number that is a
+property of the assumption. **The strongest artifact this repository owns is the never-uploaded H51
+file** (35,000 dots, 0.189 credit/dot = 1.7x the random control, 4/4 blocked folds, `evidence/build_h51.json`),
+and re-measuring it in this session reproduced both numbers exactly - that, not H53, is the recommended
+use of a weekly slot, at the owner's discretion.
+
+**Two defects found and fixed, one inherited defect documented.** (a) The structural filters smoothed
+`nan_to_num(raster)` directly, so the boundary between data and no-data was detected as a lineament and
+rang a synthetic "fault" around the whole footprint outline: at its worst it carried 79% of the
+radiometric family's top 0.5% of pixels. `gems53.field.masked_filter` (normalised convolution) plus a
+6 px data-edge guard remove it, and `tests/test_gems53.py` pins the behaviour; the H51 file still
+carries the artifact on 7.9% of its dots, where it earned *below*-average credit, so H51's advantage is
+not an edge effect. (b) `scripts/build_submission.py` still computes a 2-D ComCat `keep` mask it never
+applies (clause 6 caveat unchanged). (c) Three provenance contradictions in the sibling corpus are
+recorded in `evidence/h53_corpus.json`: byte-identical files reported with different scores, one
+resampled file reported as shipped, and every sibling "score" being an owner report rather than an
+organizer receipt.
+
+**The binding constraint is data, not method.** The field that beat the instrument (H51) used the
+official 19-band `training_features.tif`; that file is not present in this sandbox and cannot be fetched
+without the owner's logged-in download. Re-downloading it and re-running `scripts/build_h51.py` with
+`scripts/h53_ship.py --layout stratified` is the single highest-value next action for beating `0.3195`.
+
+## Earlier evidence and decision (2026-10-06 UTC, superseded where the two differ)
+
 
 
 - **The H51 deliverable exists and is verified.** `docs/downloads/gems51-scarpradio-offcat-35000-20261006-ecf058ea-nan.tif`

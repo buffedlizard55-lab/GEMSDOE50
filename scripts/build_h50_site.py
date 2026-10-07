@@ -108,6 +108,125 @@ SHA-256 <span class="hash">{esc(primary['sha256'])}</span> · {int(primary['foot
 </div></section>"""
 
 
+def h53_download_band(ship: dict[str, Any], validation: dict[str, Any] | None) -> str:
+    """The one-click download band, H53 edition: file, name, note, hash, and the honest verdict."""
+    out = ship["outputs"]
+    prim, twin, zipped = out["primary_nan"], out["all_finite_zeros_twin"], out["zip"]
+    fname = prim["path"].split("/")[-1]
+    ab = ship.get("layout_ablation_off_catalogue_instrument", {}) or {}
+    rows = "".join(
+        f"<tr><td><code>{esc(k)}</code></td><td>{fmt(v['dti'], 4)}</td>"
+        f"<td>{fmt(v['credit_per_dot'], 4)}</td><td>{fmt(v['covered_fraction'] * 100, 2)}%</td></tr>"
+        for k, v in ab.items() if isinstance(v, dict) and "dti" in v)
+    gate = (validation or {}).get("gate", {})
+    ok = bool(gate.get("shipped_beats_random_in_every_fold") and gate.get("shipped_is_best_arm_on_mean"))
+    verdict = ('<span class="status pass">slot-eligible on the local instrument</span>' if ok
+               else '<span class="status fail">NO SLOT this week &mdash; the independent instrument '
+                    'does not support it</span>')
+    uniq = (validation or {}).get("uniqueness", {}) or {}
+    exact = (uniq.get("exact_pixel_overlap_top10") or [{}])[0]
+    return f"""<section style="background:#0d3b34;color:#f2f7f2;padding:26px 0;border-bottom:4px solid #d99a52"><div class="shell">
+<div class="eyebrow" style="color:#f0c58a">&#11015; ONE-CLICK COMPETITION SUBMISSION FILE &middot; H53</div>
+<h2 style="color:#ffffff;margin:.2em 0 .3em;font-size:clamp(1.5rem,3.4vw,2.3rem)">{esc(ship['submission_name'])}</h2>
+<p style="color:#d7e8e0;max-width:900px">Single band float32 GeoTIFF, EPSG:32611, 100 m, 3292 &times; 3730.
+Every finite value is in [0, 1]; no-data outside the footprint is NaN exactly as the official template does
+it, and the twin below writes 0.0 there instead. {int(ship['mass']):,} predicted pixels.
+Verified by re-reading the bytes written to disk (<a style="color:#f0c58a" href="docs/downloads/{esc('checks-' + fname.replace('.tif', '.json'))}">receipt</a>).</p>
+<p><a class="button" style="font-size:1.05rem" href="docs/downloads/{esc(fname)}" download>&#11015; Download {esc(fname)}</a>
+<a class="button secondary" style="margin-left:10px" href="docs/downloads/{esc(twin['path'].split('/')[-1])}" download>all-finite twin</a>
+<a class="button secondary" style="margin-left:10px" href="docs/downloads/{esc(zipped['path'].split('/')[-1])}" download>.zip (one GeoTIFF inside)</a></p>
+<p class="small" style="color:#cfe3da">Unique submission name to paste in the portal: <code>{esc(ship['submission_name'])}</code><br>
+Optional note: <q>{esc(ship['submission_note'])}</q><br>
+SHA-256 <span class="hash">{esc(prim['sha256'])}</span> &middot; {prim['bytes']:,} bytes &middot;
+twin SHA-256 <span class="hash">{esc(twin['sha256'])}</span></p>
+<p>{verdict} &nbsp; <span class="small" style="color:#cfe3da">uniqueness: worst exact-pixel Jaccard against any
+prior raster {fmt(exact.get('jaccard_pixels', 0.0) * 100, 2)}% over {uniq.get('n_priors_compared_exact', 0)} compared files</span></p>
+<table style="margin-top:14px"><thead><tr><th>layout, same field, same 40,000-dot mass</th><th>DTI</th>
+<th>credit per dot</th><th>truth covered</th></tr></thead><tbody>{rows}</tbody></table>
+<p class="small" style="color:#f0c58a"><strong>Not organizer-scored, and the local instrument says this field
+is no better than random placement.</strong> Read the verdict and the ablation in
+<a style="color:#f0c58a" href="results.html">Results</a> before spending a slot.</p>
+</div></section>"""
+
+
+def h53_submission_card(ship: dict[str, Any], validation: dict[str, Any] | None) -> str:
+    """Exact portal instructions for the current artifact, with the gate that decides eligibility."""
+    prim = ship["outputs"]["primary_nan"]
+    fname = prim["path"].split("/")[-1]
+    checks = ship["gate"]["format_checks_nan"]
+    fmt_ok = all(v for k, v in checks.items() if isinstance(v, bool))
+    gate = (validation or {}).get("gate", {})
+    ok = bool(gate.get("shipped_beats_random_in_every_fold") and gate.get("shipped_is_best_arm_on_mean"))
+    rows = "".join(f"<tr><td>{esc(k)}</td><td>{esc('yes' if v else 'no')}</td></tr>"
+                   for k, v in checks.items() if isinstance(v, bool))
+    return f"""<section class="main"><div class="shell"><div class="grid">
+<article class="card span-12"><h2>Current artifact: {esc(ship['submission_name'])}</h2>
+<div class="callout {'success' if fmt_ok else 'danger'}"><strong>Format gate:
+{'PASS' if fmt_ok else 'FAIL'}</strong> every value below was recomputed by reopening the written file,
+not by trusting the writer.</div>
+<p><a class="button" href="{esc(prim['path'])}" download>&#11015; Download {esc(fname)}</a>
+&nbsp; <span class="small">or the <a href="{esc(ship['outputs']['all_finite_zeros_twin']['path'])}" download>all-finite twin</a>
+/ <a href="{esc(ship['outputs']['zip']['path'])}" download>.zip</a> if the portal rejects NaN</span></p>
+<ul class="list">
+<li><strong>Submission name (unique, never used before):</strong> <code>{esc(ship['submission_name'])}</code></li>
+<li><strong>Optional note:</strong> <q>{esc(ship['submission_note'])}</q></li>
+<li><strong>SHA-256:</strong> <span class="hash">{esc(prim['sha256'])}</span> &middot; {prim['bytes']:,} bytes</li>
+<li><strong>Receipt:</strong> <a href="{esc('docs/downloads/checks-' + fname.replace('.tif', '.json'))}">checks-{esc(fname.replace('.tif', '.json'))}</a></li>
+<li><strong>AI-use disclosure:</strong> required in the competition narrative by the NLR/DOE rules; state
+that an autonomous research agent produced this repository, and name the human reviewer.</li>
+</ul>
+<div class="wide"><table><thead><tr><th>format check on the bytes on disk</th><th>result</th></tr></thead>
+<tbody>{rows}</tbody></table></div>
+<div class="callout {'success' if ok else 'danger'}" style="margin-top:14px">
+<strong>Slot gate: {'PASS' if ok else 'NO SLOT'}.</strong> {esc(gate.get('rule', ''))}</div>
+<p class="sourced">Upload is a human action. This repository never submits, never polls the leaderboard,
+and does not claim acceptance without an organizer receipt recorded in
+<code>registry/submissions.json</code>.</p>
+</article></div></div></section>"""
+
+
+def h53_verdict_block(ship: dict[str, Any], validation: dict[str, Any] | None) -> str:
+    """What H53 was, what it measured, and what it failed."""
+    val = validation or {}
+    per = (val.get("matched_mass_holdout") or {}).get("per_arm", {})
+    arms = "".join(
+        f"<tr><td><code>{esc(k)}</code></td><td>{fmt(v['mean_sgmc_off'], 4)}</td>"
+        f"<td>{fmt(v['min_sgmc_off'], 4)}</td><td>{fmt(v['mean_credit_per_dot'], 4)}</td>"
+        f"<td>{v['folds_beating_random']}/4</td></tr>" for k, v in per.items())
+    fit = ship.get("prior", {})
+    return f"""<section class="main"><div class="shell"><div class="grid">
+<article class="card span-12"><h2>H53: corpus-calibrated prior, stratified emission &mdash; full verdict</h2>
+<p><strong>Method.</strong> Two novelties, both measured rather than asserted. (1) A
+<em>label-free</em> belief field from the four sha-pinned u8 mirrors (3DEP/LiDAR scarp descriptors,
+GeoDAWN radiometrics and extension strains, geothermal manifestation anchors, road/claim
+confounder suppression), with mask-aware (normalised-convolution) smoothing so the data-boundary step
+edge cannot masquerade as a lineament. (2) An emission rule derived from the official metric itself:
+<span class="tag">DTI = T / (0.2(T+F) + 0.8N)</span> so a dot pays only when its kernel credit beats
+<code>k&#772; = 0.2T / (0.2F + 0.8N)</code>, and a stratified (one-dot-per-block-per-round) layout so that
+dots claim <em>distinct</em> truth neighbourhoods instead of piling onto one.</p>
+<div class="callout danger"><strong>Verdict: NO SLOT.</strong> On the only independent local instrument
+(USGS SGMC mapped faults &gt;300 m from the provided catalogue, 61,664 px, scored inside each frozen
+holdout core at matched mass) the shipped arm beats the matched-mass random control in
+{sum(1 for f in (val.get('matched_mass_holdout') or {}).get('folds', []) if f['arms']['shipped']['dti'] > f['arms']['random']['dti'])}/4
+blocks, against 3/4 for the incumbent file it was meant to surpass. A prior fitted on our own 24
+scored sibling files could not be made to converge to a usable calibration either
+(<code>evidence/h53_fit.json</code>), so no number on this page is a score prediction.
+The predicted DTI under the uncalibrated prior, {fmt((ship.get('predicted_dti_under_own_prior') or {}).get('dti', 0.0), 4)},
+is a property of the assumption, not of the ground truth &mdash; which is exactly why the gate is an
+instrument and not a model.</div>
+<div class="wide"><table><thead><tr><th>arm (same 40,000-dot mass unless noted)</th><th>mean DTI</th>
+<th>worst fold</th><th>credit per dot</th><th>folds &gt; random</th></tr></thead><tbody>{arms}</tbody></table></div>
+<p class="sourced">Prior: {esc(str(fit.get('source')))}; N-hat {fmt(fit.get('n_hat', 0), 0)} px;
+domain buffer {fmt(ship['domain']['buffer_px'], 0)} px from the catalogue and
+{fmt(ship['domain']['edge_guard_px'], 0)} px inside the data edge;
+budget mode {esc(ship['budget']['mode'])}. Evidence files:
+<a href="evidence/h53_ship.json">h53_ship.json</a>,
+<a href="evidence/h53_validation.json">h53_validation.json</a>,
+<a href="evidence/h53_field.json">h53_field.json</a>,
+<a href="evidence/h53_corpus.json">h53_corpus.json</a>.</p>
+</article></div></div></section>"""
+
+
 def h51_results_block(h51: dict[str, Any], evidence_dir: Path | None = None) -> str:
     cand = h51["instruments"]["candidate"]
     ctrl = h51["instruments"]["random_control"]
@@ -417,6 +536,8 @@ def build_pages(output_dir: Path, report_path: Path, tiff_path: Path,
         artifact_link = '<span class="tag">No download until data and byte checks pass</span>'
 
     h51 = load_h51((evidence_dir / "build_h51.json") if evidence_dir else None)
+    h53_ship = load_json_optional("h53_ship.json", evidence_dir)
+    h53_val = load_json_optional("h53_validation.json", evidence_dir)
     index_note = ""
     candidates_card = ""
     if h51:
@@ -518,7 +639,11 @@ def build_pages(output_dir: Path, report_path: Path, tiff_path: Path,
 
     methods_body = """<main><section class="pagehead"><div class="shell"><div class="eyebrow">Preregistered research</div><h1>Methods, sources & limitations</h1><p class="muted">The method was ranked before implementation; the exact spatial split and implementation constants were frozen before DTI calculation.</p></div></section><section class="main"><div class="shell"><div class="grid"><article class="card span-8"><h2>H50-S1: relocated event-plane geometry</h2><p>Use only waveform-relocated (`reloc=1`) Nevada catalog events inside the valid competition footprint. Fit compact local 3-D neighborhoods, require year support and stable horizontal strike, intersect plausible planes with z=0, and rasterize the surface-line proxy. Known mapped faults are masked by 300 m for the output; holdout labels are used only for scoring, never for line fitting.</p><p>Frozen parameters, folds, control design, and metric formula are documented in <a href="https://github.com/buffedlizard55-lab/GEMSDOE50/blob/arena/c4f4db48-gemsdoe50/docs/h50s1-protocol-addendum.md">the protocol addendum</a> and <a href="https://github.com/buffedlizard55-lab/GEMSDOE50/blob/arena/c4f4db48-gemsdoe50/docs/hypotheses-preregistered.md">the ranked preregistration</a>.</p><p>Prior-art and 3–5-hypothesis review: <a href="docs/research/earthquake-geometry-review-20261006.md">seismicity audit</a> and <a href="docs/research/hypothesis-ranking-20261006.md">candidate ranking</a>.</p><p><strong>Comparator policy:</strong> H50-prior is fixed as the primary comparator before holdout scoring. H32-D, H47-S3, and H48-DS are secondary context only; their holdout scores do not select the incumbent. Two 1 km / 2 km Gaussian-smoothed event-density maps are required matched controls. No prior prediction pixels are copied to the candidate artifact.</p><p><strong>Slot eligibility:</strong> formal aftershock declustering, mine/injection-site screening, and event-location uncertainty suitable for the raster width remain additional hard gates. Until they pass, any numeric result and unique TIFF are research-only and <strong>NO SLOT</strong>.</p></article><article class="card span-4"><h2>Data & permissions</h2><ul class="list"><li>Nevada catalog: <a href="https://doi.org/10.5281/zenodo.11167510">Zenodo v2</a>, CC BY 4.0; attribution and license link required.</li><li>Competition labels/template: SHA-pinned public Dropbox mirrors from a local source bridge manifest; provenance caveat is in the experiment report.</li><li>New H50-S1 raw data stays in ignored `.arena/`; the report records hashes and access links for verification.</li><li>Inherited ComCat/SGMC/LiDAR/radiometric files are not H50-S1 inputs. ComCat rights/shareability and location uncertainty remain unresolved; legacy refresh workflows are disabled.</li><li>Competition rules require external inputs to be licensed and shareable with the sponsor.</li></ul></article><article class="card span-6"><h2>Scientific limitations</h2><ul class="list"><li>Existing USGS/INGENIOUS labels are an imperfect proxy, not the hidden expert-labeled test set.</li><li>The catalog has no event-specific location covariance; model errors can exceed the 300 m scoring kernel, and orientation bootstrap is not a position-error estimate.</li><li>Formal aftershock declustering and mine/injection-site masks are not yet applied, so the density control alone does not clear those confounds.</li><li>Hypocenter planes are not guaranteed to intersect a mapped surface fault at the projected line.</li><li>Observed earthquakes are biased toward active faults, and waveform relocation is a subset of the full catalog.</li><li>A lineament or local DTI increase is not proof of geothermal productivity or a fault discovery.</li></ul></article><article class="card span-6"><h2>Leaderboard & AI disclosure</h2><p>DrivenData's Terms of Use restrict automated leaderboard monitoring and manual copying without written consent. This site links to the official board but does not poll, scrape, or publish a live snapshot.</p><p>Before any final competition entry, disclose AI assistance as required by the current NLR/DOE rules and describe human review. This repository does not submit on the user's behalf.</p></article></div></div></section></main>"""
 
-    if h51:
+    if h53_ship:
+        index_body = h53_download_band(h53_ship, h53_val) + index_body
+        results_body = results_body + h53_verdict_block(h53_ship, h53_val)
+        submission_body = submission_body + h53_submission_card(h53_ship, h53_val)
+    elif h51:
         index_body = h51_download_band(h51) + index_body
         results_body = results_body + h51_results_block(h51, evidence_dir)
         methods_body = methods_body + h51_methods_block(h51)
