@@ -36,7 +36,7 @@ jobs:
         run: |
           echo '78b6692155c6c6d5f9f19ccee6d595167c2065f1f25eb8d08636d1d9b285ff16  evidence/holdout-v1.json' | sha256sum --check
           echo '981b42e6d0310bf77f79c7c7662a0569c8d2e79514ef4e4a3624a5b07583ae3f  evidence/holdout-realized-v1.json' | sha256sum --check
-          echo 'bcaeea5acc50a733cb0c8a58e079639d9587d2e1e1696ad28f02467a860b1273  registry/prior_positive_union.npz' | sha256sum --check
-          echo '5f2327642fb96944a5523c8774156aff4128866caaa17c6765b5cfb2bfdb8c1f  docs/downloads/gemsdoe50-h55-seisgeom-ridgesnap-13674-20261007-7160d1e5-zeros.tif' | sha256sum --check
-          echo '2430730a44e4d9945c3b1e218895673a7f90fe4851f25a30c3363c829cd71deb  docs/downloads/gemsdoe50-h55-seisgeom-ridgesnap-13674-20261007-7160d1e5-nan.tif' | sha256sum --check
+          echo 'bfaf83edf47bf7c48309f692a670f3b6d92f492081a120d85dedc30b462578a6  registry/prior_positive_union.npz' | sha256sum --check
+          echo '7a366b7bbe431533a9d4246cbcdde34eb379ebb34fa116a8667431916506498d  docs/downloads/gemsdoe50-h55-seisgeom-ridgesnap-13591-20261007-bcb60d89-zeros.tif' | sha256sum --check
+          echo 'cd7f765a95ea9c71b22abffbf330434597c28057f8a80ed723b753cd0a32d3c6  docs/downloads/gemsdoe50-h55-seisgeom-ridgesnap-13591-20261007-bcb60d89-nan.tif' | sha256sum --check
           python scripts/verify_claims.py

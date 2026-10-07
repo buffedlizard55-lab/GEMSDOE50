@@ -50,7 +50,7 @@ def test_h55_site_regeneration_is_deterministic_and_download_first():
     assert "Download portal-safe TIFF" in index
     assert index.index("Download portal-safe TIFF") < index.index("Executive summary")
     assert "NO SLOT" in index
-    assert "0.019654" in index and "0.115822" in index
+    assert "0.019321" in index and "0.115822" in index
     assert "0.2778" in index and "UNSCORED" in index
 
 
@@ -85,7 +85,7 @@ def test_h55_artifact_range_grid_and_prior_pixel_exclusion():
         assert np.all(np.isfinite(zero))
         assert float(zero.min()) == 0.0 and float(zero.max()) == 1.0
         assert set(np.unique(zero)) == {0.0, 1.0}
-        assert int(np.count_nonzero(zero)) == 13_674
+        assert int(np.count_nonzero(zero)) == 13_591
         np.testing.assert_array_equal(zero > 0, np.isfinite(nan) & (nan > 0))
 
     with np.load(ROOT / "registry/prior_positive_union.npz", allow_pickle=False) as prior:
@@ -103,16 +103,21 @@ def test_h55_prior_receipt_includes_latest_main_artifacts_and_exact_copy_groups(
     )
     assert receipt["schema"] == "gemsdoe50.h55-prior-corpus-receipt.v3"
     assert receipt["all_sha256_verified"] is True
-    assert receipt["all_source_assertions"] == 63
+    assert receipt["all_source_assertions"] == 65
     assert receipt["registered_sibling_entries"] == 50
-    assert receipt["local_prior_entries"] == 13
-    assert receipt["unique_source_paths"] == 62
-    assert receipt["unique_filenames"] == 60
-    assert receipt["unique_sha256"] == 59
-    assert receipt["unique_positive_masks"] == 33
+    assert receipt["local_prior_entries"] == 15
+    assert receipt["unique_source_paths"] == 64
+    assert receipt["unique_filenames"] == 62
+    assert receipt["unique_sha256"] == 61
+    assert receipt["unique_positive_masks"] == 34
 
     source_paths = {entry["source_path"] for entry in receipt["entries"]}
-    for prefix in ("gems52-union-", "gems52a-scarpdrainage-", "gemsdoe50-h53-tmiconj-"):
+    for prefix in (
+        "gems52-union-",
+        "gems52a-scarpdrainage-",
+        "gemsdoe50-h53-tmiconj-",
+        "gems50-h54-corpuscal-",
+    ):
         assert any(prefix in source_path for source_path in source_paths)
     exact_copy_groups = [set(group["source_paths"]) for group in receipt["byte_identical_groups"]]
     assert {
@@ -122,8 +127,8 @@ def test_h55_prior_receipt_includes_latest_main_artifacts_and_exact_copy_groups(
 
     with np.load(ROOT / "registry/prior_positive_union.npz", allow_pickle=False) as prior:
         assert int(prior["registry_entries"]) == 50
-        assert int(prior["local_prior_entries"]) == 13
-        assert int(prior["all_source_entries"]) == 63
-        assert len(prior["sha256"]) == 59
-        assert len(set(prior["positive_mask_sha256"].tolist())) == 33
-        assert int(prior["positive_cells"]) == 1_375_484
+        assert int(prior["local_prior_entries"]) == 15
+        assert int(prior["all_source_entries"]) == 65
+        assert len(prior["sha256"]) == 61
+        assert len(set(prior["positive_mask_sha256"].tolist())) == 34
+        assert int(prior["positive_cells"]) == 1_405_451

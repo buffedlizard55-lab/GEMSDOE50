@@ -1,0 +1,526 @@
+{
+ "generated_utc": "2026-10-07T03:22:06+00:00",
+ "mass_primary": 40000,
+ "matched_mass_holdout": {
+  "folds": [
+   {
+    "id": "NW",
+    "core_bounds": [
+     100,
+     1765,
+     100,
+     1546
+    ],
+    "truth_cells": 19101,
+    "arms": {
+     "shipped": {
+      "dots": 16455,
+      "dti": 0.06376084155707952,
+      "tp_weight": 1192.5511861702232,
+      "fp_weight": 15920.971249804239,
+      "fn_weight": 17908.448813829775,
+      "truth_cells": 19101,
+      "prediction_cells": 16455,
+      "credit_per_dot": 0.07247348442237758,
+      "covered_fraction": 0.062433966083986346
+     },
+     "matched44090": {
+      "dots": 21391,
+      "dti": 0.034218915663323954,
+      "tp_weight": 669.3716923601542,
+      "fp_weight": 20733.8906630564,
+      "fn_weight": 18431.628307639847,
+      "truth_cells": 19101,
+      "prediction_cells": 21391,
+      "credit_per_dot": 0.03129221132065608,
+      "covered_fraction": 0.03504380358934894
+     },
+     "dotted3px": {
+      "dots": 20461,
+      "dti": 0.0755528312855465,
+      "tp_weight": 1475.4848037512352,
+      "fp_weight": 19766.41268582599,
+      "fn_weight": 17625.515196248765,
+      "truth_cells": 19101,
+      "prediction_cells": 20461,
+      "credit_per_dot": 0.07211205726754485,
+      "covered_fraction": 0.07724646896765798
+     },
+     "band3x3": {
+      "dots": 122715,
+      "dti": 0.07415876014681962,
+      "tp_weight": 2937.49325348634,
+      "fp_weight": 118712.87332914077,
+      "fn_weight": 16163.50674651366,
+      "truth_cells": 19101,
+      "prediction_cells": 122715,
+      "credit_per_dot": 0.023937523965989,
+      "covered_fraction": 0.15378740660103346
+     },
+     "random": {
+      "dots": 16210,
+      "dti": 0.07229499548143323,
+      "tp_weight": 1351.1331630279778,
+      "fp_weight": 15690.69624952818,
+      "fn_weight": 17749.86683697202,
+      "truth_cells": 19101,
+      "prediction_cells": 16210,
+      "credit_per_dot": 0.08335182992152855,
+      "covered_fraction": 0.07073625271074697
+     },
+     "incumbent_0.2778": {
+      "dots": 15134,
+      "dti": 0.10445890648673908,
+      "tp_weight": 1934.670445915598,
+      "fp_weight": 14265.709160580533,
+      "fn_weight": 17166.3295540844,
+      "truth_cells": 19101,
+      "prediction_cells": 15134,
+      "credit_per_dot": 0.1278360278786572,
+      "covered_fraction": 0.10128634343309764
+     }
+    }
+   },
+   {
+    "id": "NE",
+    "core_bounds": [
+     100,
+     1765,
+     1746,
+     3192
+    ],
+    "truth_cells": 19576,
+    "arms": {
+     "shipped": {
+      "dots": 7273,
+      "dti": 0.07171057257302127,
+      "tp_weight": 1237.8038599507277,
+      "fp_weight": 6763.730703326396,
+      "fn_weight": 18338.196140049273,
+      "truth_cells": 19576,
+      "prediction_cells": 7273,
+      "credit_per_dot": 0.17019164855640417,
+      "covered_fraction": 0.06323068348747077
+     },
+     "matched44090": {
+      "dots": 4741,
+      "dti": 0.03335132200271658,
+      "tp_weight": 553.7129406886617,
+      "fp_weight": 4154.42982287651,
+      "fn_weight": 19022.28705931134,
+      "truth_cells": 19576,
+      "prediction_cells": 4741,
+      "credit_per_dot": 0.11679243634015221,
+      "covered_fraction": 0.028285295294680306
+     },
+     "dotted3px": {
+      "dots": 4440,
+      "dti": 0.058015950813656264,
+      "tp_weight": 966.1178207658913,
+      "fp_weight": 3993.002684571109,
+      "fn_weight": 18609.882179234108,
+      "truth_cells": 19576,
+      "prediction_cells": 4440,
+      "credit_per_dot": 0.21759410377610167,
+      "covered_fraction": 0.04935215676164136
+     },
+     "band3x3": {
+      "dots": 56142,
+      "dti": 0.11442899237795248,
+      "tp_weight": 3056.515804057523,
+      "fp_weight": 52194.61478565831,
+      "fn_weight": 16519.484195942478,
+      "truth_cells": 19576,
+      "prediction_cells": 56142,
+      "credit_per_dot": 0.054442588508737184,
+      "covered_fraction": 0.15613587066088694
+     },
+     "random": {
+      "dots": 7800,
+      "dti": 0.08381431976900602,
+      "tp_weight": 1458.916081745128,
+      "fp_weight": 7269.710667827398,
+      "fn_weight": 18117.083918254873,
+      "truth_cells": 19576,
+      "prediction_cells": 7800,
+      "credit_per_dot": 0.18704052330065743,
+      "covered_fraction": 0.07452574998698037
+     },
+     "incumbent_0.2778": {
+      "dots": 7252,
+      "dti": 0.09763225438508655,
+      "tp_weight": 1689.5026826202168,
+      "fp_weight": 6530.294870813745,
+      "fn_weight": 17886.497317379784,
+      "truth_cells": 19576,
+      "prediction_cells": 7252,
+      "credit_per_dot": 0.23297058502760848,
+      "covered_fraction": 0.08630479580201353
+     }
+    }
+   },
+   {
+    "id": "SW",
+    "core_bounds": [
+     1965,
+     3630,
+     100,
+     1546
+    ],
+    "truth_cells": 1188,
+    "arms": {
+     "shipped": {
+      "dots": 3054,
+      "dti": 0.053238798104472455,
+      "tp_weight": 83.55605570489773,
+      "fp_weight": 3011.733766736188,
+      "fn_weight": 1104.4439442951023,
+      "truth_cells": 1188,
+      "prediction_cells": 3054,
+      "credit_per_dot": 0.02735954672720947,
+      "covered_fraction": 0.07033338022297789
+     },
+     "matched44090": {
+      "dots": 5869,
+      "dti": 0.029762918381597017,
+      "tp_weight": 63.11542732176502,
+      "fp_weight": 5787.915248722546,
+      "fn_weight": 1124.884572678235,
+      "truth_cells": 1188,
+      "prediction_cells": 5869,
+      "credit_per_dot": 0.01075403430256688,
+      "covered_fraction": 0.05312746407555978
+     },
+     "dotted3px": {
+      "dots": 4250,
+      "dti": 0.0478073312293576,
+      "tp_weight": 86.44720109275221,
+      "fp_weight": 4202.760378344225,
+      "fn_weight": 1101.5527989072477,
+      "truth_cells": 1188,
+      "prediction_cells": 4250,
+      "credit_per_dot": 0.02034051790417699,
+      "covered_fraction": 0.07276700428682846
+     },
+     "band3x3": {
+      "dots": 22280,
+      "dti": 0.03787001842067515,
+      "tp_weight": 203.9345766762682,
+      "fp_weight": 21969.663189192805,
+      "fn_weight": 984.0654233237317,
+      "truth_cells": 1188,
+      "prediction_cells": 22280,
+      "credit_per_dot": 0.009153257480981516,
+      "covered_fraction": 0.17166210157935033
+     },
+     "random": {
+      "dots": 2805,
+      "dti": 0.05928227740847289,
+      "tp_weight": 90.23618516094314,
+      "fp_weight": 2768.485695438307,
+      "fn_weight": 1097.763814839057,
+      "truth_cells": 1188,
+      "prediction_cells": 2805,
+      "credit_per_dot": 0.03216976298072839,
+      "covered_fraction": 0.07595638481560871
+     },
+     "incumbent_0.2778": {
+      "dots": 3395,
+      "dti": 0.0995908396233634,
+      "tp_weight": 163.90567067225751,
+      "fp_weight": 3313.047478634592,
+      "fn_weight": 1024.0943293277423,
+      "truth_cells": 1188,
+      "prediction_cells": 3395,
+      "credit_per_dot": 0.048278548062520625,
+      "covered_fraction": 0.13796773625610903
+     }
+    }
+   },
+   {
+    "id": "SE",
+    "core_bounds": [
+     1965,
+     3630,
+     1746,
+     3192
+    ],
+    "truth_cells": 11218,
+    "arms": {
+     "shipped": {
+      "dots": 4421,
+      "dti": 0.07369234590571211,
+      "tp_weight": 732.9005222992492,
+      "fp_weight": 4122.144620008143,
+      "fn_weight": 10485.09947770075,
+      "truth_cells": 11218,
+      "prediction_cells": 4421,
+      "credit_per_dot": 0.16577709167592156,
+      "covered_fraction": 0.06533254789617127
+     },
+     "matched44090": {
+      "dots": 2112,
+      "dti": 0.033219385097742235,
+      "tp_weight": 312.3263636497402,
+      "fp_weight": 1825.3281996031976,
+      "fn_weight": 10905.673636350259,
+      "truth_cells": 11218,
+      "prediction_cells": 2112,
+      "credit_per_dot": 0.14788180097052092,
+      "covered_fraction": 0.02784153714117848
+     },
+     "dotted3px": {
+      "dots": 2075,
+      "dti": 0.06059344748667204,
+      "tp_weight": 572.9322231659747,
+      "fp_weight": 1831.8152578165736,
+      "fn_weight": 10645.067776834025,
+      "truth_cells": 11218,
+      "prediction_cells": 2075,
+      "credit_per_dot": 0.276111914778783,
+      "covered_fraction": 0.05107258184756416
+     },
+     "band3x3": {
+      "dots": 34773,
+      "dti": 0.11155299660762662,
+      "tp_weight": 1765.8763017811152,
+      "fp_weight": 32511.78150580999,
+      "fn_weight": 9452.123698218884,
+      "truth_cells": 11218,
+      "prediction_cells": 34773,
+      "credit_per_dot": 0.05078297247235255,
+      "covered_fraction": 0.15741453929230836
+     },
+     "random": {
+      "dots": 4709,
+      "dti": 0.08196803623860124,
+      "tp_weight": 821.4617015360254,
+      "fp_weight": 4415.198895427984,
+      "fn_weight": 10396.538298463976,
+      "truth_cells": 11218,
+      "prediction_cells": 4709,
+      "credit_per_dot": 0.17444504173625514,
+      "covered_fraction": 0.07322710835585892
+     },
+     "incumbent_0.2778": {
+      "dots": 4088,
+      "dti": 0.07518052718666922,
+      "tp_weight": 742.7283248819733,
+      "fp_weight": 3781.5949436250075,
+      "fn_weight": 10475.271675118027,
+      "truth_cells": 11218,
+      "prediction_cells": 4088,
+      "credit_per_dot": 0.18168501097895629,
+      "covered_fraction": 0.06620862229291971
+     }
+    }
+   }
+  ],
+  "per_arm": {
+   "shipped": {
+    "mean_sgmc_off": 0.06560063953507134,
+    "min_sgmc_off": 0.053238798104472455,
+    "folds_beating_random": 0,
+    "mean_credit_per_dot": 0.1089504428454782
+   },
+   "matched44090": {
+    "mean_sgmc_off": 0.032638135286344946,
+    "min_sgmc_off": 0.029762918381597017,
+    "folds_beating_random": 0,
+    "mean_credit_per_dot": 0.07668012073347402
+   },
+   "dotted3px": {
+    "mean_sgmc_off": 0.060492390203808095,
+    "min_sgmc_off": 0.0478073312293576,
+    "folds_beating_random": 1,
+    "mean_credit_per_dot": 0.14653964843165163
+   },
+   "band3x3": {
+    "mean_sgmc_off": 0.08450269188826848,
+    "min_sgmc_off": 0.03787001842067515,
+    "folds_beating_random": 3,
+    "mean_credit_per_dot": 0.03457908560701506
+   },
+   "random": {
+    "mean_sgmc_off": 0.07433990722437835,
+    "min_sgmc_off": 0.05928227740847289,
+    "folds_beating_random": 0,
+    "mean_credit_per_dot": 0.11925178948479237
+   },
+   "incumbent_0.2778": {
+    "mean_sgmc_off": 0.09421563192046456,
+    "min_sgmc_off": 0.07518052718666922,
+    "folds_beating_random": 3,
+    "mean_credit_per_dot": 0.14769254298693565
+   }
+  },
+  "paired": {
+   "shipped": {
+    "mean_delta_vs_random": -0.008739267689307008,
+    "min_delta": -0.012103747195984754,
+    "folds_positive": 0
+   },
+   "matched44090": {
+    "mean_delta_vs_random": -0.0417017719380334,
+    "min_delta": -0.050462997766289444,
+    "folds_positive": 0
+   },
+   "dotted3px": {
+    "mean_delta_vs_random": -0.013847517020570245,
+    "min_delta": -0.02579836895534976,
+    "folds_positive": 1
+   },
+   "band3x3": {
+    "mean_delta_vs_random": 0.010162784663890121,
+    "min_delta": -0.021412258987797736,
+    "folds_positive": 3
+   },
+   "incumbent_0.2778": {
+    "mean_delta_vs_random": 0.019875724696086217,
+    "min_delta": -0.006787509051932025,
+    "folds_positive": 3
+   }
+  },
+  "instrument": "SGMC faults >300 m from the provided catalogue, scored inside each frozen fold core at matched mass",
+  "caveat": "this instrument's truth is a *mapped* inventory, not the hidden expert set; it can rank designs but cannot score them"
+ },
+ "uniqueness": {
+  "prior_artifacts": 50,
+  "block_8px": {
+   "worst": [
+    {
+     "artifact": "13gems_20261001_r13-lattice-s5_v2_nan-outside.tif",
+     "jaccard": 0.3784
+    },
+    {
+     "artifact": "gemsdoe30-sgmc-hedge-d10-85k-20261003-ac08b41e-zeros.tif",
+     "jaccard": 0.2517
+    },
+    {
+     "artifact": "gemsdoe30-sgmc-hedge-d10-85k-20261003-ac08b41e.tif",
+     "jaccard": 0.2517
+    },
+    {
+     "artifact": "8GEMSDOE_Hedge-v2_submission.tif",
+     "jaccard": 0.2498
+    },
+    {
+     "artifact": "gems10-h28-dotted-ridge-20260928T020256236880Z-6452ae1d00.tif",
+     "jaccard": 0.2387
+    }
+   ],
+   "median_all": 0.1999
+  },
+  "block_32px": {
+   "worst": [
+    {
+     "artifact": "13gems_20261001_r13-lattice-s5_v2_nan-outside.tif",
+     "jaccard": 0.986
+    },
+    {
+     "artifact": "8GEMSDOE_Hedge-v2_submission.tif",
+     "jaccard": 0.8118
+    },
+    {
+     "artifact": "gemsdoe30-sgmc-hedge-d10-85k-20261003-ac08b41e-zeros.tif",
+     "jaccard": 0.7948
+    },
+    {
+     "artifact": "gemsdoe30-sgmc-hedge-d10-85k-20261003-ac08b41e.tif",
+     "jaccard": 0.7948
+    },
+    {
+     "artifact": "gems10-h28-dotted-ridge-20260928T020256236880Z-6452ae1d00.tif",
+     "jaccard": 0.7723
+    }
+   ],
+   "median_all": 0.7094
+  },
+  "null_pairwise_32px": {
+   "n_pairs": 58,
+   "median": 0.801241568352763,
+   "max": 1.0,
+   "this_file_worst": 0.9860233582232434
+  },
+  "exact_pixel_overlap_top10": [
+   {
+    "file": "/home/user/gemsdata/GEMSDOE22/docs/downloads/gems22-h23-a-dti-optimal-emission-6pct-20261002-e2ec4b49-allfinite.tif",
+    "other_dots": 335879,
+    "shared": 3176,
+    "jaccard_pixels": 0.00852
+   },
+   {
+    "file": "/home/user/gemsdata/GEMSDOE22/docs/downloads/gems22-h23-a-dti-optimal-emission-6pct-20261002-e2ec4b49-nan.tif",
+    "other_dots": 335879,
+    "shared": 3176,
+    "jaccard_pixels": 0.00852
+   },
+   {
+    "file": "/home/user/gemsdata/GEMSDOE22/docs/downloads/gems22-h23-b-dti-optimal-emission-10pct-20261002-86176698-allfinite.tif",
+    "other_dots": 516738,
+    "shared": 4526,
+    "jaccard_pixels": 0.0082
+   },
+   {
+    "file": "/home/user/gemsdata/GEMSDOE22/docs/downloads/gems22-h23-b-dti-optimal-emission-10pct-20261002-86176698-nan.tif",
+    "other_dots": 516738,
+    "shared": 4526,
+    "jaccard_pixels": 0.0082
+   },
+   {
+    "file": "/home/user/GEMSDOE50/docs/downloads/gems51-scarpradio-offcat-35000-20261006-ecf058ea-allfinite.tif",
+    "other_dots": 35000,
+    "shared": 606,
+    "jaccard_pixels": 0.00815
+   },
+   {
+    "file": "/home/user/GEMSDOE50/docs/downloads/gems51-scarpradio-offcat-35000-20261006-ecf058ea-nan.tif",
+    "other_dots": 35000,
+    "shared": 606,
+    "jaccard_pixels": 0.00815
+   },
+   {
+    "file": "/home/user/gemsdata/20GEMSDOE/docs/downloads/gems20-h20-5-continuous-pu-proxy-unverified-20260930-824ce73a-allfinite.tif",
+    "other_dots": 121258,
+    "shared": 1264,
+    "jaccard_pixels": 0.0079
+   },
+   {
+    "file": "/home/user/gemsdata/20GEMSDOE/docs/downloads/gems20-h20-5-continuous-pu-proxy-unverified-20260930-824ce73a-nan.tif",
+    "other_dots": 121258,
+    "shared": 1264,
+    "jaccard_pixels": 0.0079
+   },
+   {
+    "file": "/home/user/gemsdata/GEMSDOE22/docs/downloads/gems22-h22-1-fractal-clustering-prior-multiline-20261002-7fd2f28b-allfinite.tif",
+    "other_dots": 123779,
+    "shared": 1277,
+    "jaccard_pixels": 0.00786
+   },
+   {
+    "file": "/home/user/gemsdata/GEMSDOE22/docs/downloads/gems22-h22-1-fractal-clustering-prior-multiline-20261002-7fd2f28b-nan.tif",
+    "other_dots": 123779,
+    "shared": 1277,
+    "jaccard_pixels": 0.00786
+   }
+  ],
+  "n_priors_compared_exact": 166,
+  "unique_sha256_vs_all_priors": true
+ },
+ "catalogue_instrument_full_footprint": {
+  "dti": 0.0113568252549209,
+  "tp_weight": 645.3537040213948,
+  "fp_weight": 39528.57477310847,
+  "fn_weight": 60342.6462959786,
+  "truth_cells": 60988,
+  "prediction_cells": 40000,
+  "credit_per_dot": 0.01613384260053487,
+  "covered_fraction": 0.010581650554558189
+ },
+ "gate": {
+  "budget_mode": "fixed_mass",
+  "shipped_beats_random_in_every_fold": false,
+  "shipped_is_best_arm_on_mean": false,
+  "rule": "a weekly slot is spent only when the shipped arm beats the matched-mass random control in every block AND is the best arm on the block mean; the model's own predicted DTI is never part of this gate, because it is computed under the assumption being tested"
+ }
+}

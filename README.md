@@ -75,16 +75,16 @@ by finding defensible fault traces omitted from the supplied catalogue. Core val
 ### One-click H55 research artifact
 
 **All-finite portal-range-safe TIFF:**
-[`gemsdoe50-h55-seisgeom-ridgesnap-13674-20261007-7160d1e5-zeros.tif`](docs/downloads/gemsdoe50-h55-seisgeom-ridgesnap-13674-20261007-7160d1e5-zeros.tif)
+[`gemsdoe50-h55-seisgeom-ridgesnap-13591-20261007-bcb60d89-zeros.tif`](docs/downloads/gemsdoe50-h55-seisgeom-ridgesnap-13591-20261007-bcb60d89-zeros.tif)
 
-* SHA-256: `5f2327642fb96944a5523c8774156aff4128866caaa17c6765b5cfb2bfdb8c1f`
-* 103,420 bytes; one float32 band; EPSG:32611; 3,730 x 3,292; 100 m
+* SHA-256: `7a366b7bbe431533a9d4246cbcdde34eb379ebb34fa116a8667431916506498d`
+* 103,444 bytes; one float32 band; EPSG:32611; 3,730 x 3,292; 100 m
 * values exactly `{0,1}`; every one of 12,279,160 cells is finite and in `[0,1]`
-* 13,674 positive cells; zero exact positive-pixel overlap with the complete frozen prior union
+* 13,591 positive cells; zero exact positive-pixel overlap with the complete frozen prior union
 
 **Sample-footprint-semantic twin:**
-[`gemsdoe50-h55-seisgeom-ridgesnap-13674-20261007-7160d1e5-nan.tif`](docs/downloads/gemsdoe50-h55-seisgeom-ridgesnap-13674-20261007-7160d1e5-nan.tif),
-SHA-256 `2430730a44e4d9945c3b1e218895673a7f90fe4851f25a30c3363c829cd71deb`.
+[`gemsdoe50-h55-seisgeom-ridgesnap-13591-20261007-bcb60d89-nan.tif`](docs/downloads/gemsdoe50-h55-seisgeom-ridgesnap-13591-20261007-bcb60d89-nan.tif),
+SHA-256 `cd7f765a95ea9c71b22abffbf330434597c28057f8a80ed723b753cd0a32d3c6`.
 It uses NaN only outside the official footprint and passes the repository's published-format checker.
 
 > **Decision: NO SLOT. Do not spend a weekly submission on H55-S1.** The file is the requested
@@ -97,22 +97,22 @@ The exact catalog has 183,002 source events. Filters retain 15,017 relocated, in
 non-negative-depth events after site screens; 90-day/250 m sequence thinning leaves 7,325; the
 unverified normalized triangle test leaves 3,145; and covariance/recurrence/bootstrap gates accept
 299 local axes. Frozen 3-pixel spacing cannot supply the target 35,000 cells from those corridors,
-so the central 600 m realization emits 13,674.
+so the central 600 m realization emits 13,591.
 
 On the same SGMC-off proxy frame:
 
 | method | pooled DTI | credit / dot | dots |
 | --- | ---: | ---: | ---: |
-| H55-S1 300 m | 0.011153 | 0.068600 | 8,300 |
-| **H55-S1 600 m** | **0.019654** | **0.074985** | **13,674** |
-| H55-S1 1,000 m | 0.030784 | 0.077441 | 21,378 |
-| density 1 km | 0.046040 | 0.074470 | 35,000 |
-| density 2 km | 0.045797 | 0.074087 | 35,000 |
-| matched random, novelty-constrained | 0.030849 | 0.049848 | 35,000 |
+| H55-S1 300 m | 0.011069 | 0.068256 | 8,278 |
+| **H55-S1 600 m** | **0.019321** | **0.074141** | **13,591** |
+| H55-S1 1,000 m | 0.030960 | 0.078040 | 21,332 |
+| density 1 km | 0.046524 | 0.075258 | 35,000 |
+| density 2 km | 0.045898 | 0.074250 | 35,000 |
+| matched random, novelty-constrained | 0.028893 | 0.046676 | 35,000 |
 | **frozen Candidate B** | **0.115822** | **0.188856** | **35,000** |
 
 H55 loses to Candidate B in all four macrofolds. The paired 16-subtile credit-per-dot bootstrap
-95% interval is `[-0.118623, -0.037328]`. It fails mass, width consistency, density, random,
+95% interval is `[-0.118959, -0.037294]`. It fails mass, width consistency, density, random,
 incumbent, bootstrap, formal-declustering-validation, complete anthropogenic-inventory,
 event-uncertainty, and ComCat-rights gates.
 The negative sign is not ambiguous.
@@ -167,25 +167,44 @@ fold geometry before SGMC-off scoring.
 ## Direct novelty and format evidence
 
 The 50-row sibling registry was retrieved from GitHub and every expected SHA-256 was verified;
-13 in-repository H50/H51/H52/H52A/H53 TIFF source paths were then added. In total, 63 source
-assertions represent 62 distinct source paths, 60 comparison filenames, 59 byte-distinct TIFFs,
-and 33 distinct positive masks. The receipt explicitly groups byte-identical copies and
+15 in-repository H50/H51/H52/H52A/H53/H54 TIFF source paths were then added. In total, 65 source
+assertions represent 64 distinct source paths, 62 comparison filenames, 61 byte-distinct TIFFs,
+and 34 distinct positive masks. The receipt explicitly groups byte-identical copies and
 finite/NaN twins with equivalent positive support. The compact frozen union is
 `registry/prior_positive_union.npz` (SHA-256
-`bcaeea5acc50a733cb0c8a58e079639d9587d2e1e1696ad28f02467a860b1273`). H55 has zero exact
-intersection with its 1,375,484 positive cells.
+`bfaf83edf47bf7c48309f692a670f3b6d92f492081a120d85dedc30b462578a6`). H55 has zero exact
+intersection with its 1,405,451 positive cells.
 
-A second direct full-resolution check against all 60 comparison files reports:
+A second direct full-resolution check against all 62 comparison files reports:
 
 * no identical SHA-256;
-* maximum 200 m-proximity IoU `0.040203` (gate `<0.5`);
-* minimum per-file fraction of H55 dots more than 200 m away `0.472795`;
+* maximum 200 m-proximity IoU `0.040107` (gate `<0.5`);
+* minimum per-file fraction of H55 dots more than 200 m away `0.475682`;
 * verdict `unique: true`;
 * NaN twin format checks all pass; finite values are exactly 0 and 1.
 
 Evidence:
 [`h55s1-full-corpus-check-20261007.json`](evidence/results/h55s1-full-corpus-check-20261007.json) and
 [`h55-prior-corpus-receipt-20261007.json`](evidence/results/h55-prior-corpus-receipt-20261007.json).
+
+## Integrated H54 research from latest main
+
+While this pull request was awaiting integration, main added a separate H54 corpus-calibrated field
+and metric-derived stratified emitter. Its file of record is
+[`gems50-h54-corpuscal-40000-20261007T032111Z-nan.tif`](docs/downloads/gems50-h54-corpuscal-40000-20261007T032111Z-nan.tif)
+(SHA-256 `2cdf7e705c867008b0dc86d3e7481bf43aef44240508312d270c97ebd192c81b`),
+with an [all-finite twin](docs/downloads/gems50-h54-corpuscal-40000-20261007T032111Z-zeros.tif).
+H54 emits 40,000 binary cells and passes its NaN-outside format receipt, but it did not beat its
+matched-mass random control in every frozen block. Its decision is therefore also **NO SLOT**; its
+model-implied DTI is not an organizer score.
+
+H54 exposed a real footprint-edge filtering artifact and measured a 3.7x credit-per-dot gain from
+stratified rather than dense top-N emission on the same proxy field. Its attempted calibration uses
+owner-reported sibling scores, has unresolved provenance contradictions, and did not produce a
+usable fit. See [`evidence/h54_validation.json`](evidence/h54_validation.json),
+[`evidence/h54_fit_status.json`](evidence/h54_fit_status.json), and
+[`evidence/h54_ship.json`](evidence/h54_ship.json). Both H54 TIFF twins are included in H55's strict
+prior corpus before the final H55 rerun.
 
 ## Source and license ledger
 
@@ -223,7 +242,7 @@ changes (projection, filtering, thinning, screening, and derived geometry).
   catalogue/network artifacts; they are not automatically surface traces.
 * SGMC-off is a real but incomplete mapped-fault proxy. It is not hidden expert truth, and local DTI
   cannot be compared numerically with a leaderboard score.
-* The 35,000-cell target was infeasible under frozen 3-pixel spacing; the honest artifact has 13,674
+* The 35,000-cell target was infeasible under frozen 3-pixel spacing; the honest artifact has 13,591
   cells and records the failure in its name and report.
 * The all-finite twin addresses the historical range-parser error, while the NaN twin follows the
   sample footprint semantics. No portal receipt establishes which behavior the current portal
@@ -235,15 +254,15 @@ changes (projection, filtering, thinning, screening, and derived geometry).
 Only if the owner explicitly overrides the frozen no-slot rule:
 
 1. Download the all-finite TIFF above and verify SHA-256
-   `5f2327642fb96944a5523c8774156aff4128866caaa17c6765b5cfb2bfdb8c1f`.
+   `7a366b7bbe431533a9d4246cbcdde34eb379ebb34fa116a8667431916506498d`.
 2. Open the official competition manually and confirm the current rules, deadline, remaining weekly
    feedback slots, external-data disclosure requirements, and AI disclosure.
 3. Upload the single `.tif` unchanged; do not re-save, reproject, unzip into another raster, or alter
    nodata metadata.
-4. Use unique name `GEMSDOE50-H55-SEISGEOM-RIDGESNAP-13674-7160D1E5`.
+4. Use unique name `GEMSDOE50-H55-SEISGEOM-RIDGESNAP-13591-BCB60D89`.
 5. Optional note: “H55-S1 research artifact: space-time-thinned CC BY 4.0 relocated earthquake
    point geometry; recurrent local 2-D covariance axes; cross-axis 3DEP/radiometric ridge snap;
-   supplied-fault and complete prior-pixel exclusion; 13,674 binary cells; local gate NO SLOT.”
+   supplied-fault and complete prior-pixel exclusion; 13,591 binary cells; local gate NO SLOT.”
 6. Save the portal's submission ID/receipt and exact returned error or score before making any
    score-to-file claim.
 
@@ -266,7 +285,7 @@ PYTHONPATH=src .venv/bin/python scripts/build_h55.py
 # Full-resolution uniqueness (requires the scratch corpus whose acquisition receipt is committed)
 GEMS50_CORPUS=.arena/prior_corpus PYTHONPATH=src .venv/bin/python \
   scripts/check_submission.py \
-  --submission docs/downloads/gemsdoe50-h55-seisgeom-ridgesnap-13674-20261007-7160d1e5-nan.tif \
+  --submission docs/downloads/gemsdoe50-h55-seisgeom-ridgesnap-13591-20261007-bcb60d89-nan.tif \
   --out evidence/results/h55s1-full-corpus-check-20261007.json
 
 # Regenerate the four GitHub Pages files from the machine-readable H55 report
@@ -296,6 +315,6 @@ Primary evidence:
 * **Pass 3 — full requirements/quality:** rechecked charter line by line; consolidated H33 score
   attribution and 0.3195 algebra; added the source/license table, executive guide, obvious site
   download, exact hashes, full-corpus receipt, negative decision, and reproducible commands;
-  integrated latest-main H52/H52A/H53 priors, distinguished byte copies from prediction-equivalent
-  twins, rebuilt the strict exclusion and all H55 outputs; reran tests, deterministic build/hash
+  integrated latest-main H52/H52A/H53/H54 priors, distinguished byte copies from
+  prediction-equivalent twins, rebuilt the strict exclusion and all H55 outputs; reran tests, deterministic build/hash
   checks, format/range checks, and site-link validation before PR.

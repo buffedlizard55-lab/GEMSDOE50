@@ -1,0 +1,210 @@
+{
+ "generated_utc": "2026-10-07T03:21:12+00:00",
+ "submission_name": "GEMSDOE50-H54-CORPUSCAL-40000",
+ "submission_note": "expected-DTI greedy emission (field prior) on a label-free scarp+radiometric+geothermal belief field; every dot >200 m from the provided catalogue and >600 m inside the data edge; mass and spacing solved from the metric's own break-even bar; not organizer-scored",
+ "rejected_priors": [],
+ "layout_ablation_off_catalogue_instrument": {
+  "stratified_block12": {
+   "dots": 40000,
+   "dti": 0.06840894978075077,
+   "credit_per_dot": 0.09882028756475097,
+   "covered_fraction": 0.06410241798439996
+  },
+  "plain_topn": {
+   "dots": 40000,
+   "dti": 0.018502287948842365,
+   "credit_per_dot": 0.026449289323200502,
+   "covered_fraction": 0.01715703770316587
+  },
+  "uniform_random": {
+   "dots": 40000,
+   "dti": 0.07679243364127727,
+   "credit_per_dot": 0.1111356940133416,
+   "covered_fraction": 0.07209113519287856
+  },
+  "instrument": "SGMC mapped faults more than 300 m from the provided catalogue (61,664 px) - a mapped inventory, not the hidden expert set: it ranks designs, it does not score them"
+ },
+ "budget": {
+  "mode": "fixed_mass",
+  "fixed_mass": 40000,
+  "justification": "corpus break-even budget: the eight best authenticated sibling scores all sit between 37,654 and 44,090 dots (evidence/h54_corpus.json); with an uncalibrated prior the model's own bar is not trusted, because an over-concentrated prior makes extra mass look free",
+  "model_bar_mass_if_run_free": null
+ },
+ "prior": {
+  "source": "field",
+  "exponent_if_field": 4.0,
+  "n_hat": 12226,
+  "cells_positive": 4793684,
+  "sum": 12225.9990234375,
+  "peak": 0.1431114822626114
+ },
+ "domain": {
+  "buffer_px": 2.0,
+  "edge_guard_px": 6.0,
+  "cells": 4793684
+ },
+ "emission": {
+  "mass": 40000,
+  "mass_requested": 40000,
+  "block": 12,
+  "rounds": 2,
+  "blocks_occupied": 35917,
+  "blocks_in_trimmed_view": 35917,
+  "layout": "stratified",
+  "predicted_dti": 0.15579683334697256,
+  "n_truth": 12225.9990234375
+ },
+ "emission_tail": [],
+ "mass": 40000,
+ "predicted_dti_under_own_prior": {
+  "dti": 0.15579683334697256,
+  "tp": 2752.94287109375,
+  "fp": 36693.47265625,
+  "n_truth": 12225.9990234375,
+  "mass": 40000,
+  "break_even_k": 0.032161498596811604
+ },
+ "comparators": {
+  "shipped_bar_optimum": {
+   "dti": 0.15579683334697256,
+   "tp": 2752.94287109375,
+   "fp": 36693.47265625,
+   "n_truth": 12225.9990234375,
+   "mass": 40000,
+   "break_even_k": 0.032161498596811604
+  },
+  "greedy_mass44090": {
+   "dti": 0.33289863576147055,
+   "tp": 5651.2880859375,
+   "fp": 30324.728515625,
+   "n_truth": 12225.9990234375,
+   "mass": 44090,
+   "break_even_k": 0.07132877771036078
+  },
+  "random_same_mass": {
+   "dti": 0.04914651980848599,
+   "tp": 874.8975830078125,
+   "fp": 39230.21484375,
+   "n_truth": 12225.9990234375,
+   "mass": 40000,
+   "break_even_k": 0.009926878265560721
+  },
+  "incumbent_0.2778_support_on_this_prior": {
+   "dti": 0.060846970276393804,
+   "tp": 1053.8394775390625,
+   "fp": 36639.6953125,
+   "n_truth": 12225.9990234375,
+   "mass": 37654,
+   "break_even_k": 0.012319312625104542
+  }
+ },
+ "gate": {
+  "format_checks_nan": {
+   "driver": "GTiff",
+   "count_is_1": true,
+   "dtype_is_float32": true,
+   "crs_is_epsg32611": true,
+   "same_shape": true,
+   "same_transform": true,
+   "same_bounds": true,
+   "min": 0.0,
+   "max": 1.0,
+   "nan_count": 7111787,
+   "values_in_0_1": true,
+   "nan_only_outside_footprint": true,
+   "positive_px": 40000,
+   "unique_positive_values": [
+    1.0
+   ],
+   "compression": "Compression.deflate",
+   "nodata": NaN,
+   "footprint_source": "registry/footprint_mask.npz",
+   "footprint_px": 5167373,
+   "outside_footprint_all_nan": true,
+   "all_checks_pass": true
+  },
+  "format_checks_zeros_twin": {
+   "driver": "GTiff",
+   "count_is_1": true,
+   "dtype_is_float32": true,
+   "crs_is_epsg32611": true,
+   "same_shape": true,
+   "same_transform": true,
+   "same_bounds": true,
+   "min": 0.0,
+   "max": 1.0,
+   "nan_count": 0,
+   "values_in_0_1": true,
+   "nan_only_outside_footprint": false,
+   "positive_px": 40000,
+   "unique_positive_values": [
+    1.0
+   ],
+   "compression": "Compression.deflate",
+   "nodata": null,
+   "footprint_source": "registry/footprint_mask.npz",
+   "footprint_px": 5167373,
+   "outside_footprint_all_nan": false,
+   "all_checks_pass": false
+  },
+  "uniqueness": {
+   "verdict": "PASS (block-signature level)",
+   "verdict_unique": true,
+   "verification_level": "block-signature",
+   "downsample_blocks": [
+    8,
+    32
+   ],
+   "n_prior": 50,
+   "max_iou_block8": 0.3784303809958435,
+   "max_iou_block32": 0.9860233582232434,
+   "screen_threshold_block8": 0.75,
+   "worst_overlap_file": "13gems_20261001_r13-lattice-s5_v2_nan-outside.tif",
+   "identical_sha256": [],
+   "my_sha256": "2cdf7e705c867008b0dc86d3e7481bf43aef44240508312d270c97ebd192c81b",
+   "my_dots": 40000,
+   "note": "block-occupancy signatures catch copies and near-copies; fine-scale novelty (full-pixel IoU and the fraction of dots >200 m from any prior dot) is measured where the full corpus exists and is recorded in registry/submission_checks.json."
+  }
+ },
+ "outputs": {
+  "primary_nan": {
+   "path": "docs/downloads/gems50-h54-corpuscal-40000-20261007T032111Z-nan.tif",
+   "bytes": 200857,
+   "sha256": "2cdf7e705c867008b0dc86d3e7481bf43aef44240508312d270c97ebd192c81b"
+  },
+  "all_finite_zeros_twin": {
+   "path": "docs/downloads/gems50-h54-corpuscal-40000-20261007T032111Z-zeros.tif",
+   "bytes": 156393,
+   "sha256": "c24a8e3ce7ef2c30c2a44fe33bd901c6795ff02eca7004e135e2b588cce81623"
+  },
+  "zip": {
+   "path": "docs/downloads/gems50-h54-corpuscal-40000-20261007T032111Z-nan.zip",
+   "bytes": 154872,
+   "sha256": "509deee9cbfed9b297b3fe6ab760e0bfe88f5c10fdd9d1ecf1a5a4f07e5e24ad",
+   "members": [
+    "gems50-h54-corpuscal-40000-20261007T032111Z-nan.tif"
+   ]
+  }
+ },
+ "format": {
+  "crs": "EPSG:32611",
+  "pixel_m": 100.0,
+  "shape": [
+   3730,
+   3292
+  ],
+  "transform": [
+   100.0,
+   0.0,
+   243350.0,
+   0.0,
+   -100.0,
+   4508550.0
+  ],
+  "dtype": "float32",
+  "band_count": 1,
+  "official_source": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/"
+ },
+ "seconds": 70.5,
+ "name_renamed_after_build": "the candidate was labelled H53 when this raster was written; main took the H53 label for the TMI x K/U conjunction, so the family was renumbered to H54 before merge. Only the two strings changed - the pixels, the hash and every check below are the ones the build actually produced, and the file stem already reads gems50-h54-corpuscal"
+}

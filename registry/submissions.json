@@ -70,10 +70,20 @@
    "mass": 10000,
    "format": {
     "crs": "EPSG:32611",
-    "shape": [3730, 3292],
+    "shape": [
+     3730,
+     3292
+    ],
     "dtype": "float32",
     "count": 1,
-    "transform": [100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0],
+    "transform": [
+     100.0,
+     0.0,
+     243350.0,
+     0.0,
+     -100.0,
+     4508550.0
+    ],
     "cells_finite": 5167373,
     "cells_nan": 7111787,
     "outside_unit_interval": 0,
@@ -102,10 +112,20 @@
    "mass": 44828,
    "format": {
     "crs": "EPSG:32611",
-    "shape": [3730, 3292],
+    "shape": [
+     3730,
+     3292
+    ],
     "dtype": "float32",
     "count": 1,
-    "transform": [100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0],
+    "transform": [
+     100.0,
+     0.0,
+     243350.0,
+     0.0,
+     -100.0,
+     4508550.0
+    ],
     "cells_finite": 5167373,
     "cells_nan": 7111787,
     "outside_unit_interval": 0,
@@ -239,6 +259,69 @@
     "evidence/h53_check_submission.json",
     "evidence/h53_validation_final.json"
    ]
+  },
+  {
+   "name": "GEMSDOE50-H54-CORPUSCAL-40000",
+   "file": "docs/downloads/gems50-h54-corpuscal-40000-20261007T032111Z-nan.tif",
+   "bytes": 200857,
+   "sha256": "2cdf7e705c867008b0dc86d3e7481bf43aef44240508312d270c97ebd192c81b",
+   "all_finite_twin": "docs/downloads/gems50-h54-corpuscal-40000-20261007T032111Z-zeros.tif",
+   "twin_sha256": "c24a8e3ce7ef2c30c2a44fe33bd901c6795ff02eca7004e135e2b588cce81623",
+   "zip": "docs/downloads/gems50-h54-corpuscal-40000-20261007T032111Z-nan.zip",
+   "zip_sha256": "509deee9cbfed9b297b3fe6ab760e0bfe88f5c10fdd9d1ecf1a5a4f07e5e24ad",
+   "mass": 40000,
+   "format": {
+    "crs": "EPSG:32611",
+    "pixel_m": 100.0,
+    "shape": [
+     3730,
+     3292
+    ],
+    "transform": [
+     100.0,
+     0.0,
+     243350.0,
+     0.0,
+     -100.0,
+     4508550.0
+    ],
+    "dtype": "float32",
+    "band_count": 1,
+    "official_source": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/"
+   },
+   "portal_note": "expected-DTI greedy emission (field prior) on a label-free scarp+radiometric+geothermal belief field; every dot >200 m from the provided catalogue and >600 m inside the data edge; mass and spacing solved from the metric's own break-even bar; not organizer-scored",
+   "organizer_score": null,
+   "submitted_utc": null,
+   "status": "built, format-verified, uniqueness-passed; NOT submitted - the blocked SGMC-off instrument does not support it (0/4 folds beat matched-mass random; the already-scored incumbent beats it in 3/4)",
+   "evidence": [
+    "evidence/h54_ship.json",
+    "evidence/h54_validation.json",
+    "evidence/h54_field.json",
+    "evidence/h54_corpus.json",
+    "evidence/h54_fit.json",
+    "evidence/h54_fit_status.json"
+   ],
+   "method": "gems54: label-free belief field (mask-aware smoothing, 6 px data-edge guard) + stratified expected-DTI emission; prior uncalibrated, see the fit status file",
+   "built_utc": "2026-10-07T03:21:12+00:00",
+   "renamed_from": "GEMSDOE50-H53-STRAT12-40000 / GEMSDOE50-H53-CORPUSCAL-40000 (identical pixels; renumbered so this family and main's H53 TMI x K/U candidate cannot be confused)"
+  },
+  {
+   "name": "GEMSDOE50-SEISLIN-44709-79E260AE",
+   "file": "docs/downloads/gems50-seislin-44709-20261006T2041Z-79e260ae.tif",
+   "bytes": 193214,
+   "sha256": "79e260ae223d7dfd96413da28a9c6fed30107285ab843795181a5c9e5dff7262",
+   "zip": "docs/downloads/gems50-seislin-44709-20261006T2041Z-79e260ae.zip",
+   "mass": 44709,
+   "organizer_score": null,
+   "submitted_utc": null,
+   "status": "prior H50 seismic-lineation build, kept for comparison only; superseded; NOT recommended for a slot (the frozen holdout showed the seismic lineation field alone loses to its own controls)",
+   "evidence": [
+    "registry/submission_build.json",
+    "evidence/holdout_h51.json"
+   ],
+   "method": "gems50.build_submission (2-D ComCat lineations)"
   }
- ]
+ ],
+ "updated_utc": "2026-10-07T04:20:00Z",
+ "policy": "No entry may claim an organizer score without a recorded portal receipt. An artifact is 'submitted' only when the owner says so. Every entry must be linked from the published pages or be flagged here as superseded/legacy."
 }

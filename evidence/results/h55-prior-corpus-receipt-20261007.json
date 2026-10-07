@@ -1,6 +1,6 @@
 {
   "all_sha256_verified": true,
-  "all_source_assertions": 63,
+  "all_source_assertions": 65,
   "byte_identical_groups": [
     {
       "sha256": "91eae1ca42ec845eaa8c2ba32da49806e24751743459b8a10017c479bbe639b8",
@@ -24,7 +24,7 @@
       ]
     }
   ],
-  "created_utc": "2026-10-07T03:21:49.335982+00:00",
+  "created_utc": "2026-10-07T03:28:36.917177+00:00",
   "entries": [
     {
       "bytes": 1706456,
@@ -907,10 +907,38 @@
       "source_repo": "buffedlizard55-lab/GEMSDOE50",
       "verified": true,
       "verified_sha256": "3c22da583d5358b2986189a4ed3322182f39f562bdde14809f3300aeb6bd37ea"
+    },
+    {
+      "bytes": 200857,
+      "expected_sha256": "2cdf7e705c867008b0dc86d3e7481bf43aef44240508312d270c97ebd192c81b",
+      "file": "gems50-h54-corpuscal-40000-20261007T032111Z-nan.tif",
+      "github_blob_sha1": null,
+      "github_url": "https://github.com/buffedlizard55-lab/GEMSDOE50/blob/main/docs/downloads/gems50-h54-corpuscal-40000-20261007T032111Z-nan.tif",
+      "positive_cells_registry": 40000,
+      "positive_mask_sha256": "1d414dd3a66b6321bd6257d8b05a4fc77d53e5da1e626b699880e28062f2001e",
+      "source_kind": "local-prior",
+      "source_path": "docs/downloads/gems50-h54-corpuscal-40000-20261007T032111Z-nan.tif",
+      "source_repo": "buffedlizard55-lab/GEMSDOE50",
+      "verified": true,
+      "verified_sha256": "2cdf7e705c867008b0dc86d3e7481bf43aef44240508312d270c97ebd192c81b"
+    },
+    {
+      "bytes": 156393,
+      "expected_sha256": "c24a8e3ce7ef2c30c2a44fe33bd901c6795ff02eca7004e135e2b588cce81623",
+      "file": "gems50-h54-corpuscal-40000-20261007T032111Z-zeros.tif",
+      "github_blob_sha1": null,
+      "github_url": "https://github.com/buffedlizard55-lab/GEMSDOE50/blob/main/docs/downloads/gems50-h54-corpuscal-40000-20261007T032111Z-zeros.tif",
+      "positive_cells_registry": 40000,
+      "positive_mask_sha256": "1d414dd3a66b6321bd6257d8b05a4fc77d53e5da1e626b699880e28062f2001e",
+      "source_kind": "local-prior",
+      "source_path": "docs/downloads/gems50-h54-corpuscal-40000-20261007T032111Z-zeros.tif",
+      "source_repo": "buffedlizard55-lab/GEMSDOE50",
+      "verified": true,
+      "verified_sha256": "c24a8e3ce7ef2c30c2a44fe33bd901c6795ff02eca7004e135e2b588cce81623"
     }
   ],
-  "full_resolution_comparison_filenames": 60,
-  "local_prior_entries": 13,
+  "full_resolution_comparison_filenames": 62,
+  "local_prior_entries": 15,
   "note": "The sibling registry and every in-repository prior TIFF are inventoried. Byte-identical copies are retained as source assertions but SHA-256 deduplicated for union construction; finite/NaN twins with equivalent positive support are identified by positive-mask hashes. The scratch corpus bytes are not committed.",
   "prediction_equivalent_groups": [
     {
@@ -1055,13 +1083,20 @@
         "downloads/gemsdoe50-h53-tmiconj-20261007T0345Z-allfinite.tif",
         "downloads/gemsdoe50-h53-tmiconj-20261007T0345Z.tif"
       ]
+    },
+    {
+      "positive_mask_sha256": "1d414dd3a66b6321bd6257d8b05a4fc77d53e5da1e626b699880e28062f2001e",
+      "source_paths": [
+        "docs/downloads/gems50-h54-corpuscal-40000-20261007T032111Z-nan.tif",
+        "docs/downloads/gems50-h54-corpuscal-40000-20261007T032111Z-zeros.tif"
+      ]
     }
   ],
   "registered_sibling_entries": 50,
   "registry_source": "registry/prior_artifact_signatures.json",
   "schema": "gemsdoe50.h55-prior-corpus-receipt.v3",
-  "unique_filenames": 60,
-  "unique_positive_masks": 33,
-  "unique_sha256": 59,
-  "unique_source_paths": 62
+  "unique_filenames": 62,
+  "unique_positive_masks": 34,
+  "unique_sha256": 61,
+  "unique_source_paths": 64
 }

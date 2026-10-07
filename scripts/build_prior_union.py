@@ -34,6 +34,8 @@ LOCAL_PRIORS = (
     # unique prediction contributes to the union exactly once.
     "downloads/gemsdoe50-h53-tmiconj-20261007T0345Z-allfinite.tif",
     "downloads/gemsdoe50-h53-tmiconj-20261007T0345Z.tif",
+    "docs/downloads/gems50-h54-corpuscal-40000-20261007T032111Z-nan.tif",
+    "docs/downloads/gems50-h54-corpuscal-40000-20261007T032111Z-zeros.tif",
 )
 MAX_POSITIVE_FRACTION = 0.05
 

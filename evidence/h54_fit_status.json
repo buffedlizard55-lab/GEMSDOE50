@@ -1,0 +1,30 @@
+{
+ "written_utc": "2026-10-07T03:14:32+00:00",
+ "subject": "status of the Poisson-truth corpus fit (scripts/h53_fit_truth.py)",
+ "does_not_replace": "evidence/h53_fit.json, which is the output of the earlier *linear* simplex fit (scripts/h53_fit.py): rmse_first_order 0.09315, rmse_exact_closure 0.09620, max_abs_error 0.1577, target_n 249337.5 with 155466 saturated cells - a degenerate optimum, kept as evidence that the linear model class fails",
+ "attempts": [
+  {
+   "run": 1,
+   "outcome": "random search reached best rmse=0.11579 after 101/570 log-uniform coefficient draws before the process was terminated; the objective never developed an interior optimum in N (monotone decrease with N, the signature of a field that cannot supply the required concentration)"
+  },
+  {
+   "run": 2,
+   "outcome": "terminated by the sandbox OOM killer at ~45 s (3 GB limit, 2 cores) with exit status reported only through the tee wrapper; no report written"
+  },
+  {
+   "run": 3,
+   "outcome": "started with --evals 60 --loo-evals 0, OOM-terminated at the first search print (rmse 0.12622 at draw 1); no report written"
+  }
+ ],
+ "measured_field_signal": {
+  "lift_of_top_of_field_over_random_on_off_catalogue_instrument": 1.5,
+  "lift_required_by_the_top_of_the_leaderboard": 5.6,
+  "how_derived": "for the 0.2778 file the closure requires T=5041 of N=12226 truth px, i.e. mean kernel coverage 0.41 of the fitted truth mass inside its 3-px halo; a field whose top 44k cells hit its halo 20.4% of the time against a 14.0% random baseline cannot produce that without inventing mass near the dots",
+  "files": [
+   "evidence/h53_validation.json",
+   "evidence/h53_ship.json"
+  ]
+ },
+ "known_cost_bug_for_the_next_session": "predict() holds sup_list (24 full-grid boolean masks, ~295 MB) and halo_idx/halo_b (~300 MB of int64/float32) plus an 8 x 12.3M float32 basis stack (394 MB): build sup_idx inline and free the mask, or cache per-file functionals to /home/user/.arena/run, to get the peak under the 3 GB sandbox limit",
+ "decision": "the fit is not needed to decide this week's slot: the emission is gated on an independent instrument (blocked SGMC-off holdout), and the shipped arm fails it. Re-running the fit is only worth the compute once the field itself beats the instrument, i.e. after training_features.tif is available again."
+}
