@@ -1,0 +1,163 @@
+{
+ "candidate": "docs/downloads/gemsdoe50-h57-scarpstep-60000-20261007T1900Z-allfinite.tif",
+ "n_dots": 60000,
+ "truth_mode": "sgmc_off",
+ "split_spec": "evidence/holdout-v1.json",
+ "split_valid_mask_sha256": "c075e765e015e44f8da6b85aff1f5daa9c39d70d8fc3601d4811984fabe687cf",
+ "folds": {
+  "NW": {
+   "eligible_cells": 2075898,
+   "truth_cells": 19101,
+   "candidate_dots_in_cell": 18675,
+   "dti_candidate": 0.15827192222418363,
+   "coverage_candidate": 0.16057771469145438,
+   "credit_per_dot_candidate": 0.16424069227959678,
+   "dti_uniform_mean": 0.07783483539986547,
+   "dti_uniform_max": 0.0797025390658309,
+   "dti_translation_mean": 0.11538743035546088,
+   "dti_translation_max": 0.12230534353734304,
+   "lift_over_uniform": 2.0334329919384295,
+   "subtiles": [
+    {
+     "id": "NW-00",
+     "dti": 0.06897983963390257,
+     "dti_uniform": 0.05741761014853597
+    },
+    {
+     "id": "NW-01",
+     "dti": 0.20406063934409613,
+     "dti_uniform": 0.06706796495886844
+    },
+    {
+     "id": "NW-10",
+     "dti": 0.10217457179400587,
+     "dti_uniform": 0.06529137154954567
+    },
+    {
+     "id": "NW-11",
+     "dti": 0.2801841348340721,
+     "dti_uniform": 0.08264426764845027
+    }
+   ]
+  },
+  "NE": {
+   "eligible_cells": 987533,
+   "truth_cells": 19576,
+   "candidate_dots_in_cell": 9408,
+   "dti_candidate": 0.16451621173061715,
+   "coverage_candidate": 0.15040840755235124,
+   "credit_per_dot_candidate": 0.31296715415017307,
+   "dti_uniform_mean": 0.091821025601729,
+   "dti_uniform_max": 0.09776856447787378,
+   "dti_translation_mean": 0.1144521281013497,
+   "dti_translation_max": 0.12395729669533047,
+   "lift_over_uniform": 1.7917052293033775,
+   "subtiles": [
+    {
+     "id": "NE-00",
+     "dti": 0.2900062347966386,
+     "dti_uniform": 0.13299533733204064
+    },
+    {
+     "id": "NE-01",
+     "dti": 0.05174521408883065,
+     "dti_uniform": 0.021933279284755327
+    },
+    {
+     "id": "NE-10",
+     "dti": 0.2453400059171574,
+     "dti_uniform": 0.19974699232439022
+    },
+    {
+     "id": "NE-11",
+     "dti": 0.0,
+     "dti_uniform": NaN
+    }
+   ]
+  },
+  "SW": {
+   "eligible_cells": 375029,
+   "truth_cells": 1188,
+   "candidate_dots_in_cell": 7170,
+   "dti_candidate": 0.13213324113298328,
+   "coverage_candidate": 0.26905546711800876,
+   "credit_per_dot_candidate": 0.044579901664741205,
+   "dti_uniform_mean": 0.07089846841646567,
+   "dti_uniform_max": 0.07381860922234816,
+   "dti_translation_mean": 0.10697071782513227,
+   "dti_translation_max": 0.12414384962173093,
+   "lift_over_uniform": 1.8636966930909928,
+   "subtiles": [
+    {
+     "id": "SW-00",
+     "dti": 0.0,
+     "dti_uniform": NaN
+    },
+    {
+     "id": "SW-01",
+     "dti": 0.13234571019507071,
+     "dti_uniform": 0.06323624163451193
+    },
+    {
+     "id": "SW-10",
+     "dti": 0.0,
+     "dti_uniform": NaN
+    },
+    {
+     "id": "SW-11",
+     "dti": 0.13159832308254532,
+     "dti_uniform": 0.10979170904706917
+    }
+   ]
+  },
+  "SE": {
+   "eligible_cells": 600955,
+   "truth_cells": 11218,
+   "candidate_dots_in_cell": 10407,
+   "dti_candidate": 0.3074061136642368,
+   "coverage_candidate": 0.31494635170249885,
+   "credit_per_dot_candidate": 0.33948959098670434,
+   "dti_uniform_mean": 0.1387975752949255,
+   "dti_uniform_max": 0.13958145312948347,
+   "dti_translation_mean": 0.21669169903466393,
+   "dti_translation_max": 0.22492435639413141,
+   "lift_over_uniform": 2.214780143032338,
+   "subtiles": [
+    {
+     "id": "SE-00",
+     "dti": 0.23818585117205734,
+     "dti_uniform": 0.10297305651835775
+    },
+    {
+     "id": "SE-01",
+     "dti": 0.0,
+     "dti_uniform": NaN
+    },
+    {
+     "id": "SE-10",
+     "dti": 0.3207050627357047,
+     "dti_uniform": 0.16703316929029655
+    },
+    {
+     "id": "SE-11",
+     "dti": 0.0,
+     "dti_uniform": NaN
+    }
+   ]
+  }
+ },
+ "controls": {},
+ "summary": {
+  "pooled_dti_candidate": 0.18775687159946194,
+  "pooled_dti_uniform": 0.09728463633971109,
+  "mean_paired_delta": 0.09047223525975086,
+  "paired_ci95": [
+   0.05491915805677924,
+   0.12888132498331326
+  ],
+  "positive_macrofolds": 4,
+  "n_macrofolds": 4,
+  "beats_matched_uniform_in_all_folds": true,
+  "beats_translation_mean_in_all_folds": true
+ }
+}

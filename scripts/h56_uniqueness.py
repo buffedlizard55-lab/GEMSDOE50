@@ -42,6 +42,20 @@ def sha256(path: Path) -> str:
     return h.hexdigest()
 
 
+#: Files that are competition *inputs* or data layers, not submissions.  The
+#: gate must not treat the label raster or a feature band as "prior art", and
+#: it must not silently drop a prior submission merely because its filename
+#: does not contain "nan" (the earlier filter did exactly that, which is why a
+#: corpus pointed at the pinned fixtures reported zero candidates).
+INPUT_NAME_PARTS = ("labels", "sample_submission", "existing_faults", "example_submission",
+                    "training_features", "_u8.tif", "_u8_", "footprint", "up150", "tmi_up")
+
+
+def looks_like_submission(name: str) -> bool:
+    n = name.lower()
+    return not any(part in n for part in INPUT_NAME_PARTS)
+
+
 def load_corpus() -> list[tuple[str, np.ndarray]]:
     dirs = [Path(p) for p in os.environ.get("GEMS50_CORPUS", "").split(":") if p]
     dirs = dirs or [REPO / d for d in DEFAULT_DIRS]
@@ -50,22 +64,21 @@ def load_corpus() -> list[tuple[str, np.ndarray]]:
         if not d.exists():
             continue
         for f in sorted(d.glob("*.tif")):
-            if not f.name.endswith(("-nan.tif", "-allfinite.tif")) and "-nan." not in f.name:
-                if "nan" not in f.name and "allfinite" not in f.name:
-                    continue
+            if not looks_like_submission(f.name):
+                continue
             try:
                 with rasterio.open(f) as ds:
                     a = ds.read(1)
-            except Exception:
+            except Exception:  # noqa: BLE001 - unreadable files are simply skipped
                 continue
-            out.append((f.name, np.isfinite(a) & (a > 0)))
+            out.append((f"{d.name}/{f.name}", np.isfinite(a) & (a > 0)))
     return out
 
 
 def signature_fallback(mask: np.ndarray, my_sha: str) -> dict:
     z = np.load(SIGNATURES, allow_pickle=True)
     names, shas = z["names"], z["sha256"]
-    f8, f32 = int(z["factors"][0]), int(z["factors"][1])
+    f8 = int(z["factors"][0])
     h, w = z["grid_shape"]
 
     def occ(m, f):
@@ -78,7 +91,10 @@ def signature_fallback(mask: np.ndarray, my_sha: str) -> dict:
         if shas[i] == my_sha:
             rows.append({"file": str(nm), "identical_sha256": True, "iou": 1.0})
             continue
-        o8 = z["masks_block8"][i].astype(bool)
+        # The archive stores packbits() output, one row per artifact; unpack it
+        # back to the full block grid before comparing (comparing packed bytes
+        # against a boolean grid was the shape-mismatch bug).
+        o8 = np.unpackbits(z["masks_block8"][i])[:mine8.size].astype(bool)
         inter = np.logical_and(mine8.ravel(), o8).sum()
         union = np.logical_or(mine8.ravel(), o8).sum()
         rows.append({"file": str(nm), "identical_sha256": False,
@@ -112,9 +128,23 @@ def main() -> int:
     my_rc = np.argwhere(mine)
 
     corpus = load_corpus()
-    corpus = [(nm, m) for nm, m in corpus if not nm.startswith(sub.name.rsplit("-", 2)[0] + "-")
-              or nm == sub.name]
+    corpus_dirs = os.environ.get("GEMS50_CORPUS", "") or ":".join(DEFAULT_DIRS)
+    # Never compare the candidate with itself, nor with its own twins: the
+    # all-finite and NaN-outside variants of one build are the *same emission*
+    # and would otherwise report IoU 1.0 against themselves, and the same file
+    # can sit in both `downloads/` and `docs/downloads/`.  Every other artifact
+    # on disk - including this project's own earlier submissions - stays in the
+    # corpus, because overlap with them is exactly what a reviewer wants to see.
+    core = sub.name
+    for suffix in ("-allfinite.tif", "-nan.tif", ".tif"):
+        if core.endswith(suffix):
+            core = core.removesuffix(suffix)
+            break
+    core = core.removesuffix("-nan")
+    corpus = [(nm, m) for nm, m in corpus if core not in nm]
+    print(f"  self-stem excluded from the corpus: {core}*")
     print(f"{sub.name}: {int(mine.sum()):,} dots; corpus candidates on disk: {len(corpus)}")
+    print(f"  corpus dirs: {corpus_dirs}")
     if not corpus:
         out = {"my_sha256": my_sha, "my_dots": int(mine.sum()),
                "uniqueness": signature_fallback(mine, my_sha)}
@@ -142,6 +172,20 @@ def main() -> int:
                      "their_novel_fraction_at_2px": float((d2 > 2.0).mean()),
                      "n_prior_dots": int(other.shape[0])})
     rows.sort(key=lambda r: -r["iou"])
+    # Split the statistic by corpus directory: overlap with the *pinned external
+    # corpus* (`.arena/prior`, other groups' submissions) is the number that
+    # answers the standing "unlike any prior submission" rule; overlap with this
+    # project's own earlier artifacts is expected within a strategy family and
+    # is reported separately rather than hidden inside one maximum.
+    per_dir: dict[str, dict] = {}
+    for r in rows:
+        d = r["file"].split("/", 1)[0] if "/" in r["file"] else "."
+        e = per_dir.setdefault(d, {"n": 0, "max_iou": 0.0,
+                                   "min_novel_fraction_at_2px": 1.0})
+        e["n"] += 1
+        e["max_iou"] = max(e["max_iou"], float(r["iou"]))
+        e["min_novel_fraction_at_2px"] = min(e["min_novel_fraction_at_2px"],
+                                            float(r["novel_fraction_at_2px"]))
     worst_iou = rows[0] if rows else None
     worst_nov = min(rows, key=lambda r: r["novel_fraction_at_2px"]) if rows else None
     payload = {
@@ -158,6 +202,13 @@ def main() -> int:
                                and worst_nov["novel_fraction_at_2px"] > args.novel_threshold
                                and not any(r["identical_pixels"] for r in rows)),
         "gate": {"max_iou": args.iou_threshold, "min_novel_fraction_at_2px": args.novel_threshold},
+        "corpus_dirs": corpus_dirs,
+        "per_dir": {k: {kk: (round(vv, 4) if isinstance(vv, float) else vv)
+                        for kk, vv in v.items()} for k, v in per_dir.items()},
+        "verdict_unique_vs_pinned_corpus": bool(
+            ".arena/prior" in per_dir
+            and per_dir[".arena/prior"]["max_iou"] < args.iou_threshold
+            and per_dir[".arena/prior"]["min_novel_fraction_at_2px"] > args.novel_threshold),
     }
     (REPO / args.out).write_text(json.dumps(payload, indent=1) + "\n", encoding="utf-8")
     print(json.dumps({k: v for k, v in payload.items() if k not in ("rows", "instrument")},

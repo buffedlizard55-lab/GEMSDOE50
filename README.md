@@ -447,3 +447,49 @@ Primary evidence:
   integrated latest-main H52/H52A/H53/H54 priors, distinguished byte copies from
   prediction-equivalent twins, rebuilt the strict exclusion and all H55 outputs; reran tests, deterministic build/hash
   checks, format/range checks, and site-link validation before PR.
+
+## H57 — current candidate (2026-10-07), and an honest retraction
+
+**Download (one click, portal-safe):**
+[`docs/downloads/gemsdoe50-h57-scarpstep-80000-20261007T1830Z-allfinite.tif`](docs/downloads/gemsdoe50-h57-scarpstep-80000-20261007T1830Z-allfinite.tif)
+— SHA-256 `8027c4e9fe0f789e2d7180a7ccc031abec90b391cf9e42ebcc125752af9fb696`, 395,743 bytes,
+80,000 predicted cells, 3 px minimum Chebyshev spacing, zero dots within 300 m of the given
+catalogue, every cell finite and in `[0,1]`. NaN-outside twin, `.zip`, unique entry name
+`GEMSDOE50-H57-SCARPSTEP`, the portal note, and the step-by-step upload guide are on
+[`submission.html`](submission.html). **It is fine to download and submit this file**: it is this
+project's own construction from public layers, it copies no prior submission pixel (maximum
+full-pixel IoU 0.0248 against the 26 pinned prior artifacts), and it uses **no earthquake
+catalogue**, so the unresolved ComCat contributor rights and sponsor-sharing question that blocks
+H56 does not apply.
+
+**What was measured.** The earlier screen's top channels were elevation itself (`dem_mean` 3.665,
+`det_elev` 3.657) because F1's truth is USGS SGMC faults, which live in the mountains: an
+unstratified F1 result is a terrain confound. `scripts/h57_stratified.py` re-screens inside five
+mean-elevation percentile strata and admits only channels that win 5/5; H57's two families survive
+(LiDAR scarp 2.41–2.73, topographic step 2.11–2.61) while the whole geodetic-strain family
+(0.28–0.38), every magnetic and radiometric channel (0.42–0.98) and every residualised 9×9 row are
+rejected. On the frozen spatially-blocked gate H57 pools **0.2025** against a matched-mass uniform
+control of 0.1053 (1.92×), positive in **4/4** macrofolds, paired 95 % CI [+0.0626, +0.1330] — the
+strongest result this repository has measured, versus 0.1021 for the incumbent
+`gems51-scarpradio-offcat-35000` and 0.0878 for the corpus's top artifact
+(`g32_h33b2_02778.tif`, owner-reported 0.2778).
+
+**The retraction.** H57's earlier "modelled hidden DTI 0.385–0.394" came from multiplying F1 credit
+per dot by an assumed transfer factor of 1.8–2.0. Fitting that factor on the 21 scored corpus
+artifacts gives **R² = −0.872** — worse than predicting the mean — because the artifacts that score
+0.26–0.28 on the hidden frame have *lower* F1 credit per dot (0.064) than artifacts that score 0.03.
+The corpus-calibrated model (`h = 0.5305 − 0.1669·F1_c_per_dot − 0.0390·ln N`, R² = 0.651) puts
+H57's expected competition score at **≈0.23** (indicative band 0.05–0.41), with P(>0.2778) ≈ 29 %
+and **P(>0.3774) ≈ 4 %**. The F1 coefficient is negative but not significant (t = −1.05): the
+defensible statement is that F1 selectivity is *not measurably helping*, not that it hurts.
+**No page in this repository may claim H57 beats the public best 0.3774**, and the 0.386 figure
+below for H56 is likewise a model, not an organizer score.
+
+**What beating 0.3774 would require.** `T > 0.3774·(0.2N + 11,271)`, i.e. 6,518 credit pixels at
+N = 30,000 (1.25× the best absolute credit ever observed, 5,223) or 10,292 at N = 80,000 (1.97×).
+The corpus's top seven artifacts all sit in the narrow mass band 37,654–44,090, so the route is
+*credit per dot* — the same credit with far fewer dots — not more dots. That is the next experiment.
+
+Full working: [`docs/research/h57-verdict-20261007.md`](docs/research/h57-verdict-20261007.md)
+(§7 lists the flagged irregularities, including the F2 name collision between this repository's
+catalogue-holdout frame and the H52 register's INGENIOUS-holdout frame).
