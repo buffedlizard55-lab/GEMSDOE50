@@ -230,7 +230,7 @@
       "valid_path_samples": 20007
     }
   },
-  "created_utc": "2026-10-07T02:48:57.592504+00:00",
+  "created_utc": "2026-10-07T02:53:41.046003+00:00",
   "decision": {
     "decision": "NO_SLOT",
     "numeric_components": {
@@ -250,10 +250,11 @@
       "comcat_exclusion_redistribution_status_resolved": false,
       "event_specific_uncertainty_available": false,
       "external_geometry_license_verified": true,
+      "formal_aftershock_declustering_validated": false,
       "mine_injection_inventory_complete": false
     }
   },
-  "git_commit_at_build": "e23d49f20514370dd514247ce21045728ca244db",
+  "git_commit_at_build": "039495a5e1bc31d3a3dc16136b5119619630b78b",
   "holdout": {
     "controls": {
       "matched_random": {
@@ -1403,6 +1404,7 @@
   },
   "limitations": [
     "The SGMC raster is an imperfect public proxy, not hidden competition truth.",
+    "The 250 m/90-day largest-event rule is deterministic sequence thinning, not a validated ETAS/Reasenberg/Gardner-Knopoff declustering model.",
     "The relocated catalog contains no per-event covariance; corridor widths are sensitivity assumptions.",
     "GDR hot features and explicit ComCat anthropogenic events do not form a complete mine/injection inventory.",
     "Mixed-network ComCat contributor-specific redistribution status remains unresolved.",
