@@ -51,12 +51,16 @@ def test_h55_site_regeneration_is_deterministic_and_download_first():
     # Charter rule: a one-click download and the executive summary sit at the very top of the
     # site.  A later session may legitimately place its own download band above this one, so the
     # assertion is about ordering and presence, not about which session's artifact is first.
-    first_download = index.index("Download the submission GeoTIFF")
+    first_download = index.index("Download the current research candidate GeoTIFF (H56)")
     assert first_download < index.index("Executive summary")
     assert index.index("Download portal-safe TIFF") > first_download
     assert "NO SLOT" in index
     assert "0.019321" in index and "0.115822" in index
     assert "0.2778" in index and "UNSCORED" in index
+    assert "user-provided 0.3774 claim" in index
+    assert "Draft optional note (use only after rights clearance)" in index
+    assert "mixed-network ComCat-derived geometry" in index
+    assert "H53-A probe/TMI experiment: NO-GO / NO SLOT" in index
 
 
 def test_h55_site_local_links_exist():
@@ -137,3 +141,51 @@ def test_h55_prior_receipt_includes_latest_main_artifacts_and_exact_copy_groups(
         assert len(prior["sha256"]) == 61
         assert len(set(prior["positive_mask_sha256"].tolist())) == 34
         assert int(prior["positive_cells"]) == 1_405_451
+
+
+def test_h53a_is_published_only_as_a_no_go_audit_record():
+    evidence = json.loads(
+        (ROOT / "evidence/h53-validation-20261007.json").read_text(encoding="utf-8")
+    )
+    artifact = evidence["candidate"]["artifact"]
+    path = ROOT / artifact["path"]
+    assert evidence["status"] == "NO_SLOT"
+    assert evidence["decision"]["candidate_promotes"] is False
+    assert artifact["positive_cells"] == 0
+    assert _sha256(path) == artifact["sha256"]
+
+    with rasterio.open(path) as ds, rasterio.open(ROOT / "data/grid/sample_submission.tif") as sample:
+        values = ds.read(1)
+        valid = np.isfinite(sample.read(1))
+        assert ds.count == 1 and ds.dtypes[0] == "float32"
+        assert str(ds.crs) == "EPSG:32611"
+        assert ds.shape == sample.shape == (3730, 3292)
+        assert ds.transform == sample.transform
+        assert np.isfinite(values[valid]).all()
+        assert np.isnan(values[~valid]).all()
+        assert np.all((values[valid] >= 0) & (values[valid] <= 1))
+        assert np.count_nonzero(values[valid]) == 0
+
+    index = (ROOT / "index.html").read_text(encoding="utf-8")
+    results = (ROOT / "results.html").read_text(encoding="utf-8")
+    submission = (ROOT / "submission.html").read_text(encoding="utf-8")
+    assert "Separate H53-A probe/TMI experiment: NO-GO / NO SLOT" in index
+    assert 'id="h53a-no-go"' in results
+    assert "Audit-only H53-A GeoTIFF" in results
+    assert "Do not upload this all-zero file" in results
+    assert "H53-A probe/TMI experiment: NO-GO / NO SLOT" in submission
+
+
+def test_h56_conditional_score_table_uses_the_documented_g_value():
+    g = 12_226
+    cases = [(0.2778, 37_654, 4_809), (0.3774, 30_000, 5_956),
+             (0.3774, 44_090, 7_019), (0.3774, 108_000, 11_843)]
+    for score, mass, expected_credit in cases:
+        credit = round(score * (0.2 * mass + 0.8 * g))
+        assert credit == expected_credit
+
+    diagnosis = (ROOT / "docs/research/h56-diagnosis.md").read_text(encoding="utf-8")
+    assert "37,654 | 4,809 | 39.3 % | 0.1277" in diagnosis
+    assert "30,000 | 5,956 | 48.7 % | **0.199**" in diagnosis
+    assert "44,090 | 7,019 | 57.4 % | 0.159" in diagnosis
+    assert "108,000 | 11,843 | 96.9 % | 0.110" in diagnosis

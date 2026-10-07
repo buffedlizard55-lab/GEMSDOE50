@@ -13,8 +13,9 @@ by finding defensible fault traces omitted from the supplied catalogue. Core val
 1. **Review before building.** Review the complete repository, competition prompt, supplied
    GEMSDOE results, source rights, and prior attempts. Explain at PhD level why GEMSDOE32 artifact
    `h33-h33-2-b2-20261004T220000Z-e5eb6e7e` reportedly scored 0.2778 and whether a method could
-   exceed the owner-quoted historical 0.3195. Never turn an owner report into an authenticated
-   score without an organizer receipt/hash crosswalk.
+   exceed the user-provided 0.3774 high-score claim (0.3195 is a separate, older owner-quoted
+   snapshot). Never turn any owner/user report into an authenticated score without an organizer
+   receipt/hash crosswalk.
 2. **Deliver a genuinely new raster.** Build a unique competition-grid GeoTIFF from documented
    inputs and code. Never copy prior prediction pixels; prior files may be used only for learning,
    controls, and comparison. Run full-resolution byte and pixel/proximity comparisons against every
@@ -58,17 +59,19 @@ by finding defensible fault traces omitted from the supplied catalogue. Core val
 11. **Work autonomously and line by line.** Use official/trusted sources, link them for manual
     review, flag irregularities, state limitations and required access, and never ask the owner to
     perform research that can be completed in the repository.
-12. **Keep score context honest.** The 0.2778 artifact attribution and 0.3195 target are historical
-    owner reports, not current leaderboard observations. This project does not scrape/poll the
-    leaderboard or map a score to bytes without a receipt.
+12. **Keep score context honest.** The 0.2778 artifact attribution, 0.3195 historical snapshot,
+    and user-provided 0.3774 high-score claim are unverified reports, not freshly checked leaderboard
+    observations. This project does not scrape/poll the leaderboard or map a score to bytes without
+    an organizer receipt. The 0.3774 claim is not treated as fact or as a proven ceiling.
 13. **Follow competition rules.** External data must permit challenge use and sharing with the
     sponsor. AI use must be disclosed as required by the current NLR/DOE rules. Finalists must
     provide reproducible code/assets and documentation. Verify current official rules and deadline
     immediately before any real submission.
-14. **Use Arena's fixed branch.** Work, commit, and push only on
-    `arena/38c5cc42-gemsdoe50`; open the pull request from that branch. Merge to `main` only when
-    repository/environment policy permits it. Never switch or push another branch from this
-    session.
+14. **Use Arena's fixed branch.** Each Arena session must stay on its assigned branch. This
+    session works, commits, and pushes only on `arena/d284137f-gemsdoe50`; open the pull request from
+    that branch. This name is session-scoped, not a repository default for future sessions. Merge
+    to `main` only when repository/environment policy permits it. Never switch or push another
+    branch from this session.
 
 ## H56 — the best-measured design in this repository, and an H51 provenance correction (this session)
 
@@ -94,7 +97,10 @@ translation controls 4/4. Format gate `all_checks_pass: true`. Uniqueness gate: 
 IoU **0.0154** against every prior artifact on disk, minimum novel fraction at 2 px 0.4805, no SHA
 match. Modelled hidden DTI **0.386** — that is a **model with a stated transfer assumption, not a
 receipt**; `docs/research/h56-diagnosis.md` sections 5 and 9 state the assumption and what beating
-0.3774 would actually require.
+0.3774 would actually require. It is numerically above the user-provided 0.3774 claim only under
+that model and does not show that any real organizer score exceeded it. **No weekly slot has been
+used; do not upload H56 until mixed-network ComCat contributor rights and sponsor-sharing
+eligibility are cleared.**
 
 **Three findings that are binding on anything built afterwards.**
 
@@ -235,7 +241,30 @@ coverage, and 0.1264 credit per dot. A 0.3195 result would need about 5,465 cred
 (+14.8%), or about 4,982 credits / 0.166 per dot at 30,000 cells. **Exceeding 0.3195 is possible in
 principle but is not supported by a passing method here.** It requires genuinely new coverage and
 higher precision, not another blend or pruning sweep. Full derivation and evidentiary labels:
-[`docs/research/h55-final-analysis.md`](docs/research/h55-final-analysis.md).
+[`docs/research/h55-final-analysis.md`](docs/research/h55-final-analysis.md). For the user-provided
+0.3774 claim and the later H53-A probe/TMI no-go review, see
+[`docs/research/h33-score-review-20261007.md`](docs/research/h33-score-review-20261007.md). The
+0.3195 calculations above are retained as an older conditional scenario, not as the current-high
+claim.
+
+## H53-A probe/TMI test — archived NO-GO (this Arena branch)
+
+H53-A is a **separate experiment** from the TMI-conjunction H53 artifact already in the repository.
+Its four hypotheses were ranked before implementation; the preregistered probe point-pattern/TMI
+lineation detector accepted **0/145 clusters**, emitted **0 cells**, and scored DTI **0.000000** on
+the frozen local proxy versus **0.136074** for the comparator (paired spatial-subtile bootstrap 95%
+interval `[-0.169861, -0.079791]`). Decision: **NO-GO / NO SLOT**. No weekly feedback slot was used.
+
+The generated file
+[`gemsdoe50-h53-probe-tmi-pointlineation-20261007-44afc05b.tif`](docs/downloads/gemsdoe50-h53-probe-tmi-pointlineation-20261007-44afc05b.tif)
+is a format-valid, all-zero research artifact retained for audit only. **Do not upload it.** Its
+SHA-256 is `5f2fd91ad46a3602c03802e0f7773fd466b08e47cbfcf40ff796ffc2b956a382`; it is not the H56
+one-click candidate and not a positive geological prediction. See the four-hypothesis ranking,
+frozen preregistration, validation evidence, and three-pass review in
+[`docs/research/h53-hypotheses-20261007.md`](docs/research/h53-hypotheses-20261007.md),
+[`docs/research/h53-preregistration-20261007.md`](docs/research/h53-preregistration-20261007.md),
+[`evidence/h53-validation-20261007.json`](evidence/h53-validation-20261007.json), and
+[`docs/pass3-review-20261007.md`](docs/pass3-review-20261007.md).
 
 ## H55 method and preregistration
 
@@ -365,6 +394,8 @@ Only if the owner explicitly overrides the frozen no-slot rule:
    score-to-file claim.
 
 The site has the same guide at [`submission.html`](submission.html).
+
+Full review, evidence hashes, alternative explanations, official rules, and unresolved source/receipt issues: [`docs/research/h33-score-review-20261007.md`](docs/research/h33-score-review-20261007.md). No live leaderboard was queried in this review.
 
 ## Reproduction
 

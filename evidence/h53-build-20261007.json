@@ -1,0 +1,1497 @@
+{
+  "schema": "gemsdoe50.h53-build.v1",
+  "built_utc": "2026-10-07T02:56:49.355059+00:00",
+  "status": "NO_GO_NO_ACCEPTED_LINEATIONS",
+  "candidate": {
+    "name": "GEMSDOE50-H53-PROBE-TMI-POINTLINEATION-20261007",
+    "filename": "gemsdoe50-h53-probe-tmi-pointlineation-20261007-44afc05b.tif",
+    "optional_note": "Survey-normalized 2 m probe point-pattern lineations concordant with GeoDAWN TMI_up150; 300 m known-catalogue exclusion; research proxy only, not organizer-scored.",
+    "field_sha256": "44afc05b34f596ad9a4730b1c7aeec741c35926085b19f70dc48920323439de9",
+    "artifact": {
+      "path": "docs/downloads/gemsdoe50-h53-probe-tmi-pointlineation-20261007-44afc05b.tif",
+      "sha256": "5f2fd91ad46a3602c03802e0f7773fd466b08e47cbfcf40ff796ffc2b956a382",
+      "width": 3292,
+      "height": 3730,
+      "crs": "EPSG:32611",
+      "transform": [
+        100.0,
+        0.0,
+        243350.0,
+        0.0,
+        -100.0,
+        4508550.0
+      ],
+      "dtype": "float32",
+      "nodata": "NaN",
+      "all_finite_in_valid_footprint": true,
+      "finite_pixels_outside_valid_footprint": 0,
+      "min_in_valid_footprint": 0.0,
+      "max_in_valid_footprint": 0.0,
+      "positive_cells": 0,
+      "unique_values_in_valid_footprint": [
+        0.0
+      ]
+    },
+    "build_support_count": 0,
+    "requested_native_budget": 44709,
+    "warm_mark_gate_passed": true,
+    "accepted_lineation_gate_passed": false,
+    "mass_gate_passed": false,
+    "positive_cells_within_allowed_footprint": 0,
+    "artifact_sha_differs_from_registered_baseline_files": true
+  },
+  "baseline": {
+    "path": "evidence/h53-baseline-20261007.json",
+    "sha256": "acd05c2a55d4d5a64a297075907bd53b5c0d52a78f655ddf3d34bc1d4d85f7bb",
+    "frozen_incumbent": "H50 prior seismicity",
+    "incumbent_sha256": "79e260ae223d7dfd96413da28a9c6fed30107285ab843795181a5c9e5dff7262",
+    "native_budget": 44709,
+    "matched_mass_by_fold": {
+      "NW": 11253,
+      "NE": 6166,
+      "SW": 6011,
+      "SE": 8389
+    }
+  },
+  "inputs": {
+    "gdr_probe_archive": {
+      "path": "/home/user/GEMSDOE50/.arena/public-inputs/2m_temperature_probe_INGENIOUS_regional_data.zip",
+      "sha256": "1301f70d230058e616ea5d34d1c7a32fabf7d49198172f376c59c89bd652eca3",
+      "official_doi": "10.15121/1881483",
+      "licence": "CC BY 4.0",
+      "source_mirror_commit": "07345ea0604953d7efb858d9cfbc21e20c7aca0b",
+      "direct_official_binary_match": false
+    },
+    "geodawn_extension": {
+      "path": "/home/user/GEMSDOE50/.arena/public-inputs/geodawn_extensions_u8.tif",
+      "sha256": "a35a9c6d2a14786f4dab85481ee59769213072f5dab5b2535ea82ae4d9bb7d9b",
+      "band": 4,
+      "description": "TMI_up150",
+      "dtype": "uint8",
+      "tags": {},
+      "licence": "CC0 1.0",
+      "source_mirror_commit": "07345ea0604953d7efb858d9cfbc21e20c7aca0b",
+      "direct_official_binary_match": false
+    }
+  },
+  "source_audit": {
+    "archive": "/home/user/GEMSDOE50/.arena/public-inputs/2m_temperature_probe_INGENIOUS_regional_data.zip",
+    "shapefile_member": "2m_temperature_probe_INGENIOUS_regional_data/2m_temperature_probe_n83geo/2m_temperature_probe_n83geo.shp",
+    "source_crs": "EPSG:4269 (NAD83 geographic; archive .prj inspected)",
+    "target_crs": "EPSG:32611",
+    "records_total": 3800,
+    "records_valid_in_footprint": 2782,
+    "records_invalid_or_missing": 0,
+    "records_outside_footprint": 1018,
+    "area_groups_before_deduplication": 34,
+    "utm_coordinate_crosscheck_n": 3800,
+    "utm_coordinate_crosscheck_median_m": 0.00011686369970163118,
+    "utm_coordinate_crosscheck_p95_m": 0.00016498793261133767,
+    "source_units_for_F2mDAB": "not specified in the inspected archive README; use only relative within-Area ranking"
+  },
+  "deduplication_audit": {
+    "input_points": 2782,
+    "unique_area_grid_cells": 2702,
+    "duplicate_area_grid_rows_collapsed": 80
+  },
+  "warm_mark_rule": {
+    "minimum_area_points": 12,
+    "within_area_quantile": 0.75,
+    "warm_points": 714,
+    "areas": [
+      {
+        "area": "Alum",
+        "n": 41,
+        "used": true,
+        "q75_F2mDAB": 0.699999988079071,
+        "positive_upper_quartile_n": 12
+      },
+      {
+        "area": "Astor Pass",
+        "n": 210,
+        "used": true,
+        "q75_F2mDAB": 2.475000023841858,
+        "positive_upper_quartile_n": 53
+      },
+      {
+        "area": "Battle Mountain",
+        "n": 81,
+        "used": true,
+        "q75_F2mDAB": 1.0,
+        "positive_upper_quartile_n": 21
+      },
+      {
+        "area": "Blue Wing",
+        "n": 93,
+        "used": true,
+        "q75_F2mDAB": 0.4000000059604645,
+        "positive_upper_quartile_n": 29
+      },
+      {
+        "area": "Buena Vista Valley",
+        "n": 55,
+        "used": true,
+        "q75_F2mDAB": 0.699999988079071,
+        "positive_upper_quartile_n": 18
+      },
+      {
+        "area": "Buffalo Valley",
+        "n": 106,
+        "used": true,
+        "q75_F2mDAB": 0.699999988079071,
+        "positive_upper_quartile_n": 29
+      },
+      {
+        "area": "Columbus Marsh",
+        "n": 101,
+        "used": true,
+        "q75_F2mDAB": 0.800000011920929,
+        "positive_upper_quartile_n": 26
+      },
+      {
+        "area": "Crescent Valley",
+        "n": 59,
+        "used": true,
+        "q75_F2mDAB": 0.5,
+        "positive_upper_quartile_n": 16
+      },
+      {
+        "area": "Dead Horse Wells",
+        "n": 82,
+        "used": true,
+        "q75_F2mDAB": 9.849999904632568,
+        "positive_upper_quartile_n": 21
+      },
+      {
+        "area": "Desert Peak",
+        "n": 135,
+        "used": true,
+        "q75_F2mDAB": 1.75,
+        "positive_upper_quartile_n": 34
+      },
+      {
+        "area": "Desert Queen",
+        "n": 129,
+        "used": true,
+        "q75_F2mDAB": 3.700000047683716,
+        "positive_upper_quartile_n": 33
+      },
+      {
+        "area": "Diamond Field Jack Wash",
+        "n": 20,
+        "used": true,
+        "q75_F2mDAB": 0.5250000059604645,
+        "positive_upper_quartile_n": 5
+      },
+      {
+        "area": "Dixie / Fairview Valley",
+        "n": 136,
+        "used": true,
+        "q75_F2mDAB": 0.32500001043081284,
+        "positive_upper_quartile_n": 34
+      },
+      {
+        "area": "Dixie Valley",
+        "n": 44,
+        "used": true,
+        "q75_F2mDAB": 0.5250000059604645,
+        "positive_upper_quartile_n": 11
+      },
+      {
+        "area": "Dun Glen",
+        "n": 28,
+        "used": true,
+        "q75_F2mDAB": 0.8749999850988388,
+        "positive_upper_quartile_n": 7
+      },
+      {
+        "area": "Emerson Pass",
+        "n": 87,
+        "used": true,
+        "q75_F2mDAB": 1.949999988079071,
+        "positive_upper_quartile_n": 22
+      },
+      {
+        "area": "Fallon",
+        "n": 113,
+        "used": true,
+        "q75_F2mDAB": 0.699999988079071,
+        "positive_upper_quartile_n": 31
+      },
+      {
+        "area": "Fireball Craters",
+        "n": 93,
+        "used": true,
+        "q75_F2mDAB": 0.699999988079071,
+        "positive_upper_quartile_n": 25
+      },
+      {
+        "area": "Gabbs Valley",
+        "n": 290,
+        "used": true,
+        "q75_F2mDAB": 2.0,
+        "positive_upper_quartile_n": 74
+      },
+      {
+        "area": "Gerlach",
+        "n": 14,
+        "used": true,
+        "q75_F2mDAB": 1.469999998807907,
+        "positive_upper_quartile_n": 4
+      },
+      {
+        "area": "Granite Springs Valley",
+        "n": 123,
+        "used": true,
+        "q75_F2mDAB": 0.75,
+        "positive_upper_quartile_n": 31
+      },
+      {
+        "area": "Hawthorne",
+        "n": 214,
+        "used": true,
+        "q75_F2mDAB": 0.8749999850988388,
+        "positive_upper_quartile_n": 54
+      },
+      {
+        "area": "HumboldtNSO",
+        "n": 20,
+        "used": true,
+        "q75_F2mDAB": 1.9749999940395355,
+        "positive_upper_quartile_n": 5
+      },
+      {
+        "area": "HumboldtTufa",
+        "n": 34,
+        "used": true,
+        "q75_F2mDAB": 0.7899999767541885,
+        "positive_upper_quartile_n": 9
+      },
+      {
+        "area": "Lee Hot Springs",
+        "n": 46,
+        "used": true,
+        "q75_F2mDAB": 6.137500047683716,
+        "positive_upper_quartile_n": 12
+      },
+      {
+        "area": "Monte Cristo Valley",
+        "n": 27,
+        "used": true,
+        "q75_F2mDAB": 1.1500000357627869,
+        "positive_upper_quartile_n": 7
+      },
+      {
+        "area": "MtTobin",
+        "n": 21,
+        "used": true,
+        "q75_F2mDAB": 1.7999999523162842,
+        "positive_upper_quartile_n": 6
+      },
+      {
+        "area": "Queen Valley",
+        "n": 12,
+        "used": true,
+        "q75_F2mDAB": 0.8999999910593033,
+        "positive_upper_quartile_n": 3
+      },
+      {
+        "area": "Rhodes Marsh",
+        "n": 59,
+        "used": true,
+        "q75_F2mDAB": 1.3499999642372131,
+        "positive_upper_quartile_n": 15
+      },
+      {
+        "area": "Salt Wells",
+        "n": 49,
+        "used": true,
+        "q75_F2mDAB": 4.300000190734863,
+        "positive_upper_quartile_n": 13
+      },
+      {
+        "area": "Silver Peak",
+        "n": 95,
+        "used": true,
+        "q75_F2mDAB": 0.6000000238418579,
+        "positive_upper_quartile_n": 30
+      },
+      {
+        "area": "Sou Hills",
+        "n": 42,
+        "used": true,
+        "q75_F2mDAB": 0.7500000149011612,
+        "positive_upper_quartile_n": 11
+      },
+      {
+        "area": "Toulon",
+        "n": 22,
+        "used": true,
+        "q75_F2mDAB": 0.4750000014901161,
+        "positive_upper_quartile_n": 6
+      },
+      {
+        "area": "Winemucca Lake",
+        "n": 21,
+        "used": true,
+        "q75_F2mDAB": 0.4000000059604645,
+        "positive_upper_quartile_n": 7
+      }
+    ]
+  },
+  "lineation_rule": {
+    "cluster_radius_m": 1500.0,
+    "minimum_cluster_points": 5,
+    "minimum_axis_ratio": 3.0,
+    "axis_length_m": [
+      800.0,
+      20000.0
+    ],
+    "maximum_tmi_distance_px": 5.0,
+    "maximum_angle_deg": 30.0,
+    "minimum_tmi_alignment_fraction": 0.5,
+    "corridor_sigma_px": 1.5,
+    "ridge_threshold_p95": 0.7265129685401917,
+    "ridge_pixels": 258216,
+    "clusters_tested": 145,
+    "clusters_accepted": 0,
+    "clusters": [
+      {
+        "cluster_id": 1,
+        "area": "Alum",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 2,
+        "area": "Alum",
+        "n_points": 8,
+        "accepted": false,
+        "reason": "weak_tmi_alignment",
+        "axis_ratio": 4.200430221762407,
+        "length_m": 1757.985556527071,
+        "tmi_alignment_fraction": 0.0
+      },
+      {
+        "cluster_id": 3,
+        "area": "Alum",
+        "n_points": 3,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 4,
+        "area": "Astor Pass",
+        "n_points": 53,
+        "accepted": false,
+        "reason": "weak_tmi_alignment",
+        "axis_ratio": 10.352526986028973,
+        "length_m": 1919.7125830421478,
+        "tmi_alignment_fraction": 0.047619047619047616
+      },
+      {
+        "cluster_id": 5,
+        "area": "Battle Mountain",
+        "n_points": 9,
+        "accepted": false,
+        "reason": "weak_tmi_alignment",
+        "axis_ratio": 4724.636416645932,
+        "length_m": 4462.650021965318,
+        "tmi_alignment_fraction": 0.0
+      },
+      {
+        "cluster_id": 6,
+        "area": "Battle Mountain",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 7,
+        "area": "Battle Mountain",
+        "n_points": 11,
+        "accepted": false,
+        "reason": "weak_tmi_alignment",
+        "axis_ratio": 20.389914517710555,
+        "length_m": 4228.841036919783,
+        "tmi_alignment_fraction": 0.0
+      },
+      {
+        "cluster_id": 8,
+        "area": "Blue Wing",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 9,
+        "area": "Blue Wing",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 10,
+        "area": "Blue Wing",
+        "n_points": 3,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 11,
+        "area": "Blue Wing",
+        "n_points": 5,
+        "accepted": false,
+        "reason": "low_axis_ratio",
+        "axis_ratio": 2.788586808330338,
+        "length_m": 1743.0953679912031
+      },
+      {
+        "cluster_id": 12,
+        "area": "Blue Wing",
+        "n_points": 3,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 13,
+        "area": "Blue Wing",
+        "n_points": 4,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 14,
+        "area": "Blue Wing",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 15,
+        "area": "Blue Wing",
+        "n_points": 2,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 16,
+        "area": "Blue Wing",
+        "n_points": 2,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 17,
+        "area": "Blue Wing",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 18,
+        "area": "Blue Wing",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 19,
+        "area": "Blue Wing",
+        "n_points": 2,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 20,
+        "area": "Blue Wing",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 21,
+        "area": "Blue Wing",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 22,
+        "area": "Blue Wing",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 23,
+        "area": "Buena Vista Valley",
+        "n_points": 18,
+        "accepted": false,
+        "reason": "weak_tmi_alignment",
+        "axis_ratio": 752.4088755052267,
+        "length_m": 12807.421042582086,
+        "tmi_alignment_fraction": 0.0
+      },
+      {
+        "cluster_id": 24,
+        "area": "Buffalo Valley",
+        "n_points": 15,
+        "accepted": false,
+        "reason": "weak_tmi_alignment",
+        "axis_ratio": 18.942372582754224,
+        "length_m": 4114.115569455913,
+        "tmi_alignment_fraction": 0.0
+      },
+      {
+        "cluster_id": 25,
+        "area": "Buffalo Valley",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 26,
+        "area": "Buffalo Valley",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 27,
+        "area": "Buffalo Valley",
+        "n_points": 4,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 28,
+        "area": "Buffalo Valley",
+        "n_points": 8,
+        "accepted": false,
+        "reason": "low_axis_ratio",
+        "axis_ratio": 2.2905360939476744,
+        "length_m": 517.751862285057
+      },
+      {
+        "cluster_id": 29,
+        "area": "Columbus Marsh",
+        "n_points": 2,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 30,
+        "area": "Columbus Marsh",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 31,
+        "area": "Columbus Marsh",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 32,
+        "area": "Columbus Marsh",
+        "n_points": 3,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 33,
+        "area": "Columbus Marsh",
+        "n_points": 13,
+        "accepted": false,
+        "reason": "weak_tmi_alignment",
+        "axis_ratio": 4.248952414040066,
+        "length_m": 1715.286237244869,
+        "tmi_alignment_fraction": 0.47368421052631576
+      },
+      {
+        "cluster_id": 34,
+        "area": "Columbus Marsh",
+        "n_points": 2,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 35,
+        "area": "Columbus Marsh",
+        "n_points": 3,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 36,
+        "area": "Columbus Marsh",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 37,
+        "area": "Crescent Valley",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 38,
+        "area": "Crescent Valley",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 39,
+        "area": "Crescent Valley",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 40,
+        "area": "Crescent Valley",
+        "n_points": 2,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 41,
+        "area": "Crescent Valley",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 42,
+        "area": "Crescent Valley",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 43,
+        "area": "Crescent Valley",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 44,
+        "area": "Crescent Valley",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 45,
+        "area": "Crescent Valley",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 46,
+        "area": "Crescent Valley",
+        "n_points": 4,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 47,
+        "area": "Crescent Valley",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 48,
+        "area": "Crescent Valley",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 49,
+        "area": "Dead Horse Wells",
+        "n_points": 21,
+        "accepted": false,
+        "reason": "weak_tmi_alignment",
+        "axis_ratio": 6.118129671000694,
+        "length_m": 2061.0962699476677,
+        "tmi_alignment_fraction": 0.0
+      },
+      {
+        "cluster_id": 50,
+        "area": "Desert Peak",
+        "n_points": 34,
+        "accepted": false,
+        "reason": "weak_tmi_alignment",
+        "axis_ratio": 5.865699637893806,
+        "length_m": 4621.8444859507545,
+        "tmi_alignment_fraction": 0.20833333333333334
+      },
+      {
+        "cluster_id": 51,
+        "area": "Desert Queen",
+        "n_points": 33,
+        "accepted": false,
+        "reason": "weak_tmi_alignment",
+        "axis_ratio": 16.894214549046893,
+        "length_m": 3877.562516116176,
+        "tmi_alignment_fraction": 0.275
+      },
+      {
+        "cluster_id": 52,
+        "area": "Diamond Field Jack Wash",
+        "n_points": 2,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 53,
+        "area": "Diamond Field Jack Wash",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 54,
+        "area": "Diamond Field Jack Wash",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 55,
+        "area": "Diamond Field Jack Wash",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 56,
+        "area": "Dixie / Fairview Valley",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 57,
+        "area": "Dixie / Fairview Valley",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 58,
+        "area": "Dixie / Fairview Valley",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 59,
+        "area": "Dixie / Fairview Valley",
+        "n_points": 4,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 60,
+        "area": "Dixie / Fairview Valley",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 61,
+        "area": "Dixie / Fairview Valley",
+        "n_points": 6,
+        "accepted": false,
+        "reason": "weak_tmi_alignment",
+        "axis_ratio": 5.836953161724582,
+        "length_m": 2251.1278035188825,
+        "tmi_alignment_fraction": 0.0
+      },
+      {
+        "cluster_id": 62,
+        "area": "Dixie / Fairview Valley",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 63,
+        "area": "Dixie / Fairview Valley",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 64,
+        "area": "Dixie / Fairview Valley",
+        "n_points": 2,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 65,
+        "area": "Dixie / Fairview Valley",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 66,
+        "area": "Dixie / Fairview Valley",
+        "n_points": 4,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 67,
+        "area": "Dixie / Fairview Valley",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 68,
+        "area": "Dixie / Fairview Valley",
+        "n_points": 2,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 69,
+        "area": "Dixie / Fairview Valley",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 70,
+        "area": "Dixie / Fairview Valley",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 71,
+        "area": "Dixie / Fairview Valley",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 72,
+        "area": "Dixie / Fairview Valley",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 73,
+        "area": "Dixie / Fairview Valley",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 74,
+        "area": "Dixie / Fairview Valley",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 75,
+        "area": "Dixie / Fairview Valley",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 76,
+        "area": "Dixie / Fairview Valley",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 77,
+        "area": "Dixie Valley",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 78,
+        "area": "Dixie Valley",
+        "n_points": 9,
+        "accepted": false,
+        "reason": "low_axis_ratio",
+        "axis_ratio": 1.4083036930023023,
+        "length_m": 1895.384762527935
+      },
+      {
+        "cluster_id": 79,
+        "area": "Dixie Valley",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 80,
+        "area": "Dun Glen",
+        "n_points": 7,
+        "accepted": false,
+        "reason": "weak_tmi_alignment",
+        "axis_ratio": 6.024694505456044,
+        "length_m": 2496.0517524327033,
+        "tmi_alignment_fraction": 0.0
+      },
+      {
+        "cluster_id": 81,
+        "area": "Emerson Pass",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 82,
+        "area": "Emerson Pass",
+        "n_points": 19,
+        "accepted": false,
+        "reason": "low_axis_ratio",
+        "axis_ratio": 2.7832309914343134,
+        "length_m": 1266.7156839423
+      },
+      {
+        "cluster_id": 83,
+        "area": "Emerson Pass",
+        "n_points": 2,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 84,
+        "area": "Fallon",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 85,
+        "area": "Fallon",
+        "n_points": 2,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 86,
+        "area": "Fallon",
+        "n_points": 15,
+        "accepted": false,
+        "reason": "low_axis_ratio",
+        "axis_ratio": 2.3884877204387776,
+        "length_m": 5508.55147286468
+      },
+      {
+        "cluster_id": 87,
+        "area": "Fallon",
+        "n_points": 2,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 88,
+        "area": "Fallon",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 89,
+        "area": "Fallon",
+        "n_points": 2,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 90,
+        "area": "Fallon",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 91,
+        "area": "Fallon",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 92,
+        "area": "Fallon",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 93,
+        "area": "Fallon",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 94,
+        "area": "Fallon",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 95,
+        "area": "Fallon",
+        "n_points": 2,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 96,
+        "area": "Fallon",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 97,
+        "area": "Fireball Craters",
+        "n_points": 23,
+        "accepted": false,
+        "reason": "weak_tmi_alignment",
+        "axis_ratio": 5.562280883978896,
+        "length_m": 5013.543022984135,
+        "tmi_alignment_fraction": 0.09615384615384616
+      },
+      {
+        "cluster_id": 98,
+        "area": "Fireball Craters",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 99,
+        "area": "Fireball Craters",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 100,
+        "area": "Gabbs Valley",
+        "n_points": 14,
+        "accepted": false,
+        "reason": "low_axis_ratio",
+        "axis_ratio": 2.71074769455803,
+        "length_m": 3046.8907885027443
+      },
+      {
+        "cluster_id": 101,
+        "area": "Gabbs Valley",
+        "n_points": 3,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 102,
+        "area": "Gabbs Valley",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 103,
+        "area": "Gabbs Valley",
+        "n_points": 10,
+        "accepted": false,
+        "reason": "low_axis_ratio",
+        "axis_ratio": 2.876754459497145,
+        "length_m": 2056.2516813905536
+      },
+      {
+        "cluster_id": 104,
+        "area": "Gabbs Valley",
+        "n_points": 46,
+        "accepted": false,
+        "reason": "weak_tmi_alignment",
+        "axis_ratio": 3.6680779519203877,
+        "length_m": 4682.2144885492,
+        "tmi_alignment_fraction": 0.0
+      },
+      {
+        "cluster_id": 105,
+        "area": "Gerlach",
+        "n_points": 3,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 106,
+        "area": "Gerlach",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 107,
+        "area": "Granite Springs Valley",
+        "n_points": 28,
+        "accepted": false,
+        "reason": "weak_tmi_alignment",
+        "axis_ratio": 4.352853293293115,
+        "length_m": 5926.220286585298,
+        "tmi_alignment_fraction": 0.0
+      },
+      {
+        "cluster_id": 108,
+        "area": "Granite Springs Valley",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 109,
+        "area": "Granite Springs Valley",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 110,
+        "area": "Granite Springs Valley",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 111,
+        "area": "Hawthorne",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 112,
+        "area": "Hawthorne",
+        "n_points": 27,
+        "accepted": false,
+        "reason": "weak_tmi_alignment",
+        "axis_ratio": 10.076251529043889,
+        "length_m": 5448.877336151914,
+        "tmi_alignment_fraction": 0.0
+      },
+      {
+        "cluster_id": 113,
+        "area": "Hawthorne",
+        "n_points": 9,
+        "accepted": false,
+        "reason": "weak_tmi_alignment",
+        "axis_ratio": 4.524642855814071,
+        "length_m": 2621.9747470329303,
+        "tmi_alignment_fraction": 0.0
+      },
+      {
+        "cluster_id": 114,
+        "area": "Hawthorne",
+        "n_points": 2,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 115,
+        "area": "Hawthorne",
+        "n_points": 2,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 116,
+        "area": "Hawthorne",
+        "n_points": 6,
+        "accepted": false,
+        "reason": "weak_tmi_alignment",
+        "axis_ratio": 3.470734610704214,
+        "length_m": 2421.4473677201336,
+        "tmi_alignment_fraction": 0.0
+      },
+      {
+        "cluster_id": 117,
+        "area": "Hawthorne",
+        "n_points": 5,
+        "accepted": false,
+        "reason": "weak_tmi_alignment",
+        "axis_ratio": 17.89081233076762,
+        "length_m": 2763.405475545698,
+        "tmi_alignment_fraction": 0.0
+      },
+      {
+        "cluster_id": 118,
+        "area": "Hawthorne",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 119,
+        "area": "Hawthorne",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 120,
+        "area": "HumboldtNSO",
+        "n_points": 3,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 121,
+        "area": "HumboldtNSO",
+        "n_points": 2,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 122,
+        "area": "HumboldtTufa",
+        "n_points": 2,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 123,
+        "area": "HumboldtTufa",
+        "n_points": 2,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 124,
+        "area": "HumboldtTufa",
+        "n_points": 2,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 125,
+        "area": "HumboldtTufa",
+        "n_points": 2,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 126,
+        "area": "HumboldtTufa",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 127,
+        "area": "Lee Hot Springs",
+        "n_points": 12,
+        "accepted": false,
+        "reason": "weak_tmi_alignment",
+        "axis_ratio": 23.62465240694821,
+        "length_m": 1839.1991774292505,
+        "tmi_alignment_fraction": 0.4
+      },
+      {
+        "cluster_id": 128,
+        "area": "Monte Cristo Valley",
+        "n_points": 3,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 129,
+        "area": "Monte Cristo Valley",
+        "n_points": 4,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 130,
+        "area": "MtTobin",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 131,
+        "area": "MtTobin",
+        "n_points": 2,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 132,
+        "area": "MtTobin",
+        "n_points": 2,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 133,
+        "area": "MtTobin",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 134,
+        "area": "Queen Valley",
+        "n_points": 2,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 135,
+        "area": "Queen Valley",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 136,
+        "area": "Rhodes Marsh",
+        "n_points": 15,
+        "accepted": false,
+        "reason": "weak_tmi_alignment",
+        "axis_ratio": 5.034114870656668,
+        "length_m": 2626.359325853289,
+        "tmi_alignment_fraction": 0.0
+      },
+      {
+        "cluster_id": 137,
+        "area": "Salt Wells",
+        "n_points": 13,
+        "accepted": false,
+        "reason": "weak_tmi_alignment",
+        "axis_ratio": 11.397834022242277,
+        "length_m": 5204.331391831477,
+        "tmi_alignment_fraction": 0.2037037037037037
+      },
+      {
+        "cluster_id": 138,
+        "area": "Silver Peak",
+        "n_points": 29,
+        "accepted": false,
+        "reason": "low_axis_ratio",
+        "axis_ratio": 2.2466639542458937,
+        "length_m": 3854.395664284146
+      },
+      {
+        "cluster_id": 139,
+        "area": "Silver Peak",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 140,
+        "area": "Sou Hills",
+        "n_points": 4,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 141,
+        "area": "Sou Hills",
+        "n_points": 7,
+        "accepted": false,
+        "reason": "weak_tmi_alignment",
+        "axis_ratio": 81.96012060314088,
+        "length_m": 4789.058174757235,
+        "tmi_alignment_fraction": 0.04081632653061224
+      },
+      {
+        "cluster_id": 142,
+        "area": "Toulon",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 143,
+        "area": "Toulon",
+        "n_points": 1,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 144,
+        "area": "Toulon",
+        "n_points": 4,
+        "accepted": false,
+        "reason": "too_few_points"
+      },
+      {
+        "cluster_id": 145,
+        "area": "Winemucca Lake",
+        "n_points": 7,
+        "accepted": false,
+        "reason": "weak_tmi_alignment",
+        "axis_ratio": 10.935700775518441,
+        "length_m": 2251.3021720937304,
+        "tmi_alignment_fraction": 0.0
+      }
+    ],
+    "positive_score_cells": 0,
+    "score_max": 0.0
+  },
+  "candidate_pack": {
+    "mass": 0,
+    "suppression_px": 3.0,
+    "belief_max": 0.0
+  },
+  "control_design": {
+    "probe_density_500m": "Gaussian-smoothed warm-probe ranks, sigma 5 px, no point geometry",
+    "probe_density_1km": "Gaussian-smoothed warm-probe ranks, sigma 10 px, no point geometry",
+    "tmi_only": "TMI ridge strength only, no thermal probes",
+    "all_controls_to_be_packed_at_frozen_per_fold_mass": true
+  },
+  "grid": {
+    "crs": "EPSG:32611",
+    "width": 3292,
+    "height": 3730,
+    "transform": [
+      100.0,
+      0.0,
+      243350.0,
+      0.0,
+      -100.0,
+      4508550.0
+    ],
+    "all_finite_in_valid_footprint": true,
+    "nan_outside_valid_footprint": true,
+    "range_in_valid_footprint": [
+      0.0,
+      0.0
+    ]
+  },
+  "honest_note": "This build is generated from the H53-A source features, not copied pixels. The preregistered geometry produced zero accepted lineations; the linked all-zero raster is a no-go research artifact, not a useful competition prediction. The mirrored source bytes have not been matched to official downloads; no competition slot is authorized."
+}

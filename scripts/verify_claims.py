@@ -47,10 +47,28 @@ def main() -> int:
     check("H50-S1 status does not assert an organizer score", feed.get("h50_s1", {}).get("organizer_score") is None)
     check("registry carries no copied leaderboard rows", "public_leaderboard_2026_10_06" not in submissions)
     check(
-        "README treats 0.2778 as unresolved and 0.3195 as historical",
-        "not current leaderboard observations" in README
-        and "without an organizer receipt/hash crosswalk" in README
+        "README treats 0.2778 and 0.3774 as unverified reports",
+        "unverified reports, not freshly checked leaderboard" in README
+        and "without an organizer" in README and "receipt/hash crosswalk" in README
+        and "The 0.3774 claim is not treated as fact" in README
         and "No organizer receipt links these bytes to 0.2778" in README,
+    )
+    h53_review = (ROOT / "docs/research/h33-score-review-20261007.md").read_text(encoding="utf-8")
+    h53_validation = json.loads(
+        (ROOT / "evidence/h53-validation-20261007.json").read_text(encoding="utf-8")
+    )
+    check(
+        "H53-A remains a distinct audit-only no-go",
+        h53_validation.get("status") == "NO_SLOT"
+        and h53_validation.get("candidate", {}).get("artifact", {}).get("positive_cells") == 0
+        and "distinct probe/tmi point-pattern experiment" in h53_review.lower()
+        and "Do not submit the linked all-zero GeoTIFF" in h53_review,
+    )
+    check(
+        "H56 transfer estimate and unresolved ComCat rights are not promoted to a score",
+        "0.386" in README
+        and "not an organizer score" in README
+        and "ComCat contributor rights and sponsor-sharing" in README,
     )
     check(
         "prior-work notes require organizer receipt for score-to-file mapping",

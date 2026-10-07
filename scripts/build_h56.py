@@ -242,7 +242,7 @@ def main() -> int:
     out_dir.mkdir(parents=True, exist_ok=True)
     ev_dir.mkdir(parents=True, exist_ok=True)
 
-    lab, valid, catalogue, domain, d_cat, gtr = build_frames(layers_dir)
+    lab, valid, _catalogue, domain, _d_cat, gtr = build_frames(layers_dir)
     sgmc = read_band(REPO / "data/external/derived_sgmc_faults_100m_u8.tif") > 0
     sgmc_off = sgmc & domain                       # the independent-population instrument
     print(f"valid={int(valid.sum()):,}  domain(off-catalogue)={int(domain.sum()):,}  "
