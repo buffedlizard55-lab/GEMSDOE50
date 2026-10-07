@@ -1,14 +1,15 @@
 {
- "kind": "current-project status; no leaderboard snapshot",
- "generated_from": "manual project metadata only; no third-party leaderboard data",
+ "generated_from": "legacy receipts and H50-S1 project status; no third-party leaderboard data",
+ "kind": "archival status feed; no leaderboard snapshot is published",
  "leaderboard": {
   "published": false,
-  "reason": "Prior sibling-repository notes conflict and are not a fresh independent official check; no current score or score-to-TIFF mapping is asserted."
+  "reason": "Prior sibling-repository notes are conflicting and are not a fresh independent official check; no current score or score-to-TIFF mapping is asserted.",
+  "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/"
  },
  "legacy_artifact": {
   "file": "gems50-seislin-44709-20261006T2041Z-79e260ae.tif",
   "sha256": "79e260ae223d7dfd96413da28a9c6fed30107285ab843795181a5c9e5dff7262",
-  "role": "same-fold comparator only; not a new deliverable",
+  "role": "same-fold comparator / historical reference only; not a current submission",
   "organizer_score": null
  },
  "h50_s1": {
@@ -16,5 +17,27 @@
   "organizer_score": null,
   "portal_upload": null,
   "weekly_slot_used": false
+ },
+ "h51_candidate": {
+  "file": "gemsdoe50-h51-corridor-consensus-mix-20261007T0200Z.tif",
+  "sha256": "a26055834f8e6cc57cc33e96a4a5a26a1adeaafbeec490135af84c6ccd4d1da0",
+  "bytes": 339039,
+  "present": true,
+  "format_gate_pass": true,
+  "uniqueness_gate_pass": true,
+  "pixels_shared_with_any_prior_artifact": 0,
+  "worst_proximity_iou": 0.42190918512263464,
+  "worst_proximity_iou_file": "gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-nan.tif",
+  "predicted_score_local": 0.168434025396466,
+  "predicted_score_source": "leave-one-out score instrument over 25 hash-verified artifacts; a local prediction, not an organizer score",
+  "proxy_gate_pass": false,
+  "proxy_gate_note": "Fails the pre-registered sgmc_off proxy; that proxy cannot rank the 25 scored artifacts (Spearman +0.196, p = 0.35), so it is reported and not used as a pass.",
+  "organizer_score": null,
+  "portal_upload": null,
+  "weekly_slot_used": false,
+  "download": "downloads/gemsdoe50-h51-corridor-consensus-mix-20261007T0200Z.tif",
+  "unique_name": "gemsdoe50-h51-corridor-consensus-mix-20261007T0200Z",
+  "optional_note": "Corridor evidence (seismicity lineaments + magnetic/radiometric ridges + thermal springs) fused with a validated score-consensus core; off-catalogue, 300 m-aware dot geometry; pixels and 200 m neighbourhoods novel against all 26 prior artifacts.",
+  "how_to_submit": "submission.html"
  }
 }

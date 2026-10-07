@@ -15,25 +15,109 @@
 7. **Work autonomously and auditably.** Review rules, data, sources, prior attempts, and limitations; record every material decision and irregularity; run multiple implementation/review passes; fix defects found; and maintain a concise next-steps list. Do not ask the owner to do research or resolve issues the agent can verify independently.
 8. **Keep the score context honest.** The owner-quoted `0.3195` is historical, not the live leader. Prior sibling-repository notes contain conflicting historical leaderboard values and are not a fresh independent official check; do not repeat them as current official scores or map any score to a TIFF without organizer-verified provenance. DrivenData's Terms of Use prohibit automated monitoring/copying and manual monitoring/copying without prior written consent. This repository links to the official board but does not scrape, poll, or publish leaderboard snapshots.
 9. **Follow the prize rules.** The September 2026 NLR/DOE rules require an AI-use disclosure in the narrative, permit up to three feedback submissions per week, and require selection of one final submission for both prize rounds. Finalists must provide reproducible code/assets and documentation. The competition ends December 3, 2026 at 23:59 UTC (verify the official page before any deadline-dependent action).
-10. **Create and merge a PR when practical.** Keep all work on Arena's fixed branch `arena/c6060a3e-gemsdoe50`. Run tests and review the PR before merging. Do not switch branches or push elsewhere.
+10. **Create and merge a PR when practical.** Keep all work on Arena's fixed branch `arena/5e2ce8c3-gemsdoe50`. Run tests and review the PR before merging. Do not switch branches or push elsewhere.
 
-## Current evidence and decision (2026-10-06 UTC)
+## Current evidence and decision (2026-10-07 UTC)
 
-- This research branch began from a minimal README-only commit. Since then, `origin/main` added an older GEMSDOE50 submission, research site, data, and workflows; these are preserved as repository history, not silently treated as H50-S1 evidence. The full standing charter, prior-work audit, and ranked hypotheses are maintained here.
-- The local ignored `.arena/cache/` bridge contains the competition feature, label, and template rasters. The assembled 19-band feature raster is 418,912,844 bytes with SHA-256 `4371c82e3b8339b807bdffcf4ef59a225520fe2988d521be208ae33743123bc5`; the label and example-submission rasters also match the bridge manifest. **Provenance caveat:** the bridge manifest points to the official data tab and public Dropbox mirrors, but this session did not authenticate to DrivenData and independently re-download the official bytes. Matching hashes establish consistency with the bridge manifest, not organizer provenance.
-- The ranked lead remains **H50-S1**, a research hypothesis about waveform-relocated Nevada hypocenter planes and plausible z=0 trace projections. The catalog is public, 2008–2023, 183,002 rows, 103,976 waveform-relocated in the paper, CC BY 4.0, and has Zenodo MD5 `38fa663f473378b61c74b597c53c416b` (13,833,354 bytes). It does not provide per-event location covariance. The data file has **not yet been downloaded into this sandbox**: direct Zenodo `curl` fails TLS here. A manually dispatched GitHub Actions workflow now provides a pinned, auditable acquisition path; it has not yet been run.
-- Four prior-work rasters are pinned for comparison only: H32-D, H47-S3, H48-DS, and the pre-existing `main`-branch GEMSDOE50 artifact `gems50-seislin-44709-20261006T2041Z-79e260ae.tif`. Their source commits/blob IDs and file hashes are pinned in the experiment code. The prior artifact's local claims are not an organizer score or verified score-to-TIFF mapping; no prior pixels are copied into the H50-S1 output.
-- The H50-S1 implementation includes a format-checked catalog parser, robust local 3-D plane/lineament geometry, frozen spatial-mask reconstruction, same-grid comparisons, translation/time-shuffle controls, and byte-level GeoTIFF validation. Its metric is transcribed from the official problem page's distance-weighted TP/FP/FN equations and tested against the published worked example and hand-calculated spatial cases. I reviewed the reference-solution notebook: it uses Tversky loss for model training but does not implement the official distance-weighted scoring evaluator, so it is not treated as metric authority. Its focused unit suite has **18 tests**; the complete repository suite passes **57 tests with 1 skipped**, including tests for the pre-existing `gems50` code. The real Nevada-catalog experiment has not run; **no H50-S1 DTI, result report, or new candidate TIFF, organizer score, portal upload, or weekly slot use is claimed**. The prior TIFF present on `main` is comparator-only.
-- Pre-DTI review caught and corrected two evaluation issues: selecting the best baseline by the holdout score would leak labels, and subtile false-positive weighting must use neighboring truth in the metric halo even when a subtile has no truth of its own. H50-prior is now selected chronologically as the fixed incumbent; other comparators are descriptive only. Regression tests enforce both fixes, and evaluation refuses to run without all 20 preregistered time shuffles.
-- The exact 3292 × 3730 four-macrofold split and 10 km/300 m mask rules are in [`evidence/holdout-v1.json`](evidence/holdout-v1.json). The realized valid, truth, and per-fold mask hashes are in [`evidence/holdout-realized-v1.json`](evidence/holdout-realized-v1.json). These were created and hash-pinned before any H50-S1 DTI computation. Split-spec SHA-256: `78b6692155c6c6d5f9f19ccee6d595167c2065f1f25eb8d08636d1d9b285ff16`; realized-mask report SHA-256: `981b42e6d0310bf77f79c7c7662a0569c8d2e79514ef4e4a3624a5b07583ae3f`.
-- The method remains unvalidated against the hidden expert-labeled set. Existing mapped fault labels are an imperfect spatial proxy; catalog location error may exceed the 300 m metric support. No submission slot will be used unless the preregistered gate passes and an owner manually reviews the data provenance, method, and downloaded TIFF bytes.
-- The inherited mixed-network ComCat extract under `data/external/` is not used by H50-S1; its source-specific rights and location uncertainty remain unresolved. The project also does not scrape, poll, or copy DrivenData leaderboard rows; a historical `0.3195` is not called the current lead and no score is mapped to a TIFF without verified provenance.
+**Where the project actually stands.** The H50-S1 seismicity branch has run; the H51/H52 branch
+that followed is the current state of the art here. Read this section as the starting point of
+every session, then read [`docs/research/h51-analysis.md`](docs/research/h51-analysis.md) (why the
+best prior artifact scored what it did, and what beating 0.3195 requires),
+[`docs/research/h51-hypotheses.md`](docs/research/h51-hypotheses.md) (ranked hypotheses with their
+fields), and [`docs/research/h51-truth-map.md`](docs/research/h51-truth-map.md) (a negative result
+that closes a whole line of attack).
+
+- **The metric, exactly.** With binary dots the official distance-weighted Tversky index collapses
+  to `DTI = T / (0.2·N + 0.8·G)`, where `N` is the predicted pixel count, `T` the credit captured
+  inside the 300 m kernel, and `G` the hidden truth mass in the scored domain. Inverting the pinned
+  blind-lattice artifact gives **`G ≈ 12,226 px`** (±~1 %). Two consequences drive every decision
+  below: a dot pays only if it earns more than `0.2·s ≈ 0.05` credit, and coverage — not dot
+  count — is the binding term.
+- **Every scored artifact inverted.** The 25 hash-verified artifacts of
+  `registry/h51_score_corpus.json` were converted to credit pixels (`scripts/h51_truth_map.py`).
+  The corpus's best credit per dot is **0.1097** (`gems25-dotted-h19-5-d2-8`, owner-quoted 0.2600)
+  and its best coverage is **59.3 %** (a 183,642-dot blanket at 0.0395 credit/dot). **The whole
+  group's detector family cannot reach ≈41 % of the hidden truth.** 0.3195 needs `T = 5,042` at
+  `N = 30,000` (41.2 % coverage) — reachable in principle, never reached in practice.
+- **Instrument, and its honest limit.** The consensus instrument (posterior over the 25 scored
+  artifacts) predicts a held-out artifact's real score at leave-one-out Spearman **0.973**
+  (`evidence/h51_consensus.json`), but a *trivial* predictor that uses only how similar an artifact
+  is to the winners already reaches **0.905**. Most of the instrument's skill is corpus
+  self-similarity, its optimum is literally a re-draw of the corpus (98 % of dots on prior pixels),
+  and a block-grid **truth-density inversion fails leave-one-out** at every resolution tested
+  (`evidence/h51_truth_map.json`). The score history constrains *efficiency*, not geography.
+- **Shipped candidate (one click on the site).**
+  `downloads/gemsdoe50-h51-corridor-consensus-mix-20261007T0200Z.tif` — 24,000 consensus-core dots
+  (every one on a pixel no prior artifact used) plus 6,000 evidence-only exploration dots
+  (seismicity-lineament corridors, TMI/radiometric ridges, thermal springs) more than 200 m from
+  every prior dot. Format-clean float32 on the official grid, values in `[0, 1]`, NaN outside the
+  footprint; **0 pixels shared with any of the 26 prior artifacts**; frozen uniqueness gate
+  **PASS** (`max 2 px-proximity IoU 0.4219 < 0.5`, `min_novel_fraction_at_2px 0.2003`). Instrument
+  prediction **0.1684** (LOO RMSE 0.025).
+- **It is a measurement, not a win, and the README says so before the download.** 0.1684 is below
+  the repository's best delivered artifact (owner-quoted 0.2778 for `GEMSDOE32`'s `h33-2-b2`) and
+  below the owner-quoted 0.3195 target. It also **fails the pre-registered `sgmc_off` proxy gate**
+  (0.0573 vs matched uniform 0.0593) — and that proxy has no demonstrated power to predict a live
+  score (ρ = +0.196, p = 0.35 over 25 real scores, `evidence/h51_proxy_ranking_power.json`), so the
+  failure is recorded as a limitation rather than explained away. The archived `seislin-44709`
+  artifact is the opposite case: priced at 0.0422 by the instrument but 2.5× the uniform control on
+  the independent `sgmc_off` frame. The two evidence lines conflict; §12 of the analysis records it
+  instead of hiding it.
+- **Rejected designs are recorded with their numbers** so no future session re-litigates them: the
+  instrument optimum that re-draws the corpus (0.2559, forbidden by the originality rule); a
+  pixel-disjoint halo interleave that satisfies the letter of "no copied pixels" but is a one-pixel
+  translation of the group's own structure (0.1989, rejected on the 2 px-proximity gate,
+  `evidence/h51_ship_novel.json`); an exploration-free core (0.1806, gate-passing, but no new
+  territory); and every spacing/thinning variant (recorded in the frontier files).
+- **Decision rule for the next slot.** A candidate must (a) pass `scripts/check_submission.py` with
+  `GEMS50_CORPUS` mounted (`verdict_unique: true`), (b) beat the frozen incumbent on the consensus
+  instrument, and (c) not be a translation of prior structure. No candidate yet beats the
+  repository's best delivered score under those rules; the shipped file is the best gate-clean
+  measurement available and is the intended use of a slot **only if the owner chooses to spend
+  one**.
+- **Data reality in this sandbox.** `data/grid/{labels,sample_submission}.tif` are present and
+  hash-consistent with the bridge manifest. The 19-band competition feature stack is **not**
+  available here and its Dropbox mirrors are network-blocked (as are Zenodo, USGS ScienceBase,
+  EarthExplorer, and `raw.githubusercontent.com`); reachable hosts are `github.com`,
+  `api.github.com`, `codeload.github.com`, `pypi.org`, and `files.pythonhosted.org`. Staged
+  geophysical layers (TMI, K, radiometric, LiDAR scarp features) live in the public sibling
+  repository `GEMSDOE24` and are re-clonable from GitHub. The ComCat extract under
+  `data/external/` is a mixed-network product whose source-specific rights are unresolved, so it is
+  used for exploration only, never as a submission input.
 
 ## Executive summary and submission instructions
 
-Static site pages are generated at repository root by [`scripts/build_h50_site.py`](scripts/build_h50_site.py): [`index.html`](index.html), [`results.html`](results.html), [`methods.html`](methods.html), and [`submission.html`](submission.html). When the fixed branch is merged to `main`, the repository's existing GitHub Pages configuration serves the root site at [buffedlizard55-lab.github.io/GEMSDOE50](https://buffedlizard55-lab.github.io/GEMSDOE50/). The site labels the output **research-only** unless every gate passes, and even a local pass is only eligible for manual owner review—not an organizer score or upload receipt.
+The site is generated and CI-verified. Root pages come from
+[`scripts/build_h50_site.py`](scripts/build_h50_site.py) (`index.html`, `results.html`,
+`methods.html`, `submission.html`) and the data feed from [`scripts/build_site.py`](scripts/build_site.py)
+(`docs/data/*.json`). The H51 candidate panel on `index.html` is rendered directly from
+`evidence/h51_ship.json` and `evidence/h51_check_submission.json`, so the numbers on the site cannot
+drift from the evidence. `.github/workflows/h50s1-site-and-checks.yml` and `site.yml` regenerate the
+four root pages and fail the build if the committed bytes differ.
 
-If (and only if) the protocol passes and the owner approves the artifact, `submission.html` provides a numbered manual portal checklist. The planned unique filename is `gemsdoe50-h50s1-relocated-planes-20261006-research.tif`; the short optional note is “Relocated Nevada event-plane lineaments; 300 m known-fault exclusion; research proxy, not organizer-scored.” The name is only a plan until the verified run produces the TIFF. Re-check the current portal specification and the report's on-disk SHA-256 before any manual upload. No automated portal access is used.
+**One-click download (top of the site):**
+`downloads/gemsdoe50-h51-corridor-consensus-mix-20261007T0200Z.tif` — SHA-256
+`a26055834f8e6cc57cc33e96a4a5a26a1adeaafbeec490135af84c6ccd4d1da0`, 339,039 bytes, 30,000
+predicted pixels, values `0` / `1`, `float32`, EPSG:32611, 3730×3292, NaN outside the published
+footprint, all in-footprint values finite and inside `[0, 1]`. An `-allfinite.tif` sibling sets
+`0` outside the footprint for portals that reject non-finite values, so the historical error
+`Predicted values must be in range [0, 1]` cannot recur. A `.zip` of the same GeoTIFF is also
+offered.
+
+**How to submit (manual, by the owner, never by this repository):** (1) download the `.tif` and
+verify the SHA-256 shown on the page; (2) open
+[the competition page](https://www.drivendata.org/competitions/306/competition-doe-gems/) and sign
+in; (3) upload the single-band GeoTIFF without re-saving, re-projecting or re-compressing it;
+(4) use the unique name and the short optional note printed on the page; (5) record the portal
+receipt in this repository before claiming any score. `submission.html` carries the same checklist
+with the portal's own warnings.
+
+**Status of the artifact.** Format gate PASS and frozen uniqueness gate PASS (worst 2 px-proximity
+IoU 0.4219 against 26 prior artifacts, 0 pixels shared with any of them). Instrument prediction
+**0.1684** — *below* this repository's best delivered artifact (owner-quoted 0.2778) and below the
+owner-quoted 0.3195 target — and the pre-registered `sgmc_off` proxy gate FAILS. It is published as
+a measurement the owner may choose to spend one slot on, not as a predicted win; the page says so
+above the download.
 
 ## Verified project references
 
@@ -78,14 +162,35 @@ python scripts/run_experiment.py \
   --labels .arena/run/inputs/existing_faults.tif \
   --prior-dir .arena/run/prior
 python scripts/build_h50_site.py
+
+# H51/H52 research pipeline (needs the staged corpus in .arena/work/h51; see scripts/h51_consensus.py)
+python scripts/h51_consensus.py            # score instrument + leave-one-out validation
+python scripts/h51_truth_map.py            # credit ledger + block-grid truth inversion (negative)
+python scripts/h51_validate.py --candidates downloads/*.tif --incumbent downloads/gems50-seislin-*.tif
+GEMS50_CORPUS=.arena/work/h51 python scripts/check_submission.py --submission downloads/gemsdoe50-h51-*.tif
+python scripts/h51_ship_novel.py           # reproduces the rejected pixel-disjoint H52 design
 ```
 
-The manually dispatched [H50-S1 research workflow](.github/workflows/h50s1-research.yml) runs on `arena/c6060a3e-gemsdoe50` only. It verifies tests and the already-frozen masks before scoring, downloads no hidden labels, does not use the feature stack for H50-S1, and commits only the result report/site/research-only TIFF back to this fixed branch. If sandbox egress is still blocked there, the workflow fails visibly and the limitation remains recorded; no raw data are committed.
+The manually dispatched [H50-S1 research workflow](.github/workflows/h50s1-research.yml) runs on `arena/5e2ce8c3-gemsdoe50` only. It verifies tests and the already-frozen masks before scoring, downloads no hidden labels, does not use the feature stack for H50-S1, and commits only the result report/site/research-only TIFF back to this fixed branch. If sandbox egress is still blocked there, the workflow fails visibly and the limitation remains recorded; no raw data are committed.
 
 ## Open gates / next actions
 
-1. Run the fixed-branch `H50-S1 preregistered research run` workflow to retrieve and verify the catalog and input rasters from public sources.
-2. Review the complete event-count, depth/magnitude irregularity, and spatial-coverage audit; stop if the relocated points do not overlap the valid footprint adequately.
-3. Compute the frozen fold-wise DTI, 16-block bootstrap, same-fold incumbent, and matched translation/year-shuffle controls. If the promotion gate fails, do not spend a slot.
-4. Re-open and byte-validate the generated unique GeoTIFF, update the static executive-summary/results/submission pages, and review licensing, attribution, limitations, and AI disclosure.
-5. Continue PR #6 from the fixed branch through full implementation/review passes; merge only if the report, artifact, site, evidence, and conflict resolution agree. No upload is performed by this repository.
+1. **Decide the slot.** The shipped candidate is gate-clean and pixel-novel but predicted below the
+   repository's best delivered score; the decision to spend one of the three weekly feedback slots
+   belongs to the owner. If spent, it prospectively calibrates the consensus instrument and adds a
+   26th hash-verified row to the corpus.
+2. **Settle the instrument conflict** (§12 of the analysis). Either submit a corpus-consensus design
+   and a seismicity-lineament design in different weeks, or accept the conflict and pick a side with
+   a stated rationale. Do not silently average them.
+3. **Test hypothesis P1 (dot-economy pruning)**, the only lever with a *measured* sign: the champion
+   artifact is past its own family's optimum (`∂DTI/∂N < 0` at 0.2600). Sweep prune thresholds on
+   the frozen holdout and both independent frames.
+4. **Build a new detector for the missing 41 %** (P2 magnetic-lineament corridors first, then P4
+   relay bridges). No amount of re-blending can reach it; analysis §9 and the failed truth inversion
+   are the proof.
+5. **Fix the acquisition path.** Replace the unusable pre-registered proxy gate with one that has
+   demonstrated power against real scores, and re-enable an auditable fetch route for the
+   network-blocked official sources (`gh workflow run` currently returns 403 in this environment,
+   and `fetch-external-data.yml` is a disabled stub).
+6. Keep the site, feed, and evidence in sync with any new artifact; CI enforces byte-identical
+   regeneration of the four pages.

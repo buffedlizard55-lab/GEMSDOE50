@@ -25,7 +25,10 @@ def read(name: str):
 
 def main() -> int:
     DATA.mkdir(parents=True, exist_ok=True)
-    sub = next(iter(sorted((ROOT / "downloads").glob("*.tif"))), None)
+    legacy_name = "gems50-seislin-44709-20261006T2041Z-79e260ae.tif"
+    sub = ROOT / "downloads" / legacy_name
+    if not sub.exists():
+        sub = next(iter(sorted((ROOT / "downloads").glob("*.tif"))), None)
     sha = hashlib.sha256(sub.read_bytes()).hexdigest() if sub else None
 
     checks = read("submission_checks.json")
@@ -62,6 +65,38 @@ def main() -> int:
         "note": "F1 = catalogue-fold frame; F2 = SGMC off-catalogue frame. Proxies, not leaderboard scores.",
     }, indent=1))
 
+    h51_ship = ROOT / "evidence" / "h51_ship.json"
+    h51_check = ROOT / "evidence" / "h51_check_submission.json"
+    h51_candidate = None
+    if h51_ship.exists():
+        ship = json.loads(h51_ship.read_text())
+        chk = json.loads(h51_check.read_text()) if h51_check.exists() else {}
+        tif = ROOT / ship["outputs"]["tif"]
+        h51_candidate = {
+            "file": Path(ship["outputs"]["tif"]).name,
+            "sha256": ship["outputs"]["sha256"],
+            "bytes": ship["outputs"]["bytes"],
+            "present": tif.exists(),
+            "format_gate_pass": chk.get("format", {}).get("all_checks_pass"),
+            "uniqueness_gate_pass": chk.get("uniqueness", {}).get("verdict_unique"),
+            "pixels_shared_with_any_prior_artifact": ship["gate"].get("pixels_shared_with_any_prior", 0),
+            "worst_proximity_iou": ship["gate"].get("measured_iou2px_max"),
+            "worst_proximity_iou_file": ship["gate"].get("worst_overlap_file"),
+            "predicted_score_local": ship["predicted"]["DTI"],
+            "predicted_score_source": "leave-one-out score instrument over 25 hash-verified artifacts; a local prediction, not an organizer score",
+            "proxy_gate_pass": False,
+            "proxy_gate_note": (
+                "Fails the pre-registered sgmc_off proxy; that proxy cannot rank the 25 scored "
+                "artifacts (Spearman +0.196, p = 0.35), so it is reported and not used as a pass."
+            ),
+            "organizer_score": None,
+            "portal_upload": None,
+            "weekly_slot_used": False,
+            "download": ship["outputs"]["tif"],
+            "unique_name": Path(ship["outputs"]["tif"]).stem,
+            "optional_note": ship["claim_note"],
+            "how_to_submit": "submission.html",
+        }
     (DATA / "feed.json").write_text(json.dumps({
         "generated_from": "legacy receipts and H50-S1 project status; no third-party leaderboard data",
         "kind": "archival status feed; no leaderboard snapshot is published",
@@ -82,6 +117,7 @@ def main() -> int:
             "portal_upload": None,
             "weekly_slot_used": False,
         },
+        "h51_candidate": h51_candidate,
     }, indent=1))
 
     if sources:

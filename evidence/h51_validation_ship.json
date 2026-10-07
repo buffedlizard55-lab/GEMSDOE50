@@ -1,0 +1,53 @@
+{
+ "frame": "sgmc_off (>300 m from catalogue, unmasked domain)",
+ "domain_px": 5106385,
+ "truth_px": 62122,
+ "rows": {
+  "gemsdoe50-h51-corridor-consensus-mix-20261007T0200Z.tif": {
+   "dti": 0.05729023024214331,
+   "tp": 3212.0019458356965,
+   "fp": 28627.19627450881,
+   "fn": 58909.9980541643,
+   "truth_cells": 62122,
+   "pred_cells": 30000,
+   "dots_in_domain": 30000,
+   "dots_outside_domain": 0,
+   "tp_per_dot": 0.10706673152785655,
+   "fp_per_dot": 0.9542398758169603,
+   "_file": "gemsdoe50-h51-corridor-consensus-mix-20261007T0200Z.tif",
+   "_n_total": 30000
+  },
+  "gems50-seislin-44709-20261006T2041Z-79e260ae.tif": {
+   "dti": 0.14640965866905614,
+   "tp": 8696.564787353258,
+   "fp": 39809.66586688724,
+   "fn": 53425.43521264674,
+   "truth_cells": 62122,
+   "pred_cells": 44048,
+   "dots_in_domain": 44048,
+   "dots_outside_domain": 661,
+   "tp_per_dot": 0.1974338173663562,
+   "fp_per_dot": 0.9037791924011814,
+   "_file": "gems50-seislin-44709-20261006T2041Z-79e260ae.tif",
+   "_n_total": 44709
+  }
+ },
+ "uniform_control": {
+  "n": 30000,
+  "dti_mean": 0.05930233148215974,
+  "dti_max": 0.061729166376200365,
+  "draws": 5
+ },
+ "translation_control": {
+  "dti_mean": 0.04472888811869075,
+  "dti_max": 0.04707259878936948,
+  "draws": 5
+ },
+ "gate": {
+  "beats_uniform": false,
+  "beats_translation": true,
+  "beats_incumbent": false,
+  "incumbent_dti": 0.14640965866905614,
+  "all_pass": false
+ }
+}

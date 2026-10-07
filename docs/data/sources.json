@@ -13,21 +13,21 @@
  },
  "sources": [
   {
-   "name": "DrivenData DOE GEMS Prize #306 — problem description and scoring",
+   "name": "DrivenData DOE GEMS Prize #306 \u2014 problem description and scoring",
    "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/",
    "licence": "competition terms",
    "read": "2026-10-06",
    "used_for": "metric definition, alpha=0.2 beta=0.8, R=300 m, format rules"
   },
   {
-   "name": "DrivenData DOE GEMS Prize #306 — rules",
+   "name": "DrivenData DOE GEMS Prize #306 \u2014 rules",
    "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/964/",
    "licence": "competition terms",
    "read": "2026-10-06",
    "used_for": "submission cadence and eligibility"
   },
   {
-   "name": "DrivenData DOE GEMS Prize #306 — public leaderboard",
+   "name": "DrivenData DOE GEMS Prize #306 \u2014 public leaderboard",
    "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/",
    "licence": "competition terms",
    "read": "2026-10-06",
@@ -48,7 +48,7 @@
    "used_for": "off-catalogue (F2) validation frame and concealment prior"
   },
   {
-   "name": "USGS 3DEP 1 m DEM (LiDAR) — scarp descriptor stack",
+   "name": "USGS 3DEP 1 m DEM (LiDAR) \u2014 scarp descriptor stack",
    "url": "https://www.usgs.gov/3d-elevation-program",
    "licence": "US public domain",
    "read": "2026-10-04 (owner-derived 12-channel raster mirror)",

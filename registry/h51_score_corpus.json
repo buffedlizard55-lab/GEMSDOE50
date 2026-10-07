@@ -1,0 +1,206 @@
+{
+ "note": "Owner-quoted public-leaderboard scores for submission GeoTIFFs whose SHA-256 is pinned. Scores are NOT organizer receipts; they are the owner's own reports recorded in sibling repositories. Used here only to estimate where credit-earning predictions have historically landed.",
+ "n": 25,
+ "artifacts": [
+  {
+   "label": "25GEMSDOE dotted-h19-5-d2-8 (e56ea318af89)",
+   "score": 0.26,
+   "sha256": "91eae1ca42ec845eaa8c2ba32da49806e24751743459b8a10017c479bbe639b8",
+   "file": "gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-nan.tif",
+   "path": "gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-nan.tif",
+   "provenance": "sibling repo (public GitHub) file matching registry/live_scores.json SHA-256"
+  },
+  {
+   "label": "24GEMSDOE h25-1 dotted-h19-5-d1-5 (989f59505db1)",
+   "score": 0.2477,
+   "sha256": "68d0e2e4fcc594f9a23f56c44b885fee733d026d39be55e18ad2a07289525310",
+   "file": "gems24-h25-1-dotted-h19-5-d1-5-20261002-989f59505db1-nan.tif",
+   "path": "gems24-h25-1-dotted-h19-5-d1-5-20261002-989f59505db1-nan.tif",
+   "provenance": "sibling repo (public GitHub) file matching registry/live_scores.json SHA-256"
+  },
+  {
+   "label": "27GEMSDOE topo-gap-closure-t-v2-on-d1-5 (5512495c6bd1)",
+   "score": 0.2449,
+   "sha256": "33003374335d84bf885f2d8f5e9dd4c57044c8ec58fa6a0d7fa581e8bc41c11d",
+   "file": "gems27-topo-gap-closure-t-v2-on-d1-5-20261002-5512495c6bd1-nan.tif",
+   "path": "gems27-topo-gap-closure-t-v2-on-d1-5-20261002-5512495c6bd1-nan.tif",
+   "provenance": "sibling repo (public GitHub) file matching registry/live_scores.json SHA-256"
+  },
+  {
+   "label": "19GEMSDOE h19-5",
+   "score": 0.1922,
+   "sha256": "ec1f9b56b83ce33cad781ceb9f104b18fb4f2ff785263a4e89616af4aabdee8d",
+   "file": "gems24-h24-0-mirror-h19-5-group-best-20261002-e27054cf-nan.tif",
+   "path": "gems24-h24-0-mirror-h19-5-group-best-20261002-e27054cf-nan.tif",
+   "provenance": "sibling repo (public GitHub) file matching registry/live_scores.json SHA-256"
+  },
+  {
+   "label": "19GEMSDOE h19-4",
+   "score": 0.1894,
+   "sha256": "89109a3bd2cd3b12e7a0f388113c519843acfc9c4f46825affefc3e63dd99b22",
+   "file": "gems19-h19-4-multiline-corroborated-openness-thermal-pop-20260930-691e4dfa-nan.tif",
+   "path": "gems19-h19-4-multiline-corroborated-openness-thermal-pop-20260930-691e4dfa-nan.tif",
+   "provenance": "sibling repo (public GitHub) file matching registry/live_scores.json SHA-256"
+  },
+  {
+   "label": "16GEMSDOE h16-1 topo-geophys-baseline-ridges",
+   "score": 0.1855,
+   "sha256": "055309694ed499ca3d87e76b3f5e81c292aef6e39c418d33ff5a817aa1309bea",
+   "file": "gems16-h16-1-topo-geophys-baseline-ridges-20260930-df20f65e-nan.tif",
+   "path": "gems16-h16-1-topo-geophys-baseline-ridges-20260930-df20f65e-nan.tif",
+   "provenance": "sibling repo (public GitHub) file matching registry/live_scores.json SHA-256"
+  },
+  {
+   "label": "GEMSDOE10 h28-dotted-ridge",
+   "score": 0.1839,
+   "sha256": "7637b72d4c6c3e10226bf46bd72a20272d62ccbe29743062632d10b158b49c58",
+   "file": "gems10-h28-dotted-ridge-20260928T020256236880Z-6452ae1d00.tif",
+   "path": "gems10-h28-dotted-ridge-20260928T020256236880Z-6452ae1d00.tif",
+   "provenance": "sibling repo (public GitHub) file matching registry/live_scores.json SHA-256"
+  },
+  {
+   "label": "GEMSDOE ens12-adopted (7f00890a\u2026)",
+   "score": 0.1563,
+   "sha256": "7f00890a62878d612fb5eef67a9a364a2df819433dde74b6762ce4fc0fc4fe15",
+   "file": "submission.tif",
+   "path": "submission.tif",
+   "provenance": "sibling repo (public GitHub) file matching registry/live_scores.json SHA-256"
+  },
+  {
+   "label": "GEMSDOE2 dual-family-union (f68e590f)",
+   "score": 0.156,
+   "sha256": "f68e590f8534d036872f18170819b52366c728e68619f17c648dce9629b0aaf2",
+   "file": "gemsdoe2-dual-union-f68e590f.tif",
+   "path": "gemsdoe2-dual-union-f68e590f.tif",
+   "provenance": "sibling repo (public GitHub) file matching registry/live_scores.json SHA-256"
+  },
+  {
+   "label": "7GEMSDOE lidarscarp-ridge-top2pct",
+   "score": 0.1461,
+   "sha256": "36c3a3f341c8306dfb5610f61acfec635a7cb8a3ef6ef00380ca083d2f9745fe",
+   "file": "gems7-lidarscarp-ridge-top2pct-36c3a3f341c8.tif",
+   "path": "gems7-lidarscarp-ridge-top2pct-36c3a3f341c8.tif",
+   "provenance": "sibling repo (public GitHub) file matching registry/live_scores.json SHA-256"
+  },
+  {
+   "label": "12GEMSDOE r7-nms3-dem10-scarp",
+   "score": 0.1294,
+   "sha256": "0c9199f14e625d7b2539a0a045803b74d6494ce568d185abecc193fe7e93c6f2",
+   "file": "12GEMSDOE_r7-nms3-dem10-scarp_0c9199f14e62.tif",
+   "path": "12GEMSDOE_r7-nms3-dem10-scarp_0c9199f14e62.tif",
+   "provenance": "sibling repo (public GitHub) file matching registry/live_scores.json SHA-256"
+  },
+  {
+   "label": "GEMSDOE10 H25-ctx-ridge",
+   "score": 0.128,
+   "sha256": "1381e784fb8b8340beffd0e735ac9eea89ad35d1a807f8a9bab5506e3fc8275e",
+   "file": "gems10-h25-ctx-ridge-20260927T232947704150Z-6452ae1d00.tif",
+   "path": "gems10-h25-ctx-ridge-20260927T232947704150Z-6452ae1d00.tif",
+   "provenance": "sibling repo (public GitHub) file matching registry/live_scores.json SHA-256"
+  },
+  {
+   "label": "26GEMSDOE dilcond-oof-v1 (47629f496133)",
+   "score": 0.1223,
+   "sha256": "d54cf7edc6ec57c29b88dec81fe3fb101efa4fe31fc9c1088664a0c2e5190887",
+   "file": "gems26-dilcond-oof-v1-20261003-47629f496133-nan.tif",
+   "path": "gems26-dilcond-oof-v1-20261003-47629f496133-nan.tif",
+   "provenance": "sibling repo (public GitHub) file matching registry/live_scores.json SHA-256"
+  },
+  {
+   "label": "GEMSDOE3 pindrop-v4-nodes",
+   "score": 0.1193,
+   "sha256": "f347b70daa95170bfc967b1c0b6bbf951496c2b74764a7102848ad6178829aca",
+   "file": "gemsdoe3-pindrop-nodes-f347b70daa.tif",
+   "path": "gemsdoe3-pindrop-nodes-f347b70daa.tif",
+   "provenance": "sibling repo (public GitHub) file matching registry/live_scores.json SHA-256"
+  },
+  {
+   "label": "GEMSDOE3 pindrop-v4-ridge",
+   "score": 0.1152,
+   "sha256": "4e03fc97052e9bd673e48f1923ad17f15926f8db26d2befc033e1722381dc9b7",
+   "file": "gemsdoe3-pindrop-ridge-4e03fc9705.tif",
+   "path": "gemsdoe3-pindrop-ridge-4e03fc9705.tif",
+   "provenance": "sibling repo (public GitHub) file matching registry/live_scores.json SHA-256"
+  },
+  {
+   "label": "GEMSDOE10 h20-dem10-scarp-thin",
+   "score": 0.0921,
+   "sha256": "a26e5e46acc00ddd867f0b2910e638b25e4e81108ebe05c0abcc7c9b04372247",
+   "file": "gems10-h20-dem10-scarp-thin-20260927T155223039488Z-ffc91a1686.tif",
+   "path": "gems10-h20-dem10-scarp-thin-20260927T155223039488Z-ffc91a1686.tif",
+   "provenance": "sibling repo (public GitHub) file matching registry/live_scores.json SHA-256"
+  },
+  {
+   "label": "13GEMSDOE r13-lattice-s5 (nan-outside)",
+   "score": 0.0904,
+   "sha256": "b4570b406efec198eb2f4d142ad8d0d6184b14b66f2f52b5c4d697f0647dc9b2",
+   "file": "13gems_20261001_r13-lattice-s5_v2_nan-outside.tif",
+   "path": "13gems_20261001_r13-lattice-s5_v2_nan-outside.tif",
+   "provenance": "sibling repo (public GitHub) file matching registry/live_scores.json SHA-256"
+  },
+  {
+   "label": "GEMSDOE3 pindrop-v4-discovery",
+   "score": 0.083,
+   "sha256": "37f9d5b855ee1b6c302cb81cdae1414db94db427f5dc9da3538474df37cf1cad",
+   "file": "gemsdoe3-pindrop-discovery-37f9d5b855.tif",
+   "path": "gemsdoe3-pindrop-discovery-37f9d5b855.tif",
+   "provenance": "sibling repo (public GitHub) file matching registry/live_scores.json SHA-256"
+  },
+  {
+   "label": "15GEMSDOE conj_alteration_mag",
+   "score": 0.0782,
+   "sha256": "b437efcec17fb4582a3ff2f5f6ce6a179545c1e21fcd51e0c4b828cfd185d631",
+   "file": "gems-tso1-20260929T005627Z-conj_alteration_mag.tif",
+   "path": "gems-tso1-20260929T005627Z-conj_alteration_mag.tif",
+   "provenance": "sibling repo (public GitHub) file matching registry/live_scores.json SHA-256"
+  },
+  {
+   "label": "GEMSDOE10 h16-continuation",
+   "score": 0.0461,
+   "sha256": "b33684ae033512a1a1c7d2cfccd128955fedfdff2a8fed6c7585a755b1b58b3c",
+   "file": "gems10-h16-continuation-20260927T065521077735Z-3431b83c7c.tif",
+   "path": "gems10-h16-continuation-20260927T065521077735Z-3431b83c7c.tif",
+   "provenance": "sibling repo (public GitHub) file matching registry/live_scores.json SHA-256"
+  },
+  {
+   "label": "GEMSDOE4 combined (237f0063)",
+   "score": 0.0343,
+   "sha256": "237f0063a440b2c6c4b822bcb0f74e5203586313b3b5ed6c5cabe70fa046f63f",
+   "file": "gemsdoe4-combined-237f0063.tif",
+   "path": "gemsdoe4-combined-237f0063.tif",
+   "provenance": "sibling repo (public GitHub) file matching registry/live_scores.json SHA-256"
+  },
+  {
+   "label": "6GEMSDOE hgb88-topk03",
+   "score": 0.0286,
+   "sha256": "33cec71ff00b3f32d0d59c81c156f3f1488ffef46baa4b6499094e24ea1875ab",
+   "file": "gems6-hgb88-topk03-33cec71ff0.tif",
+   "path": "gems6-hgb88-topk03-33cec71ff0.tif",
+   "provenance": "sibling repo (public GitHub) file matching registry/live_scores.json SHA-256"
+  },
+  {
+   "label": "11GEMSDOE structural-area06-v1",
+   "score": 0.0202,
+   "sha256": "6292a7916c83d371fc650b0f0c6a090702b9890eaa6e6546d50f104eea2fadc3",
+   "file": "gems-structural-area06-v1.tif",
+   "path": "gems-structural-area06-v1.tif",
+   "provenance": "sibling repo (public GitHub) file matching registry/live_scores.json SHA-256"
+  },
+  {
+   "label": "17GEMSDOE F-ensemble-2pct",
+   "score": 0.0187,
+   "sha256": "0210da4395b209450e52e9efc780ab3ca6aceffd60c26d6f623da2b8fe76b691",
+   "file": "17GEMSDOE_F-ensemble-2pct_20260930T050626Z.tif",
+   "path": "17GEMSDOE_F-ensemble-2pct_20260930T050626Z.tif",
+   "provenance": "sibling repo (public GitHub) file matching registry/live_scores.json SHA-256"
+  },
+  {
+   "label": "GEMSDOE9 placeholder (2314b599)",
+   "score": 0.0107,
+   "sha256": "2314b59920bfeeaf6a592d4868b25eca62212825620f9945723c2f6d0a2e5b22",
+   "file": "gemsdoe9-PLACEHOLDER-2314b599.tif",
+   "path": "gemsdoe9-PLACEHOLDER-2314b599.tif",
+   "provenance": "sibling repo (public GitHub) file matching registry/live_scores.json SHA-256"
+  }
+ ]
+}
