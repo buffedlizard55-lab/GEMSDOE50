@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Ranked hypotheses — GEMSDOE50</title>
+<title>Archived hypotheses — GEMSDOE50</title>
 <style>
  body{margin:0;font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:#111;background:#fff}
  header{border-bottom:1px solid #ddd;padding:18px 20px} main{max-width:900px;margin:0 auto;padding:0 20px 80px}
@@ -13,22 +13,16 @@
 <body>
 <div role="note" style="margin:14px auto;padding:12px 16px;max-width:1100px;background:#fff1df;border-left:5px solid #a96519;border-radius:6px;font:600 15px/1.5 system-ui,sans-serif;color:#3b2b19">ARCHIVED, UNVERIFIED PRIOR WORK — this page describes earlier main-branch experiments/artifacts, not H50-S1. Do not upload files linked here. Historical local metrics and copied leaderboard notes are not a fresh independent official check, and no organizer receipt authenticates a score-to-TIFF mapping. See the <a href="../index.html">current H50-S1 project site</a>.</div>
 
-<header><h1>Ranked geological hypotheses</h1>
+<header><h1>Historical hypothesis notes — not the current H50-S1 ranking</h1>
 <nav class="mut"><a href="index.html">Overview</a><a href="executive-summary.html">How to submit</a>
 <a href="hypotheses.html">Hypotheses</a><a href="analysis.html">Why 0.2778 / what beats it</a><a href="sources.html">Sources</a></nav></header>
 <main>
 
-<p>Each hypothesis names (a) the layer(s), (b) the physical signature and transform, (c) why it can
-catch a fault <em>missing</em> from the given catalogue rather than one already in it, and (d) how it
-differs from everything already implemented in the sibling GEMSDOE repositories. Ranking is
-expected DTI improvement per unit of implementation cost; measured numbers are credit per emitted
-cell at matched mass, which is the only mass-free comparison the published metric allows.</p>
+<p><strong>Archive only.</strong> This page preserves earlier project hypotheses and local proxy numbers. Its “shipped” labels refer to legacy repository artifacts, not current portal submissions. Results were not independently reproduced in this session; none is an organizer score, and source rights/semantics remain unresolved for several inputs. The current three-candidate ranking, assumptions, and license gates are in <a href="hypotheses-preregistered.md">the H50-S1 preregistration</a>.</p>
 
-<h2>H50-1 — seismicity lineation corridors <span class="tag">SHIPPED</span></h2>
+<h2>H50-1 — seismicity lineation corridors <span class="tag">LEGACY FILE REPORTED</span></h2>
 <ul>
-<li><strong>(a) Layers.</strong> Official USGS ComCat catalogue (222,939 rows, FDSN event service,
-    public domain) → MS≥1.5, depth ≤ 20 km, 1970+, 18,142 events inside the survey; plus the USGS
-    3DEP 1 m DEM scarp descriptors for placement only.</li>
+<li><strong>(a) Layers.</strong> Legacy USGS-hosted, mixed-network ComCat extract (222,939 rows) → MS≥1.5, depth ≤ 20 km, 1970+, 18,142 historical rows inside the survey. Source-specific reuse and challenge/sponsor-sharing rights are unresolved; do not describe the whole extract as public domain or use it for H50-S1. The proposed placement layer was a GEMSDOE24-derived 3DEP scarp raster with no explicit reuse license; it is also excluded.</li>
 <li><strong>(b) Transform.</strong> Decluster (2-D triangle-area adaptation of the Ouillon &amp; Sornette
     tetrahedron test, plus a rescaled nearest-neighbour control), cluster in (x, y, 3 km/yr · t) with
     DBSCAN, split each cluster by recursive 2-means until its minor-axis σ ≤ Δ = 600 m (the
@@ -51,7 +45,7 @@ cell at matched mass, which is the only mass-free comparison the published metri
     smoothed density and uniform random at matched mass).</li>
 </ul>
 
-<h2>H50-2 — gap closure and splay continuation <span class="tag">PARTLY IN SHIPPED FILE</span></h2>
+<h2>H50-2 — gap closure and splay continuation <span class="tag">LEGACY FEATURE REPORTED</span></h2>
 <ul>
 <li><strong>(a)</strong> The same corridor set, plus catalogue trace endpoints.</li>
 <li><strong>(b)</strong> Where two corridor axes are within 1.5 km and ≤ 40° apart, emit a sparse bridge
@@ -66,7 +60,7 @@ cell at matched mass, which is the only mass-free comparison the published metri
     greedy pack absorbs them — flagged as a limitation.</li>
 </ul>
 
-<h2>H50-3 — cross-inventory disagreement <span class="tag">MEASURED, NOT SHIPPED</span></h2>
+<h2>H50-3 — cross-inventory disagreement <span class="tag">ARCHIVED LOCAL PROXY</span></h2>
 <ul>
 <li><strong>(a)</strong> USGS SGMC state compilation and NBMG QFaults/INGENIOUS traces absent from the
     given catalogue raster (61,664 cells beyond 300 m).</li>
@@ -82,10 +76,10 @@ cell at matched mass, which is the only mass-free comparison the published metri
     cannot be distinguished from leakage into the organiser’s own label source.)</li>
 </ul>
 
-<h2>H50-4 — radiometric lineaments <span class="tag">MEASURED, IN SHIPPED FILE</span></h2>
+<h2>H50-4 — radiometric lineaments <span class="tag">ARCHIVED FEATURE ONLY</span></h2>
 <ul>
-<li><strong>(a)</strong> GeoDAWN airborne radiometrics K, Th, U, total count (USGS 22103,
-    DOI 10.5066/P93LGLVQ, public domain).</li>
+<li><strong>(a)</strong> Archived GeoDAWN airborne radiometrics K, Th, U, total count (USGS 22103,
+    DOI 10.5066/P93LGLVQ). The raw-source public-domain status does not by itself document reuse rights for the legacy derived raster; it is excluded from current H50-S1.</li>
 <li><strong>(b)</strong> Gradient magnitude, then an oriented matched filter (max over 12 orientations of
     a 15-px mean — a ridge detector, not a threshold).</li>
 <li><strong>(c)</strong> Potassium and thorium anomalies map clay/silica alteration and fracture-hosted

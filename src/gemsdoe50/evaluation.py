@@ -7,6 +7,7 @@ import numpy as np
 import rasterio
 
 from .common import sha256_array, sha256_file
+from .controls import SMOOTHED_DENSITY_CONTROL_NAME
 from .holdout import SpatialBlock
 from .metric import DTIComponents, distance_weighted_tversky
 from .raster import check_same_grid
@@ -225,6 +226,10 @@ def evaluate_hypothesis(
             f"the preregistered primary incumbent {PRIMARY_INCUMBENT_NAME!r} is required; "
             "do not select an incumbent from holdout scores"
         )
+    if SMOOTHED_DENSITY_CONTROL_NAME not in baseline_maps:
+        raise ValueError(
+            f"the preregistered matched control {SMOOTHED_DENSITY_CONTROL_NAME!r} is required"
+        )
     if time_shuffle_maps is None or len(time_shuffle_maps) != TIME_SHUFFLE_CONTROLS:
         raise ValueError(
             f"the preregistered protocol requires exactly {TIME_SHUFFLE_CONTROLS} "
@@ -337,6 +342,7 @@ def evaluate_hypothesis(
     )
 
     delta = candidate["pooled"]["score"] - incumbent["pooled"]["score"]
+    density_control = method_results[SMOOTHED_DENSITY_CONTROL_NAME]
     pass_components = {
         "pooled_delta_at_least_0_005": bool(delta >= 0.005),
         "positive_fold_deltas_at_least_3_of_4": bool(sum(d > 0 for d in paired_fold_deltas) >= 3),
@@ -346,6 +352,9 @@ def evaluate_hypothesis(
         ),
         "beats_95th_percentile_time_shuffle_control": bool(
             candidate["pooled"]["score"] > time_control_q95
+        ),
+        "beats_smoothed_density_control": bool(
+            candidate["pooled"]["score"] > density_control["pooled"]["score"]
         ),
     }
     gate_pass = all(pass_components.values())
@@ -413,11 +422,26 @@ def evaluate_hypothesis(
                 for name, array in time_shuffle_maps.items()
             },
         },
+        "smoothed_density_control": {
+            "name": SMOOTHED_DENSITY_CONTROL_NAME,
+            "pooled_dti": density_control["pooled"]["score"],
+            "definition": (
+                "same relocated-event pool, 300 m Gaussian standard deviation, "
+                "normalized to [0, 1], equal prediction mass"
+            ),
+            "strictly_beaten": bool(
+                candidate["pooled"]["score"] > density_control["pooled"]["score"]
+            ),
+        },
         "promotion_gate": {
             "pass": gate_pass,
             "components": pass_components,
-            "decision": "ELIGIBLE_FOR_REVIEW_ONLY" if gate_pass else "NO_SLOT",
-            "note": "A local proxy pass does not equal portal acceptance or predict private-test performance.",
+            "decision": "HOLDOUT_PASS_REVIEW_ONLY" if gate_pass else "HOLDOUT_FAIL_NO_SLOT",
+            "note": (
+                "This is only a statistical proxy gate. Separate scientific, provenance, "
+                "and submission-eligibility gates must also pass; a local proxy pass does "
+                "not equal portal acceptance or predict private-test performance."
+            ),
         },
         "audit": {
             "candidate_score_map_sha256": sha256_array(candidate_scores.astype(np.float32)),

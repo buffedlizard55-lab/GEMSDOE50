@@ -35,24 +35,22 @@
     <td>U-Net with <code>TverskyLoss(0.2, 0.8)</code> — the metric weights re-used as a loss</td></tr>
 </table>
 
-<h2>Data actually used in this submission</h2>
+<h2>Legacy prior-work inputs — not used by H50-S1</h2>
 <table>
-<tr><th>Layer</th><th>Official source</th><th>Licence / status</th><th>Used for</th></tr>
-<tr><td>Earthquake catalogue (222,939 rows, 1906→2026)</td>
-    <td>USGS FDSN event service, <a href="https://earthquake.usgs.gov/fdsnws/event/1/">earthquake.usgs.gov/fdsnws/event/1/</a>
-        (the ComCat export is mirrored in <code>data/external/usgs_comcat_earthquakes.csv.gz</code>)</td>
-    <td>US federal government work — public domain (17 U.S.C. §105); service is free and unauthenticated</td>
-    <td>the lineation detector: declustering, cluster splitting, corridors</td></tr>
-<tr><td>USGS 3DEP 1 m DEM descriptors (12 uint8 bands)</td>
-    <td>3DEP downloader <a href="https://apps.nationalmap.gov/downloader/">apps.nationalmap.gov/downloader/</a>;
-        descriptor raster in <code>data/external/lidar_scarp_features_u8.tif</code></td>
-    <td>“USGS 3DEP products are available without use restrictions” (product receipt)</td>
-    <td>scarp-ridge placement: <code>step_max</code>, <code>lapneg_max</code>, <code>coh100</code></td></tr>
+<tr><th>Layer</th><th>Source</th><th>Rights / evidence status</th><th>Historical use only</th></tr>
+<tr><td>Mixed-network ComCat extract (222,939 rows, 1906→2026)</td>
+    <td>USGS FDSN/ComCat export mirrored in <code>data/external/usgs_comcat_earthquakes.csv.gz</code></td>
+    <td><strong>Not approved for H50-S1.</strong> Multiple preferred contributors appear in the extract. USGS documents <code>net</code> as the preferred contributor; that is not blanket proof of rights for all origins. Source-specific reuse/shareability remains unresolved. The <code>horizontalError</code> units and statistical meaning were not verified; do not call it 1-sigma.</td>
+    <td>Earlier H50-B/Seis-Ridge exploratory work only; not an H50-S1 input.</td></tr>
+<tr><td>GEMSDOE24 3DEP-derived scarp raster (12 uint8 bands)</td>
+    <td>Derived file from <code>buffedlizard55-lab/GEMSDOE24</code>; raw USGS source products are 3DEP</td>
+    <td><strong>Derived-file license unresolved.</strong> GEMSDOE24 has no root <code>LICENSE</code> and GitHub reports no repository license. Public-domain status of raw 3DEP products does not establish the derivative's reuse rights.</td>
+    <td>Historical H50-A analysis only; raster excluded from H50-S1 and no candidate contains its pixels.</td></tr>
 <tr><td>GeoDAWN airborne radiometrics K/Th/U/TC</td>
     <td>USGS 22103, DOI <a href="https://doi.org/10.5066/P93LGLVQ">10.5066/P93LGLVQ</a>, ScienceBase item
         657e1d85d34e23d3533209f7</td>
-    <td>USGS — public domain; retrieved 2026-09-26 from the official ScienceBase files</td>
-    <td>secondary ridge evidence (weight 0.55 in the credit field)</td></tr>
+    <td>The raw USGS source may be public domain, but the provenance and reuse terms for the archived derived raster have not been independently audited; it is not an H50-S1 input.</td>
+    <td>Historical secondary ridge feature only; old fusion weights are not current parameters.</td></tr>
 <tr><td>USGS SGMC state fault compilation (rasterised at 100 m)</td>
     <td><a href="https://mrdata.usgs.gov/geology/state/">mrdata.usgs.gov/geology/state/</a></td>
     <td>USGS — public domain</td>
@@ -71,10 +69,10 @@
 <tr><td>Ouillon &amp; Sornette (2011), JGR 116, B02306, <a href="https://doi.org/10.1029/2010JB007752">doi:10.1029/2010JB007752</a></td>
     <td>the tetrahedron/randomisation background test; our 2-D triangle-area reduction is our own and is labelled as an unverified adaptation in the module docstring</td></tr>
 <tr><td>Wang, Ouillon, Woessner, Sornette &amp; Husen (2013), JGR 118, 5956, <a href="https://arxiv.org/abs/1304.6912">arXiv:1304.6912</a></td>
-    <td>location-uncertainty clustering (ACLUD); our per-event horizontal-error weighting is a simplification of it, stated as such</td></tr>
+    <td>Legacy code cites location-uncertainty clustering, but its ComCat <code>horizontalError</code> input was not verified as per-event 1-sigma covariance; this old weighting is not a validated reproduction and is not used by H50-S1.</td></tr>
 <tr><td>Baiesi &amp; Paczuski (2004), PRE 69, 066106, <a href="https://doi.org/10.1103/PhysRevE.69.066106">doi:10.1103/PhysRevE.69.066106</a>;
-    Zaliapin &amp; Ben-Zion (2013), JGR 118, 2847, <a href="https://doi.org/10.1002/jgrb.50159">doi:10.1002/jgrb.50159</a></td>
-    <td>the rescaled nearest-neighbour declustering control (η = t·r<sup>d<sub>f</sub></sup>·10<sup>−bm</sup>, b = 1, d<sub>f</sub> = 1.6, log₁₀η = −5)</td></tr>
+    Zaliapin &amp; Ben-Zion (2013), JGR 118, 2847, <a href="https://doi.org/10.1002/jgrb.50179">doi:10.1002/jgrb.50179</a></td>
+    <td>Historical experimental NND screening only; fixed threshold choices were not established as transferable to Nevada. H50-S1 currently applies no standard declustering and is not slot eligible.</td></tr>
 <tr><td>Woessner &amp; Wiemer (2005), BSSA 95, 684, <a href="https://doi.org/10.1785/0120040007">doi:10.1785/0120040007</a></td>
     <td>magnitude of completeness (maximum curvature + 0.2)</td></tr>
 <tr><td>Kamer, Ouillon &amp; Sornette (2020), NHESS 20, 3611</td>

@@ -1,4 +1,9 @@
-"""Seismicity-lineament corridors from epicentre point patterns.
+"""LEGACY seismicity-lineament corridor prototype; not an H50-S1 input or candidate.
+
+This module reads a mixed-network ComCat export. Its `hor_err_km` field is a raw numeric
+`horizontalError` value stored under an inherited km name; source-specific units and sigma
+semantics are unverified. Do not use it as calibrated uncertainty or claim source-wide
+public-domain rights. See `docs/research/data-rights-audit-20261006.md`.
 
 Method and provenance
 ---------------------
@@ -56,7 +61,7 @@ class Catalog:
     lat: np.ndarray
     depth_km: np.ndarray
     mag: np.ndarray
-    hor_err_km: np.ndarray
+    hor_err_km: np.ndarray  # legacy raw field; units and statistical meaning not verified
     etype: np.ndarray
     time: np.ndarray
     utm_x: np.ndarray = None
@@ -87,7 +92,7 @@ class Catalog:
 
 def read_comcat(path: str | Path, depth_max_km: float = 30.0,
                 mag_min: float | None = 1.0, drop_anthropogenic: bool = True) -> Catalog:
-    """Read the ComCat CSV written by scripts/fetch_earthquake_catalog.py."""
+    """Read a legacy ComCat CSV; no rights or horizontal-error semantics are inferred."""
     lon, lat, dep, mag, herr, etyp, tim = [], [], [], [], [], [], []
     opener = gzip.open if str(path).endswith(".gz") else open
     with opener(path, "rt", newline="") as fh:
@@ -243,11 +248,12 @@ class Cluster:
 
 
 def cluster_inertia(cat: Catalog, labels: np.ndarray, min_events: int = 8) -> list:
-    """Spatial inertia tensor of each cluster, weighted by location uncertainty.
+    """Legacy inertia prototype; ``hor_err_km`` is not validated uncertainty.
 
-    Ouillon, Ducorbier & Sornette (2008): the full inertia tensor of a cluster decides
-    whether it is a plane/line and gives its orientation.  Location uncertainty enters
-    as 1/(sigma^2 + 1) weights (arXiv:1304.6912).
+    Ouillon, Ducorbier & Sornette (2008) describe uncertainty weighting. This inherited
+    ComCat implementation applies a heuristic 1/(value^2 + 1) to the raw ``horizontalError``
+    values after assuming kilometres; that assumption is unverified across contributors.
+    Treat outputs as exploratory only, not scientifically calibrated lineaments.
     """
     sigma = np.where(np.isfinite(cat.hor_err_km) & (cat.hor_err_km > 0), cat.hor_err_km, 1.5)
     xy = cat.xy_km

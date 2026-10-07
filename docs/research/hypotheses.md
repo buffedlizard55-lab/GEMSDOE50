@@ -1,75 +1,73 @@
-# Five candidate hypotheses, ranked, with what each would need to be true
+# Archived five-candidate hypothesis inventory
 
-Every hypothesis names the **layers**, the **physical signature**, **why it should catch
-a fault the USGS/INGENIOUS catalogue lacks**, and **how it differs from everything
-already implemented in this project's repositories**. Ranking is by *expected DTI gain
-per unit of implementation cost*. The top-ranked candidate was validated on the
-spatially blocked holdout **before** the submission file was built; the second was
-falsified there and is retained only as a diversity hedge.
+> **Historical prior-work notes only — not the current H50-S1 preregistration, input approval, or submission plan.** This page preserves earlier candidate descriptions and owner-reported local proxy outputs. It has not been independently reproduced in this session; none of the reported values is an organizer score. The H50-A scarp derivative has no explicit repository reuse license and is excluded from current work. The mixed-network ComCat extract has unresolved source-specific rights and unverified `horizontalError` semantics. See [`data-rights-audit-20261006.md`](data-rights-audit-20261006.md) and the current [`hypotheses-preregistered.md`](../hypotheses-preregistered.md).
 
-Evidence classes: `[OFFICIAL]` official source, `[MEASURED]` computed from pinned bytes
-in this repository, `[FALSIFIED]` the registered test came out negative,
-`[PROPOSED]` not yet implemented.
+Every hypothesis below records the **layers**, proposed **physical signature**, rationale, and historical difference from earlier project work. The former ranking by estimated *DTI gain per implementation cost* is an archived judgment, not a current assessment. Earlier terms such as “validated,” “falsified,” and “submission” refer to reported local proxy exercises or legacy builder behavior only; they do not establish scientific validation, organizer scoring, or present eligibility.
+
+Evidence classes in the archived records: `[OFFICIAL]` source information cited by the original notes, `[MEASURED]` local values reported from then-pinned bytes, `[FALSIFIED]` a historical local comparison reported negative, and `[PROPOSED]` not implemented at that time. These labels do not mean this session independently verified the results.
 
 ---
 
-## H50-A — LiDAR scarp-dipole chains (rank 1 — implemented, validated)
+## H50-A — LiDAR scarp-dipole chains (archived candidate; excluded from current work)
 
 * **Layers.** Owner-derived 12-channel 1 m-DEM scarp descriptor stack
   (`data/external/lidar_scarp_features_u8.tif`), decoded per its documented
   sqrt-quantisation: `ex_max, ex_mean, step_max, lapneg_max, lappos_max, downface_max,
   upface_max, cross_max, relief, coh100, strike, valid`. Derived from USGS 3DEP 1 m DEM
-  (public domain).
+  (raw 3DEP products are public domain per USGS, but the derivative's license is not established; excluded from current H50-S1 work).
 * **Signature.** `sqrt(step_max · max(upface_max, downface_max)) · sqrt(coh100 · valid)`
   — a *dipole* (a step with a consistent facing direction), then a 9-px, 16-direction
   collinearity vote that keeps only scarps continuing along a line.
-* **Why off-catalogue.** At 100 m a sub-metre scarp produces almost no signal, so
-  catalogue compilations built from regional maps and 10–30 m DEMs systematically miss
-  short, low-relief, en-echelon strands; at 1 m they are the clearest features on the
-  landscape. Expert mappers accept a fault exactly when such scarplets are collinear.
+* **Why it was proposed.** High-resolution terrain can preserve landforms much smaller
+  than a 100 m competition pixel, so aligned scarp-like features might identify strands
+  that regional compilations omit. Roads, channels, terraces, and other non-fault terrain
+  breaks are important competing explanations; collinearity alone does not establish a fault.
 * **Novelty.** In the earlier repositories the stack enters as per-pixel channels or as
   a single fused scalar; the *chain* (collinearity) vote on the dipole score is new, and
   so is its use as the dominant term of a metric-calibrated emission.
-* **[MEASURED] validation** (equal 44,090-dot budget, SGMC off-catalogue frame, `F2`):
-  scarp **0.0345** vs uniform-random control **0.0190** vs smoothed-300 m density
-  **0.0043**; at 70,000 dots: **0.0490** vs 0.0266 (random at equal spread) and 0.0084
-  (density). **Rank 1.** Cost: minutes, no new data.
+* **Archived local proxy report (not reproduced here).** Earlier repository notes
+  reported, on an equal 44,090-dot SGMC frame, values of **0.0345** for scarp features,
+  **0.0190** for uniform random, and **0.0043** for smoothed-300 m density; a separate
+  70,000-dot comparison reported 0.0490, 0.0266, and 0.0084. These are local historical
+  values, not competition scores or verified evidence of fault discovery. The input
+  derivative's reuse rights are unresolved, so this candidate is not ranked or used by
+  current H50-S1.
 
-## H50-B — Seismicity-lineament corridors from the official USGS ComCat catalogue (rank 2 — implemented, FALSIFIED as a standalone predictor)
+## H50-B — Mixed-source ComCat seismicity corridors (archived candidate; not approved for reuse)
 
-* **Layers.** Official USGS FDSN/ComCat epicentres (222,939 events in and around the
-  footprint, fetched through a GitHub-hosted runner because this sandbox cannot reach
-  `earthquake.usgs.gov`; `data/external/usgs_comcat_earthquakes.csv.gz`), joined to the
+* **Layers.** Legacy mixed-network USGS ComCat export (222,939 rows in and around the
+  footprint, fetched through a GitHub-hosted runner; `data/external/usgs_comcat_earthquakes.csv.gz`).
+  It contains multiple preferred contributors; source-specific rights and `horizontalError`
+  units/statistical semantics are unresolved, so it is not approved for current H50-S1 use. Joined to the
   grid in EPSG:32611. The competition's own seismicity bands are unusable for this
   (`ieq_n100a15` has autocorrelation 0.9935 at 3 km: constant at the metric's scale).
-* **Signature.** Ouillon–Ducorbier–Sornette (2008): cluster epicentres, then use each
-  cluster's **full 2-D inertia tensor** to keep only linear, well-sampled clusters and to
-  orient a corridor along the principal axis, with a width set by the catalogue's own
-  location error. Background/clustered separation follows Ouillon & Sornette (2011): the
+* **Archived signature.** The legacy implementation clustered epicentres, then used each
+  cluster's **full 2-D inertia tensor** to select linear groups and orient a corridor along
+  its principal axis. It set corridor width using a converted `horizontalError` value whose
+  units and statistical meaning are unresolved, so this is not calibrated uncertainty
+  weighting. Background/clustered separation was attributed to Ouillon & Sornette (2011): the
   nearest-neighbour distance distribution is compared with a Poisson null of the same
   event count in the same rectangle (`r_c = 1.61 km` [MEASURED]); the 2-D **triangle
   area** of an event with its two nearest neighbours is the dimensional analogue of the
   3-D tetrahedron-volume statistic — **this adaptation is ours and unverified**.
-* **Why off-catalogue.** Instrumental seismicity is a *dynamic* inventory: a blind,
-  low-slip fault lights up seismically while leaving no scarp (the 2020 M6.5 Monte
-  Cristo Range rupture is the regional example).
-* **Novelty.** It is the first *implementation* of this method in the project: earlier
-  repositories named H33-E and marked it data-blocked.
-* **[MEASURED] FALSIFICATION — the registered test came out negative.** At equal dot
-  budget on the catalogue-fold frame the corridors score 0.0014/0.0036/0.0036 at
-  5,000/20,000/44,090 dots against the smoothed-density baseline's
-  0.0001/0.0041/0.0112; on the off-catalogue frame 0.0015/0.0034/0.0034 against
-  0.0016/0.0023/0.0043. The corridor predictor therefore **does not beat smoothed
-  earthquake density** on either available frame (it ties at best).
-  Two structural reasons are recorded rather than hidden: (i) epicentre clusters are
-  dominated by aftershock swarms, and (ii) the off-catalogue frame selects faults
-  *far from the active catalogue*, which is precisely where instrumental seismicity is
-  weakest — the frame is biased against this hypothesis by construction.
-  Because the hypothesis is not supported, the corridors are carried in the submission
-  only at low weight (0.25 of a field whose leading term is scarp), as a diversity
-  hedge for the Final-Round rescoring against an expanded label set.
+* **Why it was proposed.** A fault without a clear surface scarp might still leave a
+  clustered seismicity pattern. Whether the Monte Cristo sequence is an independent
+  example of that mechanism requires a primary-source and geological review; the archived
+  analogy is not validation of a predictive fault map.
+* **Historical novelty claim.** Earlier repository notes described this as a first
+  implementation in the project and referenced H33-E as data-blocked; that comparison has
+  not been re-audited for this archived page.
+* **Archived local comparison (not reproduced here).** Historical notes report that,
+  at equal dot budgets, the corridors scored 0.0014/0.0036/0.0036 on a catalogue-fold
+  frame and 0.0015/0.0034/0.0034 on an off-catalogue frame, versus the listed smoothed-
+  density values. Those records described no consistent win over density, but are not
+  organizer scores and are not independently re-run in this session. The archive proposed
+  two possible explanations—aftershock-dominated clusters and a test frame far from active
+  seismicity—neither of which is established by those numbers alone. A legacy builder once
+  assigned a 0.25 weight to this field; that unlicensed, historical build is not the current
+  submission and no such layer is used by H50-S1.
 
-## H50-C — Multi-physics oriented-lineament consensus (rank 3 — implemented, best on the catalogue frame)
+## H50-C — Multi-physics oriented-lineament consensus (archived candidate; not current H50-S1)
 
 * **Layers.** Official bands `tmi` (14), `rtp` (2), `mag_anom` (1), `iso_grav_anom`
   (13), `cond_surf` (17), `depth_to_base_surf` (15), `det_elev` (12), `tilt_angle` (6).
@@ -78,64 +76,72 @@ in this repository, `[FALSIFIED]` the registered test came out negative,
   second-order **orientation order parameter** `R = |Σ_p w_p e^{2iθ_p}|/Σ_p w_p` across
   physics: a pixel scores only if independent fields agree that a line exists *and which
   way it runs*.
-* **Why off-catalogue.** The catalogue is dominated by faults that were mappable in one
-  dataset; requiring multi-physics strike agreement selects exactly the class that
-  single-dataset mapping under-represents.
+* **Proposed rationale.** Independent geophysical layers may preserve complementary
+  structural signatures; agreement in line orientation could help prioritize features
+  not obvious in one layer. The assumption requires controls for correlated acquisition,
+  processing artifacts, and terrain effects.
 * **Novelty.** Earlier repositories contain per-band ridge responses and pixel-wise
   products; none requires independent physics to agree on an *orientation*.
-* **[MEASURED]** Best field on the catalogue-fold frame (0.0217 at 44,090 dots vs 0.0209
-  random, 0.0112 density) but weak off-catalogue (0.0087 vs scarp's 0.0345). Carried at
-  weight 0.6 as the second term: it is the only component that improves the
-  catalogue-frame score without changing the off-catalogue score materially.
+* **Archived local proxy values (not reproduced here).** The old report described a
+  catalogue-fold value of 0.0217 at 44,090 dots versus 0.0209 for random and 0.0112 for
+  density, with an off-catalogue value of 0.0087 versus 0.0345 for scarp. The old fusion
+  assigned a weight of 0.6. These comparisons are not competition scores, were not
+  independently rerun here, and do not authorize use of the legacy scarp input.
 
-## H50-D — Depth-resolved seismicity lineations (rank 4 — PROPOSED, data in hand)
+## H50-D — Depth-resolved seismicity lineations (archived proposal; input rights unresolved)
 
-* **Layers.** The same ComCat catalogue, but using hypocentral **depth** and magnitude,
-  not just the epicentre.
+* **Layers.** The archived mixed-source ComCat export, with hypocentral **depth** and
+  magnitude; its reuse rights, field semantics, and completeness are unresolved, so it is
+  not an approved data source for this proposed work.
 * **Signature.** For each candidate corridor, take the events inside it, project them
   onto the vertical plane containing the corridor axis, and test (a) that the
   along-strike length exceeds the across-strike width in map view, **and** (b) that the
   depth distribution forms a plane (or a dipping line) rather than a diffuse cloud —
   i.e. the 3-D inertia tensor's smallest eigenvalue is close to the location-error
   variance.
-* **Why off-catalogue.** It removes the dominant confounder of H50-B: swarms and
-  aftershock clouds are diffuse in depth, whereas a fault plane is a plane. The 2-D
-  epicentre test cannot make that distinction; the 3-D test can, and the catalogue has
-  depth for every event (median 5.0 km, p90 10.4 km [MEASURED]).
-* **Novelty.** No earlier repository used earthquake *depths*; H33-E and H45 were
-  epicentre-only or depth-clustered without the inertia-tensor plane test.
-* **Cost.** Low (data already fetched). **Expected gain.** Moderate — it is the
-  best-justified repair of a falsified method, and its own falsification test is
-  pre-specified: it must beat both the epicentre-only corridors *and* smoothed density
-  at equal dot budget on the SGMC off-catalogue frame.
+* **Proposed rationale.** Depth might help distinguish some planar sequences from diffuse
+  clusters, but aftershocks can themselves occupy planes, and catalog depths carry error.
+  A 3-D fit would not eliminate the swarm confounder without declustering and uncertainty
+  analysis.
+* **Historical novelty claim.** Earlier notes stated that H33-E and H45 did not use this
+  exact plane test; that prior-work comparison has not been re-audited here.
+* **Archived cost estimate and expected gain.** Earlier notes called implementation low
+  cost and expected a moderate gain, with a proposed equal-budget comparison against
+  epicentre corridors and smoothed density. Those estimates are unverified; the required
+  input is not approved for reuse, and the test has not been run under the current protocol.
 
-## H50-E — Fluid-path alignment (rank 5 — PROPOSED, data in hand)
+## H50-E — Fluid-path alignment (archived proposal; dataset rights need review)
 
-* **Layers.** GDR 1391 (DOI 10.15121/1881483, CC BY 4.0) well/spring temperatures and
-  chemistry (`gdr_wellspring_in_footprint.csv`), paleo-geothermal sinter/tufa
-  (`derived_gdr_paleo_100m_u8.tif`), Quaternary volcanic vents
-  (`derived_gdr_volcanics_100m_u8.tif`), plus `depth_to_base_surf` and `cond_surf`.
+* **Layers.** Earlier notes proposed GDR 1391 (DOI 10.15121/1881483, reported there as
+  CC BY 4.0) well/spring temperatures and chemistry, plus derived paleo-geothermal and
+  volcanic rasters and competition feature bands. The item-level terms and provenance of
+  those derived files have not been re-audited for this work; they are not current H50-S1
+  inputs.
 * **Signature.** Point-pattern alignment: fit straight lines through chains of thermal
   features (not a kernel density of them), and require the chain to coincide with a
   gradient ridge of the conductive-basement surface.
-* **Why off-catalogue.** Faults are the permeability conduits of the Great Basin;
-  a line of springs that follows a basement step is a structural trace even where no
-  scarp survives. The catalogue records surface expression, not subsurface permeability.
+* **Proposed rationale.** Faults can provide permeability pathways in geothermal
+  settings. A spatially coherent spring chain near a basement gradient could motivate a
+  structural hypothesis, but would require independent geological review and controls;
+  proximity alone does not identify a fault or establish productivity.
 * **Novelty.** Earlier repositories tested vent *corridors* as density and
   basement-edge holdouts separately (H32-01, H32-05); the *alignment* of thermal points
   with a basement gradient ridge is a relational feature, and the well/spring chemistry
   table has never been used as a point pattern.
-* **Cost.** Low (all data on disk). **Expected gain.** Low-to-moderate; the falsification
-  test is the same equal-budget one used above.
+* **Archived cost estimate.** Described as low because prior notes claimed the files
+  were present; availability and reuse rights have not been verified in this audit.
+  **Expected gain.** Qualitative low-to-moderate proposal only; no test was run.
 
 ---
 
-## Ranked decision table
+## Archived comparison table — not the current preregistered ranking
 
-| rank | hypothesis | layers | signature | off-catalogue reason | novelty | cost | validation |
-| ---: | --- | --- | --- | --- | --- | --- | --- |
-| 1 | **H50-A** scarp-dipole chains | 12-ch scarp stack | dipole × 16-direction chain vote | sub-100 m strands invisible to regional mapping | chain vote on the dipole score | minutes | **validated** (2.2× random off-catalogue) |
-| 2 | **H50-B** seismicity corridors | USGS ComCat | 2-D inertia tensor + Poisson crossover | active blind faults are seismic | first implementation in the project | minutes | **[FALSIFIED]** vs density on both frames |
-| 3 | **H50-C** multi-physics lineaments | 8 official bands | Hessian line × orientation order parameter | single-dataset mapping misses what only multiple fields agree on | orientation agreement across physics | minutes | validated on catalogue frame only |
-| 4 | **H50-D** depth-resolved lineations | ComCat + depth | 3-D inertia tensor plane test | kills the swarm confounder of H50-B | first use of hypocentral depth | minutes | pre-specified, not run |
-| 5 | **H50-E** fluid-path alignment | GDR thermal + basement | line fit through thermal points × basement ridge | faults are the permeability conduits | thermal points used as a point pattern | minutes | pre-specified, not run |
+| archived rank | candidate | proposed inputs | physical rationale | historical novelty claim | historical cost / impact estimate | evidence in old notes |
+| ---: | --- | --- | --- | --- | --- | --- |
+| 1 | H50-A scarp-dipole chains | 12-band GEMSDOE24 scarp derivative | Aligned terrain breaks may flag small geomorphic lineaments | Chain vote on a dipole score | Low / moderate | Local proxy values reported, but not reproduced; reuse rights unresolved; excluded |
+| 2 | H50-B seismicity corridors | Mixed-source ComCat extract | Seismicity may mark structures with weak surface expression | Earlier notes called it a first project implementation | Low / uncertain | Old proxy notes reported no consistent advantage over density; not re-run; rights unresolved |
+| 3 | H50-C multi-physics lineaments | Eight competition feature bands | Multiple layers may carry complementary orientation evidence | Orientation agreement across layers | Low / uncertain | Historical local proxy values only; not re-run; not a current submission component |
+| 4 | H50-D depth-resolved lineations | ComCat plus depth | Hypocenter depth may help characterize 3-D clusters | Prior notes described a new plane test | Low / speculative | Proposed only; not run under current protocol; data rights unresolved |
+| 5 | H50-E fluid-path alignment | GDR spring data, derived rasters, feature bands | Spring chains near basement gradients may motivate structural review | Thermal point alignment with a gradient ridge | Low / speculative | Proposed only; data availability and item-level rights not re-audited |
+
+The **current** three-candidate ranking is in [`hypotheses-preregistered.md`](../hypotheses-preregistered.md). None of the archived candidates above is an authorized H50-S1 input unless its data-rights, scientific, and source-provenance gates are independently resolved.

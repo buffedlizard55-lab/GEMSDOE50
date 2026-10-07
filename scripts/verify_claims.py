@@ -39,15 +39,26 @@ def main() -> int:
     check("feed maps no organizer score to TIFF", feed.get("legacy_artifact", {}).get("organizer_score") is None)
     check("H50-S1 status does not assert an organizer score", feed.get("h50_s1", {}).get("organizer_score") is None)
     check("registry carries no copied leaderboard rows", "public_leaderboard_2026_10_06" not in submissions)
-    check("README rejects unverified/current score claims", "not a fresh independent official check" in README)
     check(
-        "prior-work notes make no score-to-TIFF assertion",
-        "no score-to-tiff mapping is authenticated" in prior.lower(),
+        "README treats 0.2778 as unresolved and 0.3195 as historical",
+        "`0.2778` score-to-artifact association remains unresolved" in README
+        and "not independently verified" in README,
     )
-    check("protocol fixes H50-prior before holdout scoring", "H50-prior is the fixed primary incumbent" in protocol)
+    check(
+        "prior-work notes require organizer receipt for score-to-file mapping",
+        "score-to-file mapping" in prior
+        and "No score-to-TIFF mapping is authenticated" in prior,
+    )
+    check(
+        "protocol fixes H50-prior before holdout scoring",
+        "**Primary incumbent:** H50-prior" in protocol,
+    )
     check("evaluator uses a fixed incumbent, not max holdout score", "max(baseline_names" not in evaluator)
     check("evaluator requires all 20 time-shuffle controls", "TIME_SHUFFLE_CONTROLS = 20" in evaluator)
-    check("legacy ComCat inputs are excluded from H50-S1", "does **not** consume these ComCat" in external)
+    check(
+        "legacy mixed-network ComCat inputs are excluded from H50-S1",
+        "does **not** consume the mixed-network ComCat extract" in external,
+    )
     check("scheduled ComCat refresh is disabled", "schedule:" not in feed_workflow and "if: ${{ false }}" in feed_workflow)
     check("ComCat fetch workflow is disabled", "if: ${{ false }}" in fetch_workflow)
     check("site workflow cannot push generated changes", "git push" not in site_workflow)

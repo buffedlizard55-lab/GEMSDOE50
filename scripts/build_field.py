@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""Assemble the evidence layers and the fused belief field.
+"""ARCHIVED legacy layer builder; command-line execution is disabled.
+
+The former pipeline consumes a mixed-network ComCat extract and GEMSDOE24-derived scarp
+features whose reuse rights/semantics are unresolved. Do not use it for H50-S1. This
+module's old functions remain in source for historical audit only.
+
+Historical description of the old layer builder:
 
 Components (each label-free — none of them reads the fault catalogue):
 
@@ -233,4 +239,7 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    raise SystemExit(
+        "Disabled legacy builder: ComCat source rights and GEMSDOE24-derived scarp reuse rights "
+        "are unresolved. No output was generated; see docs/research/data-rights-audit-20261006.md."
+    )

@@ -37,8 +37,9 @@
   "official": 1
  },
  "notes": [
-  "Official USGS public-domain data; no licence restriction (USGS data are public domain, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits).",
-  "Rows with type in {explosion, quarry blast, mining explosion, anthropogenic event} are flagged, not silently deleted: the analysis removes them explicitly.",
-  "horizontalError is the catalogue's own 1-sigma epicentre uncertainty in km; it is used as the location-uncertainty weight (arXiv:1304.6912)."
+  "Legacy mixed-network ComCat extract. USGS-produced records may be public domain, but the preferred-contributor field (`net`) does not establish rights for every row; source-specific terms and challenge/sponsor-sharing rights remain unresolved. Not authorized as a current H50-S1 input.",
+  "Event `type` values are retained as source metadata. Historical filtering claims were not independently verified; this summary does not certify complete screening of anthropogenic or induced events.",
+  "The `horizontalError` unit and statistical meaning were not verified for each contributing network. Do not describe it as a 1-sigma uncertainty or convert/weight it without source-specific documentation.",
+  "This extract is excluded from H50-S1. See data/external/README.md and docs/research/data-rights-audit-20261006.md for the corrected rights and scientific-status review."
  ]
 }

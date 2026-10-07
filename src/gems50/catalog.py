@@ -1,22 +1,17 @@
-"""Loading and quality control of the official USGS ComCat catalogue.
+"""Legacy loader for a mixed-source export from the USGS-hosted ComCat service.
 
-Source (official, free, public domain)
---------------------------------------
-USGS FDSN event web service / ANSS Comprehensive Earthquake Catalog (ComCat)
-  service : https://earthquake.usgs.gov/fdsnws/event/1/
-  docs    : https://earthquake.usgs.gov/fdsnws/event/1/
-  licence : USGS data are public domain
-            https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits
+This module belongs to prior GEMSDOE50 experiments and is not used by H50-S1. A request to
+the USGS ComCat service does not establish that every preferred contributor's record is a
+USGS work or public domain. ComCat documents ``net`` as the preferred contributor and
+``sources`` as contributing networks; source-specific rights and challenge/sponsor-sharing
+terms for the inherited mixed-network extract remain unresolved. See
+``docs/research/data-rights-audit-20261006.md`` before any reuse.
 
-The competition's own feature stack carries two seismicity layers (``ieq_n100a15`` and
-``deq_n100a15``) that are *density* fields over a ~100 km support; at the 300 m scale of
-the metric they are effectively constant, so they cannot express fault geometry.  The raw
-catalogue is therefore the only route to the geometry, which is what this module loads.
-
-Everything this module returns is derived from the catalogues' own fields; nothing is
-imputed silently.  Events whose ``type`` is not ``earthquake`` (quarry blasts, explosions,
-mining events, nuclear explosions, ...) are flagged, not deleted, so that the analyst can
-count them.
+The legacy code stores ``horizontalError`` under a kilometre-oriented variable name and
+uses it as an uncertainty value. The field's unit and statistical interpretation were not
+verified for each network. It must not be described as 1-sigma or used as a calibrated
+location uncertainty without source-specific documentation. H50-S1 does not load this
+extract or use ``horizontalError``.
 """
 
 from __future__ import annotations
@@ -57,7 +52,7 @@ _TO_UTM = Transformer.from_crs("EPSG:4326", "EPSG:32611", always_xy=True)
 class Catalog:
     """A catalogue ready for spatial analysis, with its QC record."""
 
-    frame: pd.DataFrame  # columns: time (datetime64), x, y, depth, mag, h_err_km, net, type
+    frame: pd.DataFrame  # legacy columns; h_err_km is a raw field under an unverified unit/meaning assumption
     qc: dict
 
     def __len__(self) -> int:
@@ -73,7 +68,7 @@ class Catalog:
 
     @property
     def h_err(self) -> np.ndarray:
-        """Epicentral 1-sigma uncertainty in km; catalogue value or regional fallback."""
+        """Legacy numeric error-field values; units and sigma semantics are unverified."""
         return self.frame["h_err_km"].to_numpy(dtype=np.float64)
 
     @property
@@ -153,11 +148,12 @@ def build_catalog(
     tectonic_only: bool = True,
     default_h_err_km: float | None = None,
 ) -> Catalog:
-    """Full QC pipeline: project, clip to footprint, filter type/magnitude/depth/epoch.
+    """Legacy QC pipeline. Not approved for H50-S1 or use as uncertainty-aware analysis.
 
-    ``default_h_err_km`` is the fallback epicentral uncertainty for events whose catalogue
-    row has no ``horizontalError`` (mostly pre-1990 events).  When ``None`` the median of
-    the events that *do* carry one is used, and that choice is recorded in ``qc``.
+    ``default_h_err_km`` is a historical compatibility parameter. The input extract's
+    ``horizontalError`` units/statistical interpretation are not verified; the fallback and
+    output column name must not be read as calibrated uncertainty. The H50-S1 workflow does
+    not call this function.
     """
     raw = load_csv(path)
     df = project(raw)

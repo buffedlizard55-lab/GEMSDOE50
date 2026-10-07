@@ -9,9 +9,10 @@ Three facts drive every design choice here, and each is verified in ``tests/``:
    why the group's best-scoring files are sparse "dotted" rasters.)
 2. **Mass must stop at the metric's own bar.**  Adding a unit of mass at a cell with
    kernel weight ``w`` raises DTI iff ``w > 0.2 * DTI`` (exactly: see
-   :func:`gems50.metric.marginal_condition`).  At the incumbent's 0.2778 the bar is
-   0.0556 credit per emitted pixel, so evidence whose best locations project *below* that
-   value must not be emitted at all.
+   :func:`gems50.metric.marginal_condition`). If illustrated with the historically
+   reported 0.2778, the threshold is 0.0556 credit per emitted pixel. That score-to-file
+   association remains unresolved; it is not a verified incumbent or current organizer
+   score and must not be used as a live submission target.
 3. **Kernel overlap is waste.**  Two dots closer than the 3-cell kernel radius compete for
    the same truth pixels; the second one adds little and still pays the 0.2 tax.  So the
    packing suppresses a neighbourhood around every accepted dot (greedy maximum coverage).
