@@ -15,7 +15,7 @@
 7. **Work autonomously and auditably.** Review rules, data, sources, prior attempts, and limitations; record every material decision and irregularity; run multiple implementation/review passes; fix defects found; and maintain a concise next-steps list. Do not ask the owner to do research or resolve issues the agent can verify independently.
 8. **Keep the score context honest.** The owner-quoted `0.3195` is historical, not the live leader. Prior sibling-repository notes contain conflicting historical leaderboard values and are not a fresh independent official check; do not repeat them as current official scores or map any score to a TIFF without organizer-verified provenance. DrivenData's Terms of Use prohibit automated monitoring/copying and manual monitoring/copying without prior written consent. This repository links to the official board but does not scrape, poll, or publish leaderboard snapshots.
 9. **Follow the prize rules.** The September 2026 NLR/DOE rules require an AI-use disclosure in the narrative, permit up to three feedback submissions per week, and require selection of one final submission for both prize rounds. Finalists must provide reproducible code/assets and documentation. The competition ends December 3, 2026 at 23:59 UTC (verify the official page before any deadline-dependent action).
-10. **Create and merge a PR when practical.** Keep all work on Arena's fixed branch `arena/5e2ce8c3-gemsdoe50`. Run tests and review the PR before merging. Do not switch branches or push elsewhere.
+10. **Create and merge a PR when practical.** Keep all work on Arena's fixed branch for the current session (`arena/1368e772-gemsdoe50`; earlier sessions ran on `arena/5e2ce8c3-gemsdoe50`). Run tests and review the PR before merging. Do not switch branches or push elsewhere.
 
 ## Current evidence and decision (2026-10-07 UTC)
 
@@ -96,13 +96,16 @@ drift from the evidence. `.github/workflows/h50s1-site-and-checks.yml` and `site
 four root pages and fail the build if the committed bytes differ.
 
 **One-click download (top of the site):**
-`downloads/gemsdoe50-h51-corridor-consensus-mix-20261007T0200Z.tif` — SHA-256
-`a26055834f8e6cc57cc33e96a4a5a26a1adeaafbeec490135af84c6ccd4d1da0`, 339,039 bytes, 30,000
-predicted pixels, values `0` / `1`, `float32`, EPSG:32611, 3730×3292, NaN outside the published
-footprint, all in-footprint values finite and inside `[0, 1]`. An `-allfinite.tif` sibling sets
-`0` outside the footprint for portals that reject non-finite values, so the historical error
-`Predicted values must be in range [0, 1]` cannot recur. A `.zip` of the same GeoTIFF is also
-offered.
+`docs/downloads/gemsdoe50-h52-scarpdisperse-90000-allfinite.tif` — 90,000 predicted pixels,
+values `0` / `1`, `float32`, EPSG:32611, 3730×3292, identical bounds and transform to the official
+template, **every one of the 12,279,160 cells finite and inside `[0, 1]`**. A `-nan.tif` sibling
+keeps `NaN` outside the study footprint to match the official sample submission, and a `.zip`
+carries the all-finite GeoTIFF. The all-finite variant is the primary download precisely because
+the portal once rejected an upload with `Predicted values must be in range [0, 1]`: a non-finite
+cell makes a plain `min()/max()` validator see `NaN`, and `NaN <= 1` is false. Full numbers on the
+page; machine-readable in `evidence/h52_build.json`, `evidence/h52_holdout.json`,
+`evidence/h52_holdout_offcat.json`, `evidence/h52_check_submission.json` and
+`evidence/h52_uniqueness.json`.
 
 **How to submit (manual, by the owner, never by this repository):** (1) download the `.tif` and
 verify the SHA-256 shown on the page; (2) open
@@ -112,12 +115,42 @@ in; (3) upload the single-band GeoTIFF without re-saving, re-projecting or re-co
 receipt in this repository before claiming any score. `submission.html` carries the same checklist
 with the portal's own warnings.
 
-**Status of the artifact.** Format gate PASS and frozen uniqueness gate PASS (worst 2 px-proximity
-IoU 0.4219 against 26 prior artifacts, 0 pixels shared with any of them). Instrument prediction
-**0.1684** — *below* this repository's best delivered artifact (owner-quoted 0.2778) and below the
-owner-quoted 0.3195 target — and the pre-registered `sgmc_off` proxy gate FAILS. It is published as
-a measurement the owner may choose to spend one slot on, not as a predicted win; the page says so
-above the download.
+**Status of the H52 artifact.** Format gate **PASS** (`all_checks_pass: true` on the NaN variant;
+the all-finite variant has zero non-finite cells; no value outside `[0, 1]`). Uniqueness gate
+**PASS** (worst full-pixel IoU **0.0154** against every prior artifact on disk, minimum novel
+fraction at 2 px proximity 0.4805, no SHA-256 match, zero pixels shared with the given catalogue).
+Frozen macrofold holdout, off-catalogue instrument: pooled **0.1733** vs a matched-mass uniform
+control 0.1184, **4/4** macrofolds positive, paired block-bootstrap 95 % CI **[0.0261, 0.0854]**,
+and it beats the translation controls in 4/4 folds. Transfer-calibrated modelled hidden DTI
+**0.386**, which is **a model, not a receipt**: `docs/research/h52-diagnosis.md` §5 states the
+transfer assumption and §9 states plainly what would be needed to actually beat 0.3774. No claim
+of portal acceptance is made, because no upload receipt exists.
+
+### H52 — the current best-measured design, and what changed on 2026-10-07
+
+Read [`docs/research/h52-diagnosis.md`](docs/research/h52-diagnosis.md) (why 0.2778 topped the
+corpus, and the arithmetic of what 0.3774 requires) and
+[`docs/hypotheses-20261007-h52.md`](docs/hypotheses-20261007-h52.md) (five untried hypotheses,
+screened and ranked; two negative results recorded). Three findings from that work are binding on
+anything built afterwards:
+
+1. **The corpus's structural flaw is emission geometry, not detector content.**
+   `DTI = T / (0.2N + 0.8G)` is exact for binary unit dots, so every dot costs `0.2` in the
+   denominator whatever it earns. Selecting the top-*N* pixels of any evidence field piles dots a
+   few pixels deep on the strongest feature, where the `max` in `TP_w` saturates and `0.2N` does
+   not. H52 emits **variable-density blue noise at exactly 3 px separation** — `R = 300 m`, the
+   coarsest spacing at which two dots never compete for the same truth pixel — which is also the
+   geometry actually measured on the group's best off-catalogue prior artifact.
+2. **Only the LiDAR surface-morphology family carries information about faults the given
+   catalogue does not contain.** Channel screen, enrichment over the scored domain:
+   LiDAR up-face residual **1.42**, relief 1.40, five scarp descriptors 1.21-1.42;
+   **every** magnetic and radiometric residual 1.02-1.09 (TMI gradient 1.02).
+3. **A statistic that the H51 series was ranked on does not exist** — the `ρ = +0.566` / `+0.534`
+   magnetic alignment attributed to `evidence/h51_residual_alignment.json` is not in that file
+   (which measures `f_gmtmi95` at `+0.125` raw, p = 0.552). The claim is withdrawn in place in
+   [`docs/research/h51-hypotheses.md`](docs/research/h51-hypotheses.md) with the provenance of the
+   real numbers shown. This is the single most important irregularity found in the project so far
+   and it is recorded rather than quietly fixed.
 
 ### Two verified candidates now exist — and one shared frame orders them
 

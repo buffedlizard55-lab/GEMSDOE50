@@ -1,5 +1,59 @@
 # H51 candidate hypotheses, ranked
 
+> ## ⚠ CORRECTION — 2026-10-07 UTC: the magnetic-alignment statistic in this document was never real
+>
+> This document states four times (lines 16–17, 180, 232, and in the H51-A section) that the
+> fraction of an artifact's dots inside the TMI-lineament mask is the only layer alignment with a
+> positive, robust association to score, quoting **`ρ = +0.566` (p = 0.003)** raw and
+> **`+0.534` (p = 0.006)** after controlling `log10 N`, and citing
+> `evidence/h51_residual_alignment.json` as the source. **That file does not contain those
+> numbers.** Its measured content, recomputed and re-read on 2026-10-07, is:
+>
+> | feature in `evidence/h51_residual_alignment.json` | raw `rho` | p | partial `rho` | p |
+> | --- | ---: | ---: | ---: | ---: |
+> | `f_gmtmi95` (the TMI alignment this document is about) | **+0.125** | 0.552 | **−0.385** | 0.058 |
+> | `f_gmK95` (radiometric K) | +0.192 | 0.359 | +0.104 | 0.621 |
+> | `f_ex95` (LiDAR excess q95) | +0.097 | 0.644 | **+0.590** | 0.0019 |
+> | `f_ex99` | −0.141 | 0.501 | **+0.591** | 0.0019 |
+> | `f_step95` | −0.083 | 0.692 | **+0.505** | 0.0099 |
+> | `f_step99` | −0.321 | 0.117 | +0.379 | 0.062 |
+> | `f_ring0_1` / `f_ring1_2` / `f_ring2_3` | −0.464 / −0.509 / −0.495 | 0.019 / 0.009 / 0.012 | −0.565 / −0.575 / −0.584 | 0.0033 / 0.0027 / 0.0022 |
+> | `f_hot10` (thermal-spring proximity) | **−0.527** | 0.007 | −0.382 | 0.059 |
+>
+> Three further claims in the same paragraphs are also wrong in sign or magnitude:
+>
+> * "extreme LiDAR-scarp quantiles are **negatively** associated with score (`ex99`: `ρ = −0.722`,
+>   partial −0.620, p = 0.001; `step99`: −0.802)" — the file says `f_ex99` raw −0.141 (p = 0.501)
+>   and partial **+0.591** (p = 0.0019), and `f_step99` raw −0.321 (p = 0.117), partial **+0.379**.
+>   The LiDAR-scarp family is the one family that is *positively* associated with score once mass is
+>   controlled, which is the opposite of what this document concludes.
+> * "the corpus spends only ~5 % of its dots there" — not reproducible from any file in this
+>   repository; no per-artifact TMI coverage table exists here.
+> * "the three highest-scoring artifacts are almost identical in all eleven measured alignments" —
+>   the file holds eleven features but no per-artifact matrix, so this cannot be checked and should
+>   not be cited.
+>
+> **Where `+0.566` and `+0.534` actually came from.** They are AUC values, not rank correlations,
+> and they are not from this repository. `0.5658749925558758` is
+> `/references/candidate/primary/fold_aucs[0]` in the sibling repository's
+> `docs/data/audit.json`, and `0.534...` values appear there as `null_aucs[4]`, `null_aucs[15]`,
+> `null_aucs[30]`, `null_aucs[93]` under `/references/*/shift_diagnostic/`. Inside this repository
+> the string also appears once, at `evidence/h51_truth_map.json` key
+> `/grids/32/phi[919] = 0.5662404620083589` — a **single spatial block's phi for a single artifact
+> grid**, which is not a corpus-wide association statistic either.
+>
+> **Consequences, applied the same day.** H51-A's rank-1 position rested on this number and is
+> withdrawn; the H52 register (`docs/hypotheses-20260707-h52.md`, corrected path
+> `docs/hypotheses-20261007-h52.md`) re-ran the full channel screen and measured the magnetic and
+> radiometric residual/gradient channels at **1.02 – 1.09 enrichment** against a **1.42** head for
+> the LiDAR scarp family, and rejected the magnetic family on that basis. The claims in the body of
+> this document are left in place rather than edited, so the record of what was believed and when
+> stays intact; the numbers, not the prose, are corrected.
+>
+> **Process fix.** Every statistic quoted from here on must be reproducible by a command in the
+> repository. `scripts/verify_claims.py` is the existing hook for that; a follow-up item is recorded
+> in the pull request to extend it to the `docs/research/*.md` citations it does not yet cover.
+
 Ranking criterion, in the order the charter requires: **expected improvement in captured hidden
 truth `T`** (section 3 of `docs/research/h51-analysis.md` shows every point of leaderboard score is
 a point of coverage of the same ~12,226 hidden pixels), then implementation cost, then whether the
@@ -12,16 +66,22 @@ scoring, so reproducing them is worth exactly nothing.
 Measured starting point (`evidence/h51_residual_alignment.json`, `evidence/h51_consensus.json`,
 25 hash-verified artifacts with owner-quoted scores):
 
-* the fraction of an artifact's dots inside the TMI-lineament mask is the **only** layer alignment
+* ~~the fraction of an artifact's dots inside the TMI-lineament mask is the **only** layer alignment
   with a positive, robust association to score: raw `ρ = +0.566` (p = 0.003), partial controlling
-  `log10 N` `+0.534` (p = 0.006);
+  `log10 N` `+0.534` (p = 0.006);~~ **[WITHDRAWN 2026-10-07 — the cited file says `f_gmtmi95`
+  raw `+0.125` (p = 0.552), partial `−0.385`; see the correction notice at the top of this file.
+
+  What the file *does* support: the LiDAR-scarp excess quantiles `f_ex95`/`f_ex99` are the family
+  positively associated with score after controlling `log10 N` (partial +0.590, p = 0.0019), and
+  artefacts whose dots sit near thermal springs score lower (`f_hot10` raw −0.527, p = 0.007).]**
 * the corpus spends only ~5 % of its dots there (prevalence 5.0 %), so it is exploiting that
   evidence no more than chance;
 * extreme LiDAR-scarp quantiles are **negatively** associated with score in this corpus
   (`ex99`: `ρ = −0.722`, partial −0.620, p = 0.001; `step99`: −0.802) — the group's scarp-quantile
   families are the ones that plateaued at 0.09–0.16;
-* the three highest-scoring artifacts are almost identical in all eleven measured alignments,
-  i.e. the corpus's top end is **one idea**, not several.
+* ~~the three highest-scoring artifacts are almost identical in all eleven measured alignments,
+  i.e. the corpus's top end is **one idea**, not several.~~ **[WITHDRAWN 2026-10-07: the file holds
+  no per-artifact alignment matrix, so this is unverifiable here.]**
 
 ---
 
@@ -177,7 +237,7 @@ description of each idea. The new evidence that moves the ranking:
 | rank | hypothesis | lever | expected ΔDTI | cost | validated locally? |
 | ---: | --- | --- | ---: | --- | --- |
 | **1** | **P1 — dot-economy pruning of the champion structure** | `T/N` of the *same* structure | **+0.01 … +0.05** | **low (CPU, hours)** | marginal inequality measured; the gain itself is *not* measurable without a slot |
-| **2** | **P2 — magnetic-lineament corridors** (H51-A) | coverage of a strand no detector reaches | +0.02 … +0.06 if a strand is hit | medium | alignment ρ = +0.566 (p = 0.003), partial +0.534 (p = 0.006) |
+| ~~**2**~~ | ~~**P2 — magnetic-lineament corridors** (H51-A)~~ **WITHDRAWN 2026-10-07** | — | — | — | the cited alignment statistic does not exist; the channel screen measures magnetics at 1.02–1.09 enrichment vs 1.42 for the LiDAR scarp family. See `docs/hypotheses-20261007-h52.md`. |
 | **3** | **P3 — seismicity-lineament corridors** (H50-S1/H51 lineage, the owner's own method) | coverage on the 41 % the corpus misses | unknown, tail-heavy | medium | **best independent-frame result in the project** (sgmc_off 0.1464, 2.5× uniform; Monte Cristo hit with the density control beaten) |
 | **4** | **P4 — relay/step-over bridges between existing fault tips** (H51-C) | new location class, no new data | +0.005 … +0.03 | low | not yet run |
 | **5** | **P5 — 1 m LiDAR scarp curvature** (H51-D) | resolution the 30 m products cannot reach | unknown | high | not yet run; data obtainability verified below |
@@ -228,8 +288,11 @@ description of each idea. The new evidence that moves the ranking:
   or radiometric geometry, and the previous session's TMI attempt (`TMI_up150`) lost to a random
   control at the wrong scale — this version uses 500/1,500 m continuation and a ridge (not
   amplitude) transform.
-* **Expected ΔDTI**: +0.02 … +0.06 if a strand is hit; the measured association is
-  ρ = +0.566 (p = 0.003) raw and +0.534 (p = 0.006) after controlling log₁₀N.
+* **Expected ΔDTI**: ~~+0.02 … +0.06 if a strand is hit; the measured association is
+  ρ = +0.566 (p = 0.003) raw and +0.534 (p = 0.006) after controlling log₁₀N.~~
+  **WITHDRAWN 2026-10-07**: the association is not in the cited evidence file; the measured
+  TMI alignment is `+0.125` raw (p = 0.552) and `−0.385` partial. The channel screen independently
+  finds the magnetic family uninformative about unmapped faults (1.02–1.09 vs 1.42).
 * **Data source, licence, obtainability**: GeoDAWN/DOE airborne geophysics via the sibling
   `GEMSDOE24` repository's committed raster (`data/external/geodawn_extensions_u8.tif`, 26 MB,
   public GitHub). **Verified present in this environment**; the upstream USGS/DOE ScienceBase

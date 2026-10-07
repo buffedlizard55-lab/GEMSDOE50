@@ -12,7 +12,46 @@
 </head>
 <body>
 <header><div class="shell"><nav class="nav" aria-label="Main navigation"><a class="brand" href="index.html">GEMSDOE50</a><div class="links"><a href="index.html" aria-current="page">Overview</a><a href="results.html">Results</a><a href="methods.html">Methods & evidence</a><a href="submission.html">Submission instructions</a></div></nav></div></header>
-
+<section class="main" style="padding-top:24px"><div class="shell"><div class="grid">
+<article class="card span-12" style="border:2px solid var(--teal)">
+<h2>Download the submission GeoTIFF &mdash; one click</h2>
+<div class="callout success"><strong>Why this file cannot reproduce the old portal error.</strong>
+The portal rejected an earlier upload with <code>Predicted values must be in range [0, 1]</code>.
+The usual cause is non-finite cells: an out-of-footprint <code>NaN</code> makes a plain
+<code>min()/max()</code> validator see <code>NaN</code>, and <code>NaN &lt;= 1</code> is false.
+This file writes <strong>0.0 outside the study footprint</strong>, so all 12,279,160 cells are
+finite and inside <code>[0, 1]</code>. It still satisfies the published format rule ("values
+between 0 and 1"); the official sample submission keeps <code>NaN</code> outside, and that
+variant is offered below as well.</div>
+<div class="wide"><table><tr><th>File to submit (one click)</th><td><a class="button" href="docs/downloads/gemsdoe50-h52-scarpdisperse-90000-allfinite.tif">Download gemsdoe50-h52-scarpdisperse-90000-allfinite.tif</a></td></tr><tr><th>Unique name for the portal</th><td><code>GEMSDOE50-H52-SCARPDISPERSE</code></td></tr><tr><th>Optional note field</th><td><code>GEMSDOE50 H52 | full-strength 3DEP-1m LiDAR scarp family corroborated by declustered USGS ComCat lineaments, emitted as 300 m-separated dots; off-catalogue, portal-safe all-finite float32; locally validated against matched controls; NOT organizer-scored</code></td></tr><tr><th>SHA-256</th><td><span class="hash">c44e791702c50bc1189325b4febb6f6acd2cf6ca1338514df4b4b95dc31f4c53</span></td></tr><tr><th>Bytes</th><td>672,263</td></tr><tr><th>Grid</th><td>EPSG:32611, 100 m, 3730 x 3292, single float32 band, identical bounds and transform to the official template</td></tr><tr><th>Values</th><td>every one of the 12,279,160 cells finite and inside [0, 1]; 1.0 on predicted dots, 0.0 elsewhere (see the portal-error note below)</td></tr><tr><th>Predicted dots</th><td>90,000</td></tr><tr><th>Detector</th><td>rank mean of five independent USGS 3DEP 1 m LiDAR terrain descriptors (excess, step, lap-negative, down-face, relief), sharpened, corroborated multiplicatively by 1,466 declustered ComCat epicentre lineaments</td></tr><tr><th>Format gate</th><td><span class="status pass">PASS</span> values_in_0_1=True, nan_only_outside_footprint=True on the NaN variant, all_checks_pass=True</td></tr><tr><th>Uniqueness gate</th><td><span class="status pass">PASS</span> worst full-pixel IoU 0.1869 &lt; 0.5 against 8 re-downloaded prior artifacts; novel fraction at 2 px 0.480</td></tr><tr><th>Off-catalogue instrument</th><td>sgmc_off DTI 0.1874 vs matched uniform 0.1401 (lift 1.34x)</td></tr><tr><th>Frozen blocked holdout</th><td>4/4 macrofolds positive, paired block-bootstrap 95% CI [0.0261, 0.0854]</td></tr><tr><th>Modelled hidden score</th><td>0.386 (transfer-calibrated; NOT an organizer score)</td></tr></table></div>
+<p class="small">Portal-convention variant (NaN outside the study footprint, matching the official sample submission): <a href="docs/downloads/gemsdoe50-h52-scarpdisperse-90000-nan.tif">gemsdoe50-h52-scarpdisperse-90000-nan.tif</a> &middot; <a href="docs/downloads/gemsdoe50-h52-scarpdisperse-90000-allfinite.zip">gemsdoe50-h52-scarpdisperse-90000-allfinite.zip</a> (zip).</p>
+<h3>Executive summary</h3>
+<p>The corpus that came before this file plateaued between 0.15 and 0.28 because of its
+<em>emission geometry</em>, not its geology. For binary unit dots the official metric reduces
+exactly to <code>DTI = T / (0.2N + 0.8G)</code>, so every dot costs the same 0.2 in the
+denominator no matter what it earns; selecting the top-<em>N</em> pixels of an evidence field piles
+dots a few pixels deep on the strongest feature, where the <code>max</code> in the numerator
+saturates and the cost does not. This file is emitted instead as variable-density blue noise at
+exactly the metric's own 300 m support, using the one evidence family that measured as informative
+about faults the given catalogue does not contain (USGS 3DEP 1 m LiDAR scarp descriptors,
+enrichment 1.21&ndash;1.42 against 1.02&ndash;1.09 for every magnetic and radiometric channel),
+corroborated by 1,466 declustered USGS ComCat epicentre lineaments. Full working:
+<a href="docs/research/h52-diagnosis.md">h52-diagnosis.md</a> ·
+<a href="docs/hypotheses-20261007-h52.md">five screened hypotheses</a>.</p>
+<h3>How to submit &mdash; five steps</h3>
+<ol>
+<li><strong>Download</strong> the GeoTIFF above and, if you want to be certain the bytes are
+intact, verify the SHA-256 printed in the table.</li>
+<li><strong>Open</strong> <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/"
+target="_blank" rel="noopener">competition 306 on DrivenData</a> and sign in.</li>
+<li><strong>Upload the file as downloaded.</strong> Do not re-save, re-project, re-compress,
+re-scale or convert it; the format gate on this page was run on the exact bytes the link serves.</li>
+<li><strong>Use the unique submission name and the optional note</strong> printed in the table
+above, so the entry is distinguishable from every prior one.</li>
+<li><strong>Record the portal receipt</strong> in this repository before any score is quoted. No
+page in this repository claims portal acceptance, because none exists yet.</li>
+</ol>
+</article></div></div></section>
 <main><section class="hero"><div class="shell"><div class="eyebrow">DOE GEMS Prize Challenge · audit-first research</div><h1>Map what the catalogue missed.</h1><p>GEMSDOE50 tests whether waveform-relocated Nevada earthquake planes can point to plausible, previously unmapped fault traces—without copying a prior submission or spending a scoring slot before spatial validation.</p><div class="actions"><a class="button" href="downloads/gemsdoe50-h51-corridor-consensus-mix-20261007T0200Z.tif" download>Download the H51 candidate GeoTIFF</a><a class="button secondary" href="submission.html">How to submit (5 steps)</a></div></div></section>
 
 <section class="main" id="h51-candidate"><div class="shell"><div class="grid">

@@ -1,0 +1,430 @@
+{
+ "name": "gemsdoe50-h52-scarpdisperse",
+ "stamp": "20261007T031600Z",
+ "stamp_source": "time.strftime(gmtime)",
+ "claim_note": "H52 scarp-dispersion submission: a full-strength rank mean of five independent USGS 3DEP 1 m LiDAR terrain descriptors, corroborated multiplicatively by declustered USGS ComCat epicentre lineaments, emitted as dots at the metric's own 300 m separation with no quantile threshold and no footprint shrinkage. Validated on an independent fault population against matched uniform and translation controls. NOT organizer-scored; the modelled hidden score is a transfer-calibrated model, not a receipt.",
+ "design": {
+  "belief": "scarp**4.0 * (1 + 0.25 * seismicity_corridor_norm)",
+  "scarp": {
+   "bands": [
+    "0:ex_max",
+    "2:step_max",
+    "3:lapneg_max",
+    "5:downface_max",
+    "8:relief"
+   ],
+   "transform": "within-domain rank of each of five 2 m LiDAR terrain descriptors, then the arithmetic mean; no amplitude threshold is used",
+   "per_band_mean_rank": [
+    0.5,
+    0.5,
+    0.5,
+    0.5,
+    0.5
+   ]
+  },
+  "geophysics": {
+   "source": "geodawn_extensions_u8.tif (ThK, UK, UTh, TMI_up150) + geodawn_rad_u8.tif (K, Th, U, TC)",
+   "role": "diagnostic only; the channel screen measured 1.02-1.09 enrichment for every magnetic and radiometric residual, so this family is not used in the shipped belief"
+  },
+  "seismicity": {
+   "catalog_rows": 222939,
+   "events_in_footprint": 94534,
+   "decluster": "triangle_area_filter (2-D adaptation of the Ouillon-Sornette 2011 tetrahedron test; NOT the published 3-D algorithm)",
+   "events_after_decluster": 91394,
+   "triangle_diag": {
+    "test": "2-D triangle-area adaptation of the Ouillon & Sornette (2011) tetrahedron test",
+    "status": "ADAPTATION -- not published in this form; see module docstring",
+    "n_events": 94534,
+    "n_random": 94534,
+    "reference_quantile": 0.95,
+    "area_threshold_km2": 0.5411418981657639,
+    "reference_median_km2": 0.11897329463446223,
+    "catalogue_median_km2": 0.0017718675052490012,
+    "fraction_kept_clustered": 0.9667844373452937
+   },
+   "lineations": 1466,
+   "corridor_cells_gt_0.05": 0.05703435739904032,
+   "sigma_km_median": 0.51
+  }
+ },
+ "emitter": {
+  "function": "gemsdoe50.h52.emit_blue_noise",
+  "min_sep_px": 3.0,
+  "why": "R is the coarsest spacing at which two dots never compete for the same truth pixel; measured on the group's best off-catalogue prior artifact, whose dots are 100% isolated at a 3.0 px NN median",
+  "placement_snap": {
+   "chosen": "none",
+   "before": 0.18744576350960163,
+   "after": 0.18744576350960163,
+   "used": false,
+   "moved": 0,
+   "candidates": {
+    "none": {
+     "dti": 0.18744576350960163,
+     "moved": 0
+    },
+    "belief_ridge": {
+     "dti": 0.16291914427595153,
+     "moved": 50839,
+     "fraction_moved": 0.5648777777777778
+    },
+    "geophysics_ridge": {
+     "dti": 0.1777310384948018,
+     "moved": 25782,
+     "fraction_moved": 0.28646666666666665
+    },
+    "fused_ridge": {
+     "dti": 0.16604799375959436,
+     "moved": 40408,
+     "fraction_moved": 0.44897777777777775
+    }
+   }
+  }
+ },
+ "mass_selection": {
+  "rule": "argmax of the transfer-calibrated modelled hidden DTI, subject to the physical cap T <= G_hidden",
+  "G_hidden_px": 12226,
+  "transfer_factor": 4.2,
+  "transfer_source": "evidence/h52_transfer_calibration.json",
+  "transfer_band": [
+   3.97,
+   4.59
+  ],
+  "selected_n": 90000
+ },
+ "sweep": {
+  "30000": {
+   "n_dots": 30000,
+   "sgmc_off": {
+    "dti": 0.09830267387344915,
+    "tp": 5505.454074215879,
+    "fp": 27864.19819355852,
+    "fn": 56158.545925784114,
+    "n": 30000,
+    "g": 61664.0,
+    "credit_per_dot": 0.18351513580719597,
+    "coverage": 0.0892814944573151
+   },
+   "sgmc_off_uniform_mean": 0.06193693573050273,
+   "sgmc_off_uniform_draws": [
+    0.06154857978383713,
+    0.06375196299220581,
+    0.060510264415465254
+   ],
+   "lift_over_uniform": 1.5871413836354356,
+   "model": {
+    "credit_per_dot_modelled": 0.15281777717291883,
+    "T_modelled": 4584.533315187565,
+    "T_saturated": false,
+    "dti_modelled": 0.290513365303886
+   }
+  },
+  "45000": {
+   "n_dots": 45000,
+   "sgmc_off": {
+    "dti": 0.12964646482294087,
+    "tp": 7680.551137480623,
+    "fp": 41874.80903997888,
+    "fn": 53983.44886251938,
+    "n": 45000,
+    "g": 61664.0,
+    "credit_per_dot": 0.17067891416623607,
+    "coverage": 0.12455486406137492
+   },
+   "sgmc_off_uniform_mean": 0.08515733356809119,
+   "sgmc_off_uniform_draws": [
+    0.08709644973802662,
+    0.08542122208939916,
+    0.08295432887684777
+   ],
+   "lift_over_uniform": 1.5224345266667667,
+   "model": {
+    "credit_per_dot_modelled": 0.1421287250146745,
+    "T_modelled": 6395.792625660352,
+    "T_saturated": false,
+    "dti_modelled": 0.3405495306728335
+   }
+  },
+  "60000": {
+   "n_dots": 60000,
+   "sgmc_off": {
+    "dti": 0.15591661796753756,
+    "tp": 9735.596271943981,
+    "fp": 55813.61953035151,
+    "fn": 51928.403728056015,
+    "n": 60000,
+    "g": 61664.0,
+    "credit_per_dot": 0.16225993786573303,
+    "coverage": 0.15788136144174852
+   },
+   "sgmc_off_uniform_mean": 0.10720573595639833,
+   "sgmc_off_uniform_draws": [
+    0.11021624239486935,
+    0.1074220265111153,
+    0.10397893896321035
+   ],
+   "lift_over_uniform": 1.4543682441669954,
+   "model": {
+    "credit_per_dot_modelled": 0.13511802674907725,
+    "T_modelled": 8107.081604944635,
+    "T_saturated": false,
+    "dti_modelled": 0.3722122972959962
+   }
+  },
+  "75000": {
+   "n_dots": 75000,
+   "sgmc_off": {
+    "dti": 0.17310039810023786,
+    "tp": 11351.722355855956,
+    "fp": 69886.45005622316,
+    "fn": 50312.27764414404,
+    "n": 75000,
+    "g": 61664.0,
+    "credit_per_dot": 0.1513562980780794,
+    "coverage": 0.18408994479527693
+   },
+   "sgmc_off_uniform_mean": 0.1239947155904403,
+   "sgmc_off_uniform_draws": [
+    0.12656833564439218,
+    0.1225347781166426,
+    0.12288103301028612
+   ],
+   "lift_over_uniform": 1.3960304459425164,
+   "model": {
+    "credit_per_dot_modelled": 0.1260382852437551,
+    "T_modelled": 9452.871393281632,
+    "T_saturated": false,
+    "dti_modelled": 0.38145949256204925
+   }
+  },
+  "90000": {
+   "n_dots": 90000,
+   "sgmc_off": {
+    "dti": 0.18744576350960163,
+    "tp": 12876.55671641243,
+    "fp": 83941.64284192165,
+    "fn": 48787.44328358757,
+    "n": 90000,
+    "g": 61664.0,
+    "credit_per_dot": 0.14307285240458256,
+    "coverage": 0.20881805780378226
+   },
+   "sgmc_off_uniform_mean": 0.14009399978759765,
+   "sgmc_off_uniform_draws": [
+    0.14184763880019505,
+    0.1402275060518425,
+    0.13820685451075537
+   ],
+   "lift_over_uniform": 1.3379999414235868,
+   "model": {
+    "credit_per_dot_modelled": 0.1191404468197553,
+    "T_modelled": 10722.640213777977,
+    "T_saturated": false,
+    "dti_modelled": 0.38597305382775066
+   }
+  },
+  "110000": {
+   "n_dots": 110000,
+   "sgmc_off": {
+    "dti": 0.20050245523095891,
+    "tp": 14595.359559105778,
+    "fp": 102718.23727932628,
+    "fn": 47068.640440894225,
+    "n": 110000,
+    "g": 61664.0,
+    "credit_per_dot": 0.13268508690096162,
+    "coverage": 0.23669174168243673
+   },
+   "sgmc_off_uniform_mean": 0.15861348529035277,
+   "sgmc_off_uniform_draws": [
+    0.16054015475815964,
+    0.15831785079930918,
+    0.15698245031358954
+   ],
+   "lift_over_uniform": 1.264094631449057,
+   "model": {
+    "credit_per_dot_modelled": 0.1104902871090889,
+    "T_modelled": 12153.93158199978,
+    "T_saturated": false,
+    "dti_modelled": 0.3824300074887913
+   }
+  },
+  "130000": {
+   "n_dots": 130000,
+   "sgmc_off": {
+    "dti": 0.21009544717086162,
+    "tp": 16150.648921873151,
+    "fp": 121557.91345577585,
+    "fn": 45513.35107812685,
+    "n": 130000,
+    "g": 61664.0,
+    "credit_per_dot": 0.12423576093748578,
+    "coverage": 0.26191374094890296
+   },
+   "sgmc_off_uniform_mean": 0.1730047382039921,
+   "sgmc_off_uniform_draws": [
+    0.17443282488844186,
+    0.17272834797324707,
+    0.17185304175028732
+   ],
+   "lift_over_uniform": 1.2143912898104294,
+   "model": {
+    "credit_per_dot_modelled": 0.10345431589794929,
+    "T_modelled": 13449.061066733408,
+    "T_saturated": true,
+    "dti_modelled": 0.3416916335017663
+   }
+  },
+  "160000": {
+   "n_dots": 160000,
+   "sgmc_off": {
+    "dti": 0.21710132981400448,
+    "tp": 18003.459361912537,
+    "fp": 149973.1773275145,
+    "fn": 43660.54063808746,
+    "n": 160000,
+    "g": 61664.0,
+    "credit_per_dot": 0.11252162101195336,
+    "coverage": 0.2919606149765266
+   },
+   "sgmc_off_uniform_mean": 0.1909887714554659,
+   "sgmc_off_uniform_draws": [
+    0.1928150362281469,
+    0.19076722172802865,
+    0.18938405641022213
+   ],
+   "lift_over_uniform": 1.136723002925999,
+   "model": {
+    "credit_per_dot_modelled": 0.09369965006595413,
+    "T_modelled": 14991.944010552661,
+    "T_saturated": true,
+    "dti_modelled": 0.29262244858882547
+   }
+  },
+  "220000": {
+   "n_dots": 220000,
+   "sgmc_off": {
+    "dti": 0.218566906405204,
+    "tp": 20753.03113561998,
+    "fp": 207343.3336424551,
+    "fn": 40910.96886438002,
+    "n": 220000,
+    "g": 61664.0,
+    "credit_per_dot": 0.09433195970736355,
+    "coverage": 0.33655019355896443
+   },
+   "sgmc_off_uniform_mean": 0.2130394591429228,
+   "sgmc_off_uniform_draws": [
+    0.213315028094607,
+    0.21337371496666394,
+    0.21242963436749748
+   ],
+   "lift_over_uniform": 1.0259456500899815,
+   "model": {
+    "credit_per_dot_modelled": 0.07855265090499079,
+    "T_modelled": 17281.583199097975,
+    "T_saturated": true,
+    "dti_modelled": 0.22733019962514503
+   }
+  }
+ },
+ "checks": {
+  "name": "gemsdoe50-h52-scarpdisperse",
+  "n_dots": 90000,
+  "grid_matches_template": true,
+  "all_finite_primary": true,
+  "values_in_unit_interval_primary": true,
+  "sgmc_off": {
+   "dti": 0.18744576350960163,
+   "tp": 12876.55671641243,
+   "fp": 83941.64284192165,
+   "fn": 48787.44328358757,
+   "n": 90000,
+   "g": 61664.0,
+   "credit_per_dot": 0.14307285240458256,
+   "coverage": 0.20881805780378226
+  },
+  "sgmc_off_uniform_mean": 0.14009399978759765,
+  "lift_over_uniform": 1.3379999414235868,
+  "modelled_hidden": {
+   "credit_per_dot_modelled": 0.1191404468197553,
+   "T_modelled": 10722.640213777977,
+   "T_saturated": false,
+   "dti_modelled": 0.38597305382775066
+  },
+  "files": {
+   "gemsdoe50-h52-scarpdisperse-90000-nan.tif": {
+    "bytes": 1236284,
+    "sha256": "c5179435bacc705d564e36af7466fe6374b6816875cbda2eab2da85ec12e9988",
+    "nan_cells": 7111787,
+    "positive_cells": 90000,
+    "nonzero_min_max": [
+     0.0,
+     1.0
+    ],
+    "outside_unit_interval": 0,
+    "profile": {
+     "driver": "GTiff",
+     "dtype": "float32",
+     "count": 1,
+     "crs": "EPSG:32611",
+     "shape": [
+      3730,
+      3292
+     ],
+     "transform": [
+      100.0,
+      0.0,
+      243350.0,
+      0.0,
+      -100.0,
+      4508550.0
+     ],
+     "nodata": NaN,
+     "compress": "LZW"
+    }
+   },
+   "gemsdoe50-h52-scarpdisperse-90000-allfinite.tif": {
+    "bytes": 672263,
+    "sha256": "c44e791702c50bc1189325b4febb6f6acd2cf6ca1338514df4b4b95dc31f4c53",
+    "nan_cells": 0,
+    "positive_cells": 90000,
+    "nonzero_min_max": [
+     0.0,
+     1.0
+    ],
+    "outside_unit_interval": 0,
+    "profile": {
+     "driver": "GTiff",
+     "dtype": "float32",
+     "count": 1,
+     "crs": "EPSG:32611",
+     "shape": [
+      3730,
+      3292
+     ],
+     "transform": [
+      100.0,
+      0.0,
+      243350.0,
+      0.0,
+      -100.0,
+      4508550.0
+     ],
+     "nodata": null,
+     "compress": "LZW"
+    }
+   },
+   "gemsdoe50-h52-scarpdisperse-90000-allfinite.zip": {
+    "bytes": 295329,
+    "sha256": "8c3175ab6f8bee9c9f26126ade301fe9a4e8b97d400dfe65538f3069f8f827fe"
+   }
+  },
+  "layers_fingerprint": {
+   "lidar_scarp_features_u8.tif": "d580bb8bdcdb941e32fefb8b38044bc5bf04e199bf2e83498c3576e6fc465568",
+   "geodawn_extensions_u8.tif": "a35a9c6d2a14786f4dab85481ee59769213072f5dab5b2535ea82ae4d9bb7d9b",
+   "geodawn_rad_u8.tif": "c22420f75999030d7cc65c9e31e50d232ea6158423bca051613a18a8b20ba682",
+   "derived_sgmc_faults_100m_u8.tif": "26d142c4c93282cd94f6950ab96f22aeff59fbbea523d43d662e76fa1b161b5c",
+   "labels.tif": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093"
+  }
+ }
+}

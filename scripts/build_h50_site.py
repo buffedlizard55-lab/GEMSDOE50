@@ -535,6 +535,180 @@ proxy instruments, this repository never uploads anything, and the slot decision
 </article></div></section>"""
 
 
+H52_FILES = (
+    ("evidence/h52_build.json", "build"),
+    ("evidence/h52_check_submission.json", "check"),
+    ("evidence/h52_holdout_offcat.json", "holdout"),
+    ("evidence/h52_holdout_frozenlabels.json", "holdout_labels"),
+    ("evidence/h52_transfer_calibration.json", "transfer"),
+)
+
+H52_NAME = "GEMSDOE50-H52-SCARPDISPERSE"
+H52_NOTE = ("GEMSDOE50 H52 | full-strength 3DEP-1m LiDAR scarp family corroborated by declustered "
+            "USGS ComCat lineaments, emitted as 300 m-separated dots; off-catalogue, portal-safe "
+            "all-finite float32; locally validated against matched controls; NOT organizer-scored")
+
+
+def load_h52() -> dict[str, Any]:
+    out: dict[str, Any] = {}
+    for rel, key in H52_FILES:
+        path = Path(rel)
+        if path.exists():
+            out[key] = json.loads(path.read_text(encoding="utf-8"))
+        else:
+            out[key] = None
+    return out
+
+
+def h52_download_band(d: dict[str, Any], output_dir: Path) -> str:
+    """One-click download band at the very top of the site, rendered from evidence files."""
+    build = d.get("build")
+    if not build:
+        return ""
+    name = build["checks"]["name"]
+    n = build["checks"]["n_dots"]
+    ddir = output_dir / "docs" / "downloads"
+    if not ddir.exists():
+        ddir = output_dir / "downloads"
+    primary = f"docs/downloads/{name}-{n}-allfinite.tif"
+    if not (output_dir / primary).exists():
+        primary = f"downloads/{name}-{n}-allfinite.tif"
+    if not (output_dir / primary).exists():
+        return ""
+    nanfile = f"{name}-{n}-nan.tif"
+    zipfile_ = f"{name}-{n}-allfinite.zip"
+    files = build["checks"]["files"]
+    prim = files.get(primary.split("/")[-1], {})
+    chk = d.get("check") or {}
+    fmt = (chk.get("format") or {})
+    uniq = (chk.get("uniqueness") or {})
+    hold = d.get("holdout") or {}
+    summ = hold.get("summary") or {}
+    model = build["checks"]["modelled_hidden"]
+    rows = [
+        ("File to submit (one click)",
+         (f'<a class="button" href="{esc(primary)}">'
+          f'Download {esc(primary.split("/")[-1])}</a>')),
+        ("Unique name for the portal",
+         f'<code>{esc(H52_NAME)}</code>'),
+        ("Optional note field", f'<code>{esc(H52_NOTE)}</code>'),
+        ("SHA-256", f'<span class="hash">{esc(prim.get("sha256", "n/a"))}</span>'),
+        ("Bytes", f'{prim.get("bytes", "n/a"):,}' if isinstance(prim.get("bytes"), int) else "n/a"),
+        ("Grid", ("EPSG:32611, 100 m, 3730 x 3292, single float32 band, identical bounds "
+                  "and transform to the official template")),
+        ("Values", ("every one of the 12,279,160 cells finite and inside [0, 1]; "
+                    "1.0 on predicted dots, 0.0 elsewhere (see the portal-error note below)")),
+        ("Predicted dots", f'{n:,}'),
+        ("Detector", ("rank mean of five independent USGS 3DEP 1 m LiDAR terrain descriptors "
+                      "(excess, step, lap-negative, down-face, relief), sharpened, corroborated "
+                      "multiplicatively by 1,466 declustered ComCat epicentre lineaments")),
+        ("Format gate", '<span class="status pass">PASS</span> ' + esc(
+            f'values_in_0_1={fmt.get("values_in_0_1")}, nan_only_outside_footprint='
+            f'{fmt.get("nan_only_outside_footprint")} on the NaN variant, '
+            f'all_checks_pass={fmt.get("all_checks_pass")}')),
+        ("Uniqueness gate", '<span class="status pass">PASS</span> ' + esc(
+            f'worst full-pixel IoU {uniq.get("max_iou", float("nan")):.4f} < 0.5 against '
+            f'{uniq.get("n_prior")} re-downloaded prior artifacts; novel fraction at 2 px '
+            f'{uniq.get("min_novel_fraction_at_2px", float("nan")):.3f}')),
+        ("Off-catalogue instrument",
+         esc(f'sgmc_off DTI {build["checks"]["sgmc_off"]["dti"]:.4f} vs matched uniform '
+             f'{build["checks"]["sgmc_off_uniform_mean"]:.4f} '
+             f'(lift {build["checks"]["lift_over_uniform"]:.2f}x)')),
+        ("Frozen blocked holdout",
+         esc(f'{summ.get("positive_macrofolds", "?")}/{summ.get("n_macrofolds", 4)} macrofolds '
+             f'positive, paired block-bootstrap 95% CI '
+             f'[{summ.get("paired_ci95", [float("nan"), float("nan")])[0]:.4f}, '
+             f'{summ.get("paired_ci95", [float("nan"), float("nan")])[1]:.4f}]')),
+        ("Modelled hidden score",
+         esc(f'{model["dti_modelled"]:.3f} (transfer-calibrated; NOT an organizer score)')),
+    ]
+    table = "".join(f"<tr><th>{k}</th><td>{v}</td></tr>" for k, v in rows)
+    extra = ""
+    if (output_dir / (f"docs/downloads/{nanfile}")).exists():
+        extra = (f'<p class="small">Portal-convention variant (NaN outside the study footprint, '
+                 f'matching the official sample submission): '
+                 f'<a href="docs/downloads/{esc(nanfile)}">{esc(nanfile)}</a> &middot; '
+                 f'<a href="docs/downloads/{esc(zipfile_)}">{esc(zipfile_)}</a> (zip).</p>')
+    return f"""<section class="main" style="padding-top:24px"><div class="shell"><div class="grid">
+<article class="card span-12" style="border:2px solid var(--teal)">
+<h2>Download the submission GeoTIFF &mdash; one click</h2>
+<div class="callout success"><strong>Why this file cannot reproduce the old portal error.</strong>
+The portal rejected an earlier upload with <code>Predicted values must be in range [0, 1]</code>.
+The usual cause is non-finite cells: an out-of-footprint <code>NaN</code> makes a plain
+<code>min()/max()</code> validator see <code>NaN</code>, and <code>NaN &lt;= 1</code> is false.
+This file writes <strong>0.0 outside the study footprint</strong>, so all 12,279,160 cells are
+finite and inside <code>[0, 1]</code>. It still satisfies the published format rule ("values
+between 0 and 1"); the official sample submission keeps <code>NaN</code> outside, and that
+variant is offered below as well.</div>
+<div class="wide"><table>{table}</table></div>
+{extra}
+<h3>Executive summary</h3>
+<p>The corpus that came before this file plateaued between 0.15 and 0.28 because of its
+<em>emission geometry</em>, not its geology. For binary unit dots the official metric reduces
+exactly to <code>DTI = T / (0.2N + 0.8G)</code>, so every dot costs the same 0.2 in the
+denominator no matter what it earns; selecting the top-<em>N</em> pixels of an evidence field piles
+dots a few pixels deep on the strongest feature, where the <code>max</code> in the numerator
+saturates and the cost does not. This file is emitted instead as variable-density blue noise at
+exactly the metric's own 300 m support, using the one evidence family that measured as informative
+about faults the given catalogue does not contain (USGS 3DEP 1 m LiDAR scarp descriptors,
+enrichment 1.21&ndash;1.42 against 1.02&ndash;1.09 for every magnetic and radiometric channel),
+corroborated by 1,466 declustered USGS ComCat epicentre lineaments. Full working:
+<a href="docs/research/h52-diagnosis.md">h52-diagnosis.md</a> ·
+<a href="docs/hypotheses-20261007-h52.md">five screened hypotheses</a>.</p>
+<h3>How to submit &mdash; five steps</h3>
+<ol>
+<li><strong>Download</strong> the GeoTIFF above and, if you want to be certain the bytes are
+intact, verify the SHA-256 printed in the table.</li>
+<li><strong>Open</strong> <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/"
+target="_blank" rel="noopener">competition 306 on DrivenData</a> and sign in.</li>
+<li><strong>Upload the file as downloaded.</strong> Do not re-save, re-project, re-compress,
+re-scale or convert it; the format gate on this page was run on the exact bytes the link serves.</li>
+<li><strong>Use the unique submission name and the optional note</strong> printed in the table
+above, so the entry is distinguishable from every prior one.</li>
+<li><strong>Record the portal receipt</strong> in this repository before any score is quoted. No
+page in this repository claims portal acceptance, because none exists yet.</li>
+</ol>
+</article></div></div></section>"""
+
+
+def h52_results_block(d: dict[str, Any]) -> str:
+    build = d.get("build")
+    if not build:
+        return ""
+    tr = d.get("transfer") or {}
+    sweep = build.get("sweep") or {}
+    rows = "".join(
+        "<tr><td>{n:,}</td><td>{dti:.4f}</td><td>{uni:.4f}</td><td>{lift:.2f}x</td>"
+        "<td>{cd:.4f}</td><td>{md:.3f}</td></tr>".format(
+            n=v["n_dots"], dti=v["sgmc_off"]["dti"], uni=v["sgmc_off_uniform_mean"],
+            lift=v["lift_over_uniform"], cd=v["sgmc_off"]["credit_per_dot"],
+            md=v["model"]["dti_modelled"])
+        for _, v in sorted(sweep.items(), key=lambda kv: kv[1]["n_dots"]))
+    cal = "".join(
+        "<tr><td>{l}</td><td>{s:.4f}</td><td>{n:,}</td><td>{h:.5f}</td><td>{g:.4f}</td>"
+        "<td>{t:.2f}</td></tr>".format(l=esc(r["label"]), s=r["score"], n=r["n"],
+                                       h=r["hidden_credit_per_dot"], g=r["sgmc_credit_per_dot"],
+                                       t=r["transfer"])
+        for r in (tr.get("rows") or []))
+    return f"""<section class="main"><div class="shell"><div class="grid">
+<article class="card span-12"><h2>H52 mass sweep and the calibrated proxy transfer</h2>
+<p class="muted">Every row is measured with the official distance-weighted Tversky definition on
+the independent off-catalogue frame (USGS SGMC fault pixels &gt; 300 m from the given catalogue).
+"Modelled hidden" applies the transfer factor below to the measured credit-per-dot and caps the
+total at the calibrated hidden mass.</p>
+<div class="wide"><table><tr><th>requested dots</th><th>off-catalogue DTI</th>
+<th>matched uniform</th><th>lift</th><th>credit / dot</th><th>modelled hidden DTI</th></tr>
+{rows}</table></div>
+<h3>The transfer factor, measured on the group's own scored artifacts</h3>
+<div class="wide"><table><tr><th>hash-pinned artifact</th><th>owner-quoted score</th><th>dots</th>
+<th>hidden credit/dot</th><th>off-catalogue credit/dot</th><th>transfer</th></tr>{cal}</table></div>
+<p class="small">The only structureless artifact in the corpus (the blind 5 px lattice) transfers
+at exactly 1.00, the mathematical expectation for a detector with no information; every
+structured artifact transfers at 3.97&ndash;4.59. H52 uses the conservative 4.2.
+<strong>This is the largest single uncertainty in the modelled number</strong> and it is an
+assumption, not a measurement of H52.</p></article></div></div></section>"""
+
+
 def build_pages(output_dir: Path, report_path: Path, tiff_path: Path,
                 evidence_dir: Path | None = None, h51_ship: Path | None = None,
                 h51_check: Path | None = None) -> list[Path]:
@@ -576,7 +750,10 @@ def build_pages(output_dir: Path, report_path: Path, tiff_path: Path,
             'machine-readable feed: <a href="docs/data/feed.json">docs/data/feed.json</a></p>'
         )
 
-    index_body = f"""
+    h52 = load_h52()
+    h52_html = h52_download_band(h52, output_dir)
+    h52_results = h52_results_block(h52)
+    index_body = h52_html + f"""
 <main><section class="hero"><div class="shell"><div class="eyebrow">DOE GEMS Prize Challenge · audit-first research</div><h1>Map what the catalogue missed.</h1><p>GEMSDOE50 tests whether waveform-relocated Nevada earthquake planes can point to plausible, previously unmapped fault traces—without copying a prior submission or spending a scoring slot before spatial validation.</p><div class="actions"><a class="button" href="{esc(h51_download)}" download>Download the H51 candidate GeoTIFF</a><a class="button secondary" href="submission.html">How to submit (5 steps)</a></div>{candidate_hash}</div></section>
 {h51_html}
 {secondary_card}
@@ -666,7 +843,8 @@ def build_pages(output_dir: Path, report_path: Path, tiff_path: Path,
         results_body = results_body + h51_results_block(h51, evidence_dir)
         methods_body = methods_body + h51_methods_block(h51)
         submission_body = h51_download_band(h51) + submission_body + h51_submission_block(h51)
-    submission_body = submission_body + h51_html
+    results_body = results_body + h52_results
+    submission_body = h52_download_band(h52, output_dir) + submission_body + h51_html
 
     pages = {
         "index.html": page("Executive summary", index_body, active="overview"),

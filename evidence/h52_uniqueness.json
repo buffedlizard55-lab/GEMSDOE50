@@ -1,0 +1,73 @@
+{
+ "my_sha256": "c44e791702c50bc1189325b4febb6f6acd2cf6ca1338514df4b4b95dc31f4c53",
+ "my_dots": 90000,
+ "instrument": "EXACT pixel-set equality + IoU on the full grid; novelty = fraction of my dots with no prior dot within 2 px (the metric's own tolerance is 3 px)",
+ "rows": [
+  {
+   "file": "gems24-h24-0-mirror-h19-5-group-best-20261002-e27054cf-nan.tif",
+   "identical_pixels": false,
+   "iou": 0.01542878854191215,
+   "novel_fraction_at_2px": 0.8345222222222223,
+   "their_novel_fraction_at_2px": 0.7586827484293863,
+   "n_prior_dots": 121131
+  },
+  {
+   "file": "gems19-h19-4-multiline-corroborated-openness-thermal-pop-20260930-691e4dfa-nan.tif",
+   "identical_pixels": false,
+   "iou": 0.014646903314300902,
+   "novel_fraction_at_2px": 0.8292777777777778,
+   "their_novel_fraction_at_2px": 0.7619305374902043,
+   "n_prior_dots": 123779
+  },
+  {
+   "file": "gems16-h16-1-topo-geophys-baseline-ridges-20260930-df20f65e-nan.tif",
+   "identical_pixels": false,
+   "iou": 0.013808790427674446,
+   "novel_fraction_at_2px": 0.8236888888888889,
+   "their_novel_fraction_at_2px": 0.7633109836290434,
+   "n_prior_dots": 123939
+  },
+  {
+   "file": "13gems_20261001_r13-lattice-s5_v2_nan-outside.tif",
+   "identical_pixels": false,
+   "iou": 0.012063840521414255,
+   "novel_fraction_at_2px": 0.4805,
+   "their_novel_fraction_at_2px": 0.8134802677686749,
+   "n_prior_dots": 206895
+  },
+  {
+   "file": "gems27-topo-gap-closure-t-v2-on-d1-5-20261002-5512495c6bd1-nan.tif",
+   "identical_pixels": false,
+   "iou": 0.01163871192015349,
+   "novel_fraction_at_2px": 0.8520333333333333,
+   "their_novel_fraction_at_2px": 0.7573702061048787,
+   "n_prior_dots": 61328
+  },
+  {
+   "file": "gems24-h25-1-dotted-h19-5-d1-5-20261002-989f59505db1-nan.tif",
+   "identical_pixels": false,
+   "iou": 0.011580643204292522,
+   "novel_fraction_at_2px": 0.8537333333333333,
+   "their_novel_fraction_at_2px": 0.7548485907872613,
+   "n_prior_dots": 60069
+  },
+  {
+   "file": "gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-nan.tif",
+   "identical_pixels": false,
+   "iou": 0.009835522352090613,
+   "novel_fraction_at_2px": 0.8718555555555556,
+   "their_novel_fraction_at_2px": 0.7535495577228396,
+   "n_prior_dots": 44090
+  }
+ ],
+ "max_iou": 0.01542878854191215,
+ "worst_overlap_file": "gems24-h24-0-mirror-h19-5-group-best-20261002-e27054cf-nan.tif",
+ "min_novel_fraction_at_2px": 0.4805,
+ "min_novel_vs": "13gems_20261001_r13-lattice-s5_v2_nan-outside.tif",
+ "n_prior_compared": 7,
+ "verdict_unique": true,
+ "gate": {
+  "max_iou": 0.5,
+  "min_novel_fraction_at_2px": 0.45
+ }
+}
