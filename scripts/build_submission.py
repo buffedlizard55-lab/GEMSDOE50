@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""Build the submission GeoTIFF.
+"""ARCHIVED submission builder; command-line execution is disabled.
+
+This legacy path depends on the disabled ComCat/scarp layer builder and an owner-model
+hidden-truth estimate. It is not an approved H50-S1 workflow. Its original description:
 
 Pipeline (all steps reproducible from pinned bytes):
 
@@ -149,4 +152,8 @@ def _nn_stats(idx: np.ndarray) -> dict:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    raise SystemExit(
+        "Disabled legacy submission builder: it depends on data with unresolved reuse rights "
+        "and an unverified score-derived mass assumption. No TIFF was written; see "
+        "docs/research/data-rights-audit-20261006.md and docs/h50s1-protocol-addendum.md."
+    )
