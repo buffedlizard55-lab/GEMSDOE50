@@ -10,6 +10,14 @@ import sys
 from pathlib import Path
 
 import numpy as np
+import pytest
+
+#: `route_flow` shells out to pysheds for pit-filling and D8 routing. pysheds is an optional
+#: dependency (it is not in the `[test]` extra, and no CI workflow installs it), so the two tests
+#: that reach it skip instead of failing the suite. The circular-resultant tests below need nothing
+#: but numpy and always run. Flagged as an irregularity in the merging session's report rather than
+#: papered over: without pysheds installed, CI does not exercise the flow-routing wiring at all.
+pysheds = pytest.importorskip
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
@@ -50,6 +58,7 @@ def test_in1d_shim_is_installed_and_behaves_like_isin():
 
 
 def test_route_flow_runs_on_a_small_synthetic_dem_and_accumulates_downhill():
+    pysheds("pysheds", reason="optional flow-routing dependency, not installed in this runner")
     dem = _straight_valley()
     valid = np.ones(dem.shape, dtype=bool)
     flow = drainage.route_flow(dem, valid)
@@ -113,6 +122,7 @@ def test_channel_deflection_is_higher_at_a_sharp_bend_than_on_a_straight_reach()
 
 
 def test_deflection_field_is_zero_outside_the_channel_mask():
+    pysheds("pysheds", reason="optional flow-routing dependency, not installed in this runner")
     dem = _straight_valley()
     valid = np.ones(dem.shape, dtype=bool)
     flow = drainage.route_flow(dem, valid)

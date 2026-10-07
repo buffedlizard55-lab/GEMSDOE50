@@ -59,6 +59,35 @@ No file here is organizer-scored and no slot has been used.</p>
 smoothed density 2.8×) — a split result recorded in <span class="hash">docs/research/h53-analysis.md</span> §3, not
 a shipped component. The MODEL mapping of H53's proxy credit to a leaderboard number (0.2121)
 is arithmetic, not a prediction.</p>
+</article></div></div></section><section class="main"><div class="shell"><div class="grid">
+<article class="card span-12"><h2>H54: a truth prior fitted to our own scored files, and an emission rule read off the metric</h2>
+<p><strong>Two methods, one shared finding: the emission layout matters more than the field, and the
+field available in this sandbox is the binding constraint.</strong> (i) 24 distinct scored sibling
+predictions were joined to their owner-reported scores
+(<code>scripts/h54_corpus.py</code>, deduplicated on the <em>support</em> hash so nan/zeros/all-finite
+twins count once) and fitted with a per-cell Poisson truth field whose <code>N</code>, <code>T</code>
+and <code>FP</code> are the official metric's own definitions
+(<code>scripts/h54_fit_truth.py</code>). It produced no usable calibration: the search log held at
+RMSE ~0.12 and was monotone in <code>N</code>. The reason is quantified rather than hidden - the top of
+the leaderboard needs a field that concentrates truth 5.6x more than chance; ours manages 1.5x.
+(ii) <code>DTI = T / (0.2(T+F) + 0.8N)</code> gives the exact accept rule
+<code>credit &gt; 0.2T/(0.2F+0.8N)</code>, and because <code>TPw</code> is a <em>maximum</em> over
+predicted cells, a dense blob of dots pays once while every dot still pays the false-positive penalty.
+Switching to one dot per 12 px block per round multiplied the same field's measured quality 3.7x:</p>
+<div class="wide"><table><thead><tr><th>layout, same field, same 40,000-dot mass</th><th>credit per dot
+(SGMC-off instrument)</th></tr></thead><tbody><tr><td><code>stratified_block12</code></td><td>0.0988</td></tr><tr><td><code>plain_topn</code></td><td>0.0264</td></tr><tr><td><code>uniform_random</code></td><td>0.1111</td></tr></tbody></table></div>
+<p>Blocked four-fold holdout, matched mass, scored on USGS SGMC faults more than 300 m from the provided
+catalogue (61,664 px):</p>
+<div class="wide"><table><thead><tr><th>arm</th><th>mean DTI</th><th>credit per dot</th>
+<th>folds beating random</th></tr></thead><tbody><tr><td><code>shipped</code></td><td>0.0656</td><td>0.1090</td><td>0/4</td></tr><tr><td><code>matched44090</code></td><td>0.0326</td><td>0.0767</td><td>0/4</td></tr><tr><td><code>dotted3px</code></td><td>0.0605</td><td>0.1465</td><td>1/4</td></tr><tr><td><code>band3x3</code></td><td>0.0845</td><td>0.0346</td><td>3/4</td></tr><tr><td><code>random</code></td><td>0.0743</td><td>0.1193</td><td>0/4</td></tr><tr><td><code>incumbent_0.2778</code></td><td>0.0942</td><td>0.1477</td><td>3/4</td></tr></tbody></table></div>
+<div class="callout danger"><strong>Gate: NO SLOT.</strong> a weekly slot is spent only when the shipped arm beats the matched-mass random control in every block AND is the best arm on the block mean; the model&#x27;s own predicted DTI is never part of this gate, because it is computed under the assumption being tested</div>
+<p class="sourced">A defect this work also fixed: the structural filters of this repository smooth
+<code>nan_to_num(raster)</code>, so the data/no-data boundary is detected as a lineament and rings a
+synthetic fault around the footprint outline. <code>gems54.field.masked_filter</code> (normalised
+convolution) plus a 6 px data-edge guard remove it; <code>tests/test_gems54.py</code> pins it, and the
+fix is deliberately additive so H51/H52's published numbers stay reproducible. Evidence:
+<span class="hash">evidence/h54_ship.json</span>, <span class="hash">evidence/h54_validation.json</span>,
+<span class="hash">evidence/h54_fit_status.json</span>.</p>
 </article></div></div></section>
 <footer><div class="shell">GEMSDOE50 · Maximize P(Win) · Own the Outcome<br>Research only. No portal upload, organizer score, or leaderboard scrape is represented here.</div></footer>
 </body>

@@ -98,6 +98,80 @@ that closes a whole line of attack).
   `data/external/` is a mixed-network product whose source-specific rights are unresolved, so it is
   used for exploration only, never as a submission input.
 
+## H54 (2026-10-07, this session) - corpus-calibrated truth prior, metric-derived stratified emission
+
+**One-click file of record:** `gems50-h54-corpuscal-40000-20261007T032111Z-nan.tif` -
+40,000 predicted pixels, sha256 `2cdf7e705c867008...`,
+single band float32, EPSG:32611, 100 m, 3730 x 3292, every finite value in `[0, 1]`, NaN only where
+the official template is NaN, all checks re-read from the written bytes
+(`docs/downloads/checks-gems50-h54-corpuscal-40000-20261007T032111Z-nan.json`).
+An all-finite twin and a one-file `.zip` sit beside it for portals that reject either form.
+Registered in `registry/submissions.json` as `GEMSDOE50-H53-CORPUSCAL-40000` with `organizer_score: null`.
+
+> Naming note: this session's candidate was labelled H53 when it was built; `main` had meanwhile taken
+> **H53** for a different candidate (the TMI x K/U conjunction), so the whole family here - package
+> `gems54`, `scripts/h54_*.py`, `evidence/h54_*.json`, file stem `gems50-h54-corpuscal-*` - was
+> renumbered to **H54** to keep two unrelated "H53"s out of the site, the registry and the download
+> folder. Nothing about the method changed in the renumbering.
+
+**H54 is this session's two new methods, and both were validated, not assumed.**
+
+1. *Corpus-calibrated truth prior.* The sibling repositories of this project each record their own
+   scored rasters, so 24 distinct scored predictions (plus 7 byte-identical twins) were joined to
+   their owner-reported scores and used to fit a per-cell Poisson truth field whose derived `N`, `T`
+   and `FP` are the metric's own definitions (`scripts/h54_corpus.py`, `scripts/h54_fit_truth.py`).
+   It did not reach a usable calibration: the search log stayed at RMSE ~0.12 and was monotone in `N`,
+   and the reason is now on the record - a field that explains 1.5x of the leaderboard's concentration
+   cannot reproduce a leaderboard that needs 5.6x. `evidence/h54_fit_status.json` records what ran, and
+   that `evidence/h54_fit.json` belongs to the earlier *linear* model class (RMSE 0.093 first-order /
+   0.096 exact closure at a degenerate `N` = 249,337), not to this fit.
+2. *Metric-derived stratified emission.* `DTI = T / (0.2(T+F) + 0.8N)` gives the exact stop rule
+   (`accept while kernel credit > 0.2T/(0.2F+0.8N)`) and it also exposes a trap every earlier build
+   fell into: `TPw` is a **maximum over predicted cells**, so a dense blob of dots pays once while
+   each of its dots still pays the false-positive penalty. Emitting one dot per 12 px block before any
+   block may take a second raised the same field from 0.026 to 0.099 credit per dot - **3.7x,
+   measured** (`src/gems54/emitter.py::emit_stratified`, pinned by `tests/test_gems54.py`).
+
+**Measured on the only independent instrument available here** (USGS SGMC mapped faults more than
+300 m from the provided catalogue, scored inside each frozen holdout core at matched mass):
+shipped 0.109 credit/dot, 3-px dotted
+0.147, matched-mass random control
+0.119, and the already-scored sibling incumbent
+0.148. `evidence/h54_validation.json`.
+
+**Decision: the H54 file is NOT slot-eligible** - it beats the matched-mass random control in
+0/4
+blocks, while the incumbent beats it in 3/4. The gate is deliberately an instrument and never a model:
+the uncalibrated prior predicts 0.156 DTI for the very same
+support, a number that is a property of the assumption. The recommended use of a weekly slot remains
+the highest-measured artifact in `main` (the H51 u-H52 union file the site leads with), and the
+H51 file alone reproduces its recorded 0.189 credit/dot exactly when re-measured in this session -
+1.7x the matched-mass random control, 4/4 blocked folds.
+
+**Two defects found and fixed, one inherited defect documented.** (a) The structural filters smoothed
+`nan_to_num(raster)` directly, so the boundary between data and no-data was detected as a lineament
+and rang a synthetic "fault" around the whole footprint outline: at its worst it carried 79% of the
+radiometric family's top 0.5% of pixels (0.12% expected). `gems54.field.masked_filter` (normalised
+convolution) plus a 6 px data-edge guard remove it, and a test pins the behaviour both ways; the fix is
+deliberately **not** applied inside `gems51.structfield`, because H51/H52's published numbers were
+produced by that code path and silently changing it would destroy their reproducibility. Audited
+consequence: the H51 file carries the artifact on 7.9% of its dots, where it earned *below*-average
+credit, so H51's measured advantage is not an edge effect - but a re-emission with the corrected filter
+is an open, cheap improvement. (b) `scripts/build_submission.py` still computes a 2-D ComCat `keep`
+mask it never applies (clause 6 caveat unchanged). (c) Three provenance contradictions in the sibling
+corpus are recorded in `evidence/h54_corpus.json`: byte-identical files reported with different scores,
+one resampled file reported as shipped, and every sibling "score" being an owner report rather than an
+organizer receipt.
+
+**The binding constraint is data, not method.** The field that beat the instrument used the official
+19-band `training_features.tif`; that file is not present in this sandbox and cannot be fetched without
+the owner's logged-in download, and no sibling mirror of it exists locally (checked: nothing over 90 MB
+in any cloned sibling). Re-downloading it and then running `scripts/build_h51.py` followed by
+`scripts/h54_ship.py --layout stratified` is the single highest-value next action for beating `0.3195`.
+An independent attempt to add a USGS Quaternary-fault corridor layer (`gdr_qfaults_traces.csv`, centroid
++ length, 376 traces inside the footprint) was measured and rejected: 0.054-0.074 credit/dot, below the
+random control.
+
 ## Executive summary and submission instructions
 
 The site is generated by [`scripts/build_h50_site.py`](scripts/build_h50_site.py) and the

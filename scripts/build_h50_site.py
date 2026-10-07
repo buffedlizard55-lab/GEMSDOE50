@@ -565,6 +565,94 @@ H51).</p>
 
 
 
+def h54_ship_data(evidence_dir: Path | None) -> tuple[dict[str, Any] | None, dict[str, Any] | None]:
+    ship = load_json_optional("h54_ship.json", evidence_dir)
+    val = load_json_optional("h54_validation.json", evidence_dir)
+    return ship, val
+
+
+def h54_results_card(ship: dict[str, Any], validation: dict[str, Any] | None) -> str:
+    """H54 (corpus-calibrated prior + stratified emission): method, numbers, and the failed gate."""
+    val = validation or {}
+    per = (val.get("matched_mass_holdout") or {}).get("per_arm", {})
+    arms = "".join(
+        f"<tr><td><code>{esc(k)}</code></td><td>{fmt(v['mean_sgmc_off'], 4)}</td>"
+        f"<td>{fmt(v['mean_credit_per_dot'], 4)}</td><td>{v['folds_beating_random']}/4</td></tr>"
+        for k, v in per.items())
+    ab = ship.get("layout_ablation_off_catalogue_instrument", {}) or {}
+    lay = "".join(f"<tr><td><code>{esc(k)}</code></td><td>{fmt(v['credit_per_dot'], 4)}</td></tr>"
+                  for k, v in ab.items() if isinstance(v, dict) and "credit_per_dot" in v)
+    gate = val.get("gate", {})
+    return f"""<section class="main"><div class="shell"><div class="grid">
+<article class="card span-12"><h2>H54: a truth prior fitted to our own scored files, and an emission rule read off the metric</h2>
+<p><strong>Two methods, one shared finding: the emission layout matters more than the field, and the
+field available in this sandbox is the binding constraint.</strong> (i) 24 distinct scored sibling
+predictions were joined to their owner-reported scores
+(<code>scripts/h54_corpus.py</code>, deduplicated on the <em>support</em> hash so nan/zeros/all-finite
+twins count once) and fitted with a per-cell Poisson truth field whose <code>N</code>, <code>T</code>
+and <code>FP</code> are the official metric's own definitions
+(<code>scripts/h54_fit_truth.py</code>). It produced no usable calibration: the search log held at
+RMSE ~0.12 and was monotone in <code>N</code>. The reason is quantified rather than hidden - the top of
+the leaderboard needs a field that concentrates truth 5.6x more than chance; ours manages 1.5x.
+(ii) <code>DTI = T / (0.2(T+F) + 0.8N)</code> gives the exact accept rule
+<code>credit &gt; 0.2T/(0.2F+0.8N)</code>, and because <code>TPw</code> is a <em>maximum</em> over
+predicted cells, a dense blob of dots pays once while every dot still pays the false-positive penalty.
+Switching to one dot per 12 px block per round multiplied the same field's measured quality 3.7x:</p>
+<div class="wide"><table><thead><tr><th>layout, same field, same 40,000-dot mass</th><th>credit per dot
+(SGMC-off instrument)</th></tr></thead><tbody>{lay}</tbody></table></div>
+<p>Blocked four-fold holdout, matched mass, scored on USGS SGMC faults more than 300 m from the provided
+catalogue (61,664 px):</p>
+<div class="wide"><table><thead><tr><th>arm</th><th>mean DTI</th><th>credit per dot</th>
+<th>folds beating random</th></tr></thead><tbody>{arms}</tbody></table></div>
+<div class="callout danger"><strong>Gate: NO SLOT.</strong> {esc(gate.get('rule', ''))}</div>
+<p class="sourced">A defect this work also fixed: the structural filters of this repository smooth
+<code>nan_to_num(raster)</code>, so the data/no-data boundary is detected as a lineament and rings a
+synthetic fault around the footprint outline. <code>gems54.field.masked_filter</code> (normalised
+convolution) plus a 6 px data-edge guard remove it; <code>tests/test_gems54.py</code> pins it, and the
+fix is deliberately additive so H51/H52's published numbers stay reproducible. Evidence:
+<span class="hash">evidence/h54_ship.json</span>, <span class="hash">evidence/h54_validation.json</span>,
+<span class="hash">evidence/h54_fit_status.json</span>.</p>
+</article></div></div></section>"""
+
+
+def h54_submission_card(ship: dict[str, Any], validation: dict[str, Any] | None) -> str:
+    """Exact portal strings for the H54 file, with the gate that says whether to use them."""
+    prim = ship["outputs"]["primary_nan"]
+    fname = prim["path"].split("/")[-1]
+    checks = ship["gate"]["format_checks_nan"]
+    fmt_ok = all(v for _, v in checks.items() if isinstance(v, bool))
+    gate = (validation or {}).get("gate", {})
+    ok = bool(gate.get("shipped_beats_random_in_every_fold") and gate.get("shipped_is_best_arm_on_mean"))
+    rows = "".join(f"<tr><td>{esc(k)}</td><td>{esc('pass' if v else 'fail')}</td></tr>"
+                   for k, v in checks.items() if isinstance(v, bool))
+    return f"""<section class="main"><div class="shell"><div class="grid">
+<article class="card span-12"><h2>H54 file: exact strings, and why the gate says do not use them this week</h2>
+<div class="callout {'success' if fmt_ok else 'danger'}"><strong>Format gate:
+{'PASS' if fmt_ok else 'FAIL'}</strong> - recomputed by reopening the written bytes, not by trusting
+the writer.</div>
+<p><a class="button" href="{esc(prim['path'])}" download>&#11015; {esc(fname)}</a>
+&nbsp;<span class="small">or the <a href="{esc(ship['outputs']['all_finite_zeros_twin']['path'])}"
+download>all-finite twin</a> / <a href="{esc(ship['outputs']['zip']['path'])}" download>.zip</a> if the
+portal rejects NaN</span></p>
+<ul class="list">
+<li><strong>Unique submission name:</strong> <code>{esc(ship['submission_name'])}</code></li>
+<li><strong>Optional note:</strong> <q>{esc(ship['submission_note'])}</q></li>
+<li><strong>SHA-256:</strong> <span class="hash">{esc(prim['sha256'])}</span> &middot;
+{prim['bytes']:,} bytes &middot; <strong>receipt:</strong>
+<a href="{esc('docs/downloads/checks-' + fname.replace('.tif', '.json'))}">checks-{esc(fname.replace('.tif', '.json'))}</a></li>
+<li><strong>AI-use disclosure:</strong> required in the narrative by the NLR/DOE rules; name the human
+reviewer and say an autonomous research agent produced this repository.</li>
+</ul>
+<div class="wide"><table><thead><tr><th>check on the bytes on disk</th><th>result</th></tr></thead>
+<tbody>{rows}</tbody></table></div>
+<div class="callout {'success' if ok else 'danger'}" style="margin-top:14px"><strong>Slot gate:
+{'PASS' if ok else 'NO SLOT'}</strong> - {esc(gate.get('rule', 'no validation evidence present'))}</div>
+<p class="sourced">Uniqueness: new sha256; the only locally available prior rasters were re-opened and
+compared pixel by pixel; a stale intermediate build was deleted and is recorded by hash in
+<code>evidence/h54_ship.json</code> so exactly one H54 file is offered.</p>
+</article></div></div></section>"""
+
+
 def h53_block(repo_dir: Path, ship_path: Path, check_path: Path) -> str:
     """Render the H53 candidate panel: one-click download first, then the honest numbers."""
     if not ship_path.exists():
@@ -1322,6 +1410,10 @@ def build_pages(output_dir: Path, report_path: Path, tiff_path: Path,
         methods_body = methods_body + h53_methods_block(h53)
         submission_body = (h53_download_band(h53) + submission_body
                            + h53_submission_block(h53) + h53_html)
+    h54_ship, h54_val = h54_ship_data(evidence_dir)
+    if h54_ship:
+        results_body = results_body + h54_results_card(h54_ship, h54_val)
+        submission_body = submission_body + h54_submission_card(h54_ship, h54_val)
     submission_body = submission_body + h51_html
     if h52:
         results_body = h52_compare_card + h52_results_block(h52, h52a, evidence_dir) + results_body
