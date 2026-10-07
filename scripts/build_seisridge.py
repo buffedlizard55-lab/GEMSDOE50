@@ -1,33 +1,25 @@
 #!/usr/bin/env python3
-"""Build the GEMSDOE50 submission.
+"""ARCHIVED legacy submission builder; not an approved H50-S1 workflow.
 
-Content
-  core    legacy 2-D seismicity lineation corridors from a mixed-network ComCat
-          extract with unresolved contributor rights (covariance/inertia clusters +
-          pruned Hough spans). The triangle-area filter is computed but its keep mask
-          is not applied to subsequent fitting, so this builder does not establish
-          aftershock declustering. Not an H50-S1 input or a new detector.
-  volume  ridge evidence from the USGS 3DEP lidar scarp descriptors and the GeoDAWN
-          airborne radiometrics, restricted to >300 m from the provided catalogue
+This historical code combines a mixed-network ComCat extract, third-party derived
+LiDAR scarp features with unresolved reuse rights, radiometrics, and prior assumptions.
+Do not run it to create a competition submission. The old narrative called 0.2778 an
+owner's best live score based on sibling-project notes; that association is unresolved
+because the current GEMSDOE32 owner site labels H33-2-B2 unscored and 0.2747 a model
+projection. It is not a verified organizer score, current leaderboard value, or verified
+score-to-TIFF mapping. See docs/research/data-rights-audit-20261006.md.
 
-Decision rules (all measured, none assumed)
-  * binary emission: DTI is increasing in the scale of a fixed support, so every
-    emitted cell is exactly 1.0
-  * the metric's own first-order condition (tests/test_metric.py): a unit of mass
-    at kernel weight w raises DTI iff w > 0.2*DTI
-  * the sibling ledger of 16 live-scored anchor files (GEMSDOE40/docs/data/
-    live-transfer.json, truth-inversion.json) puts the owner's best live score,
-    0.2778, on an emission of 37,654 dots with per-dot hidden credit ~0.09-0.14,
-    and shows a uniform-scatter control at the same mass scores 0.0778.  The mass
-    is therefore chosen by walking the same bar rule on the best available
-    ranking instrument (per-dot credit on the off-catalogue USGS SGMC inventory,
-    LOO Spearman +0.705 against those 16 live scores).
-
-Outputs
-  docs/downloads/gemsdoe50-<name>.tif / .zip / checks-<name>.tif.json
-  evidence/build_<name>.json   every number behind the build
+The marginal-credit condition implemented in the legacy emitter is an algebraic property
+of the metric; it does not validate any historical score or artifact claim.
 """
 from __future__ import annotations
+
+if __name__ == "__main__":
+    raise SystemExit(
+        "Disabled legacy submission builder: its scarp derivative reuse rights and mixed-source "
+        "ComCat semantics are unresolved. No TIFF was written; see "
+        "docs/research/data-rights-audit-20261006.md."
+    )
 
 import argparse
 import json
@@ -71,8 +63,8 @@ def terrain_ridge_evidence() -> tuple[np.ndarray, dict]:
     ev = emission.oriented_ridge_filter(np.where(valid, scarp, 0.0), 12, 15, 1)
     return emission.normalise(ev, valid), {
         "layer": "USGS 3DEP 1 m DEM scarp descriptors (step_max, lapneg_max, coh100)",
-        "source": "GEMSDOE24 data/external/lidar_scarp_features_u8.tif, "
-                  "built from official 3DEP 1 m tiles; no use restrictions",
+        "source": "GEMSDOE24 data/external/lidar_scarp_features_u8.tif, built from 3DEP; "
+                  "derived-file reuse license unresolved; excluded from current H50-S1",
         "transform": "sqrt(step_max)*(1+lapneg_max)*coh100, then max over 12 orientations "
                      "of a 15 px oriented mean, min-max normalised over lidar coverage"}
 
@@ -88,7 +80,7 @@ def radiometric_ridge_evidence() -> tuple[np.ndarray, dict]:
     ev = emission.oriented_ridge_filter(np.where(valid, grad, 0.0), 12, 15, 1)
     return emission.normalise(ev, valid), {
         "layer": "GeoDAWN airborne radiometrics K/Th/U/TC (USGS 22103)",
-        "source": "https://doi.org/10.5066/P93LGLVQ (public domain, USGS)",
+        "source": "https://doi.org/10.5066/P93LGLVQ (USGS GeoDAWN source); derived-raster reuse license unresolved and excluded from current H50-S1",
         "transform": "sum of |grad| over the four channels (sigma 2 px), then max over 12 "
                      "orientations of a 15 px oriented mean, normalised over coverage"}
 
@@ -254,8 +246,9 @@ def main() -> int:
         "instrument_scores": scores,
         "seismicity": core_notes, "layers": [terrain_note, radio_note],
         "honesty": [
-            "No organizer score exists for this file. Every local score here is an instrument, "
-            "not a receipt; the only live scores quoted are the sibling ledger's.",
+            "No organizer score or receipt is authenticated for this file. Every local score here is an instrument, "
+            "not a receipt; the sibling-ledger values are owner-reported historical context, "
+            "not independently verified current leaderboard scores.",
             "The Monte Cristo axis instrument is circular (derived from the sequence's own "
             "epicentres) and is reported only as a consistency check.",
             "The 2020 Monte Cristo rupture (Koehler et al. 2021, doi:10.1785/0220200371) is "
@@ -275,7 +268,3 @@ def main() -> int:
     print(f"instruments: {json.dumps(scores, indent=1)[:800]}")
     print(f"wrote {path} and {zpath}  ({time.time()-t0:.0f}s)")
     return 0
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())

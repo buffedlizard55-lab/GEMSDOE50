@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
-"""Verify the external data the build depends on, and say exactly what to do if it is missing.
+"""ARCHIVED inventory checker; it does not authorize restoring or using these legacy files.
 
-Nothing is downloaded here: DrivenData is login-gated and the official USGS sources are large.
-This script only *verifies* and *explains*, so that a missing file can never turn into a silently
-different submission.
+H50-S1 does not consume mixed-network ComCat or third-party derived scarp/radiometric rasters.
+Their source-specific rights or derived-file reuse terms are unresolved. This utility only
+checks legacy byte hashes; a hash match is not a license, provenance, or scientific approval.
 """
 from __future__ import annotations
 
 import hashlib
-import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
@@ -22,15 +21,8 @@ EXPECTED = {
 }
 
 RESTORE = {
-    "lidar_scarp_features_u8.tif":
-        "copy from buffedlizard55-lab/GEMSDOE24 data/external/ (byte-identical), or rebuild from "
-        "the official USGS 3DEP 1 m tiles listed at https://apps.nationalmap.gov/downloader/",
-    "geodawn_rad_u8.tif":
-        "copy from buffedlizard55-lab/GEMSDOE24 data/external/, or re-fetch from "
-        "https://doi.org/10.5066/P93LGLVQ (ScienceBase 657e1d85d34e23d3533209f7), archives "
-        "22103_area1_tiffs.zip / 22103_area2_tiffs.zip",
-    "usgs_comcat_earthquakes.csv.gz":
-        "fetch with the FDSN event service query recorded in registry/sources.json, then gzip",
+    name: "Not approved for H50-S1; do not restore until source-specific rights and provenance are resolved."
+    for name in EXPECTED
 }
 
 
@@ -59,9 +51,9 @@ def main() -> int:
     for name in missing:
         print(f"  MISSING {name}\n            {RESTORE.get(name, 'see registry/sources.json')}")
     if bad or missing:
-        print("\nThe build is refused until the hashes match; a different file would be a different submission.")
+        print("\nLegacy inventory is incomplete or mismatched; no H50-S1 build is authorized.")
         return 1
-    print("\nall external data present and hash-verified")
+    print("\nLegacy bytes match their pins only; rights, source provenance, and H50-S1 use are not approved.")
     return 0
 
 
