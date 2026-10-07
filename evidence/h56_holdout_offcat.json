@@ -1,0 +1,163 @@
+{
+ "candidate": "h52 default",
+ "n_dots": 90000,
+ "truth_mode": "sgmc_off",
+ "split_spec": "evidence/holdout-v1.json",
+ "split_valid_mask_sha256": "c075e765e015e44f8da6b85aff1f5daa9c39d70d8fc3601d4811984fabe687cf",
+ "folds": {
+  "NW": {
+   "eligible_cells": 2075898,
+   "truth_cells": 19101,
+   "candidate_dots_in_cell": 30998,
+   "dti_candidate": 0.14852249921611474,
+   "coverage_candidate": 0.1696658236371698,
+   "credit_per_dot_candidate": 0.10454825786481646,
+   "dti_uniform_mean": 0.10960597730605791,
+   "dti_uniform_max": 0.11322293722726019,
+   "dti_translation_mean": 0.1164884778959982,
+   "dti_translation_max": 0.1237478195129235,
+   "lift_over_uniform": 1.3550583906695928,
+   "subtiles": [
+    {
+     "id": "NW-00",
+     "dti": 0.07111227100425895,
+     "dti_uniform": 0.09531443859963505
+    },
+    {
+     "id": "NW-01",
+     "dti": 0.17023757740923665,
+     "dti_uniform": 0.10252610127042329
+    },
+    {
+     "id": "NW-10",
+     "dti": 0.10753835694047204,
+     "dti_uniform": 0.10105248587468578
+    },
+    {
+     "id": "NW-11",
+     "dti": 0.24914612234772285,
+     "dti_uniform": 0.11079015052048137
+    }
+   ]
+  },
+  "NE": {
+   "eligible_cells": 987533,
+   "truth_cells": 19576,
+   "candidate_dots_in_cell": 12462,
+   "dti_candidate": 0.15416593745416138,
+   "coverage_candidate": 0.1453500225789789,
+   "credit_per_dot_candidate": 0.22832386791896092,
+   "dti_uniform_mean": 0.11639911780183192,
+   "dti_uniform_max": 0.12009862759674098,
+   "dti_translation_mean": 0.11970778537156389,
+   "dti_translation_max": 0.1277924284477825,
+   "lift_over_uniform": 1.324459672595002,
+   "subtiles": [
+    {
+     "id": "NE-00",
+     "dti": 0.26765204998482806,
+     "dti_uniform": 0.16404392218484373
+    },
+    {
+     "id": "NE-01",
+     "dti": 0.04622062341938445,
+     "dti_uniform": 0.022371454874957113
+    },
+    {
+     "id": "NE-10",
+     "dti": 0.21565209305901042,
+     "dti_uniform": 0.19827521347731605
+    },
+    {
+     "id": "NE-11",
+     "dti": 0.0,
+     "dti_uniform": NaN
+    }
+   ]
+  },
+  "SW": {
+   "eligible_cells": 375029,
+   "truth_cells": 1188,
+   "candidate_dots_in_cell": 9609,
+   "dti_candidate": 0.11340631566897237,
+   "coverage_candidate": 0.27723377136587674,
+   "credit_per_dot_candidate": 0.03427554588226262,
+   "dti_uniform_mean": 0.08108678833633413,
+   "dti_uniform_max": 0.09192985736787121,
+   "dti_translation_mean": 0.09136468533866365,
+   "dti_translation_max": 0.10053511273532091,
+   "lift_over_uniform": 1.398579447968544,
+   "subtiles": [
+    {
+     "id": "SW-00",
+     "dti": 0.0,
+     "dti_uniform": NaN
+    },
+    {
+     "id": "SW-01",
+     "dti": 0.11161356364957863,
+     "dti_uniform": 0.07322910615976481
+    },
+    {
+     "id": "SW-10",
+     "dti": 0.0,
+     "dti_uniform": NaN
+    },
+    {
+     "id": "SW-11",
+     "dti": 0.11829027033921762,
+     "dti_uniform": 0.1046034885220772
+    }
+   ]
+  },
+  "SE": {
+   "eligible_cells": 600955,
+   "truth_cells": 11218,
+   "candidate_dots_in_cell": 15437,
+   "dti_candidate": 0.2961352279605872,
+   "coverage_candidate": 0.32905621255342393,
+   "credit_per_dot_candidate": 0.23912370230124438,
+   "dti_uniform_mean": 0.18217130642709636,
+   "dti_uniform_max": 0.18498488399144639,
+   "dti_translation_mean": 0.2200456410679162,
+   "dti_translation_max": 0.22350130697396553,
+   "lift_over_uniform": 1.6255865633762603,
+   "subtiles": [
+    {
+     "id": "SE-00",
+     "dti": 0.24006729340733726,
+     "dti_uniform": 0.1290007517954001
+    },
+    {
+     "id": "SE-01",
+     "dti": 0.0,
+     "dti_uniform": NaN
+    },
+    {
+     "id": "SE-10",
+     "dti": 0.3085410062957186,
+     "dti_uniform": 0.20126156694958613
+    },
+    {
+     "id": "SE-11",
+     "dti": 0.0,
+     "dti_uniform": NaN
+    }
+   ]
+  }
+ },
+ "controls": {},
+ "summary": {
+  "pooled_dti_candidate": 0.17327920253243326,
+  "pooled_dti_uniform": 0.11840624365719733,
+  "mean_paired_delta": 0.054872958875235904,
+  "paired_ci95": [
+   0.026135252770341934,
+   0.0853915104488824
+  ],
+  "positive_macrofolds": 4,
+  "n_macrofolds": 4,
+  "beats_matched_uniform_in_all_folds": true,
+  "beats_translation_mean_in_all_folds": true
+ }
+}

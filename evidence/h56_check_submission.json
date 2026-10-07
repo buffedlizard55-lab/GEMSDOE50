@@ -1,0 +1,94 @@
+{
+ "format": {
+  "driver": "GTiff",
+  "count_is_1": true,
+  "dtype_is_float32": true,
+  "crs_is_epsg32611": true,
+  "same_shape": true,
+  "same_transform": true,
+  "same_bounds": true,
+  "min": 0.0,
+  "max": 1.0,
+  "nan_count": 7111787,
+  "values_in_0_1": true,
+  "nan_only_outside_footprint": true,
+  "positive_px": 90000,
+  "unique_positive_values": [
+   1.0
+  ],
+  "compression": "Compression.lzw",
+  "nodata": NaN,
+  "footprint_source": "registry/footprint_mask.npz",
+  "footprint_px": 5167373,
+  "outside_footprint_all_nan": true,
+  "all_checks_pass": true
+ },
+ "uniqueness": {
+  "n_prior": 8,
+  "identical_sha256": [],
+  "max_iou": 0.18691532741664668,
+  "worst_overlap_file": "13gems_20261001_r13-lattice-s5_v2_nan-outside.tif",
+  "min_novel_fraction_at_2px": 0.4805,
+  "corpus_entries": [
+   {
+    "file": "13gems_20261001_r13-lattice-s5_v2_nan-outside.tif",
+    "prior_dots": 206895,
+    "novel_fraction_at_2px": 0.4805,
+    "reproduced_prior": 0.18651973223132506,
+    "iou_2px": 0.18691532741664668
+   },
+   {
+    "file": "gems16-h16-1-topo-geophys-baseline-ridges-20260930-df20f65e-nan.tif",
+    "prior_dots": 123939,
+    "novel_fraction_at_2px": 0.8236888888888889,
+    "reproduced_prior": 0.23668901637095668,
+    "iou_2px": 0.0801126868648111
+   },
+   {
+    "file": "gems19-h19-4-multiline-corroborated-openness-thermal-pop-20260930-691e4dfa-nan.tif",
+    "prior_dots": 123779,
+    "novel_fraction_at_2px": 0.8292777777777778,
+    "reproduced_prior": 0.2380694625097957,
+    "iou_2px": 0.07743909199955648
+   },
+   {
+    "file": "gems24-h24-0-mirror-h19-5-group-best-20261002-e27054cf-nan.tif",
+    "prior_dots": 121131,
+    "novel_fraction_at_2px": 0.8345222222222223,
+    "reproduced_prior": 0.24131725157061362,
+    "iou_2px": 0.07589253865204497
+   },
+   {
+    "file": "gems24-h25-1-dotted-h19-5-d1-5-20261002-989f59505db1-nan.tif",
+    "prior_dots": 60069,
+    "novel_fraction_at_2px": 0.8537333333333333,
+    "reproduced_prior": 0.24515140921273867,
+    "iou_2px": 0.09615426755779555
+   },
+   {
+    "file": "gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-nan.tif",
+    "prior_dots": 44090,
+    "novel_fraction_at_2px": 0.8718555555555556,
+    "reproduced_prior": 0.24645044227716034,
+    "iou_2px": 0.09410315200274158
+   },
+   {
+    "file": "gems27-topo-gap-closure-t-v2-on-d1-5-20261002-5512495c6bd1-nan.tif",
+    "prior_dots": 61328,
+    "novel_fraction_at_2px": 0.8520333333333333,
+    "reproduced_prior": 0.24262979389512132,
+    "iou_2px": 0.09649230858409837
+   },
+   {
+    "file": "gems7-lidarscarp-ridge-top2pct-36c3a3f341c8.tif",
+    "prior_dots": 76859,
+    "novel_fraction_at_2px": 0.8349555555555556,
+    "reproduced_prior": 0.3200536046526757,
+    "iou_2px": 0.09772046972139074
+   }
+  ],
+  "my_dots": 90000,
+  "my_sha256": "c5179435bacc705d564e36af7466fe6374b6816875cbda2eab2da85ec12e9988",
+  "verdict_unique": true
+ }
+}

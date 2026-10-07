@@ -48,7 +48,12 @@ def test_h55_site_regeneration_is_deterministic_and_download_first():
 
     index = (ROOT / "index.html").read_text(encoding="utf-8")
     assert "Download portal-safe TIFF" in index
-    assert index.index("Download portal-safe TIFF") < index.index("Executive summary")
+    # Charter rule: a one-click download and the executive summary sit at the very top of the
+    # site.  A later session may legitimately place its own download band above this one, so the
+    # assertion is about ordering and presence, not about which session's artifact is first.
+    first_download = index.index("Download the submission GeoTIFF")
+    assert first_download < index.index("Executive summary")
+    assert index.index("Download portal-safe TIFF") > first_download
     assert "NO SLOT" in index
     assert "0.019321" in index and "0.115822" in index
     assert "0.2778" in index and "UNSCORED" in index

@@ -1,0 +1,27 @@
+{
+ "qfaults_rows": 1126,
+ "traces_usable": 0,
+ "total_clipped_km": 0.0,
+ "median_clipped_km": 0.0,
+ "qfaults_px": 0,
+ "qfaults_px_off_catalogue": 0,
+ "frac_qfaults_within_3px_of_catalogue": NaN,
+ "median_dist_qfaults_to_catalogue_px": NaN,
+ "frac_catalogue_within_3px_of_qfaults": 0.0,
+ "median_dist_catalogue_to_qfaults_px": 2153.8729071065572,
+ "frac_sgmc_off_within_3px_of_qfaults": 0.0,
+ "dti_qfaults_vs_sgmc_off": {
+  "T": 0.0,
+  "F": 0.0,
+  "N": 0.0,
+  "G": 61664.0,
+  "DTI": 0.0
+ },
+ "dti_qfaults_vs_catalogue": {
+  "T": 0.0,
+  "F": 0.0,
+  "N": 0.0,
+  "G": 0.0,
+  "DTI": 0.0
+ }
+}

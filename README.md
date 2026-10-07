@@ -70,6 +70,66 @@ by finding defensible fault traces omitted from the supplied catalogue. Core val
     repository/environment policy permits it. Never switch or push another branch from this
     session.
 
+## H56 — the best-measured design in this repository, and an H51 provenance correction (this session)
+
+Read [`docs/research/h56-diagnosis.md`](docs/research/h56-diagnosis.md) (why the 0.2778 artifact
+topped the corpus, and the arithmetic of what 0.3774 requires) and
+[`docs/hypotheses-20261007-h56.md`](docs/hypotheses-20261007-h56.md) (five untried hypotheses,
+screened and ranked; four negative results recorded rather than buried). This session's candidate
+is numbered **H56** because `main` already carries unrelated H52, H53, H54 and H55 candidates.
+
+**One-click download (top of the site):**
+`docs/downloads/gemsdoe50-h56-scarpdisperse-90000-allfinite.tif` — 90,000 predicted pixels, values
+`0` / `1`, `float32`, EPSG:32611, 3730x3292, identical bounds and transform to the official
+template, **every one of the 12,279,160 cells finite and inside `[0, 1]`**. A `-nan.tif` sibling
+keeps `NaN` outside the study footprint to match the official sample, and a `.zip` carries the
+all-finite GeoTIFF. The all-finite variant is the primary download precisely because the portal
+once rejected an upload with `Predicted values must be in range [0, 1]`: a non-finite cell makes a
+plain `min()/max()` validator see `NaN`, and `NaN <= 1` is false.
+
+**Measured.** Off-catalogue DTI **0.1874** against a matched-mass uniform control 0.1401 (**1.34x**;
+1.59x at 30,000 dots), versus 0.1468 for the best prior artifact on that frame. Frozen blocked
+holdout: **4/4** macrofolds positive, paired block-bootstrap 95% CI **[0.0261, 0.0854]**, beats
+translation controls 4/4. Format gate `all_checks_pass: true`. Uniqueness gate: worst full-pixel
+IoU **0.0154** against every prior artifact on disk, minimum novel fraction at 2 px 0.4805, no SHA
+match. Modelled hidden DTI **0.386** — that is a **model with a stated transfer assumption, not a
+receipt**; `docs/research/h56-diagnosis.md` sections 5 and 9 state the assumption and what beating
+0.3774 would actually require.
+
+**Three findings that are binding on anything built afterwards.**
+
+1. **The corpus's structural flaw is emission geometry, not detector content.** For binary unit dots
+   the official metric reduces exactly to `DTI = T / (0.2N + 0.8G)`, so every dot costs the same
+   0.2 in the denominator no matter what it earns. Top-*N* selection piles dots a few pixels deep on
+   the strongest feature, where the `max` in the numerator saturates and the cost does not. H56
+   emits **variable-density blue noise at exactly 3 px** — `R = 300 m`, the coarsest spacing at
+   which two dots never compete for the same truth pixel — which is also the geometry measured on
+   the group's best off-catalogue prior artifact.
+2. **Only the LiDAR surface-morphology family carries information about faults the given catalogue
+   does not contain.** Channel screen, enrichment over the scored domain: LiDAR up-face residual
+   **1.42**, relief 1.40, the scarp family 1.21-1.42; **every** magnetic and radiometric residual
+   1.02-1.09 (TMI gradient 1.02).
+3. **A statistic the H51 series was ranked on does not exist.** The `rho = +0.566` / `+0.534`
+   magnetic alignment attributed to `evidence/h51_residual_alignment.json` is not in that file,
+   which measures `f_gmtmi95` at `+0.125` raw (p = 0.552), partial `-0.385`. The real provenance is
+   `evidence/h51_truth_map.json` key `/grids/32/phi[919] = 0.5662404620083589` (one spatial block's
+   phi for one artifact grid) and unrelated `fold_aucs` / `null_aucs` in the sibling `GEMSDOE24`
+   audit. H51-A's rank-1 position is withdrawn in place in
+   [`docs/research/h51-hypotheses.md`](docs/research/h51-hypotheses.md) with all four claims struck
+   through, and the magnetic family is independently rejected by the channel screen. This is the
+   most consequential irregularity found in the project so far and it is recorded, not quietly
+   fixed.
+
+**Reproduce:**
+
+```bash
+# needs the three staged GeoDAWN rasters; see .arena/work/g24/data/external or the sibling repo
+python scripts/build_h56.py --layers .arena/work/g24/data/external --out docs/downloads
+python scripts/validate_h56.py --truth-mode sgmc_off --out evidence/h56_holdout_offcat.json
+python scripts/h56_uniqueness.py --novel-threshold 0.45
+python scripts/h56_holdout.py --n-boot 200        # frozen macrofold split
+```
+
 ## Current outcome — 2026-10-07 UTC
 
 ### This session's own artifact — H52-C (eight-family coincidence)

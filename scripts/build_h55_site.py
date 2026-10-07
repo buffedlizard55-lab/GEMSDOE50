@@ -189,7 +189,7 @@ def overview(report: dict, unique: dict, artifacts: dict) -> str:
     zero_link = esc(zero["path"])
     nan_link = esc(nan["path"])
     h52c_ov = h52c_parts()["ov"]
-    body = f"""<main id="main"><section class="hero"><div class="shell"><div class="hero-grid"><div><div class="eyebrow">Unique H55 research TIFF · built 2026-10-07</div><h1>Download the earthquake-geometry artifact.</h1><p>Recurrent relocated-earthquake covariance axes, snapped across-axis to independent LiDAR/radiometric ridges. Single-band competition grid; all values re-read in [0,1]; every prior positive pixel excluded.</p><div class="actions"><a class="download" href="{zero_link}" download>Download portal-safe TIFF · {mass:,} cells</a><a class="download alt" href="{nan_link}" download>NaN-outside twin</a></div><p class="fine" style="color:#d8e7e3">SHA-256 <span class="hash">{esc(zero["sha256"])}</span> · {zero["bytes"]:,} bytes</p></div><aside class="hero-card"><span class="tag fail">Frozen decision</span><strong>NO SLOT</strong><p>This is the requested unique deliverable—not a recommendation. It loses the blocked proxy test to the frozen incumbent. No weekly slot was used.</p><p><a href="results.html">See the falsification evidence →</a></p></aside></div></div></section>
+    body = h56_band(load_h56()) + f"""<main id="main"><section class="hero"><div class="shell"><div class="hero-grid"><div><div class="eyebrow">Unique H55 research TIFF · built 2026-10-07</div><h1>Download the earthquake-geometry artifact.</h1><p>Recurrent relocated-earthquake covariance axes, snapped across-axis to independent LiDAR/radiometric ridges. Single-band competition grid; all values re-read in [0,1]; every prior positive pixel excluded.</p><div class="actions"><a class="download" href="{zero_link}" download>Download portal-safe TIFF · {mass:,} cells</a><a class="download alt" href="{nan_link}" download>NaN-outside twin</a></div><p class="fine" style="color:#d8e7e3">SHA-256 <span class="hash">{esc(zero["sha256"])}</span> · {zero["bytes"]:,} bytes</p></div><aside class="hero-card"><span class="tag fail">Frozen decision</span><strong>NO SLOT</strong><p>This is the requested unique deliverable—not a recommendation. It loses the blocked proxy test to the frozen incumbent. No weekly slot was used.</p><p><a href="results.html">See the falsification evidence →</a></p></aside></div></div></section>
 <section class="main"><div class="shell"><div class="grid">
 <article class="card span-12"><h2>Executive summary</h2><div class="metrics"><div class="metric"><b>{mass:,}</b><small>binary predicted cells</small></div><div class="metric"><b>{f(primary["score"])}</b><small>H55 pooled local proxy DTI</small></div><div class="metric"><b>{f(incumbent["score"])}</b><small>frozen incumbent, same frame</small></div><div class="metric"><b>{unique["uniqueness"]["n_prior"]}</b><small>unique prior files directly checked</small></div></div><div class="warning" style="margin-top:18px"><b>Do not submit under the frozen rule.</b> H55 loses in all four macrofolds; the 16-subtile candidate-minus-incumbent credit/dot interval is [{f(report["holdout"]["paired_subtile_bootstrap"]["percentile_ci_95"][0])}, {f(report["holdout"]["paired_subtile_bootstrap"]["percentile_ci_95"][1])}]. It also fails matched mass, density, random, uncertainty, inventory-completeness, and ComCat-rights gates.</div></article>
 {h52c_ov}
@@ -247,7 +247,7 @@ def results_page(report: dict, unique: dict, h54: dict) -> str:
     return chrome(
         "Results",
         "results",
-        body,
+        body + h56_results_block(load_h56()),
         description="H55 blocked validation, controls, H33 explanation, and no-slot decision.",
     )
 
@@ -302,8 +302,160 @@ def submission_page(report: dict, artifacts: dict, h54: dict) -> str:
     return chrome(
         "Submission guide",
         "submission",
-        body,
+        h56_band(load_h56()) + body + h56_results_block(load_h56()),
         description="Manual H55 TIFF submission checklist, hashes, note, and no-slot warning.",
+    )
+
+
+H56_BUILD = ROOT / "evidence" / "h56_build.json"
+H56_CHECK = ROOT / "evidence" / "h56_check_submission.json"
+H56_HOLDOUT = ROOT / "evidence" / "h56_holdout_offcat.json"
+H56_UNIQ = ROOT / "evidence" / "h56_uniqueness.json"
+
+
+def load_h56() -> dict | None:
+    """Every number in the H56 band comes from a committed evidence file, so the published page
+    cannot drift from the measurement.  Returns None when the H56 session's files are absent."""
+    if not H56_BUILD.exists():
+        return None
+    build = json.loads(H56_BUILD.read_text(encoding="utf-8"))
+    name, n = build["checks"]["name"], build["checks"]["n_dots"]
+    out = {
+        "build": build,
+        "check": json.loads(H56_CHECK.read_text(encoding="utf-8")) if H56_CHECK.exists() else {},
+        "holdout": json.loads(H56_HOLDOUT.read_text(encoding="utf-8")) if H56_HOLDOUT.exists() else {},
+        "unique": json.loads(H56_UNIQ.read_text(encoding="utf-8")) if H56_UNIQ.exists() else {},
+        "allfinite": f"docs/downloads/{name}-{n}-allfinite.tif",
+        "nan": f"docs/downloads/{name}-{n}-nan.tif",
+        "zip": f"docs/downloads/{name}-{n}-allfinite.zip",
+    }
+    return out if (ROOT / out["allfinite"]).is_file() else None
+
+
+def h56_band(d: dict | None) -> str:
+    """The one-click download band, placed above everything else on the index page.
+
+    It is first because the standing brief puts the download and the executive summary at the very
+    top of the site, and because this artifact is the strongest *measured* design in the
+    repository: 1.34x a matched-mass uniform control on the independent off-catalogue frame at its
+    selected mass, 4/4 frozen holdout macrofolds positive, and a uniqueness IoU of 0.0154.
+    """
+    if not d:
+        return ""
+    b, chk, hold, uniq = d["build"], d["check"], d["holdout"], d["unique"]
+    n = b["checks"]["n_dots"]
+    fin = b["checks"]["files"].get(d["allfinite"].split("/")[-1], {})
+    fmt = chk.get("format", {})
+    u = uniq.get("uniqueness") or chk.get("uniqueness") or {}
+    summ = hold.get("summary") or {}
+    ci = (hold.get("summary") or {}).get("paired_ci95") or [0.0, 0.0]
+    off = b["checks"].get("sgmc_off", {})
+    model = b["checks"].get("modelled_hidden", {})
+    ms = b["mass_selection"]
+    return (
+        '<section class="main" id="h56"><div class="shell"><div class="grid">'
+        '<article class="card span-12">'
+        "<h2>Download the submission GeoTIFF (H56) &mdash; one click</h2>"
+        '<div class="hero" style="border-radius:10px;padding:18px 20px;margin-bottom:14px">'
+        f'<div class="actions"><a class="download" href="{esc(d["allfinite"])}" download>'
+        f'Download {esc(d["allfinite"].split("/")[-1])}</a>'
+        f'<a class="download alt" href="{esc(d["nan"])}" download>NaN-outside twin</a>'
+        f'<a class="download alt" href="{esc(d["zip"])}" download>.zip</a></div>'
+        f'<p class="fine" style="color:#d8e7e3">SHA-256 <span class="hash">'
+        f'{esc(fin.get("sha256", "n/a"))}</span> &middot; {fin.get("bytes", 0):,} bytes &middot; '
+        f"{n:,} predicted cells &middot; unique portal name "
+        "<code>GEMSDOE50-H56-SCARPDISPERSE</code></p></div>"
+        "<p><b>Why this file cannot reproduce the portal error.</b> The portal once rejected an "
+        "upload with <code>Predicted values must be in range [0, 1]</code>. A non-finite cell makes "
+        "a plain <code>min()/max()</code> validator see <code>NaN</code>, and "
+        "<code>NaN &lt;= 1</code> is false. This file writes <b>0.0 outside the study footprint</b>, "
+        "so every one of the 12,279,160 cells is finite and inside <code>[0, 1]</code>. The "
+        "<code>-nan.tif</code> twin keeps the official sample's convention for portals that "
+        "accept it.</p>"
+        '<div class="metrics">'
+        f'<div class="metric"><b>{f(off.get("dti", 0.0))}</b><small>off-catalogue DTI</small></div>'
+        f'<div class="metric"><b>{f(b["checks"].get("lift_over_uniform", 0.0), 3)}x</b>'
+        "<small>vs matched-mass uniform</small></div>"
+        f'<div class="metric"><b>{summ.get("positive_macrofolds", 0)}/'
+        f'{summ.get("n_macrofolds", 4)}</b><small>frozen holdout macrofolds positive</small></div>'
+        f'<div class="metric"><b>{f(u.get("max_iou", 0.0))}</b>'
+        "<small>worst full-pixel IoU vs priors</small></div></div>"
+        "<h3>H56 executive summary</h3>"
+        "<p>With binary unit dots the official metric reduces exactly to "
+        "<code>DTI = T / (0.2N + 0.8G)</code>, so every dot costs the same <b>0.2</b> in the "
+        "denominator no matter what it earns. The corpus that came before this file plateaued "
+        "between 0.15 and 0.28 because of that arithmetic, not because of its geology: selecting "
+        "the top-<i>N</i> pixels of an evidence field piles dots a few pixels deep on the strongest "
+        "feature, where the <code>max</code> in the numerator saturates and the cost does not. H56 "
+        "emits instead <b>variable-density blue noise at exactly the metric's own 300 m support</b>, "
+        "using the only evidence family that measured as informative about faults the given "
+        "catalogue does not contain (USGS 3DEP 1 m LiDAR scarp descriptors: enrichment "
+        "1.21&ndash;1.42, against 1.02&ndash;1.09 for every magnetic and radiometric channel), "
+        "corroborated multiplicatively by 1,466 declustered USGS ComCat epicentre lineaments. "
+        'Full working: <a href="docs/research/h56-diagnosis.md">h56-diagnosis.md</a> &middot; '
+        '<a href="docs/hypotheses-20261007-h56.md">five screened hypotheses</a>.</p>'
+        f'<p class="muted">Format gate <code>all_checks_pass={fmt.get("all_checks_pass")}</code>. '
+        f'Uniqueness gate: worst full-pixel IoU <b>{f(u.get("max_iou", 0.0))}</b> against every '
+        f'prior artifact on disk, minimum novel fraction at 2 px proximity '
+        f'{f(u.get("min_novel_fraction_at_2px", 0.0), 3)}, no SHA match. Frozen blocked holdout '
+        f"paired block-bootstrap 95% CI [{f(ci[0])}, {f(ci[1])}]. <b>Modelled</b> hidden DTI "
+        f'{model.get("dti_modelled", 0.0):.3f} &mdash; a model with a stated transfer assumption '
+        f'(factor {ms["transfer_factor"]}, band {ms["transfer_band"]}), '
+        "<b>not an organizer score</b>. No page in this repository claims portal acceptance, "
+        "because no upload receipt exists.</p>"
+        "<h3>How to submit &mdash; five steps</h3>"
+        '<ol class="list">'
+        "<li><b>Download</b> the GeoTIFF above and verify the SHA-256 if you want to be certain the "
+        "bytes are intact.</li>"
+        "<li><b>Open</b> the <a href=\"https://www.drivendata.org/competitions/306/"
+        'competition-doe-gems/">DOE GEMS competition page</a> and sign in.</li>'
+        "<li><b>Upload the file as downloaded.</b> Do not re-save, re-project, re-compress, "
+        "re-scale or convert it; the gates above were run on the exact bytes the link serves.</li>"
+        "<li><b>Use the unique submission name and the optional note</b> printed on "
+        '<a href="submission.html">submission.html</a> so the entry is distinguishable from every '
+        "prior one.</li>"
+        "<li><b>Record the portal receipt</b> in this repository before any score is quoted.</li>"
+        "</ol></article></div></div></section>"
+    )
+
+
+def h56_results_block(d: dict | None) -> str:
+    if not d:
+        return ""
+    b = d["build"]
+    rows = "".join(
+        "<tr><td>{n:,}</td><td>{dti:.4f}</td><td>{uni:.4f}</td><td>{lift:.2f}x</td>"
+        "<td>{cd:.4f}</td><td>{md:.3f}</td></tr>".format(
+            n=v["n_dots"], dti=v["sgmc_off"]["dti"], uni=v["sgmc_off_uniform_mean"],
+            lift=v["lift_over_uniform"], cd=v["sgmc_off"]["credit_per_dot"],
+            md=v["model"]["dti_modelled"])
+        for _, v in sorted(b["sweep"].items(), key=lambda kv: kv[1]["n_dots"]))
+    fold_rows = "".join(
+        "<tr><td>{fold}</td><td>{c:.4f}</td><td>{u:.4f}</td><td>{t}</td><td>{n:,}</td>"
+        "<td>{lift:.2f}x</td></tr>".format(
+            fold=esc(k), c=v["dti_candidate"], u=v["dti_uniform_mean"],
+            t=("&mdash;" if v.get("dti_translation_mean") is None
+               else f"{v['dti_translation_mean']:.4f}"),
+            n=v["candidate_dots_in_cell"], lift=v["lift_over_uniform"])
+        for k, v in (d["holdout"].get("folds") or {}).items())
+    return (
+        '<main><section class="main"><div class="shell"><div class="grid">'
+        '<article class="card span-12"><h2>H56 mass sweep and the calibrated proxy transfer</h2>'
+        '<p class="muted">Every row is measured with the official distance-weighted Tversky '
+        "definition on the independent off-catalogue frame (USGS SGMC fault pixels more than 300 m "
+        'from the given catalogue). "Modelled hidden" applies the transfer factor below to the '
+        'measured credit per dot and caps the total at the calibrated hidden mass.</p>'
+        "<table><tr><th>requested dots</th><th>off-catalogue DTI</th><th>matched uniform</th>"
+        f"<th>lift</th><th>credit / dot</th><th>modelled hidden DTI</th></tr>{rows}</table>"
+        + ("<h3>Frozen blocked holdout, per macrofold</h3><table><tr><th>fold</th><th>candidate</th>"
+           "<th>uniform</th><th>translation</th><th>dots in fold</th></tr>" + fold_rows + "</table>"
+           if fold_rows else "")
+        + '<p class="small">The transfer factor is measured on the group\'s own scored artifacts: '
+        "the only structured artifacts available transfer at 3.97&ndash;4.59, and the one "
+        "structureless artifact transfers at exactly 1.00, the mathematical expectation for a "
+        "detector with no information. H56 uses the conservative 4.2. <b>This is the largest single "
+        "uncertainty in the modelled number</b> and it is an assumption, not a measurement of "
+        "H56.</p></article></div></div></section></main>"
     )
 
 
