@@ -1,0 +1,419 @@
+{
+  "schema": "gemsdoe50.emitter-spacing-audit.v1",
+  "created_utc": "2026-10-07",
+  "definition": "Euclidean pixel-centre nearest-neighbour distance in 100 m grid pixels, calculated from each local submission TIFF positive mask with scipy.spatial.cKDTree k=2; each distinct positive mask measured once and attached to every byte-distinct TIFF twin.",
+  "method_under_review": "src/gemsdoe50/h56.py::emit_blue_noise before fix: one candidate per rounded-min_sep square block; no inter-block Euclidean exclusion. The old unit test asserted only block uniqueness, not minimum distance.",
+  "scope": {
+    "prior_tiff_paths": 29,
+    "distinct_positive_masks_measured": 13,
+    "unique_tiff_bytes": 24
+  },
+  "key_findings": {
+    "H56_90k_min_nn_px": 1.0,
+    "H57_80k_min_nn_px": 3.0,
+    "H58_98598_min_nn_px": 1.0
+  },
+  "methods": {
+    "h56-scarpdisperse": [
+      {
+        "path": "docs/downloads/gemsdoe50-h56-scarpdisperse-90000-allfinite.tif",
+        "positive_cells": 90000,
+        "min_nearest_neighbor_px": 1.0,
+        "p10_px": 1.0,
+        "median_px": 2.8284271247461903,
+        "p90_px": 5.0990195135927845
+      },
+      {
+        "path": "docs/downloads/gemsdoe50-h56-scarpdisperse-90000-nan.tif",
+        "positive_cells": 90000,
+        "min_nearest_neighbor_px": 1.0,
+        "p10_px": 1.0,
+        "median_px": 2.8284271247461903,
+        "p90_px": 5.0990195135927845
+      }
+    ],
+    "h57-scarpstep": [
+      {
+        "path": "docs/downloads/gemsdoe50-h57-scarpstep-80000-20261007T1830Z-allfinite.tif",
+        "positive_cells": 80000,
+        "min_nearest_neighbor_px": 3.0,
+        "p10_px": 3.0,
+        "median_px": 3.1622776601683795,
+        "p90_px": 4.242640687119285
+      },
+      {
+        "path": "docs/downloads/gemsdoe50-h57-scarpstep-80000-20261007T1830Z.tif",
+        "positive_cells": 80000,
+        "min_nearest_neighbor_px": 3.0,
+        "p10_px": 3.0,
+        "median_px": 3.1622776601683795,
+        "p90_px": 4.242640687119285
+      }
+    ],
+    "h58-seislineage": [
+      {
+        "path": "docs/downloads/gemsdoe50-h58-seislineage-98598-20261007T180223Z-c4ff6db9-allfinite.tif",
+        "positive_cells": 98598,
+        "min_nearest_neighbor_px": 1.0,
+        "p10_px": 1.0,
+        "median_px": 2.8284271247461903,
+        "p90_px": 3.0
+      },
+      {
+        "path": "docs/downloads/gemsdoe50-h58-seislineage-98598-20261007T180223Z-c4ff6db9-nan.tif",
+        "positive_cells": 98598,
+        "min_nearest_neighbor_px": 1.0,
+        "p10_px": 1.0,
+        "median_px": 2.8284271247461903,
+        "p90_px": 3.0
+      }
+    ],
+    "h52-coincidence8": [
+      {
+        "path": "docs/downloads/gems50-h52-coincidence8-80000-20261007T032938Z-nanoutside.tif",
+        "positive_cells": 80000,
+        "min_nearest_neighbor_px": 3.0,
+        "p10_px": 3.0,
+        "median_px": 3.0,
+        "p90_px": 3.1622776601683795
+      },
+      {
+        "path": "docs/downloads/gems50-h52-coincidence8-80000-20261007T032938Z.tif",
+        "positive_cells": 80000,
+        "min_nearest_neighbor_px": 3.0,
+        "p10_px": 3.0,
+        "median_px": 3.0,
+        "p90_px": 3.1622776601683795
+      }
+    ],
+    "h54-corpuscal": [
+      {
+        "path": "docs/downloads/gems50-h54-corpuscal-40000-20261007T032111Z-nan.tif",
+        "positive_cells": 40000,
+        "min_nearest_neighbor_px": 1.0,
+        "p10_px": 1.0,
+        "median_px": 3.605551275463989,
+        "p90_px": 10.770329614269007
+      },
+      {
+        "path": "docs/downloads/gems50-h54-corpuscal-40000-20261007T032111Z-zeros.tif",
+        "positive_cells": 40000,
+        "min_nearest_neighbor_px": 1.0,
+        "p10_px": 1.0,
+        "median_px": 3.605551275463989,
+        "p90_px": 10.770329614269007
+      }
+    ],
+    "h55-seisgeom": [
+      {
+        "path": "docs/downloads/gemsdoe50-h55-seisgeom-ridgesnap-13591-20261007-bcb60d89-nan.tif",
+        "positive_cells": 13591,
+        "min_nearest_neighbor_px": 3.1622776601683795,
+        "p10_px": 3.1622776601683795,
+        "median_px": 3.1622776601683795,
+        "p90_px": 3.605551275463989
+      },
+      {
+        "path": "docs/downloads/gemsdoe50-h55-seisgeom-ridgesnap-13591-20261007-bcb60d89-zeros.tif",
+        "positive_cells": 13591,
+        "min_nearest_neighbor_px": 3.1622776601683795,
+        "p10_px": 3.1622776601683795,
+        "median_px": 3.1622776601683795,
+        "p90_px": 3.605551275463989
+      }
+    ]
+  },
+  "records": [
+    {
+      "path": "downloads/gems50-seislin-44709-20261006T2041Z-79e260ae.tif",
+      "sha256": "79e260ae223d7dfd96413da28a9c6fed30107285ab843795181a5c9e5dff7262",
+      "positive_mask_sha256": "002f9d0401d14849daafef5f7b221f2b6b5a051dac207d7100e47a1f62e4d31b",
+      "positive_cells": 44709,
+      "min_nearest_neighbor_px": 3.0,
+      "p10_px": 3.0,
+      "median_px": 3.0,
+      "p90_px": 3.1622776601683795
+    },
+    {
+      "path": "downloads/gemsdoe50-h51-corridor-consensus-mix-20261007T0200Z-allfinite.tif",
+      "sha256": "d727c2d661670780dc4d7e2195a979c1178e39ee5472231fd5e8a00b86d653d2",
+      "positive_mask_sha256": "6106f8d70b351f204400e5b206799d3deb7d2146cf474f6900e74331fde3835e",
+      "positive_cells": 30000,
+      "min_nearest_neighbor_px": 1.4142135623730951,
+      "p10_px": 2.8284271247461903,
+      "median_px": 3.1622776601683795,
+      "p90_px": 6.0
+    },
+    {
+      "path": "downloads/gemsdoe50-h51-corridor-consensus-mix-20261007T0200Z.tif",
+      "sha256": "a26055834f8e6cc57cc33e96a4a5a26a1adeaafbeec490135af84c6ccd4d1da0",
+      "positive_mask_sha256": "6106f8d70b351f204400e5b206799d3deb7d2146cf474f6900e74331fde3835e",
+      "positive_cells": 30000,
+      "min_nearest_neighbor_px": 1.4142135623730951,
+      "p10_px": 2.8284271247461903,
+      "median_px": 3.1622776601683795,
+      "p90_px": 6.0
+    },
+    {
+      "path": "downloads/gemsdoe50-h53-tmiconj-20261007T0345Z-allfinite.tif",
+      "sha256": "90026224ed74698bd623cae53c5d6f5fe3cb263cdae7d145060d813ea50ef0c4",
+      "positive_mask_sha256": "cd4947b3e4a1e44a8c08fb69db4880e774d3092ded2f0e3a3f7215a528b69050",
+      "positive_cells": 23598,
+      "min_nearest_neighbor_px": 3.1622776601683795,
+      "p10_px": 3.1622776601683795,
+      "median_px": 4.47213595499958,
+      "p90_px": 12.041594578792296
+    },
+    {
+      "path": "downloads/gemsdoe50-h53-tmiconj-20261007T0345Z.tif",
+      "sha256": "3c22da583d5358b2986189a4ed3322182f39f562bdde14809f3300aeb6bd37ea",
+      "positive_mask_sha256": "cd4947b3e4a1e44a8c08fb69db4880e774d3092ded2f0e3a3f7215a528b69050",
+      "positive_cells": 23598,
+      "min_nearest_neighbor_px": 3.1622776601683795,
+      "p10_px": 3.1622776601683795,
+      "median_px": 4.47213595499958,
+      "p90_px": 12.041594578792296
+    },
+    {
+      "path": "docs/downloads/gems50-h52-coincidence8-80000-20261007T032938Z-nanoutside.tif",
+      "sha256": "c8292db9e2c6d16b99a32ceae3d1652eb15019c8faa6f9d8b6d8b052d15dd582",
+      "positive_mask_sha256": "4a0eb62507235db87506facea8668c85c70708bf276b12d9b1a3f4efeacf526c",
+      "positive_cells": 80000,
+      "min_nearest_neighbor_px": 3.0,
+      "p10_px": 3.0,
+      "median_px": 3.0,
+      "p90_px": 3.1622776601683795
+    },
+    {
+      "path": "docs/downloads/gems50-h52-coincidence8-80000-20261007T032938Z.tif",
+      "sha256": "a2ed87fac9fdb4b9604ab2850b5f750eefe51fa9795caa6a503fc4739de6475d",
+      "positive_mask_sha256": "4a0eb62507235db87506facea8668c85c70708bf276b12d9b1a3f4efeacf526c",
+      "positive_cells": 80000,
+      "min_nearest_neighbor_px": 3.0,
+      "p10_px": 3.0,
+      "median_px": 3.0,
+      "p90_px": 3.1622776601683795
+    },
+    {
+      "path": "docs/downloads/gems50-h54-corpuscal-40000-20261007T032111Z-nan.tif",
+      "sha256": "2cdf7e705c867008b0dc86d3e7481bf43aef44240508312d270c97ebd192c81b",
+      "positive_mask_sha256": "1d414dd3a66b6321bd6257d8b05a4fc77d53e5da1e626b699880e28062f2001e",
+      "positive_cells": 40000,
+      "min_nearest_neighbor_px": 1.0,
+      "p10_px": 1.0,
+      "median_px": 3.605551275463989,
+      "p90_px": 10.770329614269007
+    },
+    {
+      "path": "docs/downloads/gems50-h54-corpuscal-40000-20261007T032111Z-zeros.tif",
+      "sha256": "c24a8e3ce7ef2c30c2a44fe33bd901c6795ff02eca7004e135e2b588cce81623",
+      "positive_mask_sha256": "1d414dd3a66b6321bd6257d8b05a4fc77d53e5da1e626b699880e28062f2001e",
+      "positive_cells": 40000,
+      "min_nearest_neighbor_px": 1.0,
+      "p10_px": 1.0,
+      "median_px": 3.605551275463989,
+      "p90_px": 10.770329614269007
+    },
+    {
+      "path": "docs/downloads/gems50-seislin-44709-20261006T2041Z-79e260ae.tif",
+      "sha256": "79e260ae223d7dfd96413da28a9c6fed30107285ab843795181a5c9e5dff7262",
+      "positive_mask_sha256": "002f9d0401d14849daafef5f7b221f2b6b5a051dac207d7100e47a1f62e4d31b",
+      "positive_cells": 44709,
+      "min_nearest_neighbor_px": 3.0,
+      "p10_px": 3.0,
+      "median_px": 3.0,
+      "p90_px": 3.1622776601683795
+    },
+    {
+      "path": "docs/downloads/gems51-scarpradio-offcat-35000-20261006-ecf058ea-allfinite.tif",
+      "sha256": "d028ba16c9232c7f1bd3074a5891ef25cd5d7265d5c2a70e2f82bec9082da6e2",
+      "positive_mask_sha256": "a958e895ab9e5b48254b59f7f860c260cd2fd3514948531ba3fd0699350b4c71",
+      "positive_cells": 35000,
+      "min_nearest_neighbor_px": 3.1622776601683795,
+      "p10_px": 3.1622776601683795,
+      "median_px": 3.1622776601683795,
+      "p90_px": 3.605551275463989
+    },
+    {
+      "path": "docs/downloads/gems51-scarpradio-offcat-35000-20261006-ecf058ea-nan.tif",
+      "sha256": "8f8708d2872b66d71925707e0aede23eebcf217dfd2e57d6e61186f32e686f5d",
+      "positive_mask_sha256": "a958e895ab9e5b48254b59f7f860c260cd2fd3514948531ba3fd0699350b4c71",
+      "positive_cells": 35000,
+      "min_nearest_neighbor_px": 3.1622776601683795,
+      "p10_px": 3.1622776601683795,
+      "median_px": 3.1622776601683795,
+      "p90_px": 3.605551275463989
+    },
+    {
+      "path": "docs/downloads/gems52-union-h51-h52a-offcat-44828-20261007T021528Z-990213fd-allfinite.tif",
+      "sha256": "f0d697490fc27e9aa1e0c440c69497240f3d8ea70329b398a99902097846feed",
+      "positive_mask_sha256": "e265d605693353af849cf0d0e9e57a5008a8a0f913e983afd5db744d53215601",
+      "positive_cells": 44828,
+      "min_nearest_neighbor_px": 1.0,
+      "p10_px": 3.0,
+      "median_px": 3.1622776601683795,
+      "p90_px": 3.605551275463989
+    },
+    {
+      "path": "docs/downloads/gems52-union-h51-h52a-offcat-44828-20261007T021528Z-990213fd-nan.tif",
+      "sha256": "15468475cc99b9106b9959c95add9966ad38678329435daa3a9cbf7e8ccc9a21",
+      "positive_mask_sha256": "e265d605693353af849cf0d0e9e57a5008a8a0f913e983afd5db744d53215601",
+      "positive_cells": 44828,
+      "min_nearest_neighbor_px": 1.0,
+      "p10_px": 3.0,
+      "median_px": 3.1622776601683795,
+      "p90_px": 3.605551275463989
+    },
+    {
+      "path": "docs/downloads/gems52a-scarpdrainage-offcat-10000-20261007T021452Z-5c377a13-allfinite.tif",
+      "sha256": "127411333856a22fb3f9faaca7c1819e8660e0663753392db5933d799ce473c1",
+      "positive_mask_sha256": "42d623e6429f12cee8f94f6bbe9e2777111d5c49ce1b6521f29fffc1d1a85b19",
+      "positive_cells": 10000,
+      "min_nearest_neighbor_px": 3.1622776601683795,
+      "p10_px": 3.1622776601683795,
+      "median_px": 3.1622776601683795,
+      "p90_px": 4.47213595499958
+    },
+    {
+      "path": "docs/downloads/gems52a-scarpdrainage-offcat-10000-20261007T021452Z-5c377a13-nan.tif",
+      "sha256": "150620f57160ee7f755fb2b2c77928bb36850b5b38547dfc4b77516346483efd",
+      "positive_mask_sha256": "42d623e6429f12cee8f94f6bbe9e2777111d5c49ce1b6521f29fffc1d1a85b19",
+      "positive_cells": 10000,
+      "min_nearest_neighbor_px": 3.1622776601683795,
+      "p10_px": 3.1622776601683795,
+      "median_px": 3.1622776601683795,
+      "p90_px": 4.47213595499958
+    },
+    {
+      "path": "docs/downloads/gemsdoe50-h51-corridor-consensus-mix-20261007T0200Z-allfinite.tif",
+      "sha256": "d727c2d661670780dc4d7e2195a979c1178e39ee5472231fd5e8a00b86d653d2",
+      "positive_mask_sha256": "6106f8d70b351f204400e5b206799d3deb7d2146cf474f6900e74331fde3835e",
+      "positive_cells": 30000,
+      "min_nearest_neighbor_px": 1.4142135623730951,
+      "p10_px": 2.8284271247461903,
+      "median_px": 3.1622776601683795,
+      "p90_px": 6.0
+    },
+    {
+      "path": "docs/downloads/gemsdoe50-h51-corridor-consensus-mix-20261007T0200Z.tif",
+      "sha256": "a26055834f8e6cc57cc33e96a4a5a26a1adeaafbeec490135af84c6ccd4d1da0",
+      "positive_mask_sha256": "6106f8d70b351f204400e5b206799d3deb7d2146cf474f6900e74331fde3835e",
+      "positive_cells": 30000,
+      "min_nearest_neighbor_px": 1.4142135623730951,
+      "p10_px": 2.8284271247461903,
+      "median_px": 3.1622776601683795,
+      "p90_px": 6.0
+    },
+    {
+      "path": "docs/downloads/gemsdoe50-h53-probe-tmi-pointlineation-20261007-44afc05b.tif",
+      "sha256": "5f2fd91ad46a3602c03802e0f7773fd466b08e47cbfcf40ff796ffc2b956a382",
+      "positive_mask_sha256": "7d5e608836ddd1dc8d742278767e017a48a2d3992d1c5cf1f88e16e88f0640e3",
+      "positive_cells": 0,
+      "min_nearest_neighbor_px": null,
+      "p10_px": null,
+      "median_px": null,
+      "p90_px": null
+    },
+    {
+      "path": "docs/downloads/gemsdoe50-h53-tmiconj-20261007T0345Z-allfinite.tif",
+      "sha256": "90026224ed74698bd623cae53c5d6f5fe3cb263cdae7d145060d813ea50ef0c4",
+      "positive_mask_sha256": "cd4947b3e4a1e44a8c08fb69db4880e774d3092ded2f0e3a3f7215a528b69050",
+      "positive_cells": 23598,
+      "min_nearest_neighbor_px": 3.1622776601683795,
+      "p10_px": 3.1622776601683795,
+      "median_px": 4.47213595499958,
+      "p90_px": 12.041594578792296
+    },
+    {
+      "path": "docs/downloads/gemsdoe50-h53-tmiconj-20261007T0345Z.tif",
+      "sha256": "3c22da583d5358b2986189a4ed3322182f39f562bdde14809f3300aeb6bd37ea",
+      "positive_mask_sha256": "cd4947b3e4a1e44a8c08fb69db4880e774d3092ded2f0e3a3f7215a528b69050",
+      "positive_cells": 23598,
+      "min_nearest_neighbor_px": 3.1622776601683795,
+      "p10_px": 3.1622776601683795,
+      "median_px": 4.47213595499958,
+      "p90_px": 12.041594578792296
+    },
+    {
+      "path": "docs/downloads/gemsdoe50-h55-seisgeom-ridgesnap-13591-20261007-bcb60d89-nan.tif",
+      "sha256": "cd7f765a95ea9c71b22abffbf330434597c28057f8a80ed723b753cd0a32d3c6",
+      "positive_mask_sha256": "bcb60d8999e09254cbf2e54748fd06d759b10c07e333b051ca1c127cb1d64612",
+      "positive_cells": 13591,
+      "min_nearest_neighbor_px": 3.1622776601683795,
+      "p10_px": 3.1622776601683795,
+      "median_px": 3.1622776601683795,
+      "p90_px": 3.605551275463989
+    },
+    {
+      "path": "docs/downloads/gemsdoe50-h55-seisgeom-ridgesnap-13591-20261007-bcb60d89-zeros.tif",
+      "sha256": "7a366b7bbe431533a9d4246cbcdde34eb379ebb34fa116a8667431916506498d",
+      "positive_mask_sha256": "bcb60d8999e09254cbf2e54748fd06d759b10c07e333b051ca1c127cb1d64612",
+      "positive_cells": 13591,
+      "min_nearest_neighbor_px": 3.1622776601683795,
+      "p10_px": 3.1622776601683795,
+      "median_px": 3.1622776601683795,
+      "p90_px": 3.605551275463989
+    },
+    {
+      "path": "docs/downloads/gemsdoe50-h56-scarpdisperse-90000-allfinite.tif",
+      "sha256": "c44e791702c50bc1189325b4febb6f6acd2cf6ca1338514df4b4b95dc31f4c53",
+      "positive_mask_sha256": "63a454b238ebf84b02d84fad4d82f35224d3631d848fc8844dc4ad1493bae079",
+      "positive_cells": 90000,
+      "min_nearest_neighbor_px": 1.0,
+      "p10_px": 1.0,
+      "median_px": 2.8284271247461903,
+      "p90_px": 5.0990195135927845
+    },
+    {
+      "path": "docs/downloads/gemsdoe50-h56-scarpdisperse-90000-nan.tif",
+      "sha256": "c5179435bacc705d564e36af7466fe6374b6816875cbda2eab2da85ec12e9988",
+      "positive_mask_sha256": "63a454b238ebf84b02d84fad4d82f35224d3631d848fc8844dc4ad1493bae079",
+      "positive_cells": 90000,
+      "min_nearest_neighbor_px": 1.0,
+      "p10_px": 1.0,
+      "median_px": 2.8284271247461903,
+      "p90_px": 5.0990195135927845
+    },
+    {
+      "path": "docs/downloads/gemsdoe50-h57-scarpstep-80000-20261007T1830Z-allfinite.tif",
+      "sha256": "8027c4e9fe0f789e2d7180a7ccc031abec90b391cf9e42ebcc125752af9fb696",
+      "positive_mask_sha256": "931850470a0d142e51265537a830efe08bd7f938321270877ef0c4b1ae506d81",
+      "positive_cells": 80000,
+      "min_nearest_neighbor_px": 3.0,
+      "p10_px": 3.0,
+      "median_px": 3.1622776601683795,
+      "p90_px": 4.242640687119285
+    },
+    {
+      "path": "docs/downloads/gemsdoe50-h57-scarpstep-80000-20261007T1830Z.tif",
+      "sha256": "7625f34335cc48fb05dbe851f03950ae61ae49f8db93dd27ac7f516a3349b980",
+      "positive_mask_sha256": "931850470a0d142e51265537a830efe08bd7f938321270877ef0c4b1ae506d81",
+      "positive_cells": 80000,
+      "min_nearest_neighbor_px": 3.0,
+      "p10_px": 3.0,
+      "median_px": 3.1622776601683795,
+      "p90_px": 4.242640687119285
+    },
+    {
+      "path": "docs/downloads/gemsdoe50-h58-seislineage-98598-20261007T180223Z-c4ff6db9-allfinite.tif",
+      "sha256": "7d2576f844636b7a1a440a8cd2b3babab523837d4b052d60e5842ca59d4b3365",
+      "positive_mask_sha256": "c4ff6db94de9fc33f2961bdf98a991640cb3afcd65041a85caad83ecb52c1aff",
+      "positive_cells": 98598,
+      "min_nearest_neighbor_px": 1.0,
+      "p10_px": 1.0,
+      "median_px": 2.8284271247461903,
+      "p90_px": 3.0
+    },
+    {
+      "path": "docs/downloads/gemsdoe50-h58-seislineage-98598-20261007T180223Z-c4ff6db9-nan.tif",
+      "sha256": "21e2b81d736440103786bf7d0a868e319c4a6aea7bb397518067d1b859a9d719",
+      "positive_mask_sha256": "c4ff6db94de9fc33f2961bdf98a991640cb3afcd65041a85caad83ecb52c1aff",
+      "positive_cells": 98598,
+      "min_nearest_neighbor_px": 1.0,
+      "p10_px": 1.0,
+      "median_px": 2.8284271247461903,
+      "p90_px": 3.0
+    }
+  ],
+  "fix": "emit_blue_noise is now weighted random sequential inhibition with an exponential-race priority and exact Euclidean spatial-hash acceptance. tests/test_h56.py now checks nearest-neighbour distance, deterministic seed behavior, and non-multiple grid-edge eligibility. This fixes future builds only; historical TIFF bytes were not rewritten."
+}

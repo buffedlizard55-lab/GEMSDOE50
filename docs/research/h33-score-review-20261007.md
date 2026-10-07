@@ -1,14 +1,20 @@
 # H33-2-B2 score review and H53-A no-go
 
-**Review date:** 2026-10-07 UTC. **Purpose:** evaluate the user-provided `0.2778` H33-2-B2 score claim, assess whether the user-provided `0.3774` high-score claim is plausibly beatable, and document the preregistered H53-A test. In this review, H53-A is a distinct probe/TMI point-pattern experiment, not the repository's earlier H53 TMI-conjunction artifact. No competition submission slot was used.
+**Review date:** 2026-10-07 UTC. **Purpose:** investigate whether the public leaderboard's `0.2778` rank-13 row maps to the local H33-2-B2 TIFF, assess whether the rank-1 `0.3774` leader is plausibly beatable, and document the preregistered H53-A test. In this review, H53-A is a distinct probe/TMI point-pattern experiment, not the repository's earlier H53 TMI-conjunction artifact. No competition submission slot was used.
 
 ## Executive conclusion
 
 The `0.2778` score is **not independently tied to the downloaded H33-2-B2 TIFF by an organizer receipt in the reviewed record**. In the exact pinned GEMSDOE32 snapshot (`b983924b57781edd29b8e249c4923bf33d9902f6`), the H33-2-B2 audit names the 37,654-dot file and its SHA-256, but its submission note explicitly says **UNSCORED** and gives a *modelled* `predicted_leaderboard_dti` of `0.274673`, not an organizer score. The same snapshot's score ledger has no H33-2-B2 / `0.2778` row. The downloaded TIFF's bytes do match that audit SHA exactly; that proves file identity, not a score-to-file link.
 
+The public [DrivenData leaderboard](https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/)
+was checked on 2026-10-07. It displayed **xiaofanhu — 0.3774 (rank 1)** and
+**extradr19 — 0.2778 (rank 13)**. The visible leaderboard values are verified observations for
+that date; no receipt/hash crosswalk was available to identify either underlying TIFF. In
+particular, the 0.2778 row must not be attributed to the local H33-2-B2 bytes without that link.
+
 The H33-2-B2 recipe was not a new H33 geological detector. The pinned audit describes it as the existing owner-reported 0.2708 base with all dots within 2 pixels (200 m) of the public catalogue deleted: 40,199 → 37,654 dots, removing 2,545 predictions. Fewer weak/near-catalogue dots while retaining most estimated weighted credit is a plausible way for a distance-weighted Tversky score to rise without demonstrating new fault discovery. The sibling's own model estimated a modest gain; it did not verify the quoted score.
 
-The leading new candidate in this review, H53-A, failed before promotion: the frozen probe/TMI rule accepted 0 of 145 thermal clusters, emitted 0 cells, scored DTI 0.0000 on the local blocked proxy, and lost to the frozen incumbent and controls. **Do not submit the linked all-zero GeoTIFF or spend a slot.** A separate later H56 candidate passed its repository's local blocked holdout and has a transfer-model estimate of 0.386; that is a conditional model, not an organizer score, and mixed-network ComCat rights remain unresolved. Thus a route above 0.3774 is plausible under that model, but no verified competition result establishes that it has been achieved. The 0.3774 claim itself remains unverified.
+The leading new candidate in this review, H53-A, failed before promotion: the frozen probe/TMI rule accepted 0 of 145 thermal clusters, emitted 0 cells, scored DTI 0.0000 on the local blocked proxy, and lost to the frozen incumbent and controls. **Do not submit the linked all-zero GeoTIFF or spend a slot.** A separate H56 research artifact later measured positively on its local blocked holdout and had a transfer-model estimate of 0.386; that is a conditional model, not an organizer score. Its historical TIFF has only 1.0 px minimum nearest-neighbour spacing (see the 2026-10-07 byte audit), and mixed-network ComCat rights remain unresolved. Neither result establishes a competition score above the public leaderboard's observed 0.3774.
 
 ## What the H33-2-B2 artifact actually is
 
@@ -72,14 +78,14 @@ The smoothed-density and TMI-only controls could not emit the full incumbent-mat
 
 This DTI uses the 2026-10-06 frozen NW/NE/SW/SE cores and **SGMC mapped faults >300 m from the provided catalogue** as a proxy. It is not the expert-labelled private test set, not the public leaderboard, and not directly comparable numerically to 0.2778 or 0.3774.
 
-## Can a strategy exceed the user-provided 0.3774?
+## Can a strategy exceed the observed public leader at 0.3774?
 
 - **In principle:** yes. The score is not capped at 0.3774. A better predictor could find more previously unmapped faults while avoiding unsupported predictions.
 - **What H53-A establishes:** nothing supporting that outcome. It failed the geometry gate before mass emission and scored zero on the proxy. Separately, H56 passed a local blocked holdout and is modelled at 0.386 under a transfer assumption; this is promising evidence for a research direction, but it is not a hidden-label or organizer score and does not clear the unresolved ComCat-rights gate.
-- **What is needed to recommend a route:** a preregistered, spatially separated validation against the frozen best and matched controls; improvement that survives the registered uncertainty test; and cleared source rights/shareability. H56 is locally promising but still fails the rights gate. **What is needed to claim an actual score above 0.3774:** an organizer receipt tied to the exact submitted TIFF bytes. The user-provided 0.3774 number itself also needs a receipt/crosswalk before it can be treated as a verified current high. The depth-profile conductance and chemistry ideas remain future hypotheses, not results.
+- **What is needed to recommend a route:** a preregistered, spatially separated validation against the frozen best and matched controls; improvement that survives the registered uncertainty test; and cleared source rights/shareability. H56 is NO-GO: its historical spacing claim failed and the ComCat rights gate remains unresolved. **What is needed to claim an actual score for a particular TIFF:** an organizer receipt/hash crosswalk. The 0.3774 value was visible on the public leaderboard at rank 1 on 2026-10-07, but that row was not linked here to a TIFF hash. The depth-profile conductance and chemistry ideas remain future hypotheses, not results.
 - **No numeric hidden-truth inversion is treated as truth.** A single reported DTI and dot count do not identify the hidden truth size, weighted TP, and FP without additional assumptions. Old repo inversions disagree; use them only as sensitivity analyses, never to promise 0.3774+.
 
-The only local public-board snapshot recorded in this repository is dated 2026-10-03 and is not current. The user's 0.3774 claim is therefore preserved as **user-provided/unverified**; this review did not monitor or scrape the live leaderboard.
+This review checked the public leaderboard page on 2026-10-07 and recorded the displayed rank-1 score (0.3774) and rank-13 score (0.2778). This dated page observation does not supply the underlying submissions' TIFF hashes or portal receipts; it verifies the visible leaderboard rows, not local artifact attribution.
 
 ## Competition rules, data permissions, and unresolved issues
 
@@ -89,9 +95,9 @@ The only local public-board snapshot recorded in this repository is dated 2026-1
 - [USGS FDSN/ComCat](https://earthquake.usgs.gov/fdsnws/event/1/): the mixed-network export's contributor-specific redistribution and sponsor-sharing rights remain unresolved. H56 uses ComCat-derived event geometry, so this unresolved rights question blocks competition upload even though its local spatial holdout is positive.
 - [USGS Great Basin conductance maps, DOI 10.5066/P9TWT2LU](https://doi.org/10.5066/P9TWT2LU): provides five depth ranges from 2 to 200 km. The reviewed page did not expose a sufficiently precise per-asset licence statement, so H53-B is not implemented until terms are verified.
 - [September 2026 DOE/NLR GEMS Prize Official Rules](https://docs.nlr.gov/docs/fy26osti/96647.pdf): sections 3.2–3.5 require one 100 m single-layer GeoTIFF, note up to three scoring submissions per week, require a single final choice for both prize rounds, and require generative-AI use to be disclosed in the narrative. The competitor remains responsible for truthfulness, accuracy, authorship, and rights.
-- [DrivenData Terms of Use](https://www.drivendata.org/termsofuse/): no automated leaderboard polling or copying was performed; the terms restrict robots/automatic devices for monitoring/copying. The claimed live score was not re-queried.
+- [DrivenData Terms of Use](https://www.drivendata.org/termsofuse/): no automated leaderboard polling or copying was performed; the terms restrict robots/automatic devices for monitoring/copying. A one-time page check on 2026-10-07 recorded the publicly displayed ranks and values above; no automated monitoring was used.
 
-**Operational/legal hard stop:** the H53-A GDR and derived GeoDAWN source bytes are from hash-pinned sibling mirrors, not matched to official binary downloads; H56's mixed-network ComCat contributor rights/shareability are unresolved. No official receipt links the owner-provided 0.2778 to the TIFF, and the 0.3774 claim is not independently verified. Do not spend a score slot until candidate holdout, data rights, and score/format gates are all addressed.
+**Operational/legal hard stop:** the H53-A GDR and derived GeoDAWN source bytes are from hash-pinned sibling mirrors, not matched to official binary downloads; H56's mixed-network ComCat contributor rights/shareability are unresolved, and its historical artifact also fails the claimed 3 px spacing. The public leaderboard displayed 0.3774 and 0.2778 on 2026-10-07, but no official receipt/hash crosswalk links either row to a local TIFF. Do not spend a score slot until candidate holdout, data rights, and score/format gates are all addressed.
 
 ## Reproducibility and outputs
 

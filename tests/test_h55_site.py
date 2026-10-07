@@ -31,7 +31,7 @@ def _sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def test_h55_site_regeneration_is_deterministic_and_download_first():
+def test_h55_site_regeneration_is_deterministic_and_no_go_first():
     tracked = [
         ROOT / name
         for name in ("index.html", "results.html", "methods.html", "submission.html", "site.css")
@@ -39,8 +39,8 @@ def test_h55_site_regeneration_is_deterministic_and_download_first():
     before = {path: path.read_bytes() for path in tracked}
     # The committed pages are produced by the two generators in sequence (the same
     # order as the site workflow): build_h55_site.py regenerates from committed
-    # evidence, then build_h58_site.py reproduces the H57-scarpstep session's
-    # preserved band (docs/fragments/) and inserts this session's H58 band.
+    # evidence, then build_h58_site.py reproduces the historical H57 audit band
+    # (docs/fragments/) and inserts H58's archived NO-SLOT research record.
     subprocess.run(
         [sys.executable, str(ROOT / "scripts/build_h55_site.py")],
         cwd=ROOT,
@@ -58,22 +58,24 @@ def test_h55_site_regeneration_is_deterministic_and_download_first():
     assert {path: path.read_bytes() for path in tracked} == before
 
     index = (ROOT / "index.html").read_text(encoding="utf-8")
-    assert "Download portal-safe TIFF" in index
-    # Charter rule: a one-click download and the executive summary sit at the very top of the
-    # site.  Later sessions may legitimately place their own download band above this one, so the
-    # assertion is about ordering and presence, not about which session's artifact is first.
-    # The current top band is the H57-scarpstep session's; the H56 band below it was reworded
-    # to "Previous candidate (H56)" by that session, and this session's H58 band follows it.
-    first_download = index.index("Download the current research candidate GeoTIFF (H57)")
-    assert "Previous candidate (H56)" in index
-    assert "GEMSDOE50-H58-SEISLINEAGE-98598-C4FF6DB9" in index
+    assert "Download historical H57 all-finite TIFF" in index
+    # The top band is an archive download only, not an eligible submission. Its no-go
+    # decision must precede every historical TIFF link and local proxy summary.
+    first_download = index.index("Download historical H57 all-finite TIFF")
+    assert "Historical H57 research artifact — NO-GO" in index
+    assert "Historical H56 research TIFF — NO SLOT" in index
+    assert "Historical H58-S1 research artifact — NO SLOT" in index
+    assert "Download H55 audit TIFF" in index
     assert first_download < index.index("Executive summary")
-    assert index.index("Download portal-safe TIFF") > first_download
-    assert "NO SLOT" in index
+    assert index.index("Download H55 audit TIFF") > first_download
+    assert "NO SLOT" in index and "Current portfolio decision: NO-GO / NO SLOT" in index
     assert "0.019321" in index and "0.115822" in index
     assert "0.2778" in index and "UNSCORED" in index
-    assert "user-provided 0.3774 claim" in index
-    assert "Draft optional note (use only after rights clearance)" in index
+    assert "xiaofanhu 0.3774 rank 1" in index
+    assert "extradr19 0.2778 rank 13" in index
+    assert "Portal name/note:</b> none authorized" in index
+    assert "Draft optional note" not in index
+    assert "user-provided 0.3774 claim" not in index
     assert "mixed-network ComCat-derived geometry" in index
     assert "H53-A probe/TMI experiment: NO-GO / NO SLOT" in index
 

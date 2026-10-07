@@ -47,10 +47,10 @@ def main() -> int:
     check("H50-S1 status does not assert an organizer score", feed.get("h50_s1", {}).get("organizer_score") is None)
     check("registry carries no copied leaderboard rows", "public_leaderboard_2026_10_06" not in submissions)
     check(
-        "README treats 0.2778 and 0.3774 as unverified reports",
-        "unverified reports, not freshly checked leaderboard" in README
-        and "without an organizer" in README and "receipt/hash crosswalk" in README
-        and "The 0.3774 claim is not treated as fact" in README
+        "README records the dated leaderboard snapshot without score-to-TIFF overclaim",
+        "xiaofanhu at 0.3774 (rank 1)" in README
+        and "extradr19 at 0.2778 (rank 13)" in README
+        and "receipt/hash crosswalk" in README
         and "No organizer receipt links these bytes to 0.2778" in README,
     )
     h53_review = (ROOT / "docs/research/h33-score-review-20261007.md").read_text(encoding="utf-8")
@@ -67,8 +67,24 @@ def main() -> int:
     check(
         "H56 transfer estimate and unresolved ComCat rights are not promoted to a score",
         "0.386" in README
-        and "not an organizer score" in README
+        and "not a score or forecast" in README
         and "ComCat contributor rights and sponsor-sharing" in README,
+    )
+    h59_draft = (ROOT / "docs/research/h59-hypotheses-preregistered-20261007.md").read_text(
+        encoding="utf-8"
+    )
+    check(
+        "unapproved H59 draft is explicitly withdrawn and not executable",
+        "WITHDRAWN / SUPERSEDED" in h59_draft
+        and "not an execution preregistration" in h59_draft
+        and "Do not implement" in h59_draft
+        and "No H59 code or TIFF was built" in h59_draft
+        and "standalone radiometric predictor" in h59_draft,
+    )
+    check(
+        "README records the H59 withdrawal and current no-go",
+        "unapproved H59 standalone-radiometric shortlist has been explicitly withdrawn" in README
+        and "**Current decision: NO-GO / NO SLOT.**" in README,
     )
     check(
         "prior-work notes require organizer receipt for score-to-file mapping",
@@ -150,9 +166,10 @@ def main() -> int:
         and "arena/5e2ce8c3-gemsdoe50" not in research_workflow,
     )
     check(
-        "leaderboard non-use and score-attribution irregularity are documented",
-        "does not scrape/poll" in README
-        and "No organizer receipt links these bytes to 0.2778" in README,
+        "dated leaderboard observation and score-to-TIFF irregularity are documented",
+        "The public leaderboard was checked once on 2026-10-07" in README
+        and "No organizer receipt links these bytes to 0.2778" in README
+        and "H33-B2-to-0.2778 TIFF attribution remains unresolved" in README,
     )
     h55_report_path = ROOT / "evidence/results/h55s1-evaluation-20261007.json"
     h55_report = json.loads(h55_report_path.read_text(encoding="utf-8"))

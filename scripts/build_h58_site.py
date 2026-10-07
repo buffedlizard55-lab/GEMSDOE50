@@ -1,22 +1,14 @@
 #!/usr/bin/env python3
-"""Insert the H58-S1 band into the generated research pages.
+"""Insert the historical H58-S1 NO-GO audit record into generated research pages.
 
-Runs after ``scripts/build_h55_site.py`` (which regenerates the pages from
-committed evidence) and adds the H58-S1 artifact to:
+Runs after ``scripts/build_h55_site.py`` and adds the H58 archive record to the
+index, results, methods, and submission pages. These are historical research files
+only: the pages withdraw upload steps and authorize no portal name, note, or slot.
 
-* ``index.html``      — a one-click download band directly below the H56 band,
-  with the SHA-256, the frozen slot decision, and the executive summary;
-* ``submission.html`` — the manual submission card (name, note, steps) for the
-  H58 artifact, next to the other candidates' cards;
-* ``results.html``    — the falsification table (candidate vs density, random,
-  translations, incumbent) and the frozen holdout result.
-
-Every number is read from the committed evidence JSONs (``evidence/h58_build.json``,
-``evidence/h58_uniqueness.json``, ``evidence/h58_holdout.json``); the artifact
-SHA-256s are re-verified on disk before anything is published, so the site can
-never advertise bytes that are not the gated bytes.  The insertion is
-deterministic and idempotent, which keeps the CI ``git diff --exit-code`` check
-green.
+Every figure is read from committed evidence JSONs (``evidence/h58_build.json``,
+``evidence/h58_uniqueness.json``, ``evidence/h58_holdout.json``), and file hashes
+are re-verified before the archive links are rendered. The insertion is deterministic
+and idempotent for the site workflow.
 """
 from __future__ import annotations
 
@@ -31,7 +23,7 @@ UNIQUE = ROOT / "evidence/h58_uniqueness.json"
 HOLDOUT = ROOT / "evidence/h58_holdout.json"
 
 INDEX_ANCHOR = '<main id="main">'
-SUBMISSION_ANCHOR = '<article class="card span-12"><h2>H56 mass sweep and the calibrated proxy transfer</h2>'
+SUBMISSION_ANCHOR = '<article class="card span-12"><h2>Historical H56 mass sweep and calibrated proxy transfer</h2>'
 RESULTS_ANCHOR = '<article class="card span-12" id="h33">'
 METHODS_ANCHOR = '<article class="card span-12"><h2>Auditable source table</h2>'
 
@@ -49,27 +41,27 @@ H57_SCARPSTEP_TIF = (
 H56_SECTION_ANCHOR = '<section class="main" id="h56">'
 
 INDEX_META_BASE = (
-    '<meta name="description" content="H56 research candidate, H55 blocked decision, '
-    'H53-A no-go audit, and score provenance.">'
+    '<meta name="description" content="Historical H55/H56 research artifacts, NO-GO decisions, '
+    'H53-A audit, and score provenance.">'
 )
 INDEX_META_H57 = (
-    '<meta name="description" content="H57 download and executive summary, H56 comparator, '
-    'H55 blocked decision, H53-A no-go audit, score provenance.">'
+    '<meta name="description" content="Current NO-GO decision and historical H57/H56/H58 '
+    'research artifacts, audit evidence, and score provenance.">'
 )
-INDEX_H56_H2_BASE = '<h2>Download the current research candidate GeoTIFF (H56) &mdash; one click</h2>'
+INDEX_H56_H2_BASE = '<h2>Historical H56 research TIFF — NO SLOT; retained for audit only</h2>'
 INDEX_H56_H2_H57 = (
-    '<h2>Previous candidate (H56) &mdash; retained for comparison; superseded by H57 above</h2>'
+    '<h2>Historical H56 research TIFF — NO SLOT; retained for audit only</h2>'
 )
 SUBMISSION_META_BASE = (
-    '<meta name="description" content="H56 draft entry details and rights gate, '
-    'with the H55 no-slot audit guide.">'
+    '<meta name="description" content="Current NO-GO. Historical H55/H56 artifacts are '
+    'retained for audit only; no upload is recommended.">'
 )
 SUBMISSION_META_H57 = (
-    '<meta name="description" content="H57 download, unique entry name and note, '
-    'with the H56 comparator and H55 no-slot audit guides.">'
+    '<meta name="description" content="Current NO-GO. Historical H57/H56/H58 artifacts are '
+    'retained for audit only; no upload is recommended.">'
 )
 SUBMISSION_TITLE_BASE = "<title>Submission guide · GEMSDOE50</title>"
-SUBMISSION_TITLE_H57 = "<title>Submission guide (H57 current) · GEMSDOE50</title>"
+SUBMISSION_TITLE_H57 = "<title>Submission guide (NO-GO) · GEMSDOE50</title>"
 
 
 def esc(value: object) -> str:
@@ -92,7 +84,10 @@ def load() -> dict:
     build = json.loads(BUILD.read_text(encoding="utf-8"))
     unique = json.loads(UNIQUE.read_text(encoding="utf-8"))
     holdout = json.loads(HOLDOUT.read_text(encoding="utf-8"))
-    zero = build["artifacts"]["recommended_portal_safe_allfinite"]
+    artifact_fields = build["artifacts"]
+    zero = artifact_fields.get("historical_allfinite_audit_only")
+    if zero is None:
+        zero = artifact_fields["recommended_portal_safe_allfinite"]
     nan = build["artifacts"]["sample_semantics_nan_outside"]
     for artifact in (zero, nan):
         path = ROOT / artifact["path"]
@@ -117,18 +112,18 @@ def index_band(ev: dict) -> str:
     fr = ev["unique"]["full_resolution"]
     tag_class = "fail" if decision != "ELIGIBLE_FOR_REVIEW" else "good"
     return f"""
-<section class="main" id="h58"><div class="shell"><div class="grid"><article class="card span-12" style="border-left:6px solid #164b66"><h2>This session&rsquo;s unique artifact &mdash; H58-S1 (ComCat point-geometry lineations) &mdash; one click</h2>
+<section class="main" id="h58"><div class="shell"><div class="grid"><article class="card span-12" style="border-left:6px solid #164b66"><h2>Historical H58-S1 research artifact — NO SLOT (audit download only)</h2>
 <div class="hero" style="border-radius:10px;padding:18px 20px;margin-bottom:14px"><div class="actions"><a class="download" href="docs/downloads/{esc(stem)}-allfinite.tif" download>Download {esc(stem)}-allfinite.tif</a><a class="download alt" href="docs/downloads/{esc(stem)}-nan.tif" download>NaN-outside twin</a><a class="download alt" href="docs/downloads/{esc(stem)}-allfinite.zip" download>.zip</a></div>
-<p class="fine" style="color:#d8e7e3">SHA-256 <span class="hash">{esc(zero['sha256'])}</span> &middot; {zero['bytes']:,} bytes &middot; {zero['positive_cells']:,} predicted cells &middot; unique entry name <code>{esc(build['artifacts']['unique_portal_name'])}</code></p>
-<p class="fine" style="color:#d8e7e3"><b>Draft optional note:</b> <q>{esc(build['artifacts']['short_submission_note'])}</q></p>
-<p class="fine" style="color:#d8e7e3"><span class="tag {tag_class}">{esc(decision)}</span> &mdash; this session&rsquo;s generated research artifact, published with its frozen gate result. The all-finite file writes 0.0 outside the study footprint, so every one of the 12,279,160 cells is finite and inside [0, 1] &mdash; it cannot reproduce the portal&rsquo;s <code>Predicted values must be in range [0, 1]</code> rejection.</p></div>
+<p class="fine" style="color:#d8e7e3">SHA-256 <span class="hash">{esc(zero['sha256'])}</span> &middot; {zero['bytes']:,} bytes &middot; {zero['positive_cells']:,} predicted cells &middot; historical research artifact</p>
+<p class="fine" style="color:#d8e7e3"><b>Portal name/note:</b> none authorized for this NO-GO.</p>
+<p class="fine" style="color:#d8e7e3"><span class="tag {tag_class}">{esc(decision)}</span> &mdash; historical research artifact only; do not upload or repackage. The all-finite file is range-valid, but its historical emitter failed the claimed spacing gate (measured 1.0 px minimum nearest-neighbour distance). Format validity does not imply eligibility.</p></div>
 <div class="metrics"><div class="metric"><b>{zero['positive_cells']:,}</b><small>binary predicted cells</small></div><div class="metric"><b>{f4(cand['dti'])}</b><small>off-catalogue proxy DTI</small></div><div class="metric"><b>{f4(inc['dti'])}</b><small>H56 incumbent, same frame</small></div><div class="metric"><b>{f4(fr['max_iou'])}</b><small>worst full-pixel IoU vs priors</small></div></div>
 <h3>H58-S1 executive summary</h3>
-<p>H58-S1 is the owner-mandated unique submission: <b>declustered USGS ComCat epicentre point geometry as the primary field</b> &mdash; 222,939 catalog rows screened to {build['catalog_processing']['events_after_decluster']:,} tectonic, site-screened, declustered events (2-D triangle-area test, an unverified adaptation of Ouillon &amp; Sornette 2011), {build['belief']['lineations']:,} linear, well-sampled 2-D covariance axes rendered as corridors whose half-width is the catalogue&rsquo;s own <code>horizontalError</code> (a corridor prior, not a trace), scored only outside the supplied-fault 300 m buffer, emitted as variable-density blue noise at the metric&rsquo;s own 300 m support, and snapped only across-axis to an independent LiDAR/radiometric ridge (the placement step was measured and the identity placement kept: no snap improved the proxy).</p>
+<p>H58-S1 was a research-only experiment with <b>declustered USGS ComCat epicentre point geometry as the primary field</b> &mdash; 222,939 catalog rows screened to {build['catalog_processing']['events_after_decluster']:,} tectonic, site-screened, declustered events (2-D triangle-area test, an unverified adaptation of Ouillon &amp; Sornette 2011), {build['belief']['lineations']:,} linear, well-sampled 2-D covariance axes rendered as corridors whose half-width is the catalogue&rsquo;s own <code>horizontalError</code> (a corridor prior, not a trace), scored only outside the supplied-fault 300 m buffer, emitted by the old block-quantised routine, which did not enforce cross-block Euclidean spacing (the written TIFF has a measured 1 px minimum, not 3 px), and snapped only across-axis to an independent LiDAR/radiometric ridge (the placement step was measured and the identity placement kept: no snap improved the proxy).</p>
 <p><b>Falsification result (frozen gates):</b> pooled proxy DTI {f4(cand['dti'])} vs smoothed-density control {f4(dens['dti'])}, matched random {f4(rnd['dti'])}, H56 incumbent {f4(inc['dti'])}; the paired 16-subtile bootstrap for candidate-minus-incumbent credit per dot is [{f4(boot[0])}, {f4(boot[1])}] &mdash; the candidate loses in all four macrofolds. 1-pixel enrichment vs proxy truth is {f4(build['holdout']['pooled']['enrichment_1px']['enrichment'])}x (chance level). <b>This is a recorded negative result, not a submission recommendation.</b> Uniqueness gate: worst full-pixel IoU {f4(fr['max_iou'])} against every prior artifact on disk, minimum novel fraction at 2 px {f4(fr['min_novel_fraction_at_2px'])}, zero exact overlap with the frozen 1,405,451-cell prior union, no identical SHA-256 &mdash; <b>unique: true</b>. Format gate: the NaN-outside twin passes <code>all_checks_pass</code>; the all-finite twin is entirely finite in [0, 1].</p>
-<p class="warning"><b>No weekly slot used; do not upload.</b> The frozen numeric and scientific gates fail (the candidate loses to density, random, and the incumbent; the 2-D triangle test is an unverified adaptation; the mine/injection inventory is incomplete; ComCat contributor rights are a flagged conflict). Verify source permissions and current rules before any slot. Full working: <a href="docs/research/h58-hypotheses-preregistered.md">preregistration</a> &middot; <a href="evidence/h58_build.json">build evidence</a> &middot; <a href="evidence/h58_uniqueness.json">uniqueness evidence</a>.</p>
-<h3>How to submit &mdash; only after rights and slot gates pass</h3>
-<ol class="list"><li><b>Download</b> the all-finite GeoTIFF above (portal-safe) or the NaN-outside twin (sample semantics) and verify the SHA-256.</li><li><b>Open</b> the <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">DOE GEMS competition page</a> and sign in.</li><li><b>Upload the file as downloaded.</b> Do not re-save, re-project, re-compress, re-scale or convert it.</li><li><b>Use the unique submission name and the optional note</b> printed above so the entry is distinguishable from every prior one.</li><li><b>Record the portal receipt</b> in this repository before any score is quoted.</li></ol></article></div></div></section>"""
+<p class="warning"><b>NO SLOT; do not upload or repackage H58-S1.</b> The frozen numeric and scientific gates fail (the candidate loses to density, random, and the incumbent; the 2-D triangle test is an unverified adaptation; the mine/injection inventory is incomplete; ComCat contributor rights are a flagged conflict), and the historical TIFF also fails the claimed spacing gate at 1.0 px minimum. This is an archived negative result, not a lead. Full working: <a href="docs/research/h58-hypotheses-preregistered.md">preregistration</a> &middot; <a href="evidence/h58_build.json">build evidence</a> &middot; <a href="evidence/h58_uniqueness.json">uniqueness evidence</a>.</p>
+<h3>Submission steps withdrawn</h3>
+<p><b>Do not upload, relabel, or repackage this historical artifact.</b> No portal name or note is authorized. A future, distinct method must be preregistered and revalidated from the start.</p></article></div></div></section>"""
 
 
 def submission_card(ev: dict) -> str:
@@ -138,17 +133,11 @@ def submission_card(ev: dict) -> str:
     stem = build["artifacts"]["stem"]
     decision = build["decision"]["decision"]
     return f"""
-<article class="card span-12"><h2>This session&rsquo;s H58-S1 file &mdash; manual steps ({esc(decision)})</h2>
-<p>Same no-automated-upload policy as the rest of this repository. H58-S1 is the generated unique competition-format artifact; its frozen gate result is <b>{esc(decision)}</b>, so no slot is recommended and the owner&rsquo;s explicit override would be required before any upload.</p>
-<ol class="steps"><li><b>Download unchanged.</b> <a href="docs/downloads/{esc(stem)}-allfinite.tif" download>All-finite portal-safe TIFF</a> (recommended: every cell finite, values in [0, 1], the direct guard against the historical range parser) or <a href="docs/downloads/{esc(stem)}-nan.tif" download>NaN-outside twin</a> (sample semantics).</li>
-<li><b>Verify SHA-256.</b> All-finite: <code>{esc(zero['sha256'])}</code>. NaN twin: <code>{esc(nan['sha256'])}</code>.</li>
-<li><b>Check current rules manually.</b> Sign in at <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">DrivenData</a>; confirm deadline, remaining weekly slots, external-data disclosures, and AI disclosure. Do not rely on this dated page for live status.</li>
-<li><b>Upload one TIFF.</b> Do not re-save, reproject, rename bands, or alter nodata metadata.</li>
-<li><b>Record the receipt.</b> Preserve submission ID, exact file hash, timestamp, portal response, and any returned error/score before making any score claim.</li></ol>
-<p><b>Unique name</b><br><code>{esc(build['artifacts']['unique_portal_name'])}</code></p>
-<p><b>Short note</b><br><q>{esc(build['artifacts']['short_submission_note'])}</q></p>
-<p class="fine">Decision record: <a href="evidence/h58_build.json">evidence/h58_build.json</a> &mdash; including the mass sweep, the placement-step measurement, the falsification controls, and the frozen gate components.</p></article>"""
-
+<article class="card span-12"><h2>Historical H58-S1 research artifacts — {esc(decision)}; do not submit</h2>
+<p class="warning"><b>Research archive only.</b> H58-S1 failed its frozen scientific/control gates and the post-run audit measured 1.0 px minimum nearest-neighbour spacing in the written TIFFs, not the claimed 3.0 px. Contributor-specific ComCat challenge-use and sponsor-sharing rights also remain unresolved. No portal name or note is authorized.</p>
+<p><a href="docs/downloads/{esc(stem)}-allfinite.tif" download>Download the historical all-finite TIFF</a> (SHA-256 <code>{esc(zero['sha256'])}</code>) · <a href="docs/downloads/{esc(stem)}-nan.tif" download>NaN-outside twin</a> (SHA-256 <code>{esc(nan['sha256'])}</code>).</p>
+<p><b>Submission steps withdrawn.</b> Do not upload, relabel, or repackage this artifact. A future method must be independently preregistered and pass all gates from the start.</p>
+<p class="fine">Decision record: <a href="evidence/h58_build.json">build evidence</a> · <a href="evidence/emitter-spacing-audit-20261007.json">spacing audit</a> · <a href="docs/research/h58-hypotheses-preregistered.md">H58 preregistration and NO-SLOT addendum</a>.</p></article>"""
 
 def results_card(ev: dict) -> str:
     build = ev["build"]
@@ -186,13 +175,13 @@ def methods_card(ev: dict) -> str:
     cat = build["catalog_processing"]
     fc = build["frozen_constants"]
     return f"""
-<article class="card span-12"><h2>H58-S1 pipeline (this session)</h2>
+<article class="card span-12"><h2>H58-S1 historical research pipeline</h2>
 <ol class="steps"><li><b>Pin and screen.</b> Verify the SHA-256 of the committed USGS ComCat extract (222,939 rows; official service <a href="https://earthquake.usgs.gov/fdsnws/event/1/">FDSN event web service</a>); keep tectonic types, M&nbsp;&ge;&nbsp;1.5, depth&nbsp;&lt;&nbsp;25&nbsp;km, horizontalError&nbsp;&le;&nbsp;10&nbsp;km, in-grid events ({cat['footprint']['events_in_bounds']:,} in bounds).</li>
 <li><b>Remove known injection/mining sites.</b> Drop every non-tectonic event type (545 rows) and apply a 3&nbsp;km buffer around {cat['anthropogenic_site_screen']['centres']} explicit anthropogenic event centres ({cat['anthropogenic_site_screen']['events_removed']:,} events removed). The GDR-1391 hot-feature CSV is absent in this environment; the screen is recorded as incomplete.</li>
 <li><b>Decluster.</b> 2-D triangle-area background test against a randomized catalogue (unverified adaptation of Ouillon &amp; Sornette 2011; {cat['events_after_decluster']:,} of {cat['decluster']['n_events']:,} events kept).</li>
 <li><b>Fit local axes.</b> Full 2-D covariance of each epicentre&rsquo;s {fc['lineation_k']} nearest neighbours; keep linear (elongation&nbsp;&ge;&nbsp;{fc['lineation_min_elongation']}), well-sampled (&ge;{fc['lineation_min_events']} events, &sigma;1&nbsp;&ge;&nbsp;{fc['lineation_min_sigma1_m']:.0f}&nbsp;m) neighbourhoods; {build['belief']['lineations']:,} lineations accepted.</li>
 <li><b>Render corridors.</b> Corridor along each principal axis with half-width = the catalogue&rsquo;s own <code>horizontalError</code> (median {build['belief']['sigma_km_median']:.2f}&nbsp;km &mdash; several pixels at 100&nbsp;m: a corridor prior, not a trace).</li>
-<li><b>Emit.</b> Variable-density blue noise at the metric&rsquo;s own 300&nbsp;m support; mass selected by the frozen transfer-modelled rule; support caps at {build['artifacts']['recommended_portal_safe_allfinite']['positive_cells']:,} cells.</li>
+<li><b>Emit.</b> The historical build used the old block-quantised emitter, which did not enforce cross-block Euclidean spacing; the written TIFF has a measured 1.0 px minimum, not 3.0 px. The shared emitter code is now corrected for future builds, but H58 was not rebuilt; see the <a href="evidence/emitter-spacing-audit-20261007.json">byte audit</a>.</li>
 <li><b>Place.</b> Every dot is offered to independent ridge targets (70/30 LiDAR-scarp / radiometric); the identity placement is kept because no snap improved the proxy.</li>
 <li><b>Gate.</b> Off-catalogue scoring only (&gt;300&nbsp;m from the supplied catalogue); every prior positive pixel excluded; falsified against smoothed density, random, translations, the H56 incumbent, and the frozen four-macrofold holdout.</li></ol>
 <p class="fine">The 2-D triangle-area test is an <b>unverified project adaptation</b>, not the published 3-D tetrahedron method, and <code>horizontalError</code> is a scalar, not a per-event covariance (not an ACLUD reproduction, Wang et al. 2013). Mixed-network ComCat contributor rights are a flagged intra-repo conflict; see <a href="docs/research/comcat-license-review-20261007.md">the ComCat rights review</a> and <a href="docs/research/h58-hypotheses-preregistered.md">the H58 preregistration</a>.</p></article>"""

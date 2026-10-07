@@ -154,3 +154,15 @@ the corpus's best artifact and 0.023 for a structureless lattice. Nothing measur
 gap, and **no candidate in this register is claimed to**. The honest position is that this
 repository has, for the first time, a design whose evidence is *measured on an independent fault
 population with controls*, and it still has to be scored by the organizer to become a datum.
+
+## Post-run emitter audit — 2026-10-07
+
+The original description above called `h56.emit_blue_noise` a 3 px blue-noise emitter. A later
+line-by-line audit found that the code selected one cell per rounded 3×3 block but did not enforce
+Euclidean spacing across blocks; its tests checked block uniqueness only. The written H56 90,000-dot
+TIFF has a measured 1.0 px minimum nearest-neighbour distance (median 2.828 px), not the claimed
+3.0 px. The H58 98,598-dot artifact has the same 1.0 px minimum. The 2026-10-07 fix now uses
+weighted exponential-race priorities and exact Euclidean Poisson-disk rejection, and regression
+tests assert the actual distance. No historical TIFF was regenerated or re-scored by this code fix.
+The old H56 proxy metrics remain measurements on the exact H56 bytes, but the design and spacing
+claims are corrected by [`evidence/emitter-spacing-audit-20261007.json`](../evidence/emitter-spacing-audit-20261007.json). H56 remains research-only; its external ComCat rights gate is unresolved.

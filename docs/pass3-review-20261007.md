@@ -1,6 +1,8 @@
-# Three-pass acceptance review — H53-A no-go close-out (2026-10-07 UTC)
+# Historical three-pass acceptance review — H53-A no-go close-out (2026-10-07 UTC)
 
-This is the acceptance record for the H53-A work from this Arena branch. The remote `main` advanced during the session and now contains later H55/H56 work; H56 remains the site's primary one-click candidate. H53-A is a separate, archived no-go experiment (not the repository's other H53 TMI-conjunction artifact). The older [`pass3-review-20261006.md`](pass3-review-20261006.md) describes an earlier H51-oriented iteration; its H51 promotion statements are superseded and withdrawn.
+> **SUPERSEDED; historical record only.** This review predates the later H56 emitter-spacing and metric-algebra audits, the H57/H58 rights and NO-SLOT decisions, and the explicit H59 withdrawal. Its statements that H56 is the current candidate or that any H56 portal guide remains active are obsolete. Current project status, authorized-name policy, and no-go decision are maintained in [`README.md`](../README.md) and [`submission.html`](../submission.html). Nothing in this historical review authorizes a download for submission, portal name/note, upload, or weekly slot.
+
+This is the original acceptance record for the H53-A work from this Arena branch. The remote `main` advanced during that session and then contained later H55/H56 work; H53-A is a separate, archived no-go experiment (not the repository's other H53 TMI-conjunction artifact). The older [`pass3-review-20261006.md`](pass3-review-20261006.md) describes an earlier H51-oriented iteration; its H51 promotion statements are superseded and withdrawn.
 
 ## Pass 1 — implement and verify
 

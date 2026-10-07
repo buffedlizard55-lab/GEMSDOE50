@@ -1,61 +1,38 @@
-"""H56 — coverage-optimal emission of seismicity lineaments corroborated by geophysical ridges.
+"""Archived H56 research methods: earthquake lineations with geophysical corroboration.
 
-Why this module exists
-----------------------
-``docs/research/h56-diagnosis.md`` measures two things that decide this design:
+H56 is **NO-GO / NO SLOT**; the historical raster remains archive-only. This module retains
+its analysis helpers, and its corrected ``emit_blue_noise`` implementation is prospective:
+existing H56/H58 TIFF bytes were not regenerated.
 
-1.  The official metric, with binary dots, is exactly
+For binary unit dots the exact published metric uses directional credit separately. Let ``T``
+be truth-side ``TP_w``, ``M`` the sum over predicted cells of their best truth-kernel credit,
+``N`` the predicted-cell count, and ``G`` the truth-cell count. Then
 
-        DTI = T / (0.2 * N + 0.8 * G)
+    DTI = T / (0.2*N + 0.8*G + 0.2*(T-M) + epsilon)
 
-    where ``T = sum_g max_x p(x) k(d(x,g))`` is credit, ``N`` the dot count and ``G`` the
-    hidden truth mass inside the scored domain.  A dot therefore has to earn its place.
+The shorter ``T / (0.2*N + 0.8*G)`` form requires ``T == M``; prediction spacing alone does not
+establish this. Use the full TP/FP/FN calculation for local scores. Historical hidden-score
+transfer numbers in the research notes are conditional models, not organizer scores or forecasts.
 
-2.  **Concentrating dots loses.**  On the independent off-catalogue frame used by this
-    repository (USGS SGMC fault pixels more than 300 m from the given catalogue), taking the
-    top 30,000 pixels of any single evidence layer's ridge response scores **0.014-0.033**,
-    while 30,000 *uniformly scattered* dots score **0.058**.  Every hand-built detector in
-    the sibling corpus has that failure mode: it stacks dots onto the few strongest
-    features, where ``T`` saturates after the first few dots per structure, while ``0.2 * N``
-    keeps growing.
-
-What this module does instead
------------------------------
-It treats emission as the **weighted maximum-coverage** problem that it is: choose ``N``
-dots maximising ``sum_y b(y) * max_dot k(d(y, dot))`` for a belief field ``b``, and stop on
-the metric's own first-order condition,
-
-    accept a dot iff  dT > alpha * s * (dT + 1 - dc),      s = current DTI estimate,
-
-which is the exact multi-truth-pixel form of ``k > 0.2 * s`` used in
-``gems50.dti.marginal_condition``.  Greedy maximisation of a monotone submodular coverage
-objective has the classical ``1 - 1/e`` guarantee, and here it is *also* exactly the metric's
-own stopping rule, so the two coincide: the emitter is metric-optimal for the belief field it
-is given.  Nothing about the geology is hidden in the optimiser; all of it is in ``b``.
-
-The belief field
-----------------
-Two independent evidence classes, each turned into a *density* (never a max):
+The historical belief-field design combined two evidence classes:
 
 ``seismic``
-    Declustered epicentres -> per-event local 2-D covariance of its k nearest neighbours ->
-    neighbourhoods accepted only if they are linear and well sampled -> corridors along the
-    principal axis with a half-width taken from the catalogue's own epicentral uncertainty.
-    This is the 2-D adaptation of the anisotropic-clustering line of Ouillon, Ducorbier &
-    Sornette (2008), Ouillon & Sornette (2011) and Wang, Ouillon, Woessner, Sornette & Husen
-    (2013); the 2-D reduction and the corridor rendering are this project's own and are
-    flagged as unverified in ``docs/research/h56-diagnosis.md``.
+    Declustered earthquake epicentres -> local 2-D covariance of neighboring points -> linear,
+    well-sampled neighborhoods -> corridors along the principal axis with half-width tied to
+    catalogue location uncertainty. This is a project-specific 2-D adaptation of anisotropic
+    clustering work and remains scientifically unverified; see
+    ``docs/research/h56-diagnosis.md``.
 
 ``ridge``
-    GeoDAWN airborne total magnetic intensity, radiometric K/Th and the USGS 3DEP LiDAR
-    scarp descriptors, reduced to a multi-scale gradient-ridge *density*.
+    GeoDAWN airborne magnetic/radiometric fields and USGS 3DEP LiDAR scarp descriptors, reduced
+    to a multi-scale gradient-ridge density. This is historical method documentation, not a
+    current authorized candidate.
 
-The two are combined multiplicatively-ish (a weighted geometric mean) so that a corridor
-carrying independent geophysical support outranks either alone, and the result is smoothed
-at the scale of the metric's own 300 m support before emission.
-
-Every function here is deterministic given its seed and its inputs; nothing is fitted to a
-held-out label.
+``emit_blue_noise`` now performs deterministic density-weighted random-sequential selection
+with an explicit hard Euclidean minimum distance. Its 3 px parameter is a spacing design rule,
+not a proven metric optimum, disjoint-support guarantee, or maximum-coverage optimizer.
+Nothing here authorizes rebuilding or submitting H56; source rights, scientific, format, and
+uniqueness gates remain independent requirements.
 """
 
 from __future__ import annotations
@@ -519,19 +496,16 @@ class Emission:
 def emit_coverage(belief: np.ndarray, domain: np.ndarray, *, n_max: int,
                   g_hat: float, s_init: float = 0.25,
                   min_belief_frac: float = 1e-6) -> Emission:
-    """Greedy weighted maximum coverage under the metric's exact marginal rule.
+    """Legacy greedy belief-coverage heuristic; not the official metric optimizer.
 
-    ``belief`` is treated as a non-negative credit density: ``sum_y b(y) max_dot k(d)`` is the
-    quantity being maximised.  A candidate pixel ``x`` is accepted only when
+    ``belief`` is treated as a non-negative credit density and the procedure maximizes
+    ``sum_y b(y) max_dot k(d(y, dot))`` greedily. Its acceptance gate uses a simplified
+    denominator model, `T/(0.2 N + 0.8 G_hat)`, which assumes equality of truth-side and
+    prediction-side matched credit. That equality is not guaranteed by a calibrated belief or
+    by minimum-distance spacing. Retain this helper only for historical comparisons; evaluate
+    candidates with the full published TP/FP/FN equations (as ``score_dots`` does).
 
-        dT > ALPHA * s * (dT + 1 - dc)
-
-    with ``dT`` the exact increase of ``sum_y b(y) max_dot k``, ``dc`` the increase of the
-    dot's own matched mass, and ``s`` the running DTI estimate ``T / (0.2 N + 0.8 G_hat)``.
-    For a calibrated belief this *is* the metric's published first-order condition.
-
-    Complexity is O(#candidates x 49); candidates are visited in descending belief order, so
-    a truncated run returns the highest-value prefix.
+    Complexity is O(#candidates x 49); candidates are visited in descending belief order.
     """
     belief = np.asarray(belief, dtype=np.float64)
     h, w = belief.shape
@@ -635,73 +609,105 @@ def emit_poisson_disk(score: np.ndarray, domain: np.ndarray, n_target: int,
 
 
 def emit_blue_noise(density: np.ndarray, domain: np.ndarray, *, n_target: int,
-                    min_sep_px: float = 3.0, seed: int = 0,
-                    max_rounds: int = 60) -> Emission:
-    """Variable-density blue-noise emission at a fixed minimum separation.
+                    min_sep_px: float = 3.0, seed: int = 0) -> Emission:
+    """Emit density-weighted pixels with a hard Euclidean Poisson-disk separation.
 
-    Why this geometry and not "the top-N pixels"
-    --------------------------------------------
-    ``docs/research/h56-diagnosis.md`` measures the geometry of every hash-pinned prior
-    artifact and finds that the best off-catalogue performer of the group's whole history
-    (``gems50-seislin-44709``) is:
+    Each finite, positive-density eligible pixel receives an exponential-race priority
+    ``-log(U) / density``. Candidates are visited in increasing-priority order and accepted
+    only when their pixel-centre distance from every accepted point is at least
+    ``min_sep_px``. A spatial hash limits each exact Euclidean check to nearby buckets.
+    This is weighted random sequential inhibition: high-density cells have a higher chance
+    of early selection, while the hard-distance rule reduces immediate crowding at the scale
+    of the metric kernel. It does not make full kernel footprints disjoint.
 
-    * 44,709 dots, **every one of them isolated** (no 8-connected pairs at all);
-    * nearest-neighbour separation **3.0 px** at the 10th, 50th and 90th percentiles --
-      exactly the metric's own 300 m support ``R = 3 px``;
-    * spread over **44 %** of the 128 x 128 blocks of the map.
-
-    A separation of exactly ``R`` is the metric's own optimum: it is the coarsest spacing at
-    which neighbouring dots never compete for the same truth pixel, so no dot is charged
-    ``0.2`` for credit another dot already earned.  Selecting the top ``N`` pixels of any
-    evidence field instead piles dots a few pixels deep on the strongest features, where the
-    ``max`` in ``TP_w`` saturates and the ``0.2 N`` term does not.
-
-    Implementation
-    --------------
-    Bernoulli thinning at acceptance probability ``p = clip(density / q, 0, 1)`` followed by
-    a greedy Poisson-disk pass at ``min_sep_px``; ``q`` is bisected so that the accepted count
-    lands on ``n_target``.  The realised density is therefore proportional to ``density``
-    wherever ``density < q`` and flat where it is larger -- i.e. the peaked part of a belief
-    field is capped, which is exactly the correction the measurements call for.
+    The result is deterministic for a fixed seed and never relaxes spacing to hit the target.
+    It may return fewer than ``n_target`` when the positive-density domain cannot supply
+    that many separated pixels. This is a Poisson-disk emitter, not a claim of a particular
+    spectral blue-noise distribution.
     """
     density = np.asarray(density, dtype=np.float64)
-    dom = np.asarray(domain, dtype=bool) & np.isfinite(density)
-    dmax = float(density[dom].max()) if dom.any() else 0.0
-    if dmax <= 0:
-        return Emission(np.zeros(0, dtype=int), np.zeros(0, dtype=int), 0.0)
+    domain = np.asarray(domain, dtype=bool)
+    if density.ndim != 2 or domain.shape != density.shape:
+        raise ValueError("density and domain must be same-shaped 2-D arrays")
+    if not np.isfinite(min_sep_px) or min_sep_px <= 0:
+        raise ValueError("min_sep_px must be finite and positive")
+    if int(n_target) != n_target or n_target < 0:
+        raise ValueError("n_target must be a non-negative integer")
+    n_target = int(n_target)
+    if n_target == 0:
+        return Emission(np.zeros(0, dtype=np.int64), np.zeros(0, dtype=np.int64), 0.0)
+
+    candidate_idx = np.flatnonzero(
+        (domain & np.isfinite(density) & (density > 0.0)).ravel()
+    )
+    if candidate_idx.size == 0:
+        return Emission(np.zeros(0, dtype=np.int64), np.zeros(0, dtype=np.int64), 0.0)
+
+    # Exponential-race priorities implement weighted sampling without replacement.
+    # Work in log space so very small but positive density values do not overflow. Fill the
+    # priority array in place and gather weights in chunks to avoid several full-grid copies.
     rng = np.random.default_rng(seed)
-    h, w = density.shape
-    b = max(round(min_sep_px), 1)
-    bh, bw = h // b, w // b
-    hh, ww = bh * b, bw * b
-    # per-block density budget: the sum of belief inside the block, and the block's argmax
-    dview = density[:hh, :ww].reshape(bh, b, bw, b)
-    mview = dom[:hh, :ww].reshape(bh, b, bw, b)
-    dvals = np.where(mview, dview, 0.0)
-    block_mass = dvals.sum(axis=(1, 3)).ravel()
-    flat_allowed = mview.any(axis=(1, 3)).ravel()
-    allowed_idx = np.flatnonzero(flat_allowed & (block_mass > 0))
-    if allowed_idx.size == 0:
-        return Emission(np.zeros(0, dtype=int), np.zeros(0, dtype=int), 0.0)
-    weights = block_mass[allowed_idx]
-    weights = weights / weights.sum()
-    take = int(min(n_target, allowed_idx.size))
-    chosen = rng.choice(allowed_idx, size=take, replace=False, p=weights)
-    # position inside the block: the highest-belief allowed pixel (flat blocks -> random pick)
-    bi, bj = np.divmod(chosen, bw)
-    sub = dvals[bi, :, bj, :].reshape(take, b * b)
-    # Tie-break among equal maxima only.  The jitter must scale with the row's own
-    # maximum: with an absolute 1e-6 jitter, blocks whose belief spread is below
-    # ~1e-6 (e.g. H57 corridor tails at 1e-7) let the jitter dominate the values and
-    # argmax can pick a cell *outside* the emission domain -- measured 2026-10-07:
-    # 5,631 of 98,598 emitted dots landed on prior-union/catalogue cells before this
-    # fix.  H56's shipped bytes are unaffected (0 dots outside its domain, verified).
-    row_max = sub.max(axis=1, keepdims=True)
-    tie = rng.random(sub.shape) * 1e-6 * np.maximum(row_max, 1e-300)
-    pick = np.argmax(sub + tie, axis=1)
-    dr, dc = np.divmod(pick, b)
-    rows = (bi * b + dr).astype(np.int64)
-    cols = (bj * b + dc).astype(np.int64)
+    priorities = rng.random(candidate_idx.size)
+    chunk_size = 1_000_000
+    for start in range(0, candidate_idx.size, chunk_size):
+        end = min(start + chunk_size, candidate_idx.size)
+        priority_chunk = priorities[start:end]
+        np.maximum(priority_chunk, np.finfo(np.float64).tiny, out=priority_chunk)
+        np.log(priority_chunk, out=priority_chunk)
+        np.negative(priority_chunk, out=priority_chunk)
+        np.log(priority_chunk, out=priority_chunk)
+        log_weights = density.ravel()[candidate_idx[start:end]]
+        np.log(log_weights, out=log_weights)
+        priority_chunk -= log_weights
+
+    width = density.shape[1]
+    cell_size = float(min_sep_px)
+    min_distance_sq = cell_size * cell_size
+    neighbor_offsets = (-1, 0, 1)  # cell size equals radius, so any clash is in these buckets
+    kept: list[tuple[int, int]] = []
+    buckets: dict[tuple[int, int], list[tuple[int, int]]] = {}
+
+    # Start with a modest prefix. If density concentration or boundary effects leave the
+    # target short, expand the exact priority prefix and restart; candidates are never lost.
+    pool_size = min(candidate_idx.size, max(1_024, 4 * n_target))
+    while True:
+        if pool_size == candidate_idx.size:
+            pool = np.arange(candidate_idx.size, dtype=np.int64)
+        else:
+            pool = np.argpartition(priorities, pool_size - 1)[:pool_size]
+        order = pool[np.lexsort((pool, priorities[pool]))]
+        kept = []
+        buckets = {}
+        for candidate_position in order:
+            flat = int(candidate_idx[candidate_position])
+            row, col = divmod(flat, width)
+            bucket = (int(np.floor(row / cell_size)), int(np.floor(col / cell_size)))
+            clash = False
+            for dr in neighbor_offsets:
+                for dc in neighbor_offsets:
+                    for other_row, other_col in buckets.get((bucket[0] + dr, bucket[1] + dc), ()):
+                        if (row - other_row) ** 2 + (col - other_col) ** 2 < min_distance_sq:
+                            clash = True
+                            break
+                    if clash:
+                        break
+                if clash:
+                    break
+            if clash:
+                continue
+            buckets.setdefault(bucket, []).append((row, col))
+            kept.append((row, col))
+            if len(kept) >= n_target:
+                break
+
+        if len(kept) >= n_target or pool_size == candidate_idx.size:
+            break
+        pool_size = min(candidate_idx.size, max(pool_size * 2, 4 * n_target))
+
+    if not kept:
+        return Emission(np.zeros(0, dtype=np.int64), np.zeros(0, dtype=np.int64), 0.0)
+    points = np.asarray(kept, dtype=np.int64)
+    rows, cols = points[:, 0], points[:, 1]
     return Emission(rows, cols, float(density[rows, cols].sum()))
 
 
@@ -795,5 +801,9 @@ def score_dots(truth: np.ndarray, rows: np.ndarray, cols: np.ndarray) -> dict:
 
 
 def required_credit(score: float, n_dots: int, g_hat: float) -> float:
-    """``T = s (0.2 N + 0.8 G)``: the credit a target score needs at a given dot budget."""
+    """Legacy model-only credit target under the conditional ``T=M`` simplification.
+
+    The exact metric depends on both directional credits; this helper is retained for
+    historical comparison and must not be used as an official-score inversion.
+    """
     return float(score * (ALPHA * n_dots + (1.0 - ALPHA) * g_hat))
