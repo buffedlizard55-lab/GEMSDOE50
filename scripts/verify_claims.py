@@ -57,6 +57,16 @@ def main() -> int:
     check("scheduled ComCat refresh is disabled", "schedule:" not in feed_workflow and "if: ${{ false }}" in feed_workflow)
     check("ComCat fetch workflow is disabled", "if: ${{ false }}" in fetch_workflow)
     check("site workflow cannot push generated changes", "git push" not in site_workflow)
+    h51 = feed.get("h51_candidate") or {}
+    check("H51 feed entry asserts no organizer score", h51.get("organizer_score") is None)
+    check("H51 feed entry records that no slot was used", h51.get("weekly_slot_used") is False)
+    ship_path = ROOT / "evidence" / "h51_ship.json"
+    check("H51 feed hash matches the shipped evidence", (
+        not ship_path.exists()
+        or h51.get("sha256") == json.loads(ship_path.read_text()).get("outputs", {}).get("sha256")
+    ))
+    check("H51 candidate is not claimed to pass the proxy gate", h51.get("proxy_gate_pass") is False)
+
     comcat = next(
         (item for item in source_registry.get("sources", []) if "Comprehensive Earthquake Catalog" in item.get("name", "")),
         {},
@@ -91,7 +101,8 @@ def main() -> int:
     )
     check(
         "research workflow is pinned to this Arena branch",
-        "arena/c4f4db48-gemsdoe50" in research_workflow
+        "arena/5e2ce8c3-gemsdoe50" in research_workflow
+        and "arena/c4f4db48-gemsdoe50" not in research_workflow
         and "arena/c6060a3e-gemsdoe50" not in research_workflow,
     )
     check(

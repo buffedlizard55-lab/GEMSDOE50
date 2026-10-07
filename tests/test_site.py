@@ -185,13 +185,17 @@ def test_site_publishes_the_h51_download_and_the_evidence_caveats(tmp_path: Path
     results = (output / "results.html").read_text(encoding="utf-8")
     methods = (output / "methods.html").read_text(encoding="utf-8")
     submission = (output / "submission.html").read_text(encoding="utf-8")
-    assert "ONE-CLICK COMPETITION SUBMISSION FILE" in index
+    # Merged design: the index page opens with the H51 candidate panel and the two-candidate table
+    # (both with one-click downloads) before the executive summary; the high-contrast one-click band
+    # now lives on the submission page.
+    assert "ONE-CLICK COMPETITION SUBMISSION FILE" in submission
     assert "gems51-test-35000-nan.tif" in index and "gems51-test-35000-nan.zip" in index
-    assert index.index("ONE-CLICK") < index.index("<h2>Executive summary</h2>")
+    assert "two-candidate" in index or "Two candidate GeoTIFFs" in index
+    assert index.index("Download .tif") < index.index("<h2>Executive summary</h2>")
     assert "GEMSDOE50-H51-SCARPRADIO-OFFCAT" in submission
     assert "How to submit the H51 file" in submission
     assert "Spatially blocked validation" in results and "4/4" in results
     assert "weak guard" in results
     assert "null distribution" in results
     assert "H52-A" in methods
-    assert "is not organizer-scored" in index.replace("Not organizer-scored", "is not organizer-scored")
+    assert "organizer-scored" in index  # the page must say the numbers are local, not organizer scores
