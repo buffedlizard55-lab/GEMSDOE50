@@ -55,6 +55,9 @@ def page(title: str, body: str, *, active: str = "") -> str:
 H51_DEFAULT = Path("evidence/build_h51.json")
 H51_SHIP_DEFAULT = Path("evidence/h51_ship.json")
 H51_CHECK_DEFAULT = Path("evidence/h51_check_submission.json")
+H53_SHIP_DEFAULT = Path("evidence/h53_ship.json")
+H53_CHECK_DEFAULT = Path("evidence/h53_check_submission.json")
+H53_FINAL_DEFAULT = Path("evidence/h53_validation_final.json")
 H51_NOTE = ("GEMSDOE50 H51 | corroborated 3DEP-scarp + radiometric lineaments, all dots >300 m "
             "from the given catalogue, metric-matched sparse emission; proxy-validated, NOT "
             "organizer-scored")
@@ -294,6 +297,169 @@ def h51_submission_block(h51: dict[str, Any]) -> str:
 </div></article></div></div></section>"""
 
 
+
+
+def h53_block(repo_dir: Path, ship_path: Path, check_path: Path) -> str:
+    """Render the H53 candidate panel: one-click download first, then the honest numbers."""
+    if not ship_path.exists():
+        return ""
+    ship = json.loads(ship_path.read_text())
+    check = json.loads(check_path.read_text()) if check_path.exists() else {}
+    tif = repo_dir / ship["outputs"]["tif"]
+    if not tif.exists():
+        return ""
+    fmtinfo = ship["format"]
+    gate = ship["gate"]
+    uniq = check.get("uniqueness", {})
+    inst = ship["instrument"]
+    return f"""
+<section class="main" id="h53-candidate"><div class="shell"><div class="grid">
+<article class="card span-12">
+<div class="eyebrow">Newest candidate · H53</div>
+<h2 style="margin-top:.2em">Download the H53 candidate submission</h2>
+<p><a class="button" href="{esc(ship['outputs']['tif'])}" download>Download {esc(ship['name'])}-{esc(ship['stamp'])}.tif</a>
+<a class="button secondary" style="color:#172a33;background:#dcefe9" href="{esc(ship['outputs']['zip'])}" download>Download .zip</a>
+<a class="button secondary" style="color:#172a33;background:#eceae1" href="{esc(ship['outputs']['allfinite'])}" download>all-finite twin</a>
+<a class="button secondary" style="color:#172a33;background:#eceae1" href="submission.html">How to submit</a></p>
+<p class="sourced">SHA-256 <span class="hash">{esc(ship['outputs']['sha256'])}</span> · {ship['outputs']['bytes']:,} bytes · stamp {esc(ship['stamp'])}</p>
+<div class="metrics">
+<div class="metric"><strong>{ship['budgets']['n']:,}</strong><span>predicted pixels (values 0 / 1 only)</span></div>
+<div class="metric"><strong>{fmt(inst['dti'], 4)}</strong><span>shared off-catalogue-frame DTI (uniform max {fmt(inst['uniform_dti_max'], 4)})</span></div>
+<div class="metric"><strong>{fmt(gate['measured_iou2px_max'], 3)}</strong><span>worst 200 m-proximity IoU vs {gate['n_prior']} priors (gate &lt; 0.5)</span></div>
+<div class="metric"><strong>0</strong><span>pixels shared with any prior artifact</span></div>
+</div>
+<div class="callout" style="margin-top:16px"><strong>Read this before uploading.</strong>
+This file passed every preregistered gate (format, uniqueness, uniform + translation controls,
+{inst['quadrants_positive']}/{inst['quadrants_total']} quadrants), but on the shared frame it scores
+<strong>below</strong> the in-repo H51 scarp + radiometric file (0.0565 vs 0.1158) while using 33 % fewer
+dots on 82 % new ground. If the owner spends a slot, the evidence says B first, H53 second. Not
+organizer-scored; no slot used.</div>
+<p class="sourced">Format: {esc(fmtinfo['dtype'])}, {esc(fmtinfo['crs'])}, {fmtinfo['shape'][0]}×{fmtinfo['shape'][1]},
+values in [0, 1] = {esc(fmtinfo['values_in_0_1'])}, NaN only outside the published footprint = {esc(fmtinfo['outside_footprint_all_nan'])},
+all in-footprint values finite = {esc(fmtinfo['inside_footprint_all_finite'])}. Uniqueness verdict:
+<strong>{esc('PASS' if uniq.get('verdict_unique') else uniq.get('verdict', 'not run'))}</strong> · identical hashes: {len(uniq.get('identical_sha256', []))}.</p>
+</article>
+<article class="card span-7"><h2>What it is</h2>
+<p>{esc(ship['design'])}. The conjunction keeps only pixels where at least two of the TMI-up150,
+radiometric-K and radiometric-U gradient-ridge families agree — the largest unspent physical layer in
+the evidence stack (the corpus spends ~5 % of its dots on TMI ground while TMI occupancy is the only
+positive robust score correlate at &rho; = +0.566).</p>
+<p class="sourced">Evidence: <span class="hash">evidence/h53_ship.json</span>,
+<span class="hash">evidence/h53_validation_final.json</span>, <span class="hash">evidence/h53_check_submission.json</span>,
+analysis in <span class="hash">docs/research/h53-analysis.md</span>, ranked hypotheses in
+<span class="hash">docs/research/h53-hypotheses.md</span>, license review in
+<span class="hash">docs/research/comcat-license-review-20261007.md</span>.</p></article>
+<article class="card span-5"><h2>Submit it in five steps</h2>
+<ol class="list">
+<li>Download the .tif above and check the SHA-256.</li>
+<li>Open <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">the competition</a> and sign in manually.</li>
+<li>Upload the single GeoTIFF; do not re-save or re-project it.</li>
+<li>Use the unique name and the short note below.</li>
+<li>Record the portal receipt in the repository before claiming a score.</li>
+</ol>
+<p><strong>Unique name:</strong> <code>{esc(ship['portal_name'])}</code><br>
+<strong>Optional note:</strong> <q>{esc(ship['claim_note'])}</q></p>
+<p class="sourced">No automated portal access: this project never uploads for you.</p></article>
+</div></div></section>"""
+
+
+def h53_download_band(h53: dict[str, Any]) -> str:
+    """The H53 one-click band for the submission page."""
+    outputs = h53["outputs"]
+    leaf = outputs["tif"].split("/")[-1]
+    return f"""<section style="background:#0d3b34;color:#f2f7f2;padding:26px 0;border-bottom:4px solid #d99a52"><div class="shell">
+<div class="eyebrow" style="color:#f0c58a">⬇ NEWEST FILE · H53 ONE-CLICK COMPETITION SUBMISSION</div>
+<h2 style="color:#ffffff;margin:.2em 0 .3em;font-size:clamp(1.5rem,3.4vw,2.3rem)">Download, then upload this one file</h2>
+<p style="color:#d7e8e0;max-width:900px">Single band, float32, EPSG:32611, 100 m, 3292 × 3730, {int(h53['budgets']['n']):,} dots, every in-footprint value in [0, 1]. Zero pixels shared with any of the {h53['gate']['n_prior']} prior artifacts. Verified by re-reading the written bytes.</p>
+<p><a class="button" style="font-size:1.05rem" href="{esc(outputs['tif'])}" download>⬇ Download {esc(leaf)}</a>
+<a class="button secondary" style="margin-left:10px" href="{esc(outputs['allfinite'])}" download>all-finite twin (0.0 outside)</a>
+<a class="button secondary" style="margin-left:10px" href="{esc(outputs['zip'])}" download>.zip (single GeoTIFF inside)</a></p>
+<p class="small" style="color:#cfe3da">Unique submission name to paste in the portal: <code>{esc(h53['portal_name'])}</code><br>
+Optional note: <q>{esc(h53['claim_note'])}</q><br>
+SHA-256 <span class="hash">{esc(outputs['sha256'])}</span> · {outputs['bytes']:,} bytes</p>
+<p class="small" style="color:#f0c58a"><strong>Not organizer-scored.</strong> H53 passes every local gate but scores below the in-repo H51 scarp + radiometric file on the shared frame — the evidence says B first, H53 second. Confirm the portal spec before uploading; this project never uploads for you.</p>
+</div></section>"""
+
+
+def h53_submission_block(h53: dict[str, Any]) -> str:
+    return f"""<section class="main"><div class="shell"><div class="grid">
+<article class="card span-12"><h2>How to submit the H53 file (numbered, manual)</h2>
+<ol class="list">
+<li>Click <a href="{esc(h53['outputs']['tif'])}" download>this download link</a> (the single-band float32 GeoTIFF at the top of the site).</li>
+<li>Optionally confirm the bytes: SHA-256 <span class="hash">{esc(h53['outputs']['sha256'])}</span>.</li>
+<li>Sign in to DrivenData manually and open <em>DOE GEMS Prize Challenge → Submit</em>.</li>
+<li>Choose the downloaded <code>.tif</code> (or the <code>.zip</code> containing it). If the portal rejects NaN outside the footprint, use the <a href="{esc(h53['outputs']['allfinite'])}" download>all-finite twin</a> instead — same dots inside the footprint, 0.0 outside.</li>
+<li>Paste the unique name <code>{esc(h53['portal_name'])}</code> and the note <q>{esc(h53['claim_note'])}</q> into the optional note field so you can find the row again.</li>
+<li>Submit. This project performs no automated upload and holds no portal credentials.</li>
+<li>Record the returned score next to the file hash in this repository before making any claim about it.</li>
+</ol>
+<div class="callout"><strong>Format contract re-checked in the written file:</strong> single band, float32, EPSG:32611, 3292 × 3730, {int(h53['budgets']['n']):,} predicted pixels, in-footprint values exactly 0/1, NaN outside the footprint (the official convention) with an all-finite twin offered as well.
+</div></article></div></div></section>"""
+
+
+def h53_results_block(h53: dict[str, Any],
+                      final: dict[str, Any] | None) -> str:
+    inst = h53.get("instrument", {})
+    gate = h53.get("gate", {})
+    comp_rows = "".join(
+        f"<tr><td>{esc(name)}</td><td>{esc(result)}</td></tr>"
+        for name, result in gate.get("component_gates", {}).items())
+    uni_line = ""
+    if final:
+        uni = final.get("uniform_control", {})
+        tra = final.get("translation_control", {})
+        uni_line = (f"<p>Shared-frame controls at the matched mass of {int(h53['budgets']['n']):,} dots: "
+                    f"uniform DTI mean {fmt(uni.get('dti_mean'), 4)} / max {fmt(uni.get('dti_max'), 4)} "
+                    f"({uni.get('draws')} draws); translation DTI mean {fmt(tra.get('dti_mean'), 4)} / max "
+                    f"{fmt(tra.get('dti_max'), 4)}. Full rows: "
+                    f'<span class="hash">evidence/h53_validation_final.json</span>.</p>')
+    return f"""<section class="main"><div class="shell"><div class="grid">
+<article class="card span-12"><h2>H53 measured results (local instruments, not the hidden labels)</h2>
+<div class="wide"><table><tr><th>quantity</th><th>value</th></tr>
+<tr><td>shared-frame DTI (sgmc_off, 61,664 truth px)</td><td>{fmt(inst.get('dti'), 4)}</td></tr>
+<tr><td>credit per dot</td><td>{fmt(inst.get('tp_per_dot'), 4)}</td></tr>
+<tr><td>quadrants positive vs own translation</td><td>{inst.get('quadrants_positive')}/{inst.get('quadrants_total')}</td></tr>
+<tr><td>prior pixels reused</td><td>{gate.get('pixels_shared_with_any_prior')} of {gate.get('n_prior')} priors (worst 2 px IoU {fmt(gate.get('measured_iou2px_max'), 4)})</td></tr>
+</table></div>
+{uni_line}
+<h3>Component gates (only PASS components were given mass)</h3>
+<div class="wide"><table><tr><th>component</th><th>verdict</th></tr>{comp_rows}</table></div>
+<p class="sourced">The H53-B seismicity line fails its proxy gate while passing its falsification test (geometry beats
+smoothed density 2.8×) — a split result recorded in <span class="hash">docs/research/h53-analysis.md</span> §3, not
+a shipped component. The MODEL mapping of H53's proxy credit to a leaderboard number ({fmt(inst.get('model_dti_est_at_G12226'), 4)})
+is arithmetic, not a prediction.</p>
+</article></div></div></section>"""
+
+
+def h53_methods_block(h53: dict[str, Any]) -> str:
+    return f"""<section class="main"><div class="shell"><div class="grid">
+<article class="card span-8"><h2>H53 method, in one page</h2>
+<p><strong>Evidence.</strong> TMI_up150 upward-continued total magnetic intensity plus radiometric K and U
+(USGS GeoDAWN, DOI 10.5066/P93LGLVQ, public domain; bytes hash-verified against the pinned public-mirror
+hashes). Each band is reduced with a multi-scale gradient-magnitude geometric mean (&sigma; = 1.5, 3.0 px)
+minus a 9 px moving-median ridge filter; the emission keeps pixels where &ge;2 of the 3 ridge families agree.</p>
+<p><strong>Domain.</strong> Off-catalogue (&gt;300 m from any provided-catalogue pixel) minus every pixel any of the
+{h53['gate']['n_prior']} prior artifacts used ({h53['budgets']['prior_union_excluded_px']:,} px excluded) — novelty by
+construction, then verified (0 shared px, worst 2 px IoU {fmt(h53['gate']['measured_iou2px_max'], 4)}).</p>
+<p><strong>Emission.</strong> Greedy packing by conjunction strength with 3 px suppression; mass chosen by the
+metric's marginal bar on the sgmc_off frame ({int(h53['budgets']['n']):,} dots, field-exhausted — padding with
+weaker dots would dilute credit per dot, the lesson of the h33 study).</p>
+<p><strong>Rejected in this session (kept as evidence).</strong> H53-B fixed seismicity corridors (split result:
+falsification passes, proxy gate fails); H53-A tip-relay bridges (near-miss, 3 % under uniform); the
+DBSCAN-in-spacetime clustering route (22 clusters, offcat DTI 0.0002). Full ranking:
+<a href="docs/research/h53-hypotheses.md">docs/research/h53-hypotheses.md</a>; falsification records:
+<a href="docs/research/h53-analysis.md">docs/research/h53-analysis.md</a>.</p>
+</article>
+<article class="card span-4"><h2>ComCat license (reviewed)</h2>
+<p>ComCat origin parameters are used in H53-B diagnostics under the USGS public-domain policy with ANSS
+attribution; the determination and its limits are recorded in
+<a href="docs/research/comcat-license-review-20261007.md">the license review</a>. Only origin parameters
+(time/lat/lon/depth/mag/type/errors) are touched — no waveforms or products. The shipped H53 file itself
+uses no seismicity inputs at all.</p>
+<p><strong>Slot rule (unchanged):</strong> no file spends a weekly slot without passing format, uniqueness,
+uniform + translation controls and 3/4 spatial folds. H53 passes; the owner still decides.</p></article>
+</div></div></section>"""
+
 H52_CANDIDATES = [
     {
         "rank": 1, "id": "H52-A", "name": "Scarp-profile matched filter + drainage-deflection corroboration",
@@ -465,11 +631,13 @@ analysis in <span class="hash">docs/research/h51-analysis.md</span>, ranked hypo
 
 
 
-def two_candidates_card(ship: dict[str, Any] | None, h51: dict[str, Any] | None,
-                        compare: dict[str, Any] | None) -> str:
-    """Both candidate GeoTIFFs on this branch, against the one frame they share.
+def three_candidates_card(ship: dict[str, Any] | None, h51: dict[str, Any] | None,
+                          compare: dict[str, Any] | None,
+                          h53: dict[str, Any] | None = None,
+                          h53_final: dict[str, Any] | None = None) -> str:
+    """All candidate GeoTIFFs on this branch, against the one frame they share.
 
-    The two parallel sessions used different local instruments, so only the shared off-catalogue
+    The sessions used different local instruments, so only the shared off-catalogue
     frame (identical truth mask, identical scoring code) can order them. Report that column next
     to each file's own instrument, and never imply an organizer score.
     """
@@ -509,6 +677,21 @@ def two_candidates_card(ship: dict[str, Any] | None, h51: dict[str, Any] | None,
             (f'<a class="button" href="{esc(primary["path"])}" download>Download .tif</a><br>'
              f'<a href="{esc(h51["outputs"]["allfinite"]["path"])}" download>all-finite twin</a> · '
              f'<a href="{esc(h51["outputs"]["zip"]["path"])}" download>.zip</a>')))
+    if h53:
+        inst = h53.get("instrument", {})
+        body.append((
+            "C · H53 TMI × K/U conjunction (this session)",
+            f"{int(h53['budgets']['n']):,}",
+            ("shared-frame DTI "
+             f"{fmt(inst.get('dti'), 4)} vs mass-matched uniform max "
+             f"{fmt(inst.get('uniform_dti_max'), 4)}; "
+             f"{inst.get('quadrants_positive')}/{inst.get('quadrants_total')} quadrants"),
+            (f"{fmt(inst.get('dti'), 4)} ({fmt(inst.get('tp_per_dot'), 4)} credit/dot)"),
+            (f"{h53['gate']['pixels_shared_with_any_prior']} shared px · worst 2 px-proximity IoU "
+             f"{fmt(h53['gate']['measured_iou2px_max'], 4)} vs {h53['gate']['n_prior']} priors"),
+            (f'<a class="button" href="{esc(h53["outputs"]["tif"])}" download>Download .tif</a><br>'
+             f'<a href="{esc(h53["outputs"]["allfinite"])}" download>all-finite twin</a> · '
+             f'<a href="{esc(h53["outputs"]["zip"])}" download>.zip</a>')))
     if not body:
         return ""
     rows = "".join(
@@ -521,15 +704,18 @@ def two_candidates_card(ship: dict[str, Any] | None, h51: dict[str, Any] | None,
         f'<code>gems50-seislin-44709</code> scores <strong>{fmt(incumbent.get("dti"), 4)}</strong>, '
         "but it cannot be resubmitted — its novelty check fails against the prior artifacts.</p>"
         if incumbent else "")
+    title = ("Three candidate GeoTIFFs on this branch — one shared frame, one ordering"
+             if h53 else "Two candidate GeoTIFFs on this branch — one shared frame, one ordering")
     return f"""<section class="main"><div class="shell"><article class="card span-12" id="candidates">
-<h2>Two candidate GeoTIFFs on this branch — one shared frame, one ordering</h2>
+<h2>{title}</h2>
 <div class="wide"><table><tr><th>candidate</th><th>dots</th><th>its own instrument (not comparable)</th>
 <th>shared off-catalogue frame DTI</th><th>uniqueness evidence</th><th>download</th></tr>{rows}</table></div>
-<p class="sourced">Both files were re-measured on one identical frame — unmasked domain, truth = SGMC fault
+<p class="sourced">All files were re-measured on one identical frame — unmasked domain, truth = SGMC fault
 pixels more than 300 m from the given catalogue{f", {truth_px:,} px" if truth_px else ""} — with the same
-code, so that column and the matched uniform control ({control}) are directly comparable. On this frame the
-parallel-session scarp + radiometric candidate is the stronger of the two new files, and the consensus-mix
-candidate scores below a matched uniform control. Neither file is organizer-scored: these are local
+code; uniform controls are mass-matched per row (A/B control: {control}). On this frame the
+parallel-session scarp + radiometric candidate (B) is the strongest in-repo file, the H53 conjunction
+file (C) matches the consensus mix (A) at 21 % fewer dots with 24 % more credit per dot, and A scores
+below a matched uniform control. Neither file is organizer-scored: these are local
 proxy instruments, this repository never uploads anything, and the slot decision is the owner's.</p>
 {inc_row}
 </article></div></section>"""
@@ -537,7 +723,9 @@ proxy instruments, this repository never uploads anything, and the slot decision
 
 def build_pages(output_dir: Path, report_path: Path, tiff_path: Path,
                 evidence_dir: Path | None = None, h51_ship: Path | None = None,
-                h51_check: Path | None = None) -> list[Path]:
+                h51_check: Path | None = None, h53_ship: Path | None = None,
+                h53_check: Path | None = None,
+                h53_final: Path | None = None) -> list[Path]:
     report = load_report(report_path)
     tiff_exists = tiff_path.exists()
     relative_tiff = tiff_path.as_posix()
@@ -555,18 +743,29 @@ def build_pages(output_dir: Path, report_path: Path, tiff_path: Path,
     compare = load_json_optional("evidence/h51_candidate_frame_compare.json")
     h51_html = h51_block(output_dir, h51_ship or H51_SHIP_DEFAULT,
                          h51_check or H51_CHECK_DEFAULT)
-    h51_download = (ship["outputs"]["tif"]
-                    if ship and (output_dir / ship["outputs"]["tif"]).exists()
-                    else "downloads/")
-    secondary_card = two_candidates_card(ship, h51, compare)
+    h53 = load_json_optional((h53_ship or H53_SHIP_DEFAULT).as_posix())
+    h53_final_data = load_json_optional((h53_final or H53_FINAL_DEFAULT).as_posix())
+    h53_html = h53_block(output_dir, h53_ship or H53_SHIP_DEFAULT,
+                         h53_check or H53_CHECK_DEFAULT)
+    if h53 and (output_dir / h53["outputs"]["tif"]).exists():
+        hero_download = h53["outputs"]["tif"]
+        hero_label = "Download the H53 candidate GeoTIFF"
+    else:
+        h53, h53_html = None, ""
+        hero_download = (ship["outputs"]["tif"]
+                         if ship and (output_dir / ship["outputs"]["tif"]).exists()
+                         else "downloads/")
+        hero_label = "Download the H51 candidate GeoTIFF"
+    secondary_card = three_candidates_card(ship, h51, compare, h53, h53_final_data)
     index_note = ""
     candidates_card = ""
     if h51:
         candidates_card = candidates_short_html()
         primary = h51["outputs"]["primary"]
         index_note = (
-            '<p class="sourced"><strong>Both candidates above are in-repo deliverables of this project,</strong> '
-            f'not of any organizer: this page publishes two files — the corridor-consensus mix '
+            '<p class="sourced"><strong>All candidates above are in-repo deliverables of this project,</strong> '
+            f'not of any organizer: this page publishes three files — the H53 TMI conjunction '
+            f'(<code>gemsdoe50-h53-tmiconj-20261007T0345Z.tif</code>), the corridor-consensus mix '
             f'(<code>gemsdoe50-h51-corridor-consensus-mix-20261007T0200Z.tif</code>) and the parallel-session '
             f'scarp + radiometric lineaments file '
             f'(<code>{esc(Path(primary["path"]).name)}</code>, {int(primary["footprint_nonzero"]):,} predicted '
@@ -577,7 +776,8 @@ def build_pages(output_dir: Path, report_path: Path, tiff_path: Path,
         )
 
     index_body = f"""
-<main><section class="hero"><div class="shell"><div class="eyebrow">DOE GEMS Prize Challenge · audit-first research</div><h1>Map what the catalogue missed.</h1><p>GEMSDOE50 tests whether waveform-relocated Nevada earthquake planes can point to plausible, previously unmapped fault traces—without copying a prior submission or spending a scoring slot before spatial validation.</p><div class="actions"><a class="button" href="{esc(h51_download)}" download>Download the H51 candidate GeoTIFF</a><a class="button secondary" href="submission.html">How to submit (5 steps)</a></div>{candidate_hash}</div></section>
+<main><section class="hero"><div class="shell"><div class="eyebrow">DOE GEMS Prize Challenge · audit-first research</div><h1>Map what the catalogue missed.</h1><p>GEMSDOE50 tests whether waveform-relocated Nevada earthquake planes can point to plausible, previously unmapped fault traces—without copying a prior submission or spending a scoring slot before spatial validation.</p><div class="actions"><a class="button" href="{esc(hero_download)}" download>{esc(hero_label)}</a><a class="button secondary" href="submission.html">How to submit (5 steps)</a></div>{candidate_hash}</div></section>
+{h53_html}
 {h51_html}
 {secondary_card}
 <section class="main"><div class="shell"><div class="grid"><article class="card span-8"><h2>Executive summary</h2><p><strong>What the scores actually say:</strong> with binary dots the official distance-weighted Tversky index is exactly <code>DTI = T / (0.2&middot;N + 0.8&middot;G)</code>, with <code>N</code> the predicted pixel count, <code>T</code> the credit captured inside the 300 m kernel, and <code>G</code> the hidden truth mass. Inverting a pinned blind-lattice artifact fixes <code>G &asymp; 12,226 px</code> (0.24 % of the unmasked footprint).</p><p>All 25 hash-verified scored artifacts were inverted to credit pixels: the best converts 0.1097 credit per dot (owner-quoted 0.2600), and the best coverage of the hidden truth is 59.3 %, reached only with 183,642 dots. A 0.3195 submission needs 41.2 % coverage at 30,000 dots - reachable in principle, never reached in practice. Re-blending, re-spacing or pruning the existing corpus cannot get there; a new detector is required.</p>{metric_cards(report)}{index_note}<p class="sourced">Status: {esc(status_text)}. H51/H52: the consensus instrument predicts held-out scores at leave-one-out Spearman 0.973, but a trivial similarity predictor already reaches 0.905 and a block-grid truth-density inversion fails leave-one-out, so the score history constrains efficiency, not geography. Historical sibling-repository scores are not used as current official leaderboard claims or mapped to a TIFF.</p></article><aside class="card span-4"><h2>Decision rule</h2><ul class="list"><li>At least +0.005 absolute pooled DTI over the frozen incumbent</li><li>Positive delta in at least 3 of 4 macrofolds</li><li>95% spatial-block bootstrap lower bound above zero</li><li>Beat both matched translation and year-shuffle controls</li><li>Otherwise: <strong>no slot</strong></li></ul><a href="results.html">View full evidence →</a></aside><article class="card span-6"><h2>What this is—and is not</h2><p>This is a research proxy against existing mapped faults, not the hidden expert-labeled test set. A local pass is necessary for review but is not an organizer score or a promise of prize performance.</p><p>The Nevada catalog is CC BY 4.0, but it lacks event-specific location covariance. A precise-looking coordinate is not proof of a precise location; a hypocenter projection is not automatically a surface trace.</p></article><article class="card span-6"><h2>Project values</h2><p><span class="tag">Maximize P(Win)</span> Choose evidence that can improve the final result, not merely a public proxy.</p><p><span class="tag">Own the Outcome</span> Publish hashes, controls, limitations, and a clear no-go when a gate fails.</p><p><a href="methods.html">Read the protocol, sources, and limitations →</a></p></article>{candidates_card}<article class="card span-12"><h2>Verified primary links</h2><div class="grid"><div class="span-4"><strong>Competition specification</strong><br><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">Metric, inputs, and TIFF contract</a></div><div class="span-4"><strong>Nevada seismicity source</strong><br><a href="https://doi.org/10.5281/zenodo.11167510">Trugman (2024), Zenodo v2 · CC BY 4.0</a></div><div class="span-4"><strong>Official leaderboard</strong><br><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">Open manually; this project does not scrape it</a></div></div></article></div></div></section></main>
@@ -666,6 +866,11 @@ def build_pages(output_dir: Path, report_path: Path, tiff_path: Path,
         results_body = results_body + h51_results_block(h51, evidence_dir)
         methods_body = methods_body + h51_methods_block(h51)
         submission_body = h51_download_band(h51) + submission_body + h51_submission_block(h51)
+    if h53:
+        results_body = results_body + h53_results_block(h53, h53_final_data)
+        methods_body = methods_body + h53_methods_block(h53)
+        submission_body = (h53_download_band(h53) + submission_body
+                           + h53_submission_block(h53) + h53_html)
     submission_body = submission_body + h51_html
 
     pages = {
@@ -699,9 +904,13 @@ def main() -> None:
     parser.add_argument("--evidence-dir", default="evidence")
     parser.add_argument("--h51-ship", default=str(H51_SHIP_DEFAULT))
     parser.add_argument("--h51-check", default=str(H51_CHECK_DEFAULT))
+    parser.add_argument("--h53-ship", default=str(H53_SHIP_DEFAULT))
+    parser.add_argument("--h53-check", default=str(H53_CHECK_DEFAULT))
+    parser.add_argument("--h53-final", default=str(H53_FINAL_DEFAULT))
     args = parser.parse_args()
     written = build_pages(Path(args.output_dir), Path(args.report), Path(args.tiff),
-                          Path(args.evidence_dir), Path(args.h51_ship), Path(args.h51_check))
+                          Path(args.evidence_dir), Path(args.h51_ship), Path(args.h51_check),
+                          Path(args.h53_ship), Path(args.h53_check), Path(args.h53_final))
     for path in written:
         print(path)
 

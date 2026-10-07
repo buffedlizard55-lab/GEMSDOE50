@@ -199,3 +199,46 @@ def test_site_publishes_the_h51_download_and_the_evidence_caveats(tmp_path: Path
     assert "null distribution" in results
     assert "H52-A" in methods
     assert "organizer-scored" in index  # the page must say the numbers are local, not organizer scores
+
+
+def test_site_promotes_the_h53_candidate_when_its_files_exist(tmp_path: Path):
+    repo = Path(__file__).parents[1]
+    output = tmp_path / "site"
+    (output / "downloads").mkdir(parents=True)
+    # Pre-create the H53 deliverables so the generator's existence gates pass.
+    ship = json.loads((repo / "evidence" / "h53_ship.json").read_text(encoding="utf-8"))
+    for key in ("tif", "allfinite", "zip"):
+        leaf = Path(ship["outputs"][key]).name
+        (output / "downloads" / leaf).write_bytes(b"h53 placeholder")
+        ship["outputs"][key] = f"downloads/{leaf}"
+    evidence = _h51_evidence(tmp_path)
+    (evidence / "h53_ship.json").write_text(json.dumps(ship), encoding="utf-8")
+    (evidence / "h53_check_submission.json").write_text(
+        (repo / "evidence" / "h53_check_submission.json").read_text(encoding="utf-8"),
+        encoding="utf-8")
+    (evidence / "h53_validation_final.json").write_text(
+        (repo / "evidence" / "h53_validation_final.json").read_text(encoding="utf-8"),
+        encoding="utf-8")
+    tiff = tmp_path / "candidate.tif"
+    tiff.write_bytes(b"placeholder")
+    report_path = tmp_path / "report.json"
+    report_path.write_text("{}", encoding="utf-8")
+    script = repo / "scripts" / "build_h50_site.py"
+    subprocess.run([sys.executable, str(script), "--output-dir", str(output), "--report",
+                    str(report_path), "--tiff", str(tiff), "--evidence-dir", str(evidence),
+                    "--h53-ship", str(evidence / "h53_ship.json"),
+                    "--h53-check", str(evidence / "h53_check_submission.json"),
+                    "--h53-final", str(evidence / "h53_validation_final.json")],
+                   check=True, capture_output=True, text=True)
+    index = (output / "index.html").read_text(encoding="utf-8")
+    results = (output / "results.html").read_text(encoding="utf-8")
+    methods = (output / "methods.html").read_text(encoding="utf-8")
+    submission = (output / "submission.html").read_text(encoding="utf-8")
+    assert "Download the H53 candidate GeoTIFF" in index
+    assert "Three candidate GeoTIFFs on this branch" in index
+    assert "C · H53 TMI" in index
+    assert "GEMSDOE50-H53-TMICONJ-OFFCAT" in submission
+    assert "How to submit the H53 file" in submission
+    assert "H53 measured results" in results
+    assert "H53 method, in one page" in methods
+    assert "H53-B fixed seismicity corridors" in methods

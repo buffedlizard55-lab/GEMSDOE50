@@ -240,12 +240,13 @@ python scripts/update_registries_h51.py
 The site is generated and CI-verified. Root pages come from
 [`scripts/build_h50_site.py`](scripts/build_h50_site.py) (`index.html`, `results.html`,
 `methods.html`, `submission.html`) and the data feed from [`scripts/build_site.py`](scripts/build_site.py)
-plus [`scripts/update_registries_h51.py`](scripts/update_registries_h51.py) (`docs/data/*.json`).
+plus [`scripts/update_registries_h51.py`](scripts/update_registries_h51.py) and
+[`scripts/update_registries_h53.py`](scripts/update_registries_h53.py) (`docs/data/*.json`).
 `.github/workflows/site.yml` regenerates the four root pages on every push and pull request and fails
-the build if the committed bytes differ. `index.html` now opens with a **"two candidates, one shared
-frame"** table rendered from `evidence/h51_ship.json`, `evidence/build_h51.json` and
-`evidence/h51_candidate_frame_compare.json`, so the numbers on the site cannot drift from the
-evidence, and both GeoTIFFs are one click away.
+the build if the committed bytes differ. `index.html` now opens with a **"three candidates, one
+shared frame"** table rendered from `evidence/h51_ship.json`, `evidence/build_h51.json`,
+`evidence/h51_candidate_frame_compare.json` and `evidence/h53_ship.json`, so the numbers on the
+site cannot drift from the evidence, and all three GeoTIFFs are one click away.
 
 **One-click downloads (top of the site):**
 
@@ -257,7 +258,9 @@ evidence, and both GeoTIFFs are one click away.
 A is `float32`, EPSG:32611, 3730×3292, values `0`/`1`, 30,000 predicted pixels, SHA-256
 `a26055834f8e6cc57cc33e96a4a5a26a1adeaafbeec490135af84c6ccd4d1da0`, 339,039 bytes, NaN outside the
 published footprint. B is the same grid and dtype with 35,000 predicted pixels, SHA-256
-`8f8708d2872b66d71925707e0aede23eebcf217dfd2e57d6e61186f32e686f5d`. Each has an `-allfinite.tif`
+`8f8708d2872b66d71925707e0aede23eebcf217dfd2e57d6e61186f32e686f5d`. C is the same grid and dtype
+with 23,598 predicted pixels, SHA-256
+`3c22da583d5358b2986189a4ed3322182f39f562bdde14809f3300aeb6bd37ea`, 159,966 bytes. Each has an `-allfinite.tif`
 sibling that writes `0.0` outside the footprint, for portals that reject non-finite values, so the
 historical error `Predicted values must be in range [0, 1]` cannot recur; each also has a one-file
 `.zip`.

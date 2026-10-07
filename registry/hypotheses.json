@@ -1,5 +1,5 @@
 {
- "updated_utc": "2026-10-06",
+ "updated_utc": "20261007T0",
  "ranking_rule": "expected DTI gain per unit implementation cost; every candidate measured at matched emitted mass",
  "hypotheses": [
   {
@@ -209,6 +209,68 @@
    },
    "evidence": [
     "docs/hypotheses-preregistered.md"
+   ]
+  },
+  {
+   "id": "H53-C",
+   "rank": 1,
+   "status": "SHIPPED",
+   "name": "TMI x K/U gradient-ridge conjunction, off-catalogue emission",
+   "layers": [
+    "upward-continued total magnetic intensity (TMI_up150)",
+    "radiometric K and U (relative highs)"
+   ],
+   "transform": "ridge extraction on the TMI grid crossed with K/U gradient ridges -> greedy conjunction-strength packing with 3 px suppression, restricted to >300 m from the catalogue",
+   "why_missing_faults": "a magnetic basement edge that coincides with a radiometric gradient ridge is two independent physics fields agreeing on a buried structure the catalogue never traced",
+   "difference": "H51-C used potential-field edges alone and fell below its random control; H53-C requires the cross-physics conjunction before emitting",
+   "measured": {
+    "shared_frame_dti": 0.05649250281066043,
+    "credit_per_dot": 0.13031380942573825,
+    "uniform_dti_max": 0.04950116996259098,
+    "translation_dti_max": 0.03969236212021709,
+    "quadrants_positive": "4/4",
+    "mass": 23598
+   },
+   "evidence": [
+    "evidence/h53_ship.json",
+    "evidence/h53_validation_final.json",
+    "docs/research/h53-hypotheses.md"
+   ]
+  },
+  {
+   "id": "H53-B",
+   "rank": 2,
+   "status": "FALSIFIED on proxy gate (not shipped)",
+   "name": "fixed seismicity lineation corridors, spatially-blocked split",
+   "layers": [
+    "USGS ComCat events (declustered, injection/mining screened)"
+   ],
+   "transform": "decluster -> 2-D covariance lineation corridors -> score only outside existing-fault buffers -> falsify vs smoothed density",
+   "why_missing_faults": "same as H51-B: aftershock lineations trace causative faults",
+   "difference": "preselected split verdict instead of a mass weight",
+   "measured": {
+    "verdict": "FAIL proxy gate (beats density 2.8x and translation, 3/4 quadrants, but below uniform max) -- recorded, not shipped"
+   },
+   "evidence": [
+    "docs/research/h53-analysis.md"
+   ]
+  },
+  {
+   "id": "H53-A",
+   "rank": 3,
+   "status": "NEAR-MISS on proxy gate (not shipped)",
+   "name": "fault-tip bridge segments between mapped-trace tips",
+   "layers": [
+    "provided catalogue fault tips"
+   ],
+   "transform": "tip-to-tip bridge segments, 300 m-aware emission",
+   "why_missing_faults": "relay ramps and step-overs between mapped tips hide blind faults",
+   "difference": "pure catalogue-geometry design with no new external layer",
+   "measured": {
+    "verdict": "FAIL proxy gate (0.0441 vs uniform max 0.0453; 4/4 quadrants) -- recorded near-miss, not shipped"
+   },
+   "evidence": [
+    "docs/research/h53-analysis.md"
    ]
   }
  ],
