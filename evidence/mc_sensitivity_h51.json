@@ -1,0 +1,49 @@
+{
+ "schema": "gems51.mc-sensitivity.v1",
+ "controls_per_mass": 24,
+ "masses": {
+  "20000": {
+   "candidate_mc_tp_weight": 13.185035664632547,
+   "candidate_mc_percentile_vs_controls": 0.75,
+   "mc_control_mean": 10.788854718656745,
+   "mc_control_sd": 3.5247085672234024,
+   "mc_control_min": 3.8783139393360835,
+   "mc_control_max": 18.50814251672279,
+   "candidate_sgmc_credit_per_dot": 0.20235588844501204,
+   "candidate_sgmc_percentile_vs_controls": 1.0,
+   "sgmc_control_mean": 0.11870946410846084,
+   "sgmc_control_sd": 0.003388181183284995,
+   "sgmc_control_min": 0.11149813326931142,
+   "sgmc_control_max": 0.12600637378282112
+  },
+  "35000": {
+   "candidate_mc_tp_weight": 18.925278416510935,
+   "candidate_mc_percentile_vs_controls": 0.7083333333333334,
+   "mc_control_mean": 16.63807792307814,
+   "mc_control_sd": 3.3782890234687426,
+   "mc_control_min": 8.651326944802033,
+   "mc_control_max": 22.30776713022561,
+   "candidate_sgmc_credit_per_dot": 0.18885648729799223,
+   "candidate_sgmc_percentile_vs_controls": 1.0,
+   "sgmc_control_mean": 0.11742460216675643,
+   "sgmc_control_sd": 0.0021184084460405474,
+   "sgmc_control_min": 0.11410929012350458,
+   "sgmc_control_max": 0.12181390070434583
+  },
+  "50000": {
+   "candidate_mc_tp_weight": 29.470259022513684,
+   "candidate_mc_percentile_vs_controls": 0.9583333333333334,
+   "mc_control_mean": 23.82096524767067,
+   "mc_control_sd": 4.1472069340407955,
+   "mc_control_min": 13.568255812555774,
+   "mc_control_max": 29.878945280196426,
+   "candidate_sgmc_credit_per_dot": 0.18032238846659907,
+   "candidate_sgmc_percentile_vs_controls": 1.0,
+   "sgmc_control_mean": 0.11648096385324798,
+   "sgmc_control_sd": 0.0019814761920864607,
+   "sgmc_control_min": 0.11234735925221158,
+   "sgmc_control_max": 0.12165206591694899
+  }
+ },
+ "verdict": "The off-catalogue instrument separates the candidate from its controls by an enormous margin at every mass (every control is below the candidate). The Monte Cristo instrument at 20-50k dots does not separate them reliably: its control spread is wide because only a few dozen random dots land within 300 m of a 242-pixel trend. It is reported as a weak guard, not as evidence, and it is not used to select the mass."
+}

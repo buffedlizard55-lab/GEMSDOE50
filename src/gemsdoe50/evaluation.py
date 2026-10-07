@@ -7,7 +7,7 @@ import numpy as np
 import rasterio
 
 from .common import sha256_array, sha256_file
-from .controls import SMOOTHED_DENSITY_CONTROL_NAME
+from .controls import SMOOTHED_DENSITY_CONTROL_NAMES
 from .holdout import SpatialBlock
 from .metric import DTIComponents, distance_weighted_tversky
 from .raster import check_same_grid
@@ -226,9 +226,11 @@ def evaluate_hypothesis(
             f"the preregistered primary incumbent {PRIMARY_INCUMBENT_NAME!r} is required; "
             "do not select an incumbent from holdout scores"
         )
-    if SMOOTHED_DENSITY_CONTROL_NAME not in baseline_maps:
+    missing_density_controls = set(SMOOTHED_DENSITY_CONTROL_NAMES) - set(baseline_maps)
+    if missing_density_controls:
         raise ValueError(
-            f"the preregistered matched control {SMOOTHED_DENSITY_CONTROL_NAME!r} is required"
+            "the preregistered smoothed-density controls are required: "
+            + ", ".join(sorted(missing_density_controls))
         )
     if time_shuffle_maps is None or len(time_shuffle_maps) != TIME_SHUFFLE_CONTROLS:
         raise ValueError(
@@ -342,7 +344,13 @@ def evaluate_hypothesis(
     )
 
     delta = candidate["pooled"]["score"] - incumbent["pooled"]["score"]
-    density_control = method_results[SMOOTHED_DENSITY_CONTROL_NAME]
+    density_control_scores = {
+        name: float(method_results[name]["pooled"]["score"])
+        for name in SMOOTHED_DENSITY_CONTROL_NAMES
+    }
+    beats_density_controls = all(
+        candidate["pooled"]["score"] > score for score in density_control_scores.values()
+    )
     pass_components = {
         "pooled_delta_at_least_0_005": bool(delta >= 0.005),
         "positive_fold_deltas_at_least_3_of_4": bool(sum(d > 0 for d in paired_fold_deltas) >= 3),
@@ -353,9 +361,7 @@ def evaluate_hypothesis(
         "beats_95th_percentile_time_shuffle_control": bool(
             candidate["pooled"]["score"] > time_control_q95
         ),
-        "beats_smoothed_density_control": bool(
-            candidate["pooled"]["score"] > density_control["pooled"]["score"]
-        ),
+        "beats_all_smoothed_density_controls": bool(beats_density_controls),
     }
     gate_pass = all(pass_components.values())
 
@@ -388,6 +394,15 @@ def evaluate_hypothesis(
             block.block_id: area for block, area in zip(blocks, fold_areas, strict=True)
         },
         "method_results": method_results,
+        "smoothed_density_controls": {
+            "names": list(SMOOTHED_DENSITY_CONTROL_NAMES),
+            "pooled_dti": density_control_scores,
+            "candidate_beats_all": bool(beats_density_controls),
+            "interpretation": (
+                "Gaussian-smoothed counts from the same relocated events; controls spatial "
+                "density, not aftershock or mining/injection confounding."
+            ),
+        },
         "incumbent_method": incumbent_name,
         "incumbent_selection_policy": (
             "H50-prior is fixed in the preregistered protocol before holdout scoring; "
@@ -422,26 +437,11 @@ def evaluate_hypothesis(
                 for name, array in time_shuffle_maps.items()
             },
         },
-        "smoothed_density_control": {
-            "name": SMOOTHED_DENSITY_CONTROL_NAME,
-            "pooled_dti": density_control["pooled"]["score"],
-            "definition": (
-                "same relocated-event pool, 300 m Gaussian standard deviation, "
-                "normalized to [0, 1], equal prediction mass"
-            ),
-            "strictly_beaten": bool(
-                candidate["pooled"]["score"] > density_control["pooled"]["score"]
-            ),
-        },
         "promotion_gate": {
             "pass": gate_pass,
             "components": pass_components,
-            "decision": "HOLDOUT_PASS_REVIEW_ONLY" if gate_pass else "HOLDOUT_FAIL_NO_SLOT",
-            "note": (
-                "This is only a statistical proxy gate. Separate scientific, provenance, "
-                "and submission-eligibility gates must also pass; a local proxy pass does "
-                "not equal portal acceptance or predict private-test performance."
-            ),
+            "decision": "ELIGIBLE_FOR_REVIEW_ONLY" if gate_pass else "NO_SLOT",
+            "note": "A local proxy pass does not equal portal acceptance or predict private-test performance.",
         },
         "audit": {
             "candidate_score_map_sha256": sha256_array(candidate_scores.astype(np.float32)),

@@ -1,0 +1,253 @@
+{
+ "name": "gemsdoe50-h52-novelpixel-consensus",
+ "stamp": "20261007T000154Z",
+ "claim_note": "Score-consensus placement (25 hash-verified scored artifacts, LOO Spearman 0.973) restricted to pixels no prior submission used; 280 m Poisson-disk dots, off-catalogue, values in [0,1]. Zero shared pixels with any of 26 prior artifacts.",
+ "design": "pixel-disjoint score-consensus placement (H52)",
+ "domain": {
+  "n_prior_artifacts": 26,
+  "prior_px": 1937102,
+  "novel_domain_px": 3395848,
+  "allowed_px": 4983788,
+  "shared_px_with_any_prior": 0
+ },
+ "packing": {
+  "spacing_px": 2.8,
+  "budget": 42500,
+  "pool_factor": 12,
+  "accepted": 42500,
+  "seed": "greedy in belief order (deterministic)"
+ },
+ "instrument": {
+  "source": "evidence/h51_consensus.json",
+  "loo_spearman": 0.9730769230769231,
+  "loo_pearson": 0.9490662704422641,
+  "loo_mae": 0.019179468235463893,
+  "loo_rmse": 0.024814168966221493,
+  "n_artifacts": 25,
+  "G_obs": 12226.0,
+  "G_uncertainty_px": 140
+ },
+ "predicted": {
+  "DTI": 0.19893840910690216,
+  "E_T": 3598.1313526034355,
+  "E_MPw": 4568.831700801849,
+  "n_px": 42500
+ },
+ "replica_cost": {
+  "rejected_design": "belief q over the whole allowed domain, K=42,000",
+  "rejected_pred": 0.2559,
+  "rejected_prior_pixel_fraction": 0.98,
+  "shipped_pred": 0.19893840910690216,
+  "cost_of_novelty": 0.05696159089309785,
+  "why_rejected": "98 % of its dots sit on pixels a prior artifact already used; the project rule forbids re-drawing prior submissions"
+ },
+ "novelty": {
+  "shared_px_with_any_prior": 0,
+  "worst_iou": 0.0,
+  "worst_iou_file": "12GEMSDOE_r7-nms3-dem10-scarp_0c9199f14e62.tif",
+  "per_prior": [
+   {
+    "file": "12GEMSDOE_r7-nms3-dem10-scarp_0c9199f14e62.tif",
+    "shared_px": 0,
+    "iou": 0.0,
+    "prior_px": 103347
+   },
+   {
+    "file": "13gems_20261001_r13-lattice-s5_v2_nan-outside.tif",
+    "shared_px": 0,
+    "iou": 0.0,
+    "prior_px": 206895
+   },
+   {
+    "file": "17GEMSDOE_F-ensemble-2pct_20260930T050626Z.tif",
+    "shared_px": 0,
+    "iou": 0.0,
+    "prior_px": 103347
+   },
+   {
+    "file": "gems-structural-area06-v1.tif",
+    "shared_px": 0,
+    "iou": 0.0,
+    "prior_px": 343526
+   },
+   {
+    "file": "gems-tso1-20260929T005627Z-conj_alteration_mag.tif",
+    "shared_px": 0,
+    "iou": 0.0,
+    "prior_px": 99999
+   },
+   {
+    "file": "gems10-h16-continuation-20260927T065521077735Z-3431b83c7c.tif",
+    "shared_px": 0,
+    "iou": 0.0,
+    "prior_px": 310042
+   },
+   {
+    "file": "gems10-h20-dem10-scarp-thin-20260927T155223039488Z-ffc91a1686.tif",
+    "shared_px": 0,
+    "iou": 0.0,
+    "prior_px": 153957
+   },
+   {
+    "file": "gems10-h25-ctx-ridge-20260927T232947704150Z-6452ae1d00.tif",
+    "shared_px": 0,
+    "iou": 0.0,
+    "prior_px": 174232
+   },
+   {
+    "file": "gems10-h28-dotted-ridge-20260928T020256236880Z-6452ae1d00.tif",
+    "shared_px": 0,
+    "iou": 0.0,
+    "prior_px": 69281
+   },
+   {
+    "file": "gems16-h16-1-topo-geophys-baseline-ridges-20260930-df20f65e-nan.tif",
+    "shared_px": 0,
+    "iou": 0.0,
+    "prior_px": 123939
+   },
+   {
+    "file": "gems19-h19-4-multiline-corroborated-openness-thermal-pop-20260930-691e4dfa-nan.tif",
+    "shared_px": 0,
+    "iou": 0.0,
+    "prior_px": 123779
+   },
+   {
+    "file": "gems24-h24-0-mirror-h19-5-group-best-20261002-e27054cf-nan.tif",
+    "shared_px": 0,
+    "iou": 0.0,
+    "prior_px": 121131
+   },
+   {
+    "file": "gems24-h25-1-dotted-h19-5-d1-5-20261002-989f59505db1-nan.tif",
+    "shared_px": 0,
+    "iou": 0.0,
+    "prior_px": 60069
+   },
+   {
+    "file": "gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-nan.tif",
+    "shared_px": 0,
+    "iou": 0.0,
+    "prior_px": 44090
+   },
+   {
+    "file": "gems26-dilcond-oof-v1-20261003-47629f496133-nan.tif",
+    "shared_px": 0,
+    "iou": 0.0,
+    "prior_px": 60068
+   },
+   {
+    "file": "gems27-topo-gap-closure-t-v2-on-d1-5-20261002-5512495c6bd1-nan.tif",
+    "shared_px": 0,
+    "iou": 0.0,
+    "prior_px": 61328
+   },
+   {
+    "file": "gems6-hgb88-topk03-33cec71ff0.tif",
+    "shared_px": 0,
+    "iou": 0.0,
+    "prior_px": 155021
+   },
+   {
+    "file": "gems7-lidarscarp-ridge-top2pct-36c3a3f341c8.tif",
+    "shared_px": 0,
+    "iou": 0.0,
+    "prior_px": 76859
+   },
+   {
+    "file": "gemsdoe2-dual-union-f68e590f.tif",
+    "shared_px": 0,
+    "iou": 0.0,
+    "prior_px": 183642
+   },
+   {
+    "file": "gemsdoe3-pindrop-discovery-37f9d5b855.tif",
+    "shared_px": 0,
+    "iou": 0.0,
+    "prior_px": 155021
+   },
+   {
+    "file": "gemsdoe3-pindrop-nodes-f347b70daa.tif",
+    "shared_px": 0,
+    "iou": 0.0,
+    "prior_px": 155021
+   },
+   {
+    "file": "gemsdoe3-pindrop-ridge-4e03fc9705.tif",
+    "shared_px": 0,
+    "iou": 0.0,
+    "prior_px": 155021
+   },
+   {
+    "file": "gemsdoe4-combined-237f0063.tif",
+    "shared_px": 0,
+    "iou": 0.0,
+    "prior_px": 264247
+   },
+   {
+    "file": "gemsdoe9-PLACEHOLDER-2314b599.tif",
+    "shared_px": 0,
+    "iou": 0.0,
+    "prior_px": 343816
+   },
+   {
+    "file": "submission.tif",
+    "shared_px": 0,
+    "iou": 0.0,
+    "prior_px": 172974
+   },
+   {
+    "file": "gems50-seislin-44709-20261006T2041Z-79e260ae.tif",
+    "shared_px": 0,
+    "iou": 0.0,
+    "prior_px": 44709
+   }
+  ],
+  "block8_signature_registry": null
+ },
+ "format": {
+  "driver": "GTiff",
+  "count": 1,
+  "dtype": "float32",
+  "crs": "EPSG:32611",
+  "shape": [
+   3730,
+   3292
+  ],
+  "transform": [
+   100.0,
+   0.0,
+   243350.0,
+   0.0,
+   -100.0,
+   4508550.0
+  ],
+  "finite_in_footprint": true,
+  "outside_footprint_all_nan": true,
+  "min": 0.0,
+  "max": 1.0,
+  "values_in_0_1": true,
+  "positive_px": 42500,
+  "unique_positive_values": [
+   1.0
+  ]
+ },
+ "outputs": {
+  "tif": "downloads/gemsdoe50-h52-novelpixel-consensus-20261007T000154Z.tif",
+  "sha256": "7ed5285b26ea2f81c0605ab187f39ad9bb3a70326e42212b12c62e47e90b5ef9",
+  "bytes": 384425,
+  "allfinite": "downloads/gemsdoe50-h52-novelpixel-consensus-20261007T000154Z-allfinite.tif",
+  "allfinite_sha256": "a47f44d0cacf4aa7162b561bde9942dedf6e5123c09093bc0e6bf00643b7d3c3",
+  "zip": "downloads/gemsdoe50-h52-novelpixel-consensus-20261007T000154Z.zip",
+  "zip_sha256": "fdc74563872d2ebc3362f7248f169eb72de6d047cded95f15ad08e4c034aa5c0",
+  "artifacts_deleted": "TIF/ZIP removed from downloads/ after rejection; reproduce with scripts/h51_ship_novel.py"
+ },
+ "status": "REJECTED \u2014 satisfies the pixel-level novelty rule (0 shared pixels) but fails the frozen 2-px proximity uniqueness gate (IoU 0.678 vs d2.8): a halo interleave of the group's own structure, i.e. a shifted copy",
+ "check_submission": {
+  "verdict_unique": false,
+  "max_iou": 0.6778406448612618,
+  "min_novel_fraction_at_2px": 0.017082352941176472,
+  "worst_overlap_file": "gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-nan.tif",
+  "source": "scripts/check_submission.py with GEMS50_CORPUS=.arena/work/h51"
+ }
+}

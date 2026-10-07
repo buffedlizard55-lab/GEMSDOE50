@@ -10,8 +10,14 @@ from scipy.ndimage import gaussian_filter
 from .catalog import CatalogEvents
 from .common import sha256_array
 
-SMOOTHED_DENSITY_CONTROL_NAME = "Smoothed-density-300m"
-SMOOTHED_DENSITY_SIGMA_M = 300.0
+SMOOTHED_DENSITY_CONTROL_SIGMA_M = {
+    "smoothed-density-300m": 300.0,
+    "smoothed-density-1km": 1000.0,
+    "smoothed-density-2km": 2000.0,
+}
+SMOOTHED_DENSITY_CONTROL_NAMES = tuple(SMOOTHED_DENSITY_CONTROL_SIGMA_M)
+SMOOTHED_DENSITY_CONTROL_NAME = "smoothed-density-300m"
+SMOOTHED_DENSITY_SIGMA_M = SMOOTHED_DENSITY_CONTROL_SIGMA_M[SMOOTHED_DENSITY_CONTROL_NAME]
 
 
 def build_smoothed_density_control(
@@ -42,10 +48,10 @@ def build_smoothed_density_control(
     relocated = np.asarray(events.relocated == 1, dtype=bool)
     rows = np.asarray(events.row[relocated], dtype=np.int64)
     cols = np.asarray(events.col[relocated], dtype=np.int64)
-    in_bounds = (rows >= 0) & (rows < height) & (cols >= 0) & (cols < width)
-    rows, cols = rows[in_bounds], cols[in_bounds]
-    finite_cells = valid[rows, cols]
-    rows, cols = rows[finite_cells], cols[finite_cells]
+    if np.any((rows < 0) | (rows >= height) | (cols < 0) | (cols >= width)):
+        raise ValueError("catalog event cell is outside the density-control grid")
+    if np.any(~valid[rows, cols]):
+        raise ValueError("catalog event falls outside the valid density-control footprint")
     if rows.size == 0:
         raise ValueError("no relocated events fall on finite template cells for density control")
 
@@ -62,8 +68,13 @@ def build_smoothed_density_control(
     if np.any(~np.isfinite(score)) or np.any((score < 0) | (score > 1)):
         raise ValueError("density-control scores must be finite and within [0, 1]")
 
+    control_name = next(
+        (name for name, registered_sigma in SMOOTHED_DENSITY_CONTROL_SIGMA_M.items()
+         if np.isclose(float(sigma_m), registered_sigma)),
+        f"smoothed-density-{float(sigma_m):g}m",
+    )
     metadata = {
-        "name": SMOOTHED_DENSITY_CONTROL_NAME,
+        "name": control_name,
         "definition": "relocated-event cell counts convolved by a normalized Gaussian, then divided by its maximum",
         "events_used": int(rows.size),
         "events_not_used": int(np.count_nonzero(events.relocated == 1) - rows.size),

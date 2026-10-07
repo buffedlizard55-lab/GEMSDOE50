@@ -16,7 +16,7 @@ from scipy.ndimage import distance_transform_edt
 
 from gemsdoe50.catalog import read_nevada_catalog
 from gemsdoe50.common import jsonable, md5_file, sha256_array, sha256_file
-from gemsdoe50.controls import SMOOTHED_DENSITY_CONTROL_NAME, build_smoothed_density_control
+from gemsdoe50.controls import SMOOTHED_DENSITY_CONTROL_SIGMA_M, build_smoothed_density_control
 from gemsdoe50.evaluation import (
     PREDICTION_MASS,
     TIME_SHUFFLE_CONTROLS,
@@ -250,10 +250,15 @@ def _write_outputs(
         baseline_metadata[name] = metadata
         input_hashes[name] = actual_sha
 
-    density_map, density_metadata = build_smoothed_density_control(events, template_path)
-    baseline_maps[SMOOTHED_DENSITY_CONTROL_NAME] = density_map
-    baseline_metadata[SMOOTHED_DENSITY_CONTROL_NAME] = density_metadata
-    input_hashes[SMOOTHED_DENSITY_CONTROL_NAME] = density_metadata["score_map_sha256"]
+    density_control_metadata: dict[str, Any] = {}
+    for name, sigma_m in SMOOTHED_DENSITY_CONTROL_SIGMA_M.items():
+        density_map, density_metadata = build_smoothed_density_control(
+            events, template_path, sigma_m=sigma_m
+        )
+        baseline_maps[name] = density_map
+        baseline_metadata[name] = density_metadata
+        input_hashes[name] = density_metadata["score_map_sha256"]
+        density_control_metadata[name] = density_metadata
 
     evaluation = evaluate_hypothesis(
         candidate_scores,
@@ -302,7 +307,7 @@ def _write_outputs(
             artifact_built = True
             prior_jaccard = {
                 name: spatial_jaccard(final_predictions, baseline_maps[name], valid_mask)
-                for name in baseline_maps
+                for name in BASELINE_PINS
             }
     else:
         print(
@@ -408,8 +413,11 @@ def _write_outputs(
                     "the official originals."
                 ),
             },
-            "prior_artifacts": baseline_metadata,
-            "smoothed_density_control": density_metadata,
+            "prior_artifacts": {
+                name: metadata for name, metadata in baseline_metadata.items()
+                if name in BASELINE_PINS
+            },
+            "smoothed_density_controls": density_control_metadata,
         },
         "candidate_extraction": candidate_result.metadata,
         "evaluation": evaluation,

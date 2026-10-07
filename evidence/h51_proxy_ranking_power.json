@@ -1,0 +1,183 @@
+{
+ "spearman_dti": 0.19615384615384615,
+ "p_dti": 0.34735564993131923,
+ "spearman_tpperdot": 0.3661538461538461,
+ "p_tpperdot": 0.07183749350420922,
+ "rows": [
+  {
+   "label": "25GEMSDOE dotted-h19-5-d2-8 (e56ea318af89)",
+   "score": 0.26,
+   "dti": 0.09417442916119365,
+   "tp_per_dot": 0.12629915268488998,
+   "n": 44090
+  },
+  {
+   "label": "24GEMSDOE h25-1 dotted-h19-5-d1-5 (989f59505db1)",
+   "score": 0.2477,
+   "dti": 0.09991134894171928,
+   "tp_per_dot": 0.10357808345592588,
+   "n": 60069
+  },
+  {
+   "label": "27GEMSDOE topo-gap-closure-t-v2-on-d1-5 (5512495c6bd1)",
+   "score": 0.2449,
+   "dti": 0.10116333958700564,
+   "tp_per_dot": 0.10315382082314657,
+   "n": 61328
+  },
+  {
+   "label": "19GEMSDOE h19-5",
+   "score": 0.1922,
+   "dti": 0.09916741840855017,
+   "tp_per_dot": 0.060546226476887365,
+   "n": 121131
+  },
+  {
+   "label": "19GEMSDOE h19-4",
+   "score": 0.1894,
+   "dti": 0.10515639342939487,
+   "tp_per_dot": 0.06331073535891467,
+   "n": 123779
+  },
+  {
+   "label": "16GEMSDOE h16-1 topo-geophys-baseline-ridges",
+   "score": 0.1855,
+   "dti": 0.11131583457031845,
+   "tp_per_dot": 0.06701450561943907,
+   "n": 123939
+  },
+  {
+   "label": "GEMSDOE10 h28-dotted-ridge",
+   "score": 0.1839,
+   "dti": 0.09063582488826295,
+   "tp_per_dot": 0.08806944538560009,
+   "n": 69281
+  },
+  {
+   "label": "GEMSDOE ens12-adopted (7f00890a\u2026)",
+   "score": 0.1563,
+   "dti": 0.10244267654367606,
+   "tp_per_dot": 0.05104693788494409,
+   "n": 172974
+  },
+  {
+   "label": "GEMSDOE2 dual-family-union (f68e590f)",
+   "score": 0.156,
+   "dti": 0.10240587289927743,
+   "tp_per_dot": 0.04933485689401266,
+   "n": 183642
+  },
+  {
+   "label": "7GEMSDOE lidarscarp-ridge-top2pct",
+   "score": 0.1461,
+   "dti": 0.06484458189534426,
+   "tp_per_dot": 0.05504295089703905,
+   "n": 76859
+  },
+  {
+   "label": "12GEMSDOE r7-nms3-dem10-scarp",
+   "score": 0.1294,
+   "dti": 0.14613810294103657,
+   "tp_per_dot": 0.1010852540539207,
+   "n": 103347
+  },
+  {
+   "label": "GEMSDOE10 H25-ctx-ridge",
+   "score": 0.128,
+   "dti": 0.08456164370236215,
+   "tp_per_dot": 0.042996953140128955,
+   "n": 174232
+  },
+  {
+   "label": "26GEMSDOE dilcond-oof-v1 (47629f496133)",
+   "score": 0.1223,
+   "dti": 0.106747062997819,
+   "tp_per_dot": 0.11290847522101329,
+   "n": 60068
+  },
+  {
+   "label": "GEMSDOE3 pindrop-v4-nodes",
+   "score": 0.1193,
+   "dti": 0.23536616952486195,
+   "tp_per_dot": 0.12629855141213975,
+   "n": 155021
+  },
+  {
+   "label": "GEMSDOE3 pindrop-v4-ridge",
+   "score": 0.1152,
+   "dti": 0.30239208744853296,
+   "tp_per_dot": 0.15697676391805135,
+   "n": 155021
+  },
+  {
+   "label": "GEMSDOE10 h20-dem10-scarp-thin",
+   "score": 0.0921,
+   "dti": 0.07322693065135341,
+   "tp_per_dot": 0.03989754469903175,
+   "n": 153957
+  },
+  {
+   "label": "13GEMSDOE r13-lattice-s5 (nan-outside)",
+   "score": 0.0904,
+   "dti": 0.2498853904613608,
+   "tp_per_dot": 0.11439125337827064,
+   "n": 206895
+  },
+  {
+   "label": "GEMSDOE3 pindrop-v4-discovery",
+   "score": 0.083,
+   "dti": 0.24017154085503478,
+   "tp_per_dot": 0.12894808229440474,
+   "n": 155021
+  },
+  {
+   "label": "15GEMSDOE conj_alteration_mag",
+   "score": 0.0782,
+   "dti": 0.17998256216175576,
+   "tp_per_dot": 0.12943269563905585,
+   "n": 99999
+  },
+  {
+   "label": "GEMSDOE10 h16-continuation",
+   "score": 0.0461,
+   "dti": 0.06253471340222991,
+   "tp_per_dot": 0.023162752321961837,
+   "n": 310042
+  },
+  {
+   "label": "GEMSDOE4 combined (237f0063)",
+   "score": 0.0343,
+   "dti": 0.22421452461715702,
+   "tp_per_dot": 0.08383879052828427,
+   "n": 264247
+  },
+  {
+   "label": "6GEMSDOE hgb88-topk03",
+   "score": 0.0286,
+   "dti": 0.035754262470791984,
+   "tp_per_dot": 0.02053514011876395,
+   "n": 155021
+  },
+  {
+   "label": "11GEMSDOE structural-area06-v1",
+   "score": 0.0202,
+   "dti": 0.054092423885358835,
+   "tp_per_dot": 0.020097487625945466,
+   "n": 343526
+  },
+  {
+   "label": "17GEMSDOE F-ensemble-2pct",
+   "score": 0.0187,
+   "dti": 0.028758970563775944,
+   "tp_per_dot": 0.02136556433538057,
+   "n": 103347
+  },
+  {
+   "label": "GEMSDOE9 placeholder (2314b599)",
+   "score": 0.0107,
+   "dti": 0.03364292029861461,
+   "tp_per_dot": 0.018090971250791198,
+   "n": 343816
+  }
+ ]
+}

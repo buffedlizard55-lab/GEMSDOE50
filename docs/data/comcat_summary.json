@@ -7,7 +7,7 @@
   "minlongitude": -120.1,
   "maxlongitude": -116.08
  },
- "fetched_utc": "2026-10-06T20:14:31",
+ "fetched_utc": "2026-10-06T20:46:25",
  "rows": 222939,
  "first": "1906-04-20T04:15:00.000Z",
  "last": "2026-10-06T19:44:10.140Z",
@@ -37,9 +37,10 @@
   "official": 1
  },
  "notes": [
-  "Legacy mixed-network ComCat extract. USGS-produced records may be public domain, but the preferred-contributor field (`net`) does not establish rights for every row; source-specific terms and challenge/sponsor-sharing rights remain unresolved. Not authorized as a current H50-S1 input.",
-  "Event `type` values are retained as source metadata. Historical filtering claims were not independently verified; this summary does not certify complete screening of anthropogenic or induced events.",
-  "The `horizontalError` unit and statistical meaning were not verified for each contributing network. Do not describe it as a 1-sigma uncertainty or convert/weight it without source-specific documentation.",
-  "This extract is excluded from H50-S1. See data/external/README.md and docs/research/data-rights-audit-20261006.md for the corrected rights and scientific-status review."
- ]
+  "USGS ComCat is a mixed-contributor catalog; general USGS public-domain guidance does not establish rights for every source contribution in this exported record set. Rights/shareability for this extract are unresolved; do not reuse externally before a source-specific review.",
+  "The export retains the raw event type. Legacy parsing can exclude listed anthropogenic/explosion types, but that does not certify complete screening of induced seismicity, mines, quarries, or injection operations; H50-S1 does not use this file.",
+  "The optional horizontalError field does not provide a full event-location covariance. Its units/statistical meaning were not verified for each network; legacy imputation/weighting is not an uncertainty-aware ACLUD reproduction.",
+  "This extract is not approved as a current external competition input. See data/external/README.md and docs/research/data-rights-audit-20261006.md."
+ ],
+ "rights_review_status": "UNRESOLVED: the mixed-network ComCat export has not been cleared record-by-record for contributor rights or competition shareability; not an H50-S1 input."
 }

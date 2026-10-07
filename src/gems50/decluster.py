@@ -1,6 +1,6 @@
 """Separating clustered events from uncorrelated background.
 
-Two independent tests are implemented, because the brief's method rests on one of them:
+Two filtering utilities are implemented in this module, but their existence does not mean a calling pipeline applies them. In particular, the legacy `build_seisridge.py` computes the triangle-area mask without applying it and does not call `nearest_neighbour_filter`:
 
 1. :func:`triangle_area_filter` -- a **2-D adaptation** of the Ouillon & Sornette (2011)
    tetrahedron test.  In 3-D that test compares the volume of the tetrahedron formed by

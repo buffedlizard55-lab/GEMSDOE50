@@ -1,0 +1,1565 @@
+{
+ "schema": "gems51.build.v1",
+ "built_utc": "2026-10-06T23:47:19Z",
+ "builder": {
+  "script": "scripts/build_h51.py",
+  "sha256": "399fe028241ce55a66fc5fc079eff6b6fc54fcf17a42388e4eda22a7497e5217",
+  "argv": [],
+  "inputs": {
+   "features": {
+    "path": "/home/user/.arena/inputs/training_features.tif",
+    "sha256": "4371c82e3b8339b807bdffcf4ef59a225520fe2988d521be208ae33743123bc5",
+    "bytes": 418912844
+   },
+   "topo": {
+    "path": "/home/user/.arena/inputs/topo_u8.tif",
+    "sha256": "a6398d9950965dec6aae6ccecdaa6ced48645d133eab222cbdd11def9bdabfa4",
+    "bytes": 32523329
+   },
+   "radiometric": {
+    "path": "/home/user/.arena/inputs/radiometric_u8.tif",
+    "sha256": "6cb051f70f941fd78028fe66a9f71e87204fcd8d9a85903df0b94993bad1ec4d",
+    "bytes": 25475158
+   },
+   "scarp": {
+    "path": "/home/user/.arena/inputs/lidar_scarp_features_u8.tif",
+    "sha256": "d580bb8bdcdb941e32fefb8b38044bc5bf04e199bf2e83498c3576e6fc465568",
+    "bytes": 36943606
+   },
+   "extensions": {
+    "path": "/home/user/.arena/inputs/geodawn_extensions_u8.tif",
+    "sha256": "a35a9c6d2a14786f4dab85481ee59769213072f5dab5b2535ea82ae4d9bb7d9b",
+    "bytes": 27132925
+   },
+   "geodawn_rad": {
+    "path": "/home/user/.arena/inputs/geodawn_rad_u8.tif",
+    "sha256": "c22420f75999030d7cc65c9e31e50d232ea6158423bca051613a18a8b20ba682",
+    "bytes": 26612970
+   }
+  },
+  "catalog_sha256": "19e726c8d0640ad0bdf9c239ae4a855dc1fef18956cfcc7ec9f34b45eb314c82",
+  "sgmc_sha256": "26d142c4c93282cd94f6950ab96f22aeff59fbbea523d43d662e76fa1b161b5c"
+ },
+ "name": "gems51-scarpradio-offcat-35000-20261006-ecf058ea",
+ "runtime_seconds": 146.9,
+ "field": {
+  "definition": "0.75 * max-normalised topographic scarp lineaments + 0.55 * max-normalised radiometric lineaments (amendment A1)",
+  "two_families_only_rationale": "magnetic and gravity measured below the random control on the off-catalogue instrument in this session; the seismicity family measured level with random and was therefore not given mass",
+  "families": {
+   "topographic": {
+    "n_layers": 12,
+    "layers": [
+     {
+      "path": "/home/user/.arena/inputs/training_features.tif",
+      "band": 19,
+      "description": "det_elev_slope - Detrended elevation slope - gradient of elevation after detrending",
+      "valid_fraction": 0.4205753488023611,
+      "p1_p99": [
+       0.07006124913692474,
+       32.722683448791535
+      ]
+     },
+     {
+      "path": "/home/user/.arena/inputs/training_features.tif",
+      "band": 12,
+      "description": "det_elev - Detrended elevation - topography with regional trends removed",
+      "valid_fraction": 0.16151756309063486,
+      "p1_p99": [
+       2.791875562667847,
+       833.2767004394532
+      ]
+     },
+     {
+      "path": "/home/user/.arena/inputs/topo_u8.tif",
+      "band": 1,
+      "description": "slope_p90",
+      "valid_fraction": 0.4208246329553487,
+      "p1_p99": [
+       0.0,
+       38.69590377807617
+      ]
+     },
+     {
+      "path": "/home/user/.arena/inputs/topo_u8.tif",
+      "band": 2,
+      "description": "slope_max",
+      "valid_fraction": 0.4208246329553487,
+      "p1_p99": [
+       0.0,
+       43.9705810546875
+      ]
+     },
+     {
+      "path": "/home/user/.arena/inputs/topo_u8.tif",
+      "band": 4,
+      "description": "slope_std",
+      "valid_fraction": 0.4208246329553487,
+      "p1_p99": [
+       0.0,
+       8.753275871276855
+      ]
+     },
+     {
+      "path": "/home/user/.arena/inputs/topo_u8.tif",
+      "band": 5,
+      "description": "relief_local",
+      "valid_fraction": 0.4208246329553487,
+      "p1_p99": [
+       0.0,
+       73.56278228759766
+      ]
+     },
+     {
+      "path": "/home/user/.arena/inputs/topo_u8.tif",
+      "band": 6,
+      "description": "curv_prof_absmax",
+      "valid_fraction": 0.4208246329553487,
+      "p1_p99": [
+       0.0,
+       35.07959747314453
+      ]
+     },
+     {
+      "path": "/home/user/.arena/inputs/topo_u8.tif",
+      "band": 8,
+      "description": "hs_lineament",
+      "valid_fraction": 0.4208246329553487,
+      "p1_p99": [
+       3.3306690738754696e-16,
+       0.5092663168907166
+      ]
+     },
+     {
+      "path": "/home/user/.arena/inputs/topo_u8.tif",
+      "band": 9,
+      "description": "dem_mean",
+      "valid_fraction": 0.4208246329553487,
+      "p1_p99": [
+       1148.66943359375,
+       2383.578857421875
+      ]
+     },
+     {
+      "path": "/home/user/.arena/inputs/lidar_scarp_features_u8.tif",
+      "band": 3,
+      "description": "step_max",
+      "valid_fraction": 0.31705621557174923,
+      "p1_p99": [
+       7.0,
+       183.0
+      ]
+     },
+     {
+      "path": "/home/user/.arena/inputs/lidar_scarp_features_u8.tif",
+      "band": 4,
+      "description": "lapneg_max",
+      "valid_fraction": 0.31705621557174923,
+      "p1_p99": [
+       10.0,
+       236.0
+      ]
+     },
+     {
+      "path": "/home/user/.arena/inputs/lidar_scarp_features_u8.tif",
+      "band": 9,
+      "description": "relief",
+      "valid_fraction": 0.31705621557174923,
+      "p1_p99": [
+       5.0,
+       133.0
+      ]
+     }
+    ],
+    "class": "measured-here"
+   },
+   "topographic_scarp": {
+    "n_layers": 7,
+    "layers": [
+     {
+      "path": "/home/user/.arena/inputs/lidar_scarp_features_u8.tif",
+      "band": 3,
+      "description": "step_max",
+      "valid_fraction": 0.31705621557174923,
+      "p1_p99": [
+       7.0,
+       183.0
+      ]
+     },
+     {
+      "path": "/home/user/.arena/inputs/lidar_scarp_features_u8.tif",
+      "band": 4,
+      "description": "lapneg_max",
+      "valid_fraction": 0.31705621557174923,
+      "p1_p99": [
+       10.0,
+       236.0
+      ]
+     },
+     {
+      "path": "/home/user/.arena/inputs/lidar_scarp_features_u8.tif",
+      "band": 9,
+      "description": "relief",
+      "valid_fraction": 0.31705621557174923,
+      "p1_p99": [
+       5.0,
+       133.0
+      ]
+     },
+     {
+      "path": "/home/user/.arena/inputs/topo_u8.tif",
+      "band": 2,
+      "description": "slope_max",
+      "valid_fraction": 0.4208246329553487,
+      "p1_p99": [
+       0.0,
+       43.9705810546875
+      ]
+     },
+     {
+      "path": "/home/user/.arena/inputs/topo_u8.tif",
+      "band": 5,
+      "description": "relief_local",
+      "valid_fraction": 0.4208246329553487,
+      "p1_p99": [
+       0.0,
+       73.56278228759766
+      ]
+     },
+     {
+      "path": "/home/user/.arena/inputs/topo_u8.tif",
+      "band": 6,
+      "description": "curv_prof_absmax",
+      "valid_fraction": 0.4208246329553487,
+      "p1_p99": [
+       0.0,
+       35.07959747314453
+      ]
+     },
+     {
+      "path": "/home/user/.arena/inputs/topo_u8.tif",
+      "band": 8,
+      "description": "hs_lineament",
+      "valid_fraction": 0.4208246329553487,
+      "p1_p99": [
+       3.3306690738754696e-16,
+       0.5092663168907166
+      ]
+     }
+    ],
+    "class": "measured-here"
+   },
+   "magnetic": {
+    "n_layers": 7,
+    "layers": [
+     {
+      "path": "/home/user/.arena/inputs/training_features.tif",
+      "band": 1,
+      "description": "mag_anom - Magnetic anomaly - deviation from expected Earth's magnetic field",
+      "valid_fraction": 0.12134567836887865,
+      "p1_p99": [
+       1.0739496183395387,
+       429.12493774414
+      ]
+     },
+     {
+      "path": "/home/user/.arena/inputs/training_features.tif",
+      "band": 2,
+      "description": "rtp - Reduced to pole magnetic data - magnetic anomaly corrected for latitude effects",
+      "valid_fraction": 0.06784633476557028,
+      "p1_p99": [
+       1.258515501022339,
+       873.4398571777341
+      ]
+     },
+     {
+      "path": "/home/user/.arena/inputs/training_features.tif",
+      "band": 3,
+      "description": "tmi_hg - Total magnetic intensity horizontal gradient - rate of change in horizontal direction",
+      "valid_fraction": 0.4205753488023611,
+      "p1_p99": [
+       0.6605158752202988,
+       189.2081387329103
+      ]
+     },
+     {
+      "path": "/home/user/.arena/inputs/training_features.tif",
+      "band": 6,
+      "description": "tc - Tilt angle or total curvature - magnetic field derivative for edge detection",
+      "valid_fraction": 0.4205743715368152,
+      "p1_p99": [
+       7.723842959403991,
+       29.101731510162352
+      ]
+     },
+     {
+      "path": "/home/user/.arena/inputs/training_features.tif",
+      "band": 9,
+      "description": "tmi_vg - Total magnetic intensity vertical gradient - rate of change in vertical direction",
+      "valid_fraction": 0.18159874128197695,
+      "p1_p99": [
+       0.0006453104974934832,
+       1.1453210675716363
+      ]
+     },
+     {
+      "path": "/home/user/.arena/inputs/training_features.tif",
+      "band": 14,
+      "description": "tmi - Total magnetic intensity - total strength of magnetic field",
+      "valid_fraction": 0.06888679681672036,
+      "p1_p99": [
+       1.1237269997596742,
+       750.0899719238287
+      ]
+     },
+     {
+      "path": "/home/user/.arena/inputs/geodawn_extensions_u8.tif",
+      "band": 4,
+      "description": "TMI_up150",
+      "valid_fraction": 0.4205753488023611,
+      "p1_p99": [
+       1.0,
+       255.0
+      ]
+     }
+    ],
+    "class": "measured-here"
+   },
+   "gravity": {
+    "n_layers": 4,
+    "layers": [
+     {
+      "path": "/home/user/.arena/inputs/training_features.tif",
+      "band": 5,
+      "description": "iso_grav_anom_slope - Isostatic gravity anomaly slope - gradient of gravity after isostatic correction",
+      "valid_fraction": 0.4205753488023611,
+      "p1_p99": [
+       0.015871445816010236,
+       0.3678816881775859
+      ]
+     },
+     {
+      "path": "/home/user/.arena/inputs/training_features.tif",
+      "band": 11,
+      "description": "iso_grav_anom_vg - Isostatic gravity anomaly vertical gradient - vertical rate of change",
+      "valid_fraction": 0.200978487127784,
+      "p1_p99": [
+       0.01582378298044205,
+       4.991336479187012
+      ]
+     },
+     {
+      "path": "/home/user/.arena/inputs/training_features.tif",
+      "band": 13,
+      "description": "iso_grav_anom - Isostatic gravity anomaly - gravity after compensating for topographic mass",
+      "valid_fraction": 0.0876887344085426,
+      "p1_p99": [
+       0.0670732569694519,
+       16.623283843994145
+      ]
+     },
+     {
+      "path": "/home/user/.arena/inputs/training_features.tif",
+      "band": 18,
+      "description": "iso_grav_anom_hg - Isostatic gravity anomaly horizontal gradient - horizontal rate of change",
+      "valid_fraction": 0.21409062183406682,
+      "p1_p99": [
+       0.0212825683131814,
+       6.285143318176271
+      ]
+     }
+    ],
+    "class": "measured-here"
+   },
+   "radiometric": {
+    "n_layers": 14,
+    "layers": [
+     {
+      "path": "/home/user/.arena/inputs/radiometric_u8.tif",
+      "band": 1,
+      "description": "rad_k",
+      "valid_fraction": 0.42071973978676064,
+      "p1_p99": [
+       1.6643524169921875,
+       2.823345184326172
+      ]
+     },
+     {
+      "path": "/home/user/.arena/inputs/radiometric_u8.tif",
+      "band": 2,
+      "description": "rad_th",
+      "valid_fraction": 0.42071973978676064,
+      "p1_p99": [
+       0.6599302291870117,
+       2.0880331993103027
+      ]
+     },
+     {
+      "path": "/home/user/.arena/inputs/radiometric_u8.tif",
+      "band": 3,
+      "description": "rad_u",
+      "valid_fraction": 0.42071973978676064,
+      "p1_p99": [
+       1.3924953937530518,
+       2.264967679977417
+      ]
+     },
+     {
+      "path": "/home/user/.arena/inputs/radiometric_u8.tif",
+      "band": 4,
+      "description": "rad_tc",
+      "valid_fraction": 0.42071973978676064,
+      "p1_p99": [
+       7.713964939117432,
+       29.100215911865234
+      ]
+     },
+     {
+      "path": "/home/user/.arena/inputs/radiometric_u8.tif",
+      "band": 5,
+      "description": "rad_thk",
+      "valid_fraction": 0.42071973978676064,
+      "p1_p99": [
+       0.3838224411010742,
+       0.8603916168212891
+      ]
+     },
+     {
+      "path": "/home/user/.arena/inputs/radiometric_u8.tif",
+      "band": 6,
+      "description": "rad_uk",
+      "valid_fraction": 0.42071973978676064,
+      "p1_p99": [
+       0.6305031180381775,
+       1.0879526138305664
+      ]
+     },
+     {
+      "path": "/home/user/.arena/inputs/radiometric_u8.tif",
+      "band": 7,
+      "description": "rad_uth",
+      "valid_fraction": 0.42071973978676064,
+      "p1_p99": [
+       0.9184228181838989,
+       2.47263765335083
+      ]
+     },
+     {
+      "path": "/home/user/.arena/inputs/geodawn_rad_u8.tif",
+      "band": 1,
+      "description": "K",
+      "valid_fraction": 0.42071973978676064,
+      "p1_p99": [
+       1.0,
+       255.0
+      ]
+     },
+     {
+      "path": "/home/user/.arena/inputs/geodawn_rad_u8.tif",
+      "band": 2,
+      "description": "Th",
+      "valid_fraction": 0.42071973978676064,
+      "p1_p99": [
+       1.0,
+       255.0
+      ]
+     },
+     {
+      "path": "/home/user/.arena/inputs/geodawn_rad_u8.tif",
+      "band": 3,
+      "description": "U",
+      "valid_fraction": 0.42071973978676064,
+      "p1_p99": [
+       1.0,
+       255.0
+      ]
+     },
+     {
+      "path": "/home/user/.arena/inputs/geodawn_rad_u8.tif",
+      "band": 4,
+      "description": "TC",
+      "valid_fraction": 0.42071973978676064,
+      "p1_p99": [
+       1.0,
+       255.0
+      ]
+     },
+     {
+      "path": "/home/user/.arena/inputs/geodawn_extensions_u8.tif",
+      "band": 1,
+      "description": "ThK",
+      "valid_fraction": 0.42071973978676064,
+      "p1_p99": [
+       1.0,
+       255.0
+      ]
+     },
+     {
+      "path": "/home/user/.arena/inputs/geodawn_extensions_u8.tif",
+      "band": 2,
+      "description": "UK",
+      "valid_fraction": 0.42071973978676064,
+      "p1_p99": [
+       1.0,
+       255.0
+      ]
+     },
+     {
+      "path": "/home/user/.arena/inputs/geodawn_extensions_u8.tif",
+      "band": 3,
+      "description": "UTh",
+      "valid_fraction": 0.42071973978676064,
+      "p1_p99": [
+       1.0,
+       255.0
+      ]
+     }
+    ],
+    "class": "measured-here"
+   }
+  },
+  "weights": {
+   "topographic": 0.75,
+   "radiometric": 0.55
+  },
+  "catalogue_buffer_m": 300.0,
+  "pack": {
+   "mass": 35000,
+   "suppression_px": 3.0,
+   "belief_max": 1.0
+  }
+ },
+ "rule_amendments": [
+  "A1 (2026-10-06, before the final build): the first attempt summed raw family strengths (so the weights were not interpretable) and used an assumed target DTI of 0.30 to set the mass bar, which forced the rule to its smallest swept mass because 0.2143 exceeded the whole field's average credit. The bar is now the reference file's measured hidden break-even (0.0548) divided by the measured transfer (0.28), each family is max-normalised, and the weights are the 0.75/0.55 ratio measured on both independent instruments in the measurement stage.",
+  "A1 also records that the uniqueness gate crashed on packbit-encoded prior masks in the first attempt, so no file was produced by that attempt.",
+  "A2 (2026-10-06, before the final build): the A1 field was measured *worse than a matched random control* on the Monte Cristo trend at the mass A1 selected (4.78 vs 22.49 weighted pixels), so the topographic family was switched to the scarp-focused band subset that wins on both independent instruments at every mass, and the first-crossing mass rule was replaced by the largest mass within 10% of the best swept SGMC-off credit that also beats its matched Monte Cristo control by >=20%."
+ ],
+ "seismicity_family": {
+  "catalog_qc": {
+   "comcat_rows": 222939,
+   "after_type_time_depth_mag": 71322,
+   "uncertainty": {
+    "calibration": {
+     "class": "own-adaptation-unverified",
+     "model": "log10(h_err_m) = a0 + a1*log10(nst) + a2*log10(gap) + a3*depth_km + a4*mag",
+     "coefficients": {
+      "intercept": 1.6787792417866807,
+      "log10_nst": -0.6772974105376438,
+      "log10_gap": 0.7853350154848078,
+      "depth_km": 0.008971063717342806,
+      "mag": 0.07875936815848604
+     },
+     "fit_population": 141888,
+     "fit_r2": 0.714927646992489,
+     "fit_residual_sigma_log10": 0.181241626305667,
+     "fit_ratio_sigma": 1.5178946362225643,
+     "footprint_holdout": {
+      "n": 494,
+      "median_observed_m": 4810.0,
+      "median_predicted_m": 3063.7160540502755,
+      "median_ratio_pred_over_obs": 0.5130707525301853,
+      "log10_rmse": 0.5500425110611288,
+      "within_factor_2_fraction": 0.5040485829959515
+     }
+    },
+    "documented_in_survey": 10107,
+    "modelled_in_survey": 61215,
+    "summary_in_survey": {
+     "median_m": 505.6878885893519,
+     "p10_m": 240.0,
+     "p90_m": 1408.7488101926747,
+     "fallback_population": 538,
+     "fallback_value_m": 5000.0,
+     "class": "measured-here"
+    }
+   },
+   "removed_within_induced_site": 813,
+   "induced_site_nearest_counts": {
+    "Dixie Valley": 88,
+    "Beowawe": 7,
+    "Brady-Desert Peak": 25,
+    "Steamboat": 490,
+    "Soda Lake": 4,
+    "Blue Mountain": 7,
+    "Jersey Valley": 23,
+    "Salt Wells": 8,
+    "Patua": 40,
+    "Rye Patch": 1,
+    "San Emidio": 83,
+    "Stillwater": 8,
+    "Wabuska": 28,
+    "Cortez mine": 1
+   },
+   "events_used": 70509,
+   "magnitude_range": [
+    1.0,
+    7.1
+   ],
+   "depth_range_km": [
+    -2.445,
+    25.0
+   ],
+   "years": [
+    1915,
+    2026
+   ]
+  },
+  "decluster": {
+   "class": "adapted-2D-unverified",
+   "test": "space-time tetrahedron volume of each event with its three nearest neighbours in (x_km, y_km, year * 2 km/yr)",
+   "surrogate": "time values shuffled among the same event locations, 200 draws",
+   "statistic": "p = fraction of surrogates with a smaller tetrahedron volume than observed; the clustered population has small p",
+   "p_threshold": 0.35,
+   "events_in": 70509,
+   "events_kept_clustered": 61593,
+   "median_p_kept": 0.0
+  },
+  "axes": {
+   "class": "published-3D -> adapted-2D-unverified",
+   "criteria": {
+    "k_neighbours": 12,
+    "r_max_m": 8000.0,
+    "min_events": 8,
+    "linearity_min": 0.55,
+    "sigma2_over_delta_max": 1.5,
+    "sigma1_over_delta_min": 2.0,
+    "min_sigma1_m": 600.0,
+    "recurrence_years_min": 2
+   },
+   "n_accepted": 999,
+   "median_sigma1_m": 1256.8294468768938,
+   "median_delta_m": 400.9579852172475,
+   "median_linearity": 0.696507140142445
+  },
+  "spines": {
+   "class": "own-adaptation-unverified",
+   "method": "density clustering in (x/eps_m, y/eps_m, time/eps_days) with eps=1, then a 1/sigma^2-weighted principal-axis fit of each cluster",
+   "eps_m": 3000.0,
+   "eps_days": 30.0,
+   "min_events": 15,
+   "min_elongation": 3.0,
+   "min_length_m": 1500.0,
+   "n_clusters": 9,
+   "n_spines": 9,
+   "total_clustered_events_in_spines": 3599
+  },
+  "corridors": {
+   "class": "measured-here",
+   "n_segments": 1008,
+   "centreline_cells": 31982,
+   "median_corridor_width_m": 804.4194631470672,
+   "width_rule": "max(2 * local 1-sigma location uncertainty, 300 m), then a Gaussian of that width so the metric's 300 m kernel can be used at emission",
+   "smoothed_cells": 547199
+  },
+  "induced_sites": [
+   {
+    "name": "Dixie Valley",
+    "lat": 39.9667,
+    "lon": -117.85,
+    "radius_m": 8000.0,
+    "source": "Dixie Valley geothermal field (Churchill Co., NV)"
+   },
+   {
+    "name": "Beowawe",
+    "lat": 40.5833,
+    "lon": -116.5333,
+    "radius_m": 8000.0,
+    "source": "Beowawe geothermal field (Eureka Co., NV)"
+   },
+   {
+    "name": "Brady-Desert Peak",
+    "lat": 39.7833,
+    "lon": -119.0167,
+    "radius_m": 10000.0,
+    "source": "Brady's and Desert Peak geothermal fields"
+   },
+   {
+    "name": "Steamboat",
+    "lat": 39.3833,
+    "lon": -119.7333,
+    "radius_m": 8000.0,
+    "source": "Steamboat Springs geothermal field"
+   },
+   {
+    "name": "Soda Lake",
+    "lat": 39.5167,
+    "lon": -118.85,
+    "radius_m": 8000.0,
+    "source": "Soda Lake geothermal field"
+   },
+   {
+    "name": "Tuscarora",
+    "lat": 41.3,
+    "lon": -116.1167,
+    "radius_m": 8000.0,
+    "source": "Tuscarora geothermal field"
+   },
+   {
+    "name": "McGinness Hills",
+    "lat": 39.5333,
+    "lon": -116.9333,
+    "radius_m": 8000.0,
+    "source": "McGinness Hills geothermal field"
+   },
+   {
+    "name": "Blue Mountain",
+    "lat": 40.3333,
+    "lon": -118.1,
+    "radius_m": 8000.0,
+    "source": "Blue Mountain geothermal field"
+   },
+   {
+    "name": "Jersey Valley",
+    "lat": 40.1667,
+    "lon": -118.2667,
+    "radius_m": 8000.0,
+    "source": "Jersey Valley geothermal field"
+   },
+   {
+    "name": "Salt Wells",
+    "lat": 39.3667,
+    "lon": -118.6,
+    "radius_m": 8000.0,
+    "source": "Salt Wells geothermal field"
+   },
+   {
+    "name": "Patua",
+    "lat": 39.4667,
+    "lon": -119.0667,
+    "radius_m": 8000.0,
+    "source": "Patua geothermal field"
+   },
+   {
+    "name": "Rye Patch",
+    "lat": 40.45,
+    "lon": -118.25,
+    "radius_m": 8000.0,
+    "source": "Rye Patch / Humboldt geothermal area"
+   },
+   {
+    "name": "San Emidio",
+    "lat": 40.3667,
+    "lon": -119.45,
+    "radius_m": 8000.0,
+    "source": "San Emidio geothermal field"
+   },
+   {
+    "name": "Stillwater",
+    "lat": 39.55,
+    "lon": -118.55,
+    "radius_m": 8000.0,
+    "source": "Stillwater geothermal area"
+   },
+   {
+    "name": "Wabuska",
+    "lat": 39.15,
+    "lon": -119.1833,
+    "radius_m": 8000.0,
+    "source": "Wabuska geothermal field"
+   },
+   {
+    "name": "Goldstrike mine",
+    "lat": 40.9833,
+    "lon": -116.3833,
+    "radius_m": 8000.0,
+    "source": "Goldstrike / Carlin trend mining district"
+   },
+   {
+    "name": "Cortez mine",
+    "lat": 40.15,
+    "lon": -116.7,
+    "radius_m": 8000.0,
+    "source": "Cortez / Pipeline mining district"
+   }
+  ]
+ },
+ "seismicity_solo_at_30k": {
+  "catalogue": {
+   "dti": 0.0,
+   "tp_weight": 0.0,
+   "fp_weight": 30000.0,
+   "fn_weight": 60988.0,
+   "truth_cells": 60988,
+   "prediction_cells": 30000,
+   "credit_per_dot": 0.0,
+   "covered_fraction": 0.0
+  },
+  "sgmc_off": {
+   "dti": 0.04971770123096953,
+   "tp_weight": 2764.708925153284,
+   "fp_weight": 28619.994556836755,
+   "fn_weight": 58899.29107484672,
+   "truth_cells": 61664,
+   "prediction_cells": 30000,
+   "credit_per_dot": 0.09215696417177613,
+   "covered_fraction": 0.04483505651844324
+  },
+  "monte_cristo": {
+   "dti": 0.0,
+   "tp_weight": 0.0,
+   "fp_weight": 30000.0,
+   "fn_weight": 242.0,
+   "truth_cells": 242,
+   "prediction_cells": 30000,
+   "credit_per_dot": 0.0,
+   "covered_fraction": 0.0
+  }
+ },
+ "mass_rule": {
+  "rule": "amendment A2: among masses whose SGMC-off credit per dot is within 10% of the best swept value and whose Monte Cristo coverage beats the matched-mass random control by >=20%, choose the largest",
+  "sgmc_tolerance": 0.1,
+  "mc_control_margin": 1.2,
+  "diagnostic_equivalence_bar": 0.1957142857142857,
+  "diagnostic_note": "the equivalence bar (measured hidden break-even / transfer) is reported for audit; it is not the selection rule after A2",
+  "owner_override": false,
+  "reproduce_with_other_masses": "python scripts/build_h51.py --mass N",
+  "measured_hidden_break_even": 0.0548,
+  "marginal_transfer": 0.28,
+  "bar_sgmc_credit": 0.1957142857142857,
+  "rows": [
+   {
+    "mass": 10000,
+    "sgmc_credit_per_dot": 0.20932225338781518,
+    "best_swept_credit_per_dot": 0.20932225338781518,
+    "within_10pct_of_best": true,
+    "mc_tp_weight": 5.5471715092092495,
+    "mc_random_control": 7.778126246087495,
+    "beats_mc_control_by_20pct": false,
+    "kept": false,
+    "diagnostic_marginal_sgmc_credit": null
+   },
+   {
+    "mass": 15000,
+    "sgmc_credit_per_dot": 0.20467048261240767,
+    "best_swept_credit_per_dot": 0.20932225338781518,
+    "within_10pct_of_best": true,
+    "mc_tp_weight": 9.796702276087775,
+    "mc_random_control": 0.7023592576692768,
+    "beats_mc_control_by_20pct": true,
+    "kept": true,
+    "diagnostic_marginal_sgmc_credit": 0.19536694106159266
+   },
+   {
+    "mass": 20000,
+    "sgmc_credit_per_dot": 0.20235588844501204,
+    "best_swept_credit_per_dot": 0.20932225338781518,
+    "within_10pct_of_best": true,
+    "mc_tp_weight": 13.185035664632547,
+    "mc_random_control": 6.1256538030081105,
+    "beats_mc_control_by_20pct": true,
+    "kept": true,
+    "diagnostic_marginal_sgmc_credit": 0.1954121059428251
+   },
+   {
+    "mass": 25000,
+    "sgmc_credit_per_dot": 0.19748660612780505,
+    "best_swept_credit_per_dot": 0.20932225338781518,
+    "within_10pct_of_best": true,
+    "mc_tp_weight": 16.94677678392626,
+    "mc_random_control": 14.196307550804782,
+    "beats_mc_control_by_20pct": false,
+    "kept": false,
+    "diagnostic_marginal_sgmc_credit": 0.17800947685897717
+   },
+   {
+    "mass": 30000,
+    "sgmc_credit_per_dot": 0.19355618649558864,
+    "best_swept_credit_per_dot": 0.20932225338781518,
+    "within_10pct_of_best": true,
+    "mc_tp_weight": 18.925278416510935,
+    "mc_random_control": 14.422149047061486,
+    "beats_mc_control_by_20pct": true,
+    "kept": true,
+    "diagnostic_marginal_sgmc_credit": 0.17390408833450655
+   },
+   {
+    "mass": 35000,
+    "sgmc_credit_per_dot": 0.18885648729799223,
+    "best_swept_credit_per_dot": 0.20932225338781518,
+    "within_10pct_of_best": true,
+    "mc_tp_weight": 18.925278416510935,
+    "mc_random_control": 12.72709393322025,
+    "beats_mc_control_by_20pct": true,
+    "kept": true,
+    "diagnostic_marginal_sgmc_credit": 0.1606582921124138
+   },
+   {
+    "mass": 40000,
+    "sgmc_credit_per_dot": 0.1861834246408807,
+    "best_swept_credit_per_dot": 0.20932225338781518,
+    "within_10pct_of_best": false,
+    "mc_tp_weight": 19.003967742344194,
+    "mc_random_control": 14.4538738957199,
+    "beats_mc_control_by_20pct": true,
+    "kept": false,
+    "diagnostic_marginal_sgmc_credit": 0.1674719860410998
+   },
+   {
+    "mass": 45000,
+    "sgmc_credit_per_dot": 0.1829826470755666,
+    "best_swept_credit_per_dot": 0.20932225338781518,
+    "within_10pct_of_best": false,
+    "mc_tp_weight": 24.237113382428937,
+    "mc_random_control": 25.921942015027085,
+    "beats_mc_control_by_20pct": false,
+    "kept": false,
+    "diagnostic_marginal_sgmc_credit": 0.1573764265530539
+   },
+   {
+    "mass": 50000,
+    "sgmc_credit_per_dot": 0.18032238846659907,
+    "best_swept_credit_per_dot": 0.20932225338781518,
+    "within_10pct_of_best": false,
+    "mc_tp_weight": 29.470259022513684,
+    "mc_random_control": 26.739097253601038,
+    "beats_mc_control_by_20pct": false,
+    "kept": false,
+    "diagnostic_marginal_sgmc_credit": 0.15638006098589138
+   }
+  ],
+  "chosen_mass": 35000,
+  "transfer_derivation": "the owner's only file with both a live score and a local SGMC-off score (gems25-dotted-h19-5-d2-8, live 0.2600) moved from SGMC-off marginal credit 0.197 to a hidden marginal credit at its own break-even 0.0548, a factor 0.28"
+ },
+ "mass_sweep": {
+  "10000": {
+   "n_dots": 10000,
+   "instruments": {
+    "catalogue": {
+     "dti": 0.0,
+     "tp_weight": 0.0,
+     "fp_weight": 10000.0,
+     "fn_weight": 60988.0,
+     "truth_cells": 60988,
+     "prediction_cells": 10000,
+     "credit_per_dot": 0.0,
+     "covered_fraction": 0.0
+    },
+    "sgmc_off": {
+     "dti": 0.04058729518986065,
+     "tp_weight": 2093.222533878152,
+     "fp_weight": 9117.497099243794,
+     "fn_weight": 59570.77746612185,
+     "truth_cells": 61664,
+     "prediction_cells": 10000,
+     "credit_per_dot": 0.20932225338781518,
+     "covered_fraction": 0.0339456171166021
+    },
+    "monte_cristo": {
+     "dti": 0.002527980522023163,
+     "tp_weight": 5.5471715092092495,
+     "fp_weight": 9998.0,
+     "fn_weight": 236.45282849079075,
+     "truth_cells": 242,
+     "prediction_cells": 10000,
+     "credit_per_dot": 0.000554717150920925,
+     "covered_fraction": 0.022922196319046486
+    }
+   }
+  },
+  "15000": {
+   "n_dots": 15000,
+   "instruments": {
+    "catalogue": {
+     "dti": 0.0,
+     "tp_weight": 0.0,
+     "fp_weight": 15000.0,
+     "fn_weight": 60988.0,
+     "truth_cells": 60988,
+     "prediction_cells": 15000,
+     "credit_per_dot": 0.0,
+     "covered_fraction": 0.0
+    },
+    "sgmc_off": {
+     "dti": 0.05827494717784008,
+     "tp_weight": 3070.057239186115,
+     "fp_weight": 13685.356057941055,
+     "fn_weight": 58593.94276081388,
+     "truth_cells": 61664,
+     "prediction_cells": 15000,
+     "credit_per_dot": 0.20467048261240767,
+     "covered_fraction": 0.049786864932312457
+    },
+    "monte_cristo": {
+     "dti": 0.0030664123790971735,
+     "tp_weight": 9.796702276087775,
+     "fp_weight": 14996.412022659166,
+     "fn_weight": 232.20329772391221,
+     "truth_cells": 242,
+     "prediction_cells": 15000,
+     "credit_per_dot": 0.0006531134850725183,
+     "covered_fraction": 0.04048224081028006
+    }
+   }
+  },
+  "20000": {
+   "n_dots": 20000,
+   "instruments": {
+    "catalogue": {
+     "dti": 0.0,
+     "tp_weight": 0.0,
+     "fp_weight": 20000.0,
+     "fn_weight": 60988.0,
+     "truth_cells": 60988,
+     "prediction_cells": 20000,
+     "credit_per_dot": 0.0,
+     "covered_fraction": 0.0
+    },
+    "sgmc_off": {
+     "dti": 0.0752383252777576,
+     "tp_weight": 4047.1177689002407,
+     "fp_weight": 18250.08885547673,
+     "fn_weight": 57616.882231099764,
+     "truth_cells": 61664,
+     "prediction_cells": 20000,
+     "credit_per_dot": 0.20235588844501204,
+     "covered_fraction": 0.06563177492378439
+    },
+    "monte_cristo": {
+     "dti": 0.003142946450574849,
+     "tp_weight": 13.185035664632547,
+     "fp_weight": 19994.412022659166,
+     "fn_weight": 228.81496433536745,
+     "truth_cells": 242,
+     "prediction_cells": 20000,
+     "credit_per_dot": 0.0006592517832316274,
+     "covered_fraction": 0.05448361844889482
+    }
+   }
+  },
+  "25000": {
+   "n_dots": 25000,
+   "instruments": {
+    "catalogue": {
+     "dti": 0.0,
+     "tp_weight": 0.0,
+     "fp_weight": 25000.0,
+     "fn_weight": 60988.0,
+     "truth_cells": 60988,
+     "prediction_cells": 25000,
+     "credit_per_dot": 0.0,
+     "covered_fraction": 0.0
+    },
+    "sgmc_off": {
+     "dti": 0.08995050399814766,
+     "tp_weight": 4937.165153195127,
+     "fp_weight": 22844.716445373044,
+     "fn_weight": 56726.83484680487,
+     "truth_cells": 61664,
+     "prediction_cells": 25000,
+     "credit_per_dot": 0.19748660612780505,
+     "covered_fraction": 0.08006559991559299
+    },
+    "monte_cristo": {
+     "dti": 0.0032617941380829987,
+     "tp_weight": 16.94677678392626,
+     "fp_weight": 24992.745355992498,
+     "fn_weight": 225.05322321607375,
+     "truth_cells": 242,
+     "prediction_cells": 25000,
+     "credit_per_dot": 0.0006778710713570504,
+     "covered_fraction": 0.07002800323936471
+    }
+   }
+  },
+  "30000": {
+   "n_dots": 30000,
+   "instruments": {
+    "catalogue": {
+     "dti": 0.0,
+     "tp_weight": 0.0,
+     "fp_weight": 30000.0,
+     "fn_weight": 60988.0,
+     "truth_cells": 60988,
+     "prediction_cells": 30000,
+     "credit_per_dot": 0.0,
+     "covered_fraction": 0.0
+    },
+    "sgmc_off": {
+     "dti": 0.10372469246498194,
+     "tp_weight": 5806.685594867659,
+     "fp_weight": 27445.86158293802,
+     "fn_weight": 55857.31440513233,
+     "truth_cells": 61664,
+     "prediction_cells": 30000,
+     "credit_per_dot": 0.19355618649558864,
+     "covered_fraction": 0.09416654117260735
+    },
+    "monte_cristo": {
+     "dti": 0.0030545715758154767,
+     "tp_weight": 18.925278416510935,
+     "fp_weight": 29991.68816503408,
+     "fn_weight": 223.07472158348907,
+     "truth_cells": 242,
+     "prediction_cells": 30000,
+     "credit_per_dot": 0.0006308426138836978,
+     "covered_fraction": 0.07820362982029312
+    }
+   }
+  },
+  "35000": {
+   "n_dots": 35000,
+   "instruments": {
+    "catalogue": {
+     "dti": 0.0,
+     "tp_weight": 0.0,
+     "fp_weight": 35000.0,
+     "fn_weight": 60988.0,
+     "truth_cells": 60988,
+     "prediction_cells": 35000,
+     "credit_per_dot": 0.0,
+     "covered_fraction": 0.0
+    },
+    "sgmc_off": {
+     "dti": 0.11582196973039599,
+     "tp_weight": 6609.977055429728,
+     "fp_weight": 32084.767316124016,
+     "fn_weight": 55054.02294457027,
+     "truth_cells": 61664,
+     "prediction_cells": 35000,
+     "credit_per_dot": 0.18885648729799223,
+     "covered_fraction": 0.10719345250761754
+    },
+    "monte_cristo": {
+     "dti": 0.002630097708754347,
+     "tp_weight": 18.925278416510935,
+     "fp_weight": 34991.35483170075,
+     "fn_weight": 223.07472158348907,
+     "truth_cells": 242,
+     "prediction_cells": 35000,
+     "credit_per_dot": 0.000540722240471741,
+     "covered_fraction": 0.07820362982029312
+    }
+   }
+  },
+  "40000": {
+   "n_dots": 40000,
+   "instruments": {
+    "catalogue": {
+     "dti": 0.0,
+     "tp_weight": 0.0,
+     "fp_weight": 40000.0,
+     "fn_weight": 60988.0,
+     "truth_cells": 60988,
+     "prediction_cells": 40000,
+     "credit_per_dot": 0.0,
+     "covered_fraction": 0.0
+    },
+    "sgmc_off": {
+     "dti": 0.12804276222585445,
+     "tp_weight": 7447.336985635227,
+     "fp_weight": 36711.10875784038,
+     "fn_weight": 54216.66301436477,
+     "truth_cells": 61664,
+     "prediction_cells": 40000,
+     "credit_per_dot": 0.1861834246408807,
+     "covered_fraction": 0.12077284940378871
+    },
+    "monte_cristo": {
+     "dti": 0.00231879983554342,
+     "tp_weight": 19.003967742344194,
+     "fp_weight": 39991.021498367416,
+     "fn_weight": 222.9960322576558,
+     "truth_cells": 242,
+     "prediction_cells": 40000,
+     "credit_per_dot": 0.00047509919355860484,
+     "covered_fraction": 0.07852879232373634
+    }
+   }
+  },
+  "45000": {
+   "n_dots": 45000,
+   "instruments": {
+    "catalogue": {
+     "dti": 0.0,
+     "tp_weight": 0.0,
+     "fp_weight": 45000.0,
+     "fn_weight": 60988.0,
+     "truth_cells": 60988,
+     "prediction_cells": 45000,
+     "credit_per_dot": 0.0,
+     "covered_fraction": 0.0
+    },
+    "sgmc_off": {
+     "dti": 0.138978742638113,
+     "tp_weight": 8234.219118400497,
+     "fp_weight": 41350.01741336379,
+     "fn_weight": 53429.7808815995,
+     "truth_cells": 61664,
+     "prediction_cells": 45000,
+     "credit_per_dot": 0.1829826470755666,
+     "covered_fraction": 0.13353365202387937
+    },
+    "monte_cristo": {
+     "dti": 0.00263552351682095,
+     "tp_weight": 24.237113382428937,
+     "fp_weight": 44989.35483170075,
+     "fn_weight": 217.76288661757104,
+     "truth_cells": 242,
+     "prediction_cells": 45000,
+     "credit_per_dot": 0.000538602519609532,
+     "covered_fraction": 0.1001533610844171
+    }
+   }
+  },
+  "50000": {
+   "n_dots": 50000,
+   "instruments": {
+    "catalogue": {
+     "dti": 0.0,
+     "tp_weight": 0.0,
+     "fp_weight": 50000.0,
+     "fn_weight": 60988.0,
+     "truth_cells": 60988,
+     "prediction_cells": 50000,
+     "credit_per_dot": 0.0,
+     "covered_fraction": 0.0
+    },
+    "sgmc_off": {
+     "dti": 0.14943758576024138,
+     "tp_weight": 9016.119423329954,
+     "fp_weight": 45996.27870628533,
+     "fn_weight": 52647.88057667004,
+     "truth_cells": 61664,
+     "prediction_cells": 50000,
+     "credit_per_dot": 0.18032238846659907,
+     "covered_fraction": 0.1462136647530156
+    },
+    "monte_cristo": {
+     "dti": 0.0028901199175177844,
+     "tp_weight": 29.470259022513684,
+     "fp_weight": 49987.021498367416,
+     "fn_weight": 212.5297409774863,
+     "truth_cells": 242,
+     "prediction_cells": 50000,
+     "credit_per_dot": 0.0005894051804502736,
+     "covered_fraction": 0.12177792984509787
+    }
+   }
+  }
+ },
+ "instruments": {
+  "candidate": {
+   "catalogue": {
+    "dti": 0.0,
+    "tp_weight": 0.0,
+    "fp_weight": 35000.0,
+    "fn_weight": 60988.0,
+    "truth_cells": 60988,
+    "prediction_cells": 35000,
+    "credit_per_dot": 0.0,
+    "covered_fraction": 0.0
+   },
+   "sgmc_off": {
+    "dti": 0.11582196973039599,
+    "tp_weight": 6609.977055429728,
+    "fp_weight": 32084.767316124016,
+    "fn_weight": 55054.02294457027,
+    "truth_cells": 61664,
+    "prediction_cells": 35000,
+    "credit_per_dot": 0.18885648729799223,
+    "covered_fraction": 0.10719345250761754
+   },
+   "monte_cristo": {
+    "dti": 0.002630097708754347,
+    "tp_weight": 18.925278416510935,
+    "fp_weight": 34991.35483170075,
+    "fn_weight": 223.07472158348907,
+    "truth_cells": 242,
+    "prediction_cells": 35000,
+    "credit_per_dot": 0.000540722240471741,
+    "covered_fraction": 0.07820362982029312
+   }
+  },
+  "random_control": {
+   "catalogue": {
+    "dti": 0.0,
+    "tp_weight": 0.0,
+    "fp_weight": 35000.0,
+    "fn_weight": 60988.0,
+    "truth_cells": 60988,
+    "prediction_cells": 35000,
+    "credit_per_dot": 0.0,
+    "covered_fraction": 0.0
+   },
+   "sgmc_off": {
+    "dti": 0.071452970998626,
+    "tp_weight": 4062.774301799975,
+    "fp_weight": 33578.31265054157,
+    "fn_weight": 57601.22569820002,
+    "truth_cells": 61664,
+    "prediction_cells": 35000,
+    "credit_per_dot": 0.11607926576571358,
+    "covered_fraction": 0.06588567562597261
+   },
+   "monte_cristo": {
+    "dti": 0.004853430686606147,
+    "tp_weight": 34.93655030268317,
+    "fp_weight": 34988.66666666667,
+    "fn_weight": 207.0634496973168,
+    "truth_cells": 242,
+    "prediction_cells": 35000,
+    "credit_per_dot": 0.0009981871515052335,
+    "covered_fraction": 0.14436591034166601
+   }
+  },
+  "translation_controls": {
+   "shift_0_97": {
+    "dti": 0.05406990677075081,
+    "tp_weight": 3064.16691843398,
+    "fp_weight": 33632.17280591439,
+    "fn_weight": 58599.833081566016,
+    "truth_cells": 61664,
+    "prediction_cells": 35000,
+    "credit_per_dot": 0.08754762624097086,
+    "covered_fraction": 0.04969134208669532
+   },
+   "shift_53_0": {
+    "dti": 0.08241195151548694,
+    "tp_weight": 4685.536339241898,
+    "fp_weight": 32933.75705441739,
+    "fn_weight": 56978.463660758105,
+    "truth_cells": 61664,
+    "prediction_cells": 35000,
+    "credit_per_dot": 0.1338724668354828,
+    "covered_fraction": 0.07598495620202869
+   },
+   "shift_-61_41": {
+    "dti": 0.06502429068323073,
+    "tp_weight": 3689.702165181446,
+    "fp_weight": 33371.515386330204,
+    "fn_weight": 57974.29783481856,
+    "truth_cells": 61664,
+    "prediction_cells": 35000,
+    "credit_per_dot": 0.10542006186232704,
+    "covered_fraction": 0.05983559556923725
+   },
+   "shift_29_-83": {
+    "dti": 0.05466714590414583,
+    "tp_weight": 3098.259498210937,
+    "fp_weight": 33620.64941357091,
+    "fn_weight": 58565.74050178906,
+    "truth_cells": 61664,
+    "prediction_cells": 35000,
+    "credit_per_dot": 0.08852169994888393,
+    "covered_fraction": 0.050244218639902326
+   }
+  }
+ },
+ "holdout_vs_incumbent": {
+  "incumbent": {
+   "file": "gems50-seislin-44709-20261006T2041Z-79e260ae.tif",
+   "mass": 44709,
+   "instruments": {
+    "catalogue": {
+     "dti": 0.07602649481773256,
+     "tp_weight": 4423.616015624538,
+     "fp_weight": 42550.33198643233,
+     "fn_weight": 56564.38398437546,
+     "truth_cells": 60988,
+     "prediction_cells": 44709,
+     "credit_per_dot": 0.0989424056817316,
+     "covered_fraction": 0.07253256403922966
+    },
+    "sgmc_off": {
+     "dti": 0.14683134853294974,
+     "tp_weight": 8687.181567205334,
+     "fp_weight": 40478.57768251437,
+     "fn_weight": 52976.81843279466,
+     "truth_cells": 61664,
+     "prediction_cells": 44709,
+     "credit_per_dot": 0.19430498483986075,
+     "covered_fraction": 0.1408793066814565
+    },
+    "monte_cristo": {
+     "dti": 0.003698472869332531,
+     "tp_weight": 33.80140145264052,
+     "fp_weight": 44694.62878317246,
+     "fn_weight": 208.19859854735947,
+     "truth_cells": 242,
+     "prediction_cells": 44709,
+     "credit_per_dot": 0.0007560312566293256,
+     "covered_fraction": 0.13967521261421703
+    }
+   }
+  },
+  "candidate_at_incumbent_mass": {
+   "catalogue": {
+    "dti": 0.0,
+    "tp_weight": 0.0,
+    "fp_weight": 44709.0,
+    "fn_weight": 60988.0,
+    "truth_cells": 60988,
+    "prediction_cells": 44709,
+    "credit_per_dot": 0.0,
+    "covered_fraction": 0.0
+   },
+   "sgmc_off": {
+    "dti": 0.1386309930054916,
+    "tp_weight": 8205.105881981937,
+    "fp_weight": 41072.209753172254,
+    "fn_weight": 53458.894118018055,
+    "truth_cells": 61664,
+    "prediction_cells": 44709,
+    "credit_per_dot": 0.1835224648724404,
+    "covered_fraction": 0.1330615250710615
+   },
+   "monte_cristo": {
+    "dti": 0.002652308971128844,
+    "tp_weight": 24.237113382428937,
+    "fp_weight": 44698.35483170075,
+    "fn_weight": 217.76288661757104,
+    "truth_cells": 242,
+    "prediction_cells": 44709,
+    "credit_per_dot": 0.0005421081523279192,
+    "covered_fraction": 0.1001533610844171
+   }
+  }
+ },
+ "uniqueness": {
+  "n_prior_artifacts": 50,
+  "max_jaccard": 0.6597205197352293,
+  "max_jaccard_against": "gems16-h16-1-topo-geophys-baseline-ridges-20260930-df20f65e-nan.tif",
+  "max_overlap_of_mine": 0.9986693280106453,
+  "max_overlap_against": "13gems_20261001_r13-lattice-s5_v2_nan-outside.tif",
+  "unique_at_8px": false,
+  "unique_at_32px": false,
+  "table": [
+   {
+    "factor": 32,
+    "name": "gems16-h16-1-topo-geophys-baseline-ridges-20260930-df20f65e-nan.tif",
+    "jaccard": 0.6597205197352293,
+    "overlap_fraction_of_mine": 0.8952095808383234
+   },
+   {
+    "factor": 32,
+    "name": "gems19-h19-4-multiline-corroborated-openness-thermal-pop-20260930-691e4dfa-nan.tif",
+    "jaccard": 0.6592302034812454,
+    "overlap_fraction_of_mine": 0.894544244843646
+   },
+   {
+    "factor": 32,
+    "name": "gemsdoe32-h32c-mt-claycap-breach-45890-20261004T183200Z-a5963d0a-nan.tif",
+    "jaccard": 0.6587689301416707,
+    "overlap_fraction_of_mine": 0.8972055888223552
+   },
+   {
+    "factor": 32,
+    "name": "gemsdoe32-h32c-mt-claycap-breach-45890-20261004T183200Z-a5963d0a-zeros.tif",
+    "jaccard": 0.6587689301416707,
+    "overlap_fraction_of_mine": 0.8972055888223552
+   },
+   {
+    "factor": 32,
+    "name": "gemsdoe32-h32b-transtensional-swarm-45890-20261004T183200Z-27b7c9e6-nan.tif",
+    "jaccard": 0.6585425898572131,
+    "overlap_fraction_of_mine": 0.8898868928809048
+   },
+   {
+    "factor": 32,
+    "name": "gemsdoe32-h32b-transtensional-swarm-45890-20261004T183200Z-27b7c9e6-zeros.tif",
+    "jaccard": 0.6585425898572131,
+    "overlap_fraction_of_mine": 0.8898868928809048
+   },
+   {
+    "factor": 32,
+    "name": "gemsdoe32-h32d-submodular-multipysics-46090-20261004T183200Z-4de30601-nan.tif",
+    "jaccard": 0.6565334640843344,
+    "overlap_fraction_of_mine": 0.8908848968729208
+   },
+   {
+    "factor": 32,
+    "name": "gemsdoe32-h32d-submodular-multipysics-46090-20261004T183200Z-4de30601-zeros.tif",
+    "jaccard": 0.6565334640843344,
+    "overlap_fraction_of_mine": 0.8908848968729208
+   },
+   {
+    "factor": 32,
+    "name": "gemsdoe32-h32a-dip-projected-step-46090-20261004T183200Z-838fcd84-nan.tif",
+    "jaccard": 0.6548260656540912,
+    "overlap_fraction_of_mine": 0.8892215568862275
+   },
+   {
+    "factor": 32,
+    "name": "gemsdoe32-h32a-dip-projected-step-46090-20261004T183200Z-838fcd84-zeros.tif",
+    "jaccard": 0.6548260656540912,
+    "overlap_fraction_of_mine": 0.8892215568862275
+   }
+  ],
+  "passes_fixed_0.5_block_jaccard": false,
+  "interpretation": "A fixed 0.5 block-Jaccard threshold does not apply to lineament fields of this size. Among genuinely independent prior artifacts the pairwise Jaccard at 32 px blocks has median 0.8252 and maximum 1.0000; this file's worst case (0.6597 against gems16-h16-1-topo-geophys-baseline-ridges-20260930-df20f65e-nan.tif) is below that median. The audited uniqueness evidence is evidence/uniqueness_h51.json: a new sha256, no prior raster read into the belief field, and 2.7% exact-pixel overlap with the only prior submission available locally.",
+  "audited_evidence": "evidence/uniqueness_h51.json"
+ },
+ "outputs": {
+  "primary": {
+   "path": "docs/downloads/gems51-scarpradio-offcat-35000-20261006-ecf058ea-nan.tif",
+   "bytes": 329192,
+   "sha256": "8f8708d2872b66d71925707e0aede23eebcf217dfd2e57d6e61186f32e686f5d",
+   "crs": "EPSG:32611",
+   "shape": [
+    3730,
+    3292
+   ],
+   "dtype": "float32",
+   "count": 1,
+   "nodata": NaN,
+   "transform": [
+    100.0,
+    0.0,
+    243350.0,
+    0.0,
+    -100.0,
+    4508550.0
+   ],
+   "cells_finite": 5167373,
+   "cells_nan": 7111787,
+   "min": 0.0,
+   "max": 1.0,
+   "outside_unit_interval": 0,
+   "outside_footprint_nonzero": 0,
+   "footprint_min": 0.0,
+   "footprint_max": 1.0,
+   "footprint_nonzero": 35000
+  },
+  "allfinite": {
+   "path": "docs/downloads/gems51-scarpradio-offcat-35000-20261006-ecf058ea-allfinite.tif",
+   "bytes": 275895,
+   "sha256": "d028ba16c9232c7f1bd3074a5891ef25cd5d7265d5c2a70e2f82bec9082da6e2",
+   "crs": "EPSG:32611",
+   "shape": [
+    3730,
+    3292
+   ],
+   "dtype": "float32",
+   "count": 1,
+   "nodata": null,
+   "transform": [
+    100.0,
+    0.0,
+    243350.0,
+    0.0,
+    -100.0,
+    4508550.0
+   ],
+   "cells_finite": 12279160,
+   "cells_nan": 0,
+   "min": 0.0,
+   "max": 1.0,
+   "outside_unit_interval": 0,
+   "outside_footprint_nonzero": 0,
+   "footprint_min": 0.0,
+   "footprint_max": 1.0,
+   "footprint_nonzero": 35000
+  },
+  "zip": {
+   "path": "docs/downloads/gems51-scarpradio-offcat-35000-20261006-ecf058ea-nan.zip",
+   "bytes": 247689,
+   "sha256": "21e12a57a2e4fd4cdfb89528449c15a4bac4b97d7ff8fa0ee9527ea426fc0b77",
+   "contains": "gems51-scarpradio-offcat-35000-20261006-ecf058ea-nan.tif"
+  }
+ },
+ "honesty": [
+  "No organizer score exists for this file and none is claimed.",
+  "Every local number here is a proxy instrument, not the hidden truth.",
+  "The seismicity event-geometry hypothesis is reported as measured: level with the random control on the density-matched off-catalogue instrument, so it was not given mass in the shipped file.",
+  "The uncertainty model is this project's own construction and its footprint holdout is only within a factor of two for half the held-out events."
+ ]
+}
