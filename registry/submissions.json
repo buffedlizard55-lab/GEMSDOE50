@@ -165,6 +165,48 @@
     "evidence/checks_h51_raster.json",
     "evidence/holdout_h51.json"
    ]
+  },
+  {
+   "name": "gems51-scarpradio-offcat-35000-20261006-ecf058ea",
+   "portal_name": "GEMSDOE50-H51-SCARPRADIO-OFFCAT",
+   "file": "docs/downloads/gems51-scarpradio-offcat-35000-20261006-ecf058ea-nan.tif",
+   "bytes": 329192,
+   "sha256": "8f8708d2872b66d71925707e0aede23eebcf217dfd2e57d6e61186f32e686f5d",
+   "all_finite_twin": "docs/downloads/gems51-scarpradio-offcat-35000-20261006-ecf058ea-allfinite.tif",
+   "zip": "docs/downloads/gems51-scarpradio-offcat-35000-20261006-ecf058ea-nan.zip",
+   "zip_sha256": "21e12a57a2e4fd4cdfb89528449c15a4bac4b97d7ff8fa0ee9527ea426fc0b77",
+   "mass": 35000,
+   "format": {
+    "crs": "EPSG:32611",
+    "shape": [
+     3730,
+     3292
+    ],
+    "dtype": "float32",
+    "count": 1,
+    "transform": [
+     100.0,
+     0.0,
+     243350.0,
+     0.0,
+     -100.0,
+     4508550.0
+    ],
+    "cells_finite": 5167373,
+    "cells_nan": 7111787,
+    "outside_unit_interval": 0,
+    "outside_footprint_nonzero": 0
+   },
+   "status": "H51 deliverable; local proxy instruments only; no organizer score exists for this file and no portal upload was performed by this repository",
+   "organizer_score": null,
+   "submitted_utc": null,
+   "built_utc": "2026-10-06T23:47:19Z",
+   "portal_note": "GEMSDOE50 H51 | corroborated 3DEP-scarp + radiometric lineaments, all dots >300 m from the given catalogue, metric-matched sparse emission; proxy-validated, NOT organizer-scored",
+   "evidence": [
+    "evidence/build_h51.json",
+    "evidence/checks_h51_raster.json",
+    "evidence/holdout_h51.json"
+   ]
   }
  ]
 }

@@ -17,7 +17,7 @@ from gemsdoe50.metric import distance_weighted_tversky
 
 
 def _fixture() -> tuple[np.ndarray, np.ndarray]:
-    rng = np.random.default_rng(11)
+    _rng = np.random.default_rng(11)
     truth = np.zeros((40, 40), dtype=bool)
     truth[5:25, 20] = True          # a vertical line
     truth[30, 5:30] = True          # a horizontal line

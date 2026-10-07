@@ -15,119 +15,150 @@
 7. **Work autonomously and auditably.** Review rules, data, sources, prior attempts, and limitations; record every material decision and irregularity; run multiple implementation/review passes; fix defects found; and maintain a concise next-steps list. Do not ask the owner to do research or resolve issues the agent can verify independently.
 8. **Keep the score context honest.** The owner-quoted `0.3195` is historical, not the live leader. Prior sibling-repository notes contain conflicting historical leaderboard values and are not a fresh independent official check; do not repeat them as current official scores or map any score to a TIFF without organizer-verified provenance. DrivenData's Terms of Use prohibit automated monitoring/copying and manual monitoring/copying without prior written consent. This repository links to the official board but does not scrape, poll, or publish leaderboard snapshots.
 9. **Follow the prize rules.** The September 2026 NLR/DOE rules require an AI-use disclosure in the narrative, permit up to three feedback submissions per week, and require selection of one final submission for both prize rounds. Finalists must provide reproducible code/assets and documentation. The competition ends December 3, 2026 at 23:59 UTC (verify the official page before any deadline-dependent action).
-10. **Create and merge a PR when practical.** Keep all work on Arena's fixed branch `arena/c4f4db48-gemsdoe50`. Run tests and review the PR before merging. Do not switch branches or push elsewhere.
+10. **Create and merge a PR when practical.** Keep all work on your session's fixed Arena branch (this
+    section was written by `arena/5e2ce8c3-gemsdoe50`; the H52 section below was written by the
+    concurrent `arena/a51bdd46-gemsdoe50` and merged into `main` second). Run tests and review the PR
+    before merging. Do not switch branches or push elsewhere.
 
-## Current evidence and decision (2026-10-06 UTC)
+## Current evidence and decision (2026-10-07 UTC)
 
+**Where the project actually stands.** The H50-S1 seismicity branch has run; the H51/H52 branch
+that followed is the current state of the art here. Read this section as the starting point of
+every session, then read [`docs/research/h51-analysis.md`](docs/research/h51-analysis.md) (why the
+best prior artifact scored what it did, and what beating 0.3195 requires),
+[`docs/research/h51-hypotheses.md`](docs/research/h51-hypotheses.md) (ranked hypotheses with their
+fields), and [`docs/research/h51-truth-map.md`](docs/research/h51-truth-map.md) (a negative result
+that closes a whole line of attack).
 
-- **The H51 deliverable exists and is verified.** `docs/downloads/gems51-scarpradio-offcat-35000-20261006-ecf058ea-nan.tif`
-  (35,000 predicted pixels, sha256 `8f8708d2872b66d71925707e0aede23eebcf217dfd2e57d6e61186f32e686f5d`) with an
-  all-finite twin and a one-file `.zip`. It is single band float32, EPSG:32611, 100 m, 3292 × 3730,
-  every finite value in `[0, 1]`, NaN only where the official template is NaN — re-read from the written
-  bytes by `scripts/verify_h51_raster.py` (`evidence/checks_h51_raster.json`, zero failed checks).
-- **What it is.** A corroborated lineament field: the measured-best blend of the scarp-focused 3DEP/LiDAR
-  topographic family and the airborne radiometric family (multi-scale structure tensor, 0.75/0.55 on
-  max-normalised families), greedily packed by expected marginal kernel credit with a 3 px suppression
-  radius, restricted to cells more than 300 m from every provided-catalogue pixel. The preregistration and
-  its three amendments are in [`docs/hypotheses-preregistered.md`](docs/hypotheses-preregistered.md); the
-  ranked untried candidates are in [`docs/h51-candidates.md`](docs/h51-candidates.md).
-- **What it measures.** On the off-catalogue SGMC instrument the file earns 0.189 credit per emitted dot
-  against 0.116–0.126 for 24 matched-mass random controls (±0.002 spread) — above every control seed at
-  every swept mass. On the frozen four-macrofold spatial holdout it beats its matched control in **4/4**
-  folds with a paired subtile bootstrap 95% CI of `[0.0406, 0.0785]`
-  ([`evidence/holdout_h51.json`](evidence/holdout_h51.json)).
-- **What it is *not*.** No organizer score exists for this file; no portal upload was performed; no weekly
-  slot is claimed. The 242-pixel Monte Cristo trend does **not** separate this file from random scatter at
-  these masses (71st percentile of 24 control seeds) and is reported as a weak guard, not as evidence
-  ([`evidence/mc_sensitivity_h51.json`](evidence/mc_sensitivity_h51.json)).
-- **The seismicity line (H51-B) is a recorded negative.** The event-geometry corridor field — declustered
-  with a space-time tetrahedron test, 1/σ²-weighted covariance axes, corridor width from a calibrated
-  location-uncertainty model — measured level with a matched random control on the off-catalogue instrument
-  and covered none of the Monte Cristo trend, so it received **no mass** in the shipped file. The
-  uncertainty model is this project's own construction (R² 0.715 in sample; footprint holdout within a
-  factor of two for 50.4 % of events) and is **not** from Wang et al. (arXiv:1304.6912).
-- **Uniqueness.** Worst-case block Jaccard against the 50 frozen prior artifacts is 0.66 at 32 px blocks —
-  *below* the median of the same statistic between genuinely independent prior artifacts (0.83), so the
-  block test is not informative at this scale. The audited statement is narrower: a new sha256, no prior
-  raster read into the belief field, and 2.7 % exact-pixel overlap with the only prior submission available
-  locally ([`evidence/uniqueness_h51.json`](evidence/uniqueness_h51.json)).
-- **H50-S1 remains blocked.** The waveform-relocated Nevada catalog has still not been fetched in this
-  sandbox (direct Zenodo egress fails TLS here), so the H50-S1 experiment has not run and no H50-S1 DTI is
-  claimed. The inherited mixed-network ComCat extract is used **only** as H51's own evidence line, with USGS
-  public-domain status recorded in [`registry/sources.json`](registry/sources.json).
-- **Score context stays honest.** The owner-quoted `0.3195` and sibling-repository leaderboard notes are
-  historical, not a live board. DrivenData's Terms of Use prohibit automated monitoring or copying; this
-  repository links to the official board but never polls, scrapes, or publishes a leaderboard snapshot, and
-  no score is mapped to a TIFF. One unintended automated request to the public leaderboard page occurred
-  during prior research; no rows/scores were saved or used, and no further automated access will be made.
-- This session's Arena branch is `arena/a51bdd46-gemsdoe50`; the older
-  [`h50s1-research.yml`](.github/workflows/h50s1-research.yml) workflow is pinned to
-  `arena/c6060a3e-gemsdoe50` and is not used by H51/H52.
-- **Inherited H50-S1 status from `main` (still true).** The dispatch-only research workflow now returns
-  HTTP 403 `Resource not accessible by integration`, so no job ran and no data was fetched and the
-  experiment still has not run; the branch also carries two matched Gaussian-smoothed relocated-event density controls
-  (1 km and 2 km) as required comparators, plus the H50-prior fixed-incumbent rule. Inherited validation in
-  this checkout is now **75 tests passed, 1 skipped** (was 61/1 before H51), and the frozen split spec
-  (`78b6692155c6c6d5f9f19ccee6d595167c2065f1f25eb8d08636d1d9b285ff16`) plus the realized-mask report
-  (`981b42e6d0310bf77f79c7c7662a0569c8d2e79514ef4e4a3624a5b07583ae3f`) are unchanged.
-- **Inherited provenance caveat from `main` (still true).** The bridge manifest points at the official data
-  tab and public Dropbox mirrors, but no session has authenticated to DrivenData and re-downloaded the
-  official bytes; matching hashes establish consistency with the bridge manifest, not organizer provenance.
-
-
-- **Pass-3 re-check (2026-10-06).** Every clause of the original request is mapped to an artifact in
-  [`docs/pass3-review-20261006.md`](docs/pass3-review-20261006.md), together with the defects found in
-  Pass 2/3, the remaining work, and the limitations. The 5 ranked *untried* hypotheses now also appear
-  as a card on the executive-summary page (rank, layers, signature, why the catalogue can miss the
-  fault, difference from what is implemented, cost, expected gain, and the slot rule).
-- **H52-A implemented and validated (2026-10-07); H52 is now the top-billed recommendation.** The
-  rank-1 untried candidate (scarp-profile matched filter + independent drainage-deflection
-  corroboration) was built as `scripts/build_h52a.py` / `src/gems51/scarpmf.py` /
-  `src/gems51/drainage.py`, with 8 new passing unit tests. Standalone it scores a lower SGMC-off DTI
-  than H51 (0.0550 vs 0.1158, because it emits only 10,000 dots) but only 1.7% of its cells overlap
-  H51's — the lowest overlap of any candidate measured in this project. Unioned with H51
-  (`scripts/build_h52.py`, `docs/downloads/gems52-union-h51-h52a-offcat-44828-20261007T021528Z-990213fd-nan.tif`,
-  sha256 `15468475cc99b9106b9959c95add9966ad38678329435daa3a9cbf7e8ccc9a21`), pooled SGMC-off DTI rises
-  to **0.1518** (+31% over H51 alone), beating H51 in 3/4 frozen spatial macrofolds and a matched
-  random control in 4/4, with a paired subtile bootstrap 95% CI entirely positive
-  (`[0.0063, 0.0174]`) — see [`evidence/holdout_h52.json`](evidence/holdout_h52.json) and
-  [`docs/h52a-protocol.md`](docs/h52a-protocol.md) Amendments B1–B2 for the full promotion-gate record.
-  **Mandatory disclosure:** the union (H52) is a literal pixel superset of H51 — about 78% of its
-  44,828 predicted pixels are H51's own prior output, only ~22% (9,828 pixels) is new from H52-A.
-  H51 has never been uploaded to the DrivenData portal (`organizer_score: null` in
-  [`registry/submissions.json`](registry/submissions.json)), so this is not "copying a previous
-  *submission's* pixels" in the sense this project's own rule prohibits, but it is a transparent
-  internal fusion of this project's own prior and new work and must always be described that way —
-  **H52-A standalone** (`docs/downloads/gems52a-scarpdrainage-offcat-10000-20261007T021452Z-5c377a13-nan.tif`,
-  sha256 `150620f57160ee7f755fb2b2c77928bb36850b5b38547dfc4b77516346483efd`) is the genuinely
-  independently-derived new artifact from this session, offered as an alternative on the submission
-  page for anyone who does not want a fused file.
+- **The metric, exactly.** With binary dots the official distance-weighted Tversky index collapses
+  to `DTI = T / (0.2·N + 0.8·G)`, where `N` is the predicted pixel count, `T` the credit captured
+  inside the 300 m kernel, and `G` the hidden truth mass in the scored domain. Inverting the pinned
+  blind-lattice artifact gives **`G ≈ 12,226 px`** (±~1 %). Two consequences drive every decision
+  below: a dot pays only if it earns more than `0.2·s ≈ 0.05` credit, and coverage — not dot
+  count — is the binding term.
+- **Every scored artifact inverted.** The 25 hash-verified artifacts of
+  `registry/h51_score_corpus.json` were converted to credit pixels (`scripts/h51_truth_map.py`).
+  The corpus's best credit per dot is **0.1097** (`gems25-dotted-h19-5-d2-8`, owner-quoted 0.2600)
+  and its best coverage is **59.3 %** (a 183,642-dot blanket at 0.0395 credit/dot). **The whole
+  group's detector family cannot reach ≈41 % of the hidden truth.** 0.3195 needs `T = 5,042` at
+  `N = 30,000` (41.2 % coverage) — reachable in principle, never reached in practice.
+- **Instrument, and its honest limit.** The consensus instrument (posterior over the 25 scored
+  artifacts) predicts a held-out artifact's real score at leave-one-out Spearman **0.973**
+  (`evidence/h51_consensus.json`), but a *trivial* predictor that uses only how similar an artifact
+  is to the winners already reaches **0.905**. Most of the instrument's skill is corpus
+  self-similarity, its optimum is literally a re-draw of the corpus (98 % of dots on prior pixels),
+  and a block-grid **truth-density inversion fails leave-one-out** at every resolution tested
+  (`evidence/h51_truth_map.json`). The score history constrains *efficiency*, not geography.
+- **Shipped candidate (one click on the site).**
+  `downloads/gemsdoe50-h51-corridor-consensus-mix-20261007T0200Z.tif` — 24,000 consensus-core dots
+  (every one on a pixel no prior artifact used) plus 6,000 evidence-only exploration dots
+  (seismicity-lineament corridors, TMI/radiometric ridges, thermal springs) more than 200 m from
+  every prior dot. Format-clean float32 on the official grid, values in `[0, 1]`, NaN outside the
+  footprint; **0 pixels shared with any of the 26 prior artifacts**; frozen uniqueness gate
+  **PASS** (`max 2 px-proximity IoU 0.4219 < 0.5`, `min_novel_fraction_at_2px 0.2003`). Instrument
+  prediction **0.1684** (LOO RMSE 0.025).
+- **It is a measurement, not a win, and the README says so before the download.** 0.1684 is below
+  the repository's best delivered artifact (owner-quoted 0.2778 for `GEMSDOE32`'s `h33-2-b2`) and
+  below the owner-quoted 0.3195 target. It also **fails the pre-registered `sgmc_off` proxy gate**
+  (0.0573 vs matched uniform 0.0593) — and that proxy has no demonstrated power to predict a live
+  score (ρ = +0.196, p = 0.35 over 25 real scores, `evidence/h51_proxy_ranking_power.json`), so the
+  failure is recorded as a limitation rather than explained away. The archived `seislin-44709`
+  artifact is the opposite case: priced at 0.0422 by the instrument but 2.5× the uniform control on
+  the independent `sgmc_off` frame. The two evidence lines conflict; §12 of the analysis records it
+  instead of hiding it.
+- **Rejected designs are recorded with their numbers** so no future session re-litigates them: the
+  instrument optimum that re-draws the corpus (0.2559, forbidden by the originality rule); a
+  pixel-disjoint halo interleave that satisfies the letter of "no copied pixels" but is a one-pixel
+  translation of the group's own structure (0.1989, rejected on the 2 px-proximity gate,
+  `evidence/h51_ship_novel.json`); an exploration-free core (0.1806, gate-passing, but no new
+  territory); and every spacing/thinning variant (recorded in the frontier files).
+- **Decision rule for the next slot.** A candidate must (a) pass `scripts/check_submission.py` with
+  `GEMS50_CORPUS` mounted (`verdict_unique: true`), (b) beat the frozen incumbent on the consensus
+  instrument, and (c) not be a translation of prior structure. No candidate yet beats the
+  repository's best delivered score under those rules; the shipped file is the best gate-clean
+  measurement available and is the intended use of a slot **only if the owner chooses to spend
+  one**.
+- **Data reality in this sandbox.** `data/grid/{labels,sample_submission}.tif` are present and
+  hash-consistent with the bridge manifest. The 19-band competition feature stack is **not**
+  available here and its Dropbox mirrors are network-blocked (as are Zenodo, USGS ScienceBase,
+  EarthExplorer, and `raw.githubusercontent.com`); reachable hosts are `github.com`,
+  `api.github.com`, `codeload.github.com`, `pypi.org`, and `files.pythonhosted.org`. Staged
+  geophysical layers (TMI, K, radiometric, LiDAR scarp features) live in the public sibling
+  repository `GEMSDOE24` and are re-clonable from GitHub. The ComCat extract under
+  `data/external/` is a mixed-network product whose source-specific rights are unresolved, so it is
+  used for exploration only, never as a submission input.
 
 ## Executive summary and submission instructions
 
-The site is generated at repository root by [`scripts/build_h50_site.py`](scripts/build_h50_site.py) and
-serves [`index.html`](index.html), [`results.html`](results.html), [`methods.html`](methods.html) and
-[`submission.html`](submission.html). The **first thing on the executive-summary page is a one-click
-download band** for the current recommended file, **H52** (GeoTIFF, all-finite twin, and zip), next to
-the unique portal name, the optional note, and a prominent disclosure banner; H51 (the prior incumbent,
-never itself uploaded to the portal) and H52-A (the standalone, non-fused new method) remain downloadable
-further down the same pages for comparison.
+The site is generated and CI-verified. Root pages come from
+[`scripts/build_h50_site.py`](scripts/build_h50_site.py) (`index.html`, `results.html`,
+`methods.html`, `submission.html`) and the data feed from [`scripts/build_site.py`](scripts/build_site.py)
+(`docs/data/*.json`). The H51 candidate panel on `index.html` is rendered directly from
+`evidence/h51_ship.json` and `evidence/h51_check_submission.json`, so the numbers on the site cannot
+drift from the evidence. `.github/workflows/h50s1-site-and-checks.yml` and `site.yml` regenerate the
+four root pages and fail the build if the committed bytes differ.
 
-Numbered manual upload path (this repository never uploads for you and holds no portal credentials):
+**One-click download (top of the site):**
+`downloads/gemsdoe50-h51-corridor-consensus-mix-20261007T0200Z.tif` — SHA-256
+`a26055834f8e6cc57cc33e96a4a5a26a1adeaafbeec490135af84c6ccd4d1da0`, 339,039 bytes, 30,000
+predicted pixels, values `0` / `1`, `float32`, EPSG:32611, 3730×3292, NaN outside the published
+footprint, all in-footprint values finite and inside `[0, 1]`. An `-allfinite.tif` sibling sets
+`0` outside the footprint for portals that reject non-finite values, so the historical error
+`Predicted values must be in range [0, 1]` cannot recur. A `.zip` of the same GeoTIFF is also
+offered.
 
-1. Download the GeoTIFF — or the zip containing it — from the band at the top of the site.
-2. Optionally confirm the bytes against the SHA-256 shown next to the link.
-3. Sign in to DrivenData manually and open *DOE GEMS Prize Challenge → Submit*.
-4. Choose the downloaded `.tif`.
-5. Use the unique name `GEMSDOE50-H52-UNION-OFFCAT` and the note
-   “GEMSDOE50 H52 | H51 scarp+radiometric UNION H52-A scarp-matched-filter+drainage; disclosed fusion of
-   this project's own validated prior work, not an independently new method; beats H51 in 3/4 spatial
-   holdout macrofolds and 4/4 vs random control; proxy-validated, NOT organizer-scored” — or, to submit
-   the non-fused standalone artifact instead, `GEMSDOE50-H52A-SCARPDRAINAGE-OFFCAT` with the note shown
-   on the submission page.
-6. Submit, then record the returned score next to the file hash before making any claim about it.
+**How to submit (manual, by the owner, never by this repository):** (1) download the `.tif` and
+verify the SHA-256 shown on the page; (2) open
+[the competition page](https://www.drivendata.org/competitions/306/competition-doe-gems/) and sign
+in; (3) upload the single-band GeoTIFF without re-saving, re-projecting or re-compressing it;
+(4) use the unique name and the short optional note printed on the page; (5) record the portal
+receipt in this repository before claiming any score. `submission.html` carries the same checklist
+with the portal's own warnings.
 
-A local pass is a proxy result, not an organizer score, and it licenses a manual upload decision only.
+**Status of the artifact.** Format gate PASS and frozen uniqueness gate PASS (worst 2 px-proximity
+IoU 0.4219 against 26 prior artifacts, 0 pixels shared with any of them). Instrument prediction
+**0.1684** — *below* this repository's best delivered artifact (owner-quoted 0.2778) and below the
+owner-quoted 0.3195 target — and the pre-registered `sgmc_off` proxy gate FAILS. It is published as
+a measurement the owner may choose to spend one slot on, not as a predicted win; the page says so
+above the download.
+
+### Two verified candidates now exist — and one shared frame orders them
+
+- **Candidate A — H51 corridor-consensus mix (this branch).**
+  `downloads/gemsdoe50-h51-corridor-consensus-mix-20261007T0200Z.tif`, 30,000 dots, consensus
+  instrument **0.1684**, frozen uniqueness gate PASS (0 shared pixels, worst 2 px-proximity IoU
+  0.4219).
+- **Candidate B — H51 scarp + radiometric lineaments (parallel session, now on `main`).**
+  `docs/downloads/gems51-scarpradio-offcat-35000-20261006-ecf058ea-nan.tif`, sha256
+  `8f8708d2872b66d71925707e0aede23eebcf217dfd2e57d6e61186f32e686f5d`, 35,000 dots; on its own
+  off-catalogue sweeps **0.1889 credit per dot** against **0.1161** for a matched random control at
+  the same mass, and it beats its matched control in **4/4** macrofolds of the frozen holdout
+  (paired subtile bootstrap 95 % CI `[0.0406, 0.0785]`, [`evidence/holdout_h51.json`](evidence/holdout_h51.json)).
+- **The one directly comparable measurement** ([`evidence/h51_candidate_frame_compare.json`](evidence/h51_candidate_frame_compare.json),
+  produced 2026-10-07 by `scripts/h51_validate.py` with `--layers data/external`): one identical
+  frame — unmasked domain of 5,106,385 px, truth = SGMC fault pixels more than 300 m from the given
+  catalogue, 61,664 px (1.208 %) — and identical code for all three files:
+
+  | file | dots | shared-frame `sgmc_off` DTI | credit per dot |
+  |---|---:|---:|---:|
+  | A · corridor-consensus mix | 30,000 | 0.0566 | 0.1050 |
+  | B · scarp + radiometric lineaments | 35,000 | **0.1158** | **0.1889** |
+  | archived `gems50-seislin-44709` | 44,709 | 0.1472 | 0.1972 |
+  | matched uniform control (30 k) | 30,000 | 0.0592 mean / 0.0617 max | — |
+  | translations (4) | — | 0.0448 mean / 0.0472 max | — |
+
+- **What that means, stated plainly.** On the only frame where the two new files are measured the
+  same way, **B is the stronger of the two and A does not beat a matched uniform control.** The
+  archived incumbent beats both but cannot be resubmitted (its novelty check fails). If the owner
+  spends a slot on a file from this repository, the evidence points at **B first**. A stays
+  published because it is the gate-clean measurement of the consensus line, and because its failure
+  on the shared frame is itself the strongest evidence yet that the score-consensus instrument's
+  skill does not transfer to new territory (analysis §12–14).
+- The two "own instrument" columns are **not** comparable to each other or to the shared-frame
+  column: A's 0.1684 is a leave-one-out prediction over 25 scored artifacts (a different frame and
+  a different currency), B's 0.1889 is credit per dot on its own sweep. Neither is an organizer
+  score, and no portal upload has occurred for either file.
+
 
 ## Verified project references
 
@@ -143,6 +174,22 @@ A local pass is a proxy result, not an organizer score, and it licenses a manual
 | Seismicity-to-fault literature | 3-D anisotropic clustering, spatial clustering/segmentation, and explicit location-uncertainty methods | [Ouillon et al. 2008](https://doi.org/10.1029/2007JB005032) · [Ouillon & Sornette 2011](https://doi.org/10.1029/2010JB007752) · [Wang et al. 2013](https://arxiv.org/abs/1304.6912) |
 | Reference-solution notebook | Reviewed 2026-10-06: uses a Tversky training loss with α=0.2/β=0.8, but does not implement the official distance-weighted scoring evaluator; scoring authority is the problem-description page above. | [DrivenData reference solution](https://github.com/drivendataorg/gems-prize-reference-solution/blob/main/unet-mc-cv-reference-solution.ipynb) |
 | Prior GEMSDOE experiments | Educational evidence only; prior outputs are never copied into this project's deliverable | [GEMSDOE32](https://github.com/buffedlizard55-lab/GEMSDOE32) · [GEMSDOE47](https://github.com/buffedlizard55-lab/GEMSDOE47) · [GEMSDOE48](https://github.com/buffedlizard55-lab/GEMSDOE48) |
+
+### Inherited from `main` and still true
+
+- **H50-S1 has not run.** Its dispatch-only workflow returns HTTP 403 `Resource not accessible by
+  integration` here, so no job ran and no data was fetched; the frozen split spec
+  (`78b6692155c6c6d5f9f19ccee6d595167c2065f1f25eb8d08636d1d9b285ff16`) and the realized-mask report
+  (`981b42e6d0310bf77f79c7c7662a0569c8d2e79514ef4e4a3624a5b07583ae3f`) are unchanged.
+- **Provenance caveat.** The bridge manifest points at the official data tab and public mirrors, but
+  no session has authenticated to DrivenData and re-downloaded the official bytes; matching hashes
+  establish consistency with the manifest, not organizer provenance.
+- **No automated leaderboard access.** One unintended automated request to the public leaderboard
+  page happened during earlier research; no rows/scores were saved or used, and no further
+  automated access is made. Historical sibling-repository scores are quoted as history only and are
+  never mapped to a TIFF.
+- **Repository suite:** `python -m pytest -q` → 72 passed, 0 skipped, including the H51 metric
+  identities (`tests/test_h51.py`, `tests/test_h51_ship_gate.py`).
 
 ## Reproduction
 
@@ -172,40 +219,145 @@ python scripts/run_experiment.py \
   --labels .arena/run/inputs/existing_faults.tif \
   --prior-dir .arena/run/prior
 python scripts/build_h50_site.py
+
+# H51/H52 research pipeline (needs the staged corpus in .arena/work/h51; see scripts/h51_consensus.py)
+python scripts/h51_consensus.py            # score instrument + leave-one-out validation
+python scripts/h51_truth_map.py            # credit ledger + block-grid truth inversion (negative)
+python scripts/h51_validate.py --candidates downloads/*.tif --incumbent downloads/gems50-seislin-*.tif
+GEMS50_CORPUS=.arena/work/h51 python scripts/check_submission.py --submission downloads/gemsdoe50-h51-*.tif
+python scripts/h51_ship_novel.py           # reproduces the rejected pixel-disjoint H52 design
+python scripts/h51_validate.py --layers data/external \
+  --candidates downloads/gemsdoe50-h51-corridor-consensus-mix-*.tif \
+               docs/downloads/gems51-scarpradio-offcat-*.tif \
+  --out evidence/h51_candidate_frame_compare.json   # the shared-frame comparison above
+
+# The parallel-session candidate's own checks (unchanged from main).
+python scripts/verify_h51_raster.py
+python scripts/validate_h51_holdout.py
+python scripts/uniqueness_h51.py
+python scripts/update_registries_h51.py
 ```
 
-The manually dispatched [H50-S1 research workflow](.github/workflows/h50s1-research.yml) runs on `arena/c4f4db48-gemsdoe50` only. It verifies tests and the already-frozen masks before scoring, downloads no hidden labels, does not use the feature stack for H50-S1, and commits only the result report/site/research-only TIFF back to this fixed branch. A numerical score-gate pass cannot authorize a slot while the aftershock, mine/injection, and location-uncertainty gates remain open; no raw data are committed.
+## Executive summary and submission instructions
 
-## Open gates / next actions
+The site is generated and CI-verified. Root pages come from
+[`scripts/build_h50_site.py`](scripts/build_h50_site.py) (`index.html`, `results.html`,
+`methods.html`, `submission.html`) and the data feed from [`scripts/build_site.py`](scripts/build_site.py)
+plus [`scripts/update_registries_h51.py`](scripts/update_registries_h51.py) (`docs/data/*.json`).
+`.github/workflows/site.yml` regenerates the four root pages on every push and pull request and fails
+the build if the committed bytes differ. `index.html` now opens with a **"two candidates, one shared
+frame"** table rendered from `evidence/h51_ship.json`, `evidence/build_h51.json` and
+`evidence/h51_candidate_frame_compare.json`, so the numbers on the site cannot drift from the
+evidence, and both GeoTIFFs are one click away.
 
-1. **Manual owner decision** on whether to spend one of the three weekly slots, and on which file: H52
-   (best-validated, but a disclosed 78%-H51 fusion) or H52-A standalone (fully independent new method,
-   lower standalone coverage, never validated to beat H51 on its own). Nothing is uploaded by this
-   repository: both have an artifact and local proxy evidence, but no organizer score.
-2. If a slot is spent, record the returned score and the portal receipt next to the pinned sha256; never
-   restate proxy numbers as official.
-3. **Next untried candidates (H52-B basement-depth step, H52-C spring/well conduits, H52-D nodal-plane
-   seismicity)** remain unimplemented — see [`docs/h51-candidates.md`](docs/h51-candidates.md) Part 2.
-   H52-B needs `training_features.tif`, which is confirmed **permanently unobtainable** in this sandbox
-   (see `docs/h52a-protocol.md`); do not re-attempt fetching it without a new access path (e.g. a
-   DrivenData-authenticated session the user runs manually).
-4. **H50-S1 stays blocked.** The fixed-branch dispatch-only workflow returns HTTP 403 in this repository, so
-   the Nevada catalog still needs an auditable acquisition route; the hypothesis itself is unchanged and
-   unimplemented, and no H50-S1 DTI or raster is claimed.
-5. Re-verify the large snapshot-excluded input stack (`/home/user/.arena/inputs/`) before any rebuild; the
-   build regenerates deterministically from those pinned bytes
-   (`python scripts/build_h51.py`, then `python scripts/build_h52a.py`, `python scripts/build_h52.py`,
-   `scripts/verify_h51_raster.py` against both evidence files, `scripts/uniqueness_h52.py`,
-   `scripts/validate_h52_holdout.py`, `python scripts/build_h50_site.py`).
-6. Any next iteration must independently re-open and byte-validate its GeoTIFF, refresh the
-   executive-summary/results/submission pages, and re-check source licenses, attribution, limitations, and
-   the AI-use disclosure before a slot is spent.
-7. **Still outstanding from the standing brief, flagged honestly rather than hidden:** (a) embedding the
-   full original mega-prompt verbatim into this README — the session memory available to this agent
-   preserves a condensed/paraphrased form of the user's original instructions, not the literal original
-   message text, so a "verbatim" embed cannot be produced without risking fabrication; the standing
-   project brief above is the faithful distilled version actually re-read each session, and the exact
-   original text should be pasted in by the user if a literal verbatim copy is required; (b) a dedicated,
-   deep, source-linked geothermal-vent research writeup (a 2026-10-07 TODO, not yet started this session);
-   (c) 2–3 forward-looking H53+ candidate ideas beyond the ranked H52-B/C/D list already in
-   `docs/h51-candidates.md`.
+**One-click downloads (top of the site):**
+
+| candidate | file | portal name | note for the optional field |
+|---|---|---|---|
+| A | `downloads/gemsdoe50-h51-corridor-consensus-mix-20261007T0200Z.tif` | `gemsdoe50-h51-corridor-consensus-mix-20261007T0200Z` | "Corridor evidence (seismicity lineaments + magnetic/radiometric ridges + thermal springs) fused with a validated score-consensus core; off-catalogue, 300 m-aware dot geometry; pixels and 200 m neighbourhoods novel against all 26 prior artifacts." |
+| B | `docs/downloads/gems51-scarpradio-offcat-35000-20261006-ecf058ea-nan.tif` | `GEMSDOE50-H51-SCARPRADIO-OFFCAT` | "GEMSDOE50 H51 \| corroborated 3DEP-scarp + radiometric lineaments, all dots >300 m from the given catalogue, metric-matched sparse emission; proxy-validated, NOT organizer-scored" |
+
+A is `float32`, EPSG:32611, 3730×3292, values `0`/`1`, 30,000 predicted pixels, SHA-256
+`a26055834f8e6cc57cc33e96a4a5a26a1adeaafbeec490135af84c6ccd4d1da0`, 339,039 bytes, NaN outside the
+published footprint. B is the same grid and dtype with 35,000 predicted pixels, SHA-256
+`8f8708d2872b66d71925707e0aede23eebcf217dfd2e57d6e61186f32e686f5d`. Each has an `-allfinite.tif`
+sibling that writes `0.0` outside the footprint, for portals that reject non-finite values, so the
+historical error `Predicted values must be in range [0, 1]` cannot recur; each also has a one-file
+`.zip`.
+
+**How to submit (manual, by the owner, never by this repository — it holds no portal credentials
+and never uploads):**
+
+1. Download one GeoTIFF — or its zip — from the band at the top of the site.
+2. Confirm the bytes against the SHA-256 shown next to the link.
+3. Sign in to [the competition](https://www.drivendata.org/competitions/306/competition-doe-gems/)
+   manually and open *Submit*.
+4. Choose the downloaded `.tif` without re-saving, re-projecting or re-compressing it.
+5. Paste the unique name and the short note from the table above.
+6. Submit, then record the receipt next to the file hash in this repository before claiming any
+   score.
+
+`submission.html` carries the same checklist. **No organizer score exists for either file and no
+weekly slot has been used by this repository.** Spending a slot is the owner's decision; the shared
+frame above says which file to spend it on first.
+
+## H52 (2026-10-07, concurrent session `arena/a51bdd46-gemsdoe50`) — a second, independently built and validated candidate
+
+This section was written by a **second Arena session working on this same repository at the same
+time** as the corridor-consensus-mix work above. It implemented and validated the top-ranked
+*untried* hypothesis from `docs/h51-candidates.md` (scarp-profile matched filter + independent
+drainage-deflection corroboration) before either session had seen the other's commits, then merged
+second and reconciled the two lines of work in this PR. It is kept as its own section, not
+interleaved with the text above, so neither session's numbers are misattributed to the other.
+
+### What was built
+
+- **H52-A** (`src/gems51/scarpmf.py` + `src/gems51/drainage.py`, 8 new passing unit tests): a signed,
+  azimuth-specific scarp-cross-section matched filter on detrended `topo_u8` elevation, corroborated
+  by an independent channel-deflection/knickpoint test from `pysheds` D8 flow routing at the same
+  azimuth — the first candidate in this project's history to require two independent physical
+  quantities to agree rather than OR-ing/summing layers. `training_features.tif` (needed for the
+  originally proposed `det_elev`/`det_elev_slope` bands) is confirmed **permanently unobtainable**
+  in this sandbox; `topo_u8` + `pysheds` routing was substituted as a different implementation of the
+  same physical test, recorded as an irregularity in `docs/h52a-protocol.md`.
+- **H52 = H51 ∪ H52-A**: a mechanical pixel union of H51's fixed 35,000-dot file with H52-A's
+  10,000-dot file (only 172 pixels coincide), with no new tunable threshold.
+
+### What it measures, and how it cross-checks against the corridor-consensus work above
+
+On the exact same off-catalogue SGMC frame the parallel session used to build
+`evidence/h51_candidate_frame_compare.json` (confirmed by this session's own, independently computed
+`evidence/build_h51.json` DTI for the scarp+radiometric file matching that file's row to 10
+significant figures — same truth mask, same scoring code, not a re-tuned metric):
+
+| candidate | dots | SGMC-off DTI (shared frame) |
+|---|---:|---:|
+| **H52 = H51 ∪ H52-A (this session)** | 44,828 | **0.1518** |
+| Frozen prior incumbent `gems50-seislin-44709` (not resubmittable) | 44,048 | 0.1472 |
+| H51 alone, scarp + radiometric | 35,000 | 0.1158 |
+| Corridor-consensus-mix (parallel session's shipped candidate above) | 30,000 | 0.0566 (below its own matched uniform control) |
+
+H52 is the strongest file either session has produced on this shared, apples-to-apples frame. It
+also passed a dedicated spatially-blocked holdout test before being written up here: it beats H51 in
+3/4 frozen macrofolds and a matched-mass random control in 4/4, with a paired subtile bootstrap 95%
+CI entirely positive, `[0.0063, 0.0174]` (`evidence/holdout_h52.json`,
+`docs/h52a-protocol.md` Amendments B1–B2 for the full promotion-gate record).
+
+### The disclosure this section exists to make explicit
+
+**H52 is a literal pixel superset of H51.** All 35,000 of H51's dots are included unchanged; H52-A
+contributes 9,828 genuinely new dots after removing the 172 that already coincided with H51. That
+means roughly **78% of H52's emitted mass is H51's own prior output** — only about 22% is the output
+of a method never built before this session. H51 has never been uploaded to the DrivenData portal
+(`organizer_score: null`, `submitted_utc: null` in `registry/submissions.json`), so this is not
+"copying a previous *submission's* pixels" in the sense the project's own rule 1 (above) prohibits —
+but it is an internal fusion of this project's own prior and new work, and the site, registry, and
+this README describe it that way everywhere, never as an independently-derived new hypothesis.
+**H52-A standalone** (only 1.7% cell overlap with H51) is offered as the genuinely independent
+artifact for anyone who does not want a fused file — see `submission.html` for both unique names and
+notes.
+
+### Deep-research deliverable from this session
+
+`docs/research/geothermal-vents-20261007.md` is a sourced, link-verified research note on what
+actually controls blind geothermal systems in the Great Basin (USGS/DOE/NBMG "play fairway"
+literature), which surfaces a free, CC-BY-4.0 source — GDR submission 1391 / the INGENIOUS project —
+that could supply a substitute for the still-unobtainable `training_features.tif` magnetic/gravity/
+`det_elev` bands, plus genuine mapped geothermal-vent and paleo-spring point data. That source is
+**not fetchable from this sandbox** (same `SSL_ERROR_SYSCALL` network ceiling documented for every
+other non-GitHub host this project has tried); it is recorded as two new, unimplemented H53-A/H53-B
+candidates in `docs/h51-candidates.md` Part 3 for whichever session gets normal network egress next.
+
+### What this session left honestly unfinished
+
+- **The full, verbatim original mega-prompt is not embedded in this README.** This agent's available
+  session memory preserves a condensed/paraphrased form of the user's instructions across a long
+  multi-session task, not the literal original message text, so a true verbatim embed cannot be
+  produced without risking fabrication of wording the user never wrote. The "Standing project brief"
+  at the top of this README is the faithful distilled charter actually re-read each session; the
+  exact original text should be pasted in directly by the user if a literal verbatim copy is
+  required.
+- H53-A/H53-B (above) are named and sourced but not implemented.
+- No portal upload has been made for any file this project has produced (H50-prior, the
+  corridor-consensus-mix candidate, H51, H52-A, or H52); every `organizer_score` in
+  `registry/submissions.json` is `null`.
