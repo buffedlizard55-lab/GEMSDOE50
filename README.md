@@ -68,10 +68,48 @@ by finding defensible fault traces omitted from the supplied catalogue. Core val
     provide reproducible code/assets and documentation. Verify current official rules and deadline
     immediately before any real submission.
 14. **Use Arena's fixed branch.** Each Arena session must stay on its assigned branch. This
-    session works, commits, and pushes only on `arena/71ff0271-gemsdoe50`; open the pull request from
+    session works, commits, and pushes only on `arena/5550c3e4-gemsdoe50`; open the pull request from
     that branch. This name is session-scoped, not a repository default for future sessions. Merge
     to `main` only when repository/environment policy permits it. Never switch or push another
     branch from this session.
+
+## H59 — current status (2026-10-07): submit H57; the mandated seismic map failed
+
+**Recommended file (YES, OK to submit):**
+[`docs/downloads/gemsdoe50-h57-scarpstep-80000-20261007T1830Z-allfinite.tif`](docs/downloads/gemsdoe50-h57-scarpstep-80000-20261007T1830Z-allfinite.tif)
+(SHA-256 `8027c4e9fe0f789e2d7180a7ccc031abec90b391cf9e42ebcc125752af9fb696`), entry name
+`GEMSDOE50-H57-SCARPSTEP`; step-by-step guide: [`docs/how-to-submit.html`](docs/how-to-submit.html).
+It remains the best file on the frozen spatially-blocked holdout (pooled DTI 0.2178 in the H59
+frame) and re-emitting it from code reproduces the shipped pixels exactly. Expectation on the
+hidden labels ≈ 0.23 (P(> 0.3774) ≈ 4 %); a proxy result is not an organizer score.
+
+**H59 (preregistered in `docs/research/h59-hypotheses-preregistered.md`) — NO SLOT.** The
+mandated seismicity-lineation artifact was built as specified (ComCat → Zaliapin–Ben-Zion
+declustering → unverified 2-D triangle screen → location-error-deconvolved covariance →
+epicentral + up-dip corridors → snap to the H57 ridge): 31 lineations, 326 dots, DTI 0.0002,
+below random dots and translated corridors, and below smoothed density on withheld faults
+(0.0007 vs 0.0093). Inside every H57-strength decile the corridors carry *less* fault credit than
+the cells outside them; loosening every screen (up to 1,034 lineations) never lifts that ratio
+above 0.97. A corridor/H57 hybrid (0.2088) and wider H57 spacing (4 px 0.1866, 5 px 0.1786) also
+lost. The H59 file is valid and unique but labelled **do not submit**.
+
+**Corrections made this session:** the metric "reduces exactly" claim and the "3 px ⇒ no
+competition" claim are false (errata in `docs/research/h56-diagnosis.md`,
+`docs/research/h33-02778-study-20261007.md`, and the site); H57's uniqueness was re-measured against
+the full corpus of 302 distinct prior files (not a copy: max Jaccard 0.172 with our own unsubmitted
+H56; 34 % of its dots share a pixel with at least one registered prior; chance-corrected 2-px
+proximity 0.508 to the dense 13GEMSDOE r8-ensemble — borderline, because all scarp-based files follow
+the same scarps); `scripts/check_submission.py` now accepts zero-outside files (the portal scored
+such files). Full working, flags and next steps:
+[`docs/research/h59-verdict-20261007.md`](docs/research/h59-verdict-20261007.md).
+
+```bash
+.venv/bin/python scripts/fetch_prior_corpus.py --out .arena/prior_corpus --receipt evidence/h59_prior_corpus_receipt.json
+.venv/bin/python scripts/build_h59.py --stamp 20261007T205554Z      # deterministic: same bytes
+.venv/bin/python scripts/h59_uniqueness.py --candidate docs/downloads/<file>.tif
+.venv/bin/python scripts/h59_sensitivity.py                          # post-hoc, exploratory
+python scripts/build_h55_site.py && python scripts/build_h58_site.py && python scripts/build_h59_site.py
+```
 
 ## H56 — the best-measured design in this repository, and an H51 provenance correction (this session)
 
@@ -561,15 +599,17 @@ Full working: [`docs/research/h57-verdict-20261007.md`](docs/research/h57-verdic
 catalogue-holdout frame and the H52 register's INGENIOUS-holdout frame).
 ## Standing project prompt — read at the start of every session (2026-10-07)
 
-This is the owner's standing instruction for this project, kept verbatim in summary so it is read
-every time the project is worked on. It sits above the session-scoped charter items where they
-differ.
+This is the owner's standing instruction for this project, restated item by item (not a verbatim
+transcript) so it is read every time the project is worked on. It sits above the session-scoped
+charter items where they differ.
 
 1. **The goal is to place at the top of the DrivenData #306 DOE GEMS Prize leaderboard**
    (<https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/>). The verified
    public leader on 2026-10-07 is **0.3774 (xiaofanhu)**; the design target is to beat it. The
    metric is the distance-weighted Tversky index (alpha=0.2, beta=0.8, R=300 m); for binary dots
-   it reduces exactly to `DTI = T / (0.2N + 0.8G)`.
+   it is `DTI = T / (0.2N + 0.8G + 0.2(T − M))` with `M = Σ K(dot)` — **not** the
+   `T / (0.2N + 0.8G)` collapse earlier sessions wrote (exact only when T = M; dots < 6 px apart
+   compete). See `docs/research/h59-verdict-20261007.md` §4 and `tests/test_h59.py`.
 2. **MUST GENERATE A UNIQUE TIF SUBMISSION for the competition.** Never copy a previous submission;
    prior files are for learning, controls, and comparison only. The generated submission must be
    **obvious to download** (one click, top of the site / executive summary) and **it must be
@@ -585,13 +625,18 @@ differ.
    earthquake density, normalize to [0, 1], write the required GeoTIFF, run the uniqueness gate
    against all prior submissions, and snap the corridor to another layer's ridge in the placement
    step. The 2-D reduction of Ouillon & Sornette's 3-D tetrahedron test is our adaptation and is
-   unverified; say so everywhere.
+   unverified; say so everywhere. References named by the owner: Ouillon, Ducorbier & Sornette
+   (2008) JGR 113, B01306, doi:10.1029/2007JB005032; Ouillon & Sornette (2011) JGR 116, B02306,
+   doi:10.1029/2010JB007752; Wang, Ouillon, Woessner, Sornette & Husen (2013) arXiv:1304.6912.
 4. **Answer at PhD level, from verified sources, with links for manual review**: why the
-   group's best artifact reportedly scored 0.2778, and whether a submission can exceed the
-   leader. Never turn an owner/user report into an authenticated score without an organizer
+   group's best artifact reportedly scored 0.2778 (GEMSDOE32
+   `h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros`), and whether a submission can exceed it and the
+   leader. Keep deep geothermal research from official sources in `docs/research/`. Never turn an owner/user report into an authenticated score without an organizer
    receipt. Flag irregularities; no hallucinations; verify line by line.
-5. **Protect the weekly feedback slots.** Preregister 3-5 hypotheses before implementing; rank
-   them by expected DTI improvement and cost; validate the top candidate on the frozen
+5. **Protect the weekly feedback slots.** Preregister 3-5 untried hypotheses before implementing
+   (layers combined, physical signature or transform, why it catches faults the catalogue misses,
+   how it differs from what the repository already tried); rank them by expected DTI improvement
+   and cost; validate the top candidate on the frozen
    spatially-blocked holdout before touching a slot; do not spend a slot on an idea that has not
    beaten the current holdout best. If a candidate needs new external data, name the specific
    free official source and check it is obtainable first.
@@ -605,5 +650,7 @@ differ.
    permission, treat failure and success as signals. Work autonomously; no manual input; work
    line by line; verify everything; run three passes (implement, review/fix, re-check).
 8. **Session mechanics.** Work, commit, and push only on this session's assigned branch
-   (`arena/71ff0271-gemsdoe50`); open the pull request from it; merge to `main` when the checks
+   (`arena/5550c3e4-gemsdoe50` for the 2026-10-07 H59 session); open the pull request from it;
+   merge to `main` when the checks
    pass. Keep large scratch data out of Git; keep hash-pinned derivatives needed to reproduce.
+   End every session with suggested next work, limitations, and any access still required.

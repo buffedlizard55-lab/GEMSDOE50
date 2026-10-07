@@ -27,6 +27,8 @@ jobs:
             scripts/build_h50_site.py scripts/build_h55.py scripts/build_h55_site.py \
             scripts/build_prior_union.py scripts/run_experiment.py scripts/download_3dep_dem.py \
             scripts/freeze_holdout.py scripts/verify_claims.py \
+            scripts/build_h59.py scripts/build_h59_site.py scripts/h59_uniqueness.py \
+            scripts/h59_sensitivity.py scripts/fetch_prior_corpus.py tests/test_h59.py \
             tests/test_h50_*.py tests/test_h55.py tests/test_h55_site.py \
             tests/test_site.py tests/test_build_h50_site.py tests/test_raster.py \
             tests/test_spatial.py tests/test_geometry.py tests/test_catalog.py \

@@ -1,66 +1,42 @@
 <!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="refresh" content="5; url=../submission.html">
-<title>How to submit — GEMSDOE50</title>
-<style>
-:root{--ink:#12161c;--mut:#5b6674;--line:#e3e8ef;--acc:#0b6bcb;--card:#f7f9fc}
-*{box-sizing:border-box}
-body{margin:0;font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink)}
-header{border-bottom:1px solid var(--line);padding:22px 20px}
-main{max-width:860px;margin:0 auto;padding:26px 20px 60px}
-h1{font-size:1.55rem;margin:0 0 4px}
-h2{font-size:1.12rem;margin:30px 0 8px}
-nav a{margin-right:14px;font-weight:600}
-a{color:var(--acc)}
-code{background:var(--card);border:1px solid var(--line);border-radius:4px;padding:1px 5px}
-ol li,ul li{margin:5px 0}
-.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 18px;margin:14px 0}
-table{border-collapse:collapse;width:100%;font-size:.95rem;margin:8px 0}
-th,td{border:1px solid var(--line);padding:7px 9px;text-align:left}
-th{background:var(--card)}
-footer{color:var(--mut);font-size:.88rem;border-top:1px solid var(--line);padding:18px 20px;margin-top:36px}
-</style>
-</head>
-<body>
-<div role="note" style="margin:14px auto;padding:12px 16px;max-width:1100px;background:#fff1df;border-left:5px solid #a96519;border-radius:6px;font:600 15px/1.5 system-ui,sans-serif;color:#3b2b19">ARCHIVED, UNVERIFIED PRIOR WORK — this page describes earlier main-branch experiments/artifacts, not the current H51 file. Do not upload files linked here; the current deliverable and the exact manual upload steps are on <a href="../submission.html">submission.html</a> (one-click download on the <a href="../index.html">executive-summary page</a>). Historical local metrics and copied leaderboard notes are not a fresh independent official check, and no organizer receipt authenticates a score-to-TIFF mapping.</div>
-
-<header><nav><a href="./">Home</a><a href="how-to-submit.html">How to submit</a><a href="report.html">Report</a></nav></header>
-<main>
-<h1>Archived prior submission instructions — withdrawn</h1>
-
-<h2>Executive summary</h2>
-<ol>
-  <li><b>The file.</b> One GeoTIFF, <code>gems50-seislin-44709-20261006T2041Z-79e260ae.tif</code>, single band, float32, EPSG:32611, 100 m, 3730×3292, values exactly 0 and 1, NaN outside the study footprint, 44,709 positive pixels. Minimum 0.0, maximum 1.0.</li>
-  <li><b>Why it can score.</b> The official metric is <code>DTI = T/(0.2(T+F) + 0.8G)</code> with a 300 m triangular kernel; because <code>T + FN = |G|</code> exactly, the denominator is <code>0.8G + 0.2(T+F)</code>. A dot pays whenever its kernel credit exceeds <code>0.2·score</code> — so the optimum is a binary support at ≈300 m spacing placed where extra faults are most likely, not a probability map. The file is emitted on that rule.</li>
-  <li><b>Where the dots are.</b> Dominantly on 1 m-LiDAR scarp dipoles that line up in chains (validated: 2.2× the matched random control on the off-catalogue frame), with a low-weight hedge on seismicity corridors.</li>
-  <li><b>What failed.</b> The seismicity-lineament corridors did not beat smoothed earthquake density at equal dot budget (0.0015–0.0034 vs 0.0016–0.0043). Reported as falsified; kept only as a hedge.</li>
-  <li><b>Uniqueness.</b> Checked against all 50 prior submissions on this grid: no identical file, ≤ 0.36 overlap, ≥ 47 % novel pixels. Automatic, no manual check.</li>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="How to submit the recommended GEMS GeoTIFF"><title>How to submit the recommended GEMS GeoTIFF &middot; GEMSDOE50</title><link rel="stylesheet" href="../site.css"></head>
+<body><a class="skip" href="#start">Skip to content</a><header class="site-head"><div class="shell"><nav class="nav" aria-label="Main navigation"><a class="brand" href="../index.html">GEMSDOE50 / Research</a><div class="links"><a href="../index.html">Overview</a><a href="../results.html">Results</a><a href="../methods.html">Methods &amp; sources</a><a href="../submission.html">Submission guide</a><a href="../docs/how-to-submit.html">How to submit</a></div></nav></div></header>
+<section class="main" id="start"><div class="shell"><div class="grid"><article class="card span-12" style="border-left:6px solid #0f6b5c">
+<h1 style="margin-top:0">Start here &mdash; the one file to submit</h1>
+<div class="hero" style="border-radius:10px;padding:18px 20px;margin-bottom:14px"><div class="actions"><a class="download" href="../docs/downloads/gemsdoe50-h57-scarpstep-80000-20261007T1830Z-allfinite.tif" download>Download the recommended GeoTIFF (H57, portal-safe)</a><a class="download alt" href="../docs/downloads/gemsdoe50-h57-scarpstep-80000-20261007T1830Z-allfinite.zip" download>same file as .zip</a></div>
+<p class="fine" style="color:#d8e7e3">File <code>gemsdoe50-h57-scarpstep-80000-20261007T1830Z-allfinite.tif</code> &middot; SHA-256 <span class="hash">8027c4e9fe0f789e2d7180a7ccc031abec90b391cf9e42ebcc125752af9fb696</span> &middot; 395,743 bytes &middot; 80,000 predicted cells &middot; float32, EPSG:32611, 3,730 &times; 3,292, values exactly 0 or 1, no NaN anywhere.</p>
+<p class="fine" style="color:#d8e7e3"><b>Entry name:</b> <code>GEMSDOE50-H57-SCARPSTEP</code> &middot; <b>note to paste:</b> <q>H57 stratified LiDAR-scarp + topographic-step dot emitter; every dot is &gt;=300 m from the given catalogue and &gt;=300 m from every other dot; research model, not organizer-scored.</q></p></div>
+<p><span class="tag">YES</span> <b>OK to download and submit</b> (it uses one of your weekly slots). H57 is still the best file this repository has measured on its frozen spatially-blocked holdout (pooled DTI <b>0.2178</b>; NW 0.1799, NE 0.1839, SW 0.1411, SE 0.3256); nothing built since, including today&rsquo;s H59 run, beats it. Rebuilding H57 from its code reproduces the shipped pixels exactly: <b>yes</b>. It uses no earthquake catalogue, so the unresolved ComCat rights question does not apply. <a href="../docs/how-to-submit.html"><b>Exactly how to submit, step by step &rarr;</b></a></p>
+<p class="warning"><b>Expectation, not a promise.</b> The holdout scores a proxy (USGS SGMC faults away from the given catalogue), not the organizers&rsquo; hidden expert labels. The calibrated expectation for H57 is about <b>0.23</b> (P(&gt;&nbsp;0.2778)&nbsp;&asymp;&nbsp;29&nbsp;%, P(&gt;&nbsp;0.3774)&nbsp;&asymp;&nbsp;4&nbsp;%). Under the corrected metric algebra, beating the public best 0.3774 with 80,000 dots needs about 10,500 hidden-truth credit (credit/dot &gt; 0.13). No organizer score exists for any GEMSDOE50 file.</p>
+<p><b>Uniqueness, measured against the full prior corpus (302 distinct submission-like files from all 54 sibling repositories plus this one).</b> H57 is not a copy: its largest exact-pixel overlap (Jaccard) with any prior file is 0.1716, and that file is our own never-submitted H56; at most 31&nbsp;% of its dots sit on any single prior file. But 27,248 of its 80,000 dots (34&nbsp;%) land on a pixel that at least one of the 61 registered prior files also used, and its chance-corrected 2-pixel proximity to the dense 13GEMSDOE r8-ensemble is 0.5084 (borderline against a 0.5 screen), because every scarp-based file follows the same LiDAR scarps. A version with zero exact overlap was tested and scores lower (0.2088), so it is not recommended.</p>
+<h3>Today&rsquo;s run (H59): the required seismic-lineation map &mdash; <span class="tag fail">NO SLOT</span></h3>
+<p>Built as specified: 63,081 screened USGS ComCat earthquakes, declustered with the Zaliapin&ndash;Ben-Zion nearest-neighbour method (12,450 background events kept), a 2-D triangle test (my unverified adaptation of the Ouillon&ndash;Sornette 3-D tetrahedron test), local 2-D covariance with location-error removal, corridors as wide as the catalogue location error plus up-dip copies, and dots snapped to the H57 ridge. Result: only 31 lineations and <b>326 dots</b>; holdout DTI <b>0.0002</b>, credit/dot 0.0232 versus 0.1267 for random dots. On withheld catalogue faults the corridors lose to smoothed density (0.0007 vs 0.0093). Within every H57-strength decile, the corridors hold <i>less</i> fault credit than the cells outside them (median ratio 0.065, 0/10 deciles above 1). Loosening every screen (up to 1,034 lineations) never lifts that ratio above 0.97. Two variants were also rejected: mixing the corridor dots into H57 (0.2088) and spacing H57&rsquo;s dots 4 or 5 px apart (0.1866, 0.1786). The H59 file is unique (Jaccard &le; 0.0016) and valid, but <b>do not submit it</b>: <a href="../docs/downloads/gemsdoe50-h59-updipseis-326-20261007T205554Z-cc1f44da-allfinite.tif" download>H59 research file</a> (SHA-256 <span class="hash">009dd3d8dffae29d&hellip;</span>, entry name if ever used <code>GEMSDOE50-H59-UPDIPSEIS-326-CC1F44DA</code>).</p>
+<h3>Flags for manual review</h3>
+<ul class="list">
+<li><b>Metric algebra:</b> earlier pages said the score &ldquo;reduces exactly&rdquo; to <code>T/(0.2N+0.8G)</code> and that dots 3&nbsp;px apart do not compete. Both are false (tested in <code>tests/test_h59.py</code>); errata added.</li>
+<li><b>Leaderboard coincidence:</b> five owner-reported corpus scores (0.2778, 0.2750, 0.2710, 0.2708, 0.2600) equal the public scores of five different leaderboard accounts. Please check this against <a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">rules &sect;3.4</a> (limits per participating entity).</li>
+<li><b>Sample file:</b> the local <code>sample_submission.tif</code> holds 1.0 on exactly the 60,988 training-label cells, not &ldquo;total fault absence&rdquo;.</li>
+<li><b>Reference solution</b> writes float64; the <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">format page</a> asks for float32 (our files are float32).</li>
+<li><b>ComCat contributor rights</b> are unresolved, so no catalogue-derived file (H56, H58, H59) can be cleared for a slot.</li>
+<li><b>H33 parent conflict:</b> 44,090&nbsp;&minus;&nbsp;6,436 vs 40,199&nbsp;&minus;&nbsp;2,545 dots, unresolved.</li>
+</ul>
+<p class="muted">Full working: <a href="../docs/research/h59-verdict-20261007.md">H59 verdict</a> &middot; <a href="../docs/research/h59-hypotheses-preregistered.md">preregistration</a> &middot; <a href="../evidence/h59_build.json">build evidence</a> &middot; <a href="../evidence/h59_uniqueness.json">uniqueness</a> &middot; <a href="../evidence/h59_sensitivity.json">sensitivity</a> &middot; <a href="../docs/executive-summary.html">executive summary</a>. Older candidates follow below for the record; none of them is recommended.</p>
+</article></div></div></section>
+<section class="main"><div class="shell"><div class="grid"><article class="card span-12" id="steps"><h2>Exactly how to submit</h2>
+<ol class="list">
+<li><b>Download</b> <a href="../docs/downloads/gemsdoe50-h57-scarpstep-80000-20261007T1830Z-allfinite.tif" download><code>gemsdoe50-h57-scarpstep-80000-20261007T1830Z-allfinite.tif</code></a> (or the <a href="../docs/downloads/gemsdoe50-h57-scarpstep-80000-20261007T1830Z-allfinite.zip" download>.zip</a>; the portal accepts a .tif or a .zip holding one GeoTIFF).</li>
+<li><b>Check the bytes</b> (optional but recommended). The SHA-256 must be <span class="hash">8027c4e9fe0f789e2d7180a7ccc031abec90b391cf9e42ebcc125752af9fb696</span>.<br>macOS/Linux: <code>shasum -a 256 gemsdoe50-h57-scarpstep-80000-20261007T1830Z-allfinite.tif</code> &middot; Windows PowerShell: <code>Get-FileHash gemsdoe50-h57-scarpstep-80000-20261007T1830Z-allfinite.tif -Algorithm SHA256</code></li>
+<li><b>Open</b> the <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">DOE GEMS competition page</a>, sign in, and go to the submissions tab. Read the <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">submission-format page</a> once: single-band GeoTIFF, same CRS (EPSG:32611), shape and geotransform as the training data, values between 0 and 1.</li>
+<li><b>Upload</b> the file. If the form asks for a name, use <code>GEMSDOE50-H57-SCARPSTEP</code>.</li>
+<li><b>Paste the note</b> (optional field): <q>H57 stratified LiDAR-scarp + topographic-step dot emitter; every dot is &gt;=300 m from the given catalogue and &gt;=300 m from every other dot; research model, not organizer-scored.</q></li>
+<li><b>Submit</b> and record the public score and the submission time in <code>registry/submissions.json</code> so later sessions can calibrate against a real organizer number.</li>
 </ol>
-
-<h2>Archived instructions — withdrawn</h2>
-<div class="card">
-<p><strong>Do not follow the upload steps in this archived page.</strong> They refer to an earlier main-branch TIFF, retained only as a same-fold comparator. The current deliverable is the H51 scarp + radiometric GeoTIFF, locally proxy-validated and <strong>not organizer-scored</strong>.</p>
-<p>The current executive summary, status, and conditional manual submission checklist are on the <a href="../index.html">root project site</a>. A weekly slot must not be used unless the preregistered spatial gate passes, the raster bytes and permissions are reviewed, and the owner explicitly approves the upload.</p>
-<p>This archive does not instruct users to monitor or copy leaderboard rows. Prior sibling-repository notes are not a fresh independent official check, and no score-to-TIFF mapping is authenticated.</p>
-</div>
-
-<h2>Rules the file already satisfies</h2>
-<table>
-<tr><th>requirement (official wording)</th><th>this file</th></tr>
-<tr><td>same projected CRS as the training data</td><td>EPSG:32611 (UTM 11N) ✓</td></tr>
-<tr><td>same resolution as the training data</td><td>100 m ✓</td></tr>
-<tr><td>same bounds; data outside the bounds is null or nan</td><td>identical transform and bounds; NaN outside the footprint ✓</td></tr>
-<tr><td>a single layer (band)</td><td>count = 1 ✓</td></tr>
-<tr><td>datatype 32-bit float</td><td>float32 ✓</td></tr>
-<tr><td>values between 0 and 1</td><td>min 0.0, max 1.0, none outside [0,1] ✓</td></tr>
-</table>
-
-<h2>How to check this claim yourself (no manual vetting needed)</h2>
-<p>Open <a href="data/no_manual_check.json">data/no_manual_check.json</a>: it is regenerated on every push by <code>scripts/check_submission.py</code> and reports the 15 format checks, the uniqueness verdict (full-pixel where the corpus is present, coarse 32× signature level on a bare runner) and the sha256 of the file. The same file is re-scored on both evidence frames in <a href="data/validation.json">data/validation.json</a>.</p>
-<footer>Official sources: <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">problem and scoring</a> · <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/964/">rules</a> · <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">leaderboard</a>.</footer>
-</main>
-</body>
-</html>
+<h3>If the portal says &ldquo;Predicted values must be in range [0, 1]&rdquo;</h3>
+<p>That message appears when any cell the validator reads is outside [0,&nbsp;1] &mdash; and a NaN counts, because <code>NaN &le; 1</code> is false. This file has no NaN, no nodata sentinel and only the values 0 and 1 in all 12,279,160 cells, so the error cannot come from it. If you see it anyway, you uploaded a different file: compare the SHA-256 above. Do not upload the <code>-nan</code> or older files.</p>
+<h3>Limits to keep in mind</h3>
+<ul class="list"><li>Three submissions per week; only spend one on a file that beat the current holdout best (H57 is that file).</li>
+<li>Read <a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">the official rules</a> &sect;3.4 on how many entries one participating entity may hold, and the generative-AI disclosure requirement, before submitting.</li>
+<li>The score you see is the public split; the private split decides prizes.</li></ul>
+</article></div></div></section>
+</body></html>

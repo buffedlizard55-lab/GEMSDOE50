@@ -55,6 +55,15 @@ def test_h55_site_regeneration_is_deterministic_and_download_first():
         capture_output=True,
         text=True,
     )
+    # H59 adds the single "start here" band (recommended download + verdict) at the very
+    # top, the errata, and regenerates the docs/ submission pages.
+    subprocess.run(
+        [sys.executable, str(ROOT / "scripts/build_h59_site.py")],
+        cwd=ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
     assert {path: path.read_bytes() for path in tracked} == before
 
     index = (ROOT / "index.html").read_text(encoding="utf-8")
@@ -64,7 +73,13 @@ def test_h55_site_regeneration_is_deterministic_and_download_first():
     # assertion is about ordering and presence, not about which session's artifact is first.
     # The current top band is the H57-scarpstep session's; the H56 band below it was reworded
     # to "Previous candidate (H56)" by that session, and this session's H58 band follows it.
+    start = index.index("Download the recommended GeoTIFF (H57, portal-safe)")
+    assert start < index.index('<section class="main" id="h57">')
+    assert '<a class="skip" href="#start">' in index
+    assert "reduces exactly to <code>DTI = T / (0.2N + 0.8G)</code>" not in index
+    assert "GEMSDOE50-H57-SCARPSTEP" in index[: index.index('<section class="main" id="h57">')]
     first_download = index.index("Download the current research candidate GeoTIFF (H57)")
+    assert start < first_download
     assert "Previous candidate (H56)" in index
     assert "GEMSDOE50-H58-SEISLINEAGE-98598-C4FF6DB9" in index
     assert first_download < index.index("Executive summary")
