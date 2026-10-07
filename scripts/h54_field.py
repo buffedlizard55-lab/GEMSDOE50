@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Build (and cache) the H53 label-free belief field, then report its anatomy.
 
-Usage:  python3 scripts/h53_field.py [--out /home/user/.arena/run/h53_field.npz]
+Usage:  python3 scripts/h54_field.py [--out /home/user/.arena/run/h54_field.npz]
 """
 from __future__ import annotations
 
@@ -16,14 +16,14 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from gems53 import field as F                                     # noqa: E402
-from gems53.gridio import catalogue_distance, footprint, labels   # noqa: E402
+from gems54 import field as F                                     # noqa: E402
+from gems54.gridio import catalogue_distance, footprint, labels   # noqa: E402
 
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--out", default="/home/user/.arena/run/h53_field.npz")
-    ap.add_argument("--report", default=str(ROOT / "evidence/h53_field.json"))
+    ap.add_argument("--out", default="/home/user/.arena/run/h54_field.npz")
+    ap.add_argument("--report", default=str(ROOT / "evidence/h54_field.json"))
     ap.add_argument("--buffer-px", type=float, default=2.0)
     args = ap.parse_args()
     t0 = time.time()

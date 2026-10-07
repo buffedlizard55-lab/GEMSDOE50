@@ -18,7 +18,7 @@ above without approximation:
 2. Every predicted pixel is *bounded* by 1 in its contribution to ``TP_w`` (the maximum over
    ``x`` is taken per truth pixel), while ``FP_w`` is linear in ``p(x)``.  Therefore, for a
    fixed support, ``p(x) = 1`` dominates every ``p(x) < 1``: the optimal submission is binary
-   on its support.  This is verified numerically in ``tests/test_h53_truthmodel.py``.
+   on its support.  This is verified numerically in ``tests/test_gems54.py``.
 
 Because the support is what we choose, we can work with an expected truth: a weight field
 ``w(x) >= 0`` with ``sum(w) = |G|``.  ``TP_w`` is then exact under linearity of expectation (the
@@ -167,7 +167,7 @@ def dti_exact(truth: np.ndarray, prediction: np.ndarray, *, pixel_size_m: float 
     """Independent reference: the official metric on a *binary* truth raster.
 
     Deliberately re-derived here (not imported) so that a mistake in one implementation cannot
-    validate the other; ``tests/test_h53_truthmodel.py`` compares both against the repository's
+    validate the other; ``tests/test_gems54.py`` compares both against the repository's
     long-tested ``gemsdoe50.metric`` implementation and the competition's published worked
     example (TP=3.00, FP=1.89, FN=2.00 -> 0.60).
     """
@@ -212,7 +212,7 @@ class TruthModel:
     ``prior`` is ``belief ** gamma`` restricted to the emission domain (footprint, outside the
     catalogue buffer of ``buffer_px`` pixels).  ``u`` is a uniform floor over that same domain:
     the fraction of the hidden truth the field is *not* told about.  All four numbers are fitted
-    to the group's own scored submissions in ``scripts/h53_calibrate.py``; none is hand-picked.
+    to the group's own scored submissions in ``scripts/h54_calibrate.py``; none is hand-picked.
     """
     n_truth: float = 12226.0
     gamma: float = 1.0

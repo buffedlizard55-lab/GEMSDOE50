@@ -47,8 +47,8 @@ from scipy.optimize import minimize
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from gems53.gridio import catalogue_distance, footprint, labels                    # noqa: E402
-from gems53.truthmodel import (ALPHA, BETA, EPS, _LEVELS, dti_exact,               # noqa: E402
+from gems54.gridio import catalogue_distance, footprint, labels                    # noqa: E402
+from gems54.truthmodel import (ALPHA, BETA, EPS, _LEVELS, dti_exact,               # noqa: E402
                                dti_weighted, expected_max_kernel, kernel_weights)
 
 RUN = Path("/home/user/.arena/run")
@@ -131,10 +131,10 @@ def fit(theta0, Tm, Cm, masses, scores, n_truth, ridge):
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--corpus", default=str(ROOT / "evidence/h53_corpus.json"))
-    ap.add_argument("--supports", default=str(RUN / "h53_corpus_supports.npz"))
-    ap.add_argument("--field", default=str(RUN / "h53_field.npz"))
-    ap.add_argument("--out", default=str(ROOT / "evidence/h53_fit.json"))
+    ap.add_argument("--corpus", default=str(ROOT / "evidence/h54_corpus.json"))
+    ap.add_argument("--supports", default=str(RUN / "h54_corpus_supports.npz"))
+    ap.add_argument("--field", default=str(RUN / "h54_field.npz"))
+    ap.add_argument("--out", default=str(ROOT / "evidence/h54_fit.json"))
     ap.add_argument("--n-grid", default="5000,7000,9000,11000,13000,15000,18000,22000")
     ap.add_argument("--ridge", type=float, default=0.002)
     args = ap.parse_args()
@@ -149,7 +149,7 @@ def main() -> int:
     thermal = np.zeros_like(belief)
     try:                                                  # optional; the field builder caches it
         import rasterio                                        # noqa: F401
-        from gems53 import field as F
+        from gems54 import field as F
         inp = F.load_inputs()
         thermal = F.proximity_boost(inp.springs[:, :2], foot, 800.0, 2500.0) * 0.5 \
             + F.proximity_boost(inp.vents, foot, 800.0, 2500.0) * 0.5
@@ -255,7 +255,7 @@ def main() -> int:
                                 "mc_sd": float(np.std(vals)), "weighted_model": float(exact[i]),
                                 "observed": float(scores[i]),
                                 "first_order_model": float(predict(theta_hat, n_hat)[i])}
-    np.savez_compressed(RUN / "h53_prior.npz", q=q, discount=disc, rho=rho,
+    np.savez_compressed(RUN / "h54_prior.npz", q=q, discount=disc, rho=rho,
                         n_hat=np.array([n_hat]), theta=np.asarray([theta_hat]),
                         basis_names=np.array(names, dtype=object), allow_pickle=True)
     out = {

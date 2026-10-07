@@ -1,6 +1,6 @@
 {
- "file": "gems50-h53-strat12-40000-20261007T030253Z-nan.tif",
- "sha256": "ff3909e28a4eb5862a7a6ffeda81e0d8b21b7fe1a6935effa375e9e250025b16",
+ "file": "gems50-h54-corpuscal-40000-20261007T032111Z-nan.tif",
+ "sha256": "2cdf7e705c867008b0dc86d3e7481bf43aef44240508312d270c97ebd192c81b",
  "format_checks_nan": {
   "driver": "GTiff",
   "count_is_1": true,
@@ -63,10 +63,10 @@
   "screen_threshold_block8": 0.75,
   "worst_overlap_file": "13gems_20261001_r13-lattice-s5_v2_nan-outside.tif",
   "identical_sha256": [],
-  "my_sha256": "ff3909e28a4eb5862a7a6ffeda81e0d8b21b7fe1a6935effa375e9e250025b16",
+  "my_sha256": "2cdf7e705c867008b0dc86d3e7481bf43aef44240508312d270c97ebd192c81b",
   "my_dots": 40000,
   "note": "block-occupancy signatures catch copies and near-copies; fine-scale novelty (full-pixel IoU and the fraction of dots >200 m from any prior dot) is measured where the full corpus exists and is recorded in registry/submission_checks.json."
  },
- "verified_utc": "2026-10-07T03:02:54+00:00",
+ "verified_utc": "2026-10-07T03:21:12+00:00",
  "note": "every number read back from the bytes on disk"
 }

@@ -17,7 +17,7 @@ Three separate questions, deliberately not merged:
    must be near zero - its dots are excluded from that label set by construction - and the number
    is reported anyway, because a reader should be able to see which instrument says what.
 
-Output: ``evidence/h53_validation.json``.
+Output: ``evidence/h54_validation.json``.
 """
 from __future__ import annotations
 
@@ -36,7 +36,7 @@ sys.path.insert(0, str(ROOT / "src"))
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from gems51 import instruments                                                    # noqa: E402
-from gems53.gridio import (catalogue_distance, edge_distance_px, footprint,       # noqa: E402
+from gems54.gridio import (catalogue_distance, edge_distance_px, footprint,       # noqa: E402
                             labels)
 from gemsdoe50 import holdout
 
@@ -68,7 +68,7 @@ def core_mask(block, shape) -> np.ndarray:
 def greedy_at_mass(q: np.ndarray, allowed: np.ndarray, mask: np.ndarray, mass: int,
                    suppression: float) -> np.ndarray:
     """Deterministic top-``mass`` emission of the kernel-credit field inside ``mask``."""
-    from gems53.truthmodel import kernel_weights
+    from gems54.truthmodel import kernel_weights
     credit = ndimage.correlate(np.where(mask, q, 0.0).astype(np.float32), kernel_weights(),
                                mode="constant", cval=0.0)
     order = np.argsort(-credit.ravel(), kind="stable")
@@ -97,10 +97,10 @@ def greedy_at_mass(q: np.ndarray, allowed: np.ndarray, mask: np.ndarray, mass: i
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--build", default=str(ROOT / "evidence/h53_ship.json"))
-    ap.add_argument("--supports", default=str(RUN / "h53_ship_supports.npz"))
-    ap.add_argument("--prior", default=str(RUN / "h53_prior.npz"))
-    ap.add_argument("--out", default=str(ROOT / "evidence/h53_validation.json"))
+    ap.add_argument("--build", default=str(ROOT / "evidence/h54_ship.json"))
+    ap.add_argument("--supports", default=str(RUN / "h54_ship_supports.npz"))
+    ap.add_argument("--prior", default=str(RUN / "h54_prior.npz"))
+    ap.add_argument("--out", default=str(ROOT / "evidence/h54_validation.json"))
     ap.add_argument("--incumbent", default="/home/user/gemsdata/GEMSDOE32/docs/downloads/"
                                            "gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif")
     args = ap.parse_args()
@@ -110,8 +110,8 @@ def main() -> int:
     if Path(args.prior).exists():
         q = np.load(args.prior)["q"].astype(np.float32)
     else:                                   # rebuild exactly as the ship script did
-        from h53_ship import to_probability
-        bel = np.load(str(RUN / "h53_field.npz"))["belief"].astype(np.float32)
+        from h54_ship import to_probability
+        bel = np.load(str(RUN / "h54_field.npz"))["belief"].astype(np.float32)
         pr = build["prior"]
         q = to_probability(bel, footprint() & (catalogue_distance() > float(build["domain"]["buffer_px"]))
                            & (edge_distance_px() > float(build["domain"]["edge_guard_px"])),

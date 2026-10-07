@@ -7,7 +7,7 @@ The competition has scored our group's own submissions.  A scored raster is a *m
 hidden label set*: the score is a known scalar function of the emitted support and of the private
 truth, so the pair (support, score) constrains where that truth is and how big it is.  This script
 collects every such pair that can be byte-authenticated in the group's repositories, and the next
-script (:mod:`h53_calibrate`) fits a generative truth model to all of them at once.
+script (:mod:`h54_calibrate`) fits a generative truth model to all of them at once.
 
 Authentication rules applied here, in order:
 
@@ -132,10 +132,10 @@ def registry_hashes() -> dict[str, list[dict]]:
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--out", default=str(ROOT / "evidence/h53_corpus.json"))
+    ap.add_argument("--out", default=str(ROOT / "evidence/h54_corpus.json"))
     args = ap.parse_args()
     hashes = registry_hashes()
-    from gems53.gridio import load_binary_support, footprint, labels as labels_fn, catalogue_distance
+    from gems54.gridio import load_binary_support, footprint, labels as labels_fn, catalogue_distance
 
     foot = footprint()
     labels = labels_fn()
@@ -210,8 +210,8 @@ def main() -> int:
     for r in rows:
         yy, xx = np.nonzero(r.pop("_support"))
         arrays[r["support_sha256"]] = np.stack([yy, xx]).astype(np.int32)
-    np.savez_compressed(scratch / "h53_corpus_supports.npz", **arrays)
-    print(f"supports written: {len(arrays)} -> {scratch/'h53_corpus_supports.npz'}")
+    np.savez_compressed(scratch / "h54_corpus_supports.npz", **arrays)
+    print(f"supports written: {len(arrays)} -> {scratch/'h54_corpus_supports.npz'}")
     out = {"generated_utc": __import__("datetime").datetime.now(__import__("datetime").timezone.utc)
            .isoformat(timespec="seconds"),
            "grid": GRID_OK, "n_scored": len(rows), "n_excluded": len(rejected),

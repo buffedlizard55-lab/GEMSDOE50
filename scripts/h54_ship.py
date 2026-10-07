@@ -1,21 +1,21 @@
 #!/usr/bin/env python3
-"""Emit, write, verify and package the H53 submission.  One command, no hidden state.
+"""Emit, write, verify and package the H54 submission.  One command, no hidden state.
 
-    python3 scripts/h53_ship.py [--prior /home/user/.arena/run/h53_prior.npz]
+    python3 scripts/h54_ship.py [--prior /home/user/.arena/run/h54_prior.npz]
 
 Two belief regimes are supported and the choice is recorded in the evidence file:
 
 ``fitted``
-    the per-cell probability field produced by :mod:`scripts.h53_fit_truth` (a Poisson prior whose
+    the per-cell probability field produced by :mod:`scripts.h54_fit_truth` (a Poisson prior whose
     coefficients were fitted to the group's own 24 scored files and *gate-checked* by leave-one-file
-    refitting).  Used automatically when ``run/h53_prior.npz`` exists.
+    refitting).  Used automatically when ``run/h54_prior.npz`` exists.
 ``field``
     otherwise: the label-free belief field sharpened by a fixed exponent (p = 4, the value the
     repository's H51 lineage already used) and rescaled to the owner-model truth mass
     N-hat = 12,226 px.  This is the honest fallback and it is *labelled as uncalibrated* in every
     artifact that mentions it.
 
-In both regimes the *emission* is the same: :func:`gems53.emitter.emit_expected_dti` accepts a
+In both regimes the *emission* is the same: :func:`gems54.emitter.emit_expected_dti` accepts a
 pixel while its expected marginal credit beats the metric's own break-even bar, so neither the
 budget nor the spacing is a hand-set knob.  Everything downstream (NaN convention, all-finite twin,
 zip, receipts) reuses the repository's tested format gate in ``scripts/check_submission.py``.
@@ -39,9 +39,9 @@ from rasterio.transform import Affine
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from gems53.emitter import emit_expected_dti                                      # noqa: E402
-from gems53.gridio import emission_domain, footprint                               # noqa: E402
-from gems53.truthmodel import dti_exact, dti_weighted                              # noqa: E402
+from gems54.emitter import emit_expected_dti                                      # noqa: E402
+from gems54.gridio import emission_domain, footprint                               # noqa: E402
+from gems54.truthmodel import dti_exact, dti_weighted                              # noqa: E402
 
 RUN = Path("/home/user/.arena/run")
 OUT_DIR = ROOT / "docs" / "downloads"
@@ -86,7 +86,7 @@ def write_tif(path: Path, values: np.ndarray, nodata) -> dict:
     with rasterio.open(path, "w", **prof) as ds:
         ds.write(values, 1)
         try:
-            ds.update_tags(method="gems53 expected-DTI greedy emission",
+            ds.update_tags(method="gems54 expected-DTI greedy emission",
                            belief="label-free scarp+radiometric+geothermal field",
                            generated=_dt.datetime.now(_dt.timezone.utc).isoformat(timespec="seconds"),
                            organizer_scored="no - local instruments only")
@@ -98,8 +98,8 @@ def write_tif(path: Path, values: np.ndarray, nodata) -> dict:
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--field", default=str(RUN / "h53_field.npz"))
-    ap.add_argument("--prior", default=str(RUN / "h53_prior.npz"))
+    ap.add_argument("--field", default=str(RUN / "h54_field.npz"))
+    ap.add_argument("--prior", default=str(RUN / "h54_prior.npz"))
     ap.add_argument("--exponent", type=float, default=4.0)
     ap.add_argument("--n-hat", type=int, default=N_HAT)
     ap.add_argument("--buffer-px", type=float, default=2.0)
@@ -114,8 +114,8 @@ def main() -> int:
     ap.add_argument("--fixed-mass", type=int, default=40000,
                     help="stop at this dot count instead of at the model's own bar; use it when the "
                          "prior is uncalibrated (then the corpus break-even budget is the evidence)")
-    ap.add_argument("--tag", default="calibemit")
-    ap.add_argument("--evidence", default=str(ROOT / "evidence/h53_ship.json"))
+    ap.add_argument("--tag", default="corpuscal")
+    ap.add_argument("--evidence", default=str(ROOT / "evidence/h54_ship.json"))
     args = ap.parse_args()
     t0 = time.time()
     npz = np.load(args.field)
@@ -144,7 +144,7 @@ def main() -> int:
 
     print("[2] emitting at the metric's own break-even bar", flush=True)
     if args.layout == "stratified":
-        from gems53.emitter import emit_stratified
+        from gems54.emitter import emit_stratified
         sup, info = emit_stratified(q, dom, args.fixed_mass or INCUMBENT_MASS, block=args.block)
         info["layout"] = "stratified"
         info["predicted_dti"] = float(dti_weighted(sup, q)["dti"])
@@ -170,11 +170,11 @@ def main() -> int:
     try:
         import rasterio as _rio
         from gems51.instruments import score as _score
-        from gems53.emitter import emit_stratified as _strat
-        from gems53.gridio import labels as _labels
+        from gems54.emitter import emit_stratified as _strat
+        from gems54.gridio import labels as _labels
         with _rio.open(ROOT / "data" / "external" / "derived_sgmc_faults_100m_u8.tif") as ds:
             sgmc = ds.read(1) > 0
-        from gems53.gridio import catalogue_distance as _cd
+        from gems54.gridio import catalogue_distance as _cd
         instrument = sgmc & (_cd() > 3)
         plain_top = np.zeros(dom.shape, dtype=bool)
         thr = np.partition(q[dom].ravel(), -mass)[-mass]
@@ -226,7 +226,7 @@ def main() -> int:
     foot = footprint()
     base[foot] = 0.0
     base[sup] = 1.0
-    stem = f"gems50-h53-{args.tag}-{mass}-{stamp}"
+    stem = f"gems50-h54-{args.tag}-{mass}-{stamp}"
     nan_path = OUT_DIR / f"{stem}-nan.tif"
     rec_nan = write_tif(nan_path, base, np.nan)
     zeros = np.where(foot, base, 0.0).astype(np.float32)
@@ -261,7 +261,7 @@ def main() -> int:
                    "fixed_mass": args.fixed_mass or None,
                    "justification": ("corpus break-even budget: the eight best authenticated sibling "
                                      "scores all sit between 37,654 and 44,090 dots "
-                                     "(evidence/h53_corpus.json); with an uncalibrated prior the "
+                                     "(evidence/h54_corpus.json); with an uncalibrated prior the "
                                      "model's own bar is not trusted, because an over-concentrated "
                                      "prior makes extra mass look free") if args.fixed_mass else
                                     ("the model's own break-even bar, trusted only once the corpus "
@@ -288,8 +288,8 @@ def main() -> int:
         "seconds": round(time.time() - t0, 1),
     }
     Path(args.evidence).write_text(json.dumps(out, indent=1))
-    np.savez_compressed(RUN / "h53_ship_supports.npz", primary=sup, matched=inc, null=null)
-    np.savez_compressed(RUN / "h53_ship_prior.npz", q=q, domain=dom.astype(np.uint8))
+    np.savez_compressed(RUN / "h54_ship_supports.npz", primary=sup, matched=inc, null=null)
+    np.savez_compressed(RUN / "h54_ship_prior.npz", q=q, domain=dom.astype(np.uint8))
     failed = [k for k, v in checks.items() if isinstance(v, bool) and not v]
     print(json.dumps({"mass": mass, "name": out["submission_name"], "pred_dti": round(pred["dti"], 4),
                       "comparators": {k: (round(v["dti"], 4) if v else None)

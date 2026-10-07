@@ -1,4 +1,4 @@
-"""Invariant tests for :mod:`gems53` (the corpus-calibrated prior + expected-DTI emitter).
+"""Invariant tests for :mod:`gems54` (the corpus-calibrated prior + expected-DTI emitter).
 
 Small synthetic grids only: the point of these tests is the *algebra and the layout rules*, which
 must hold independently of the 12.3M-cell competition raster.  The repository-level hygiene tests at
@@ -14,9 +14,9 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from gems53.emitter import emit_stratified
-from gems53.field import masked_filter
-from gems53.truthmodel import (ALPHA, BETA, EPS, dti_weighted, expected_max_kernel,
+from gems54.emitter import emit_stratified
+from gems54.field import masked_filter
+from gems54.truthmodel import (ALPHA, BETA, EPS, dti_weighted, expected_max_kernel,
                               kernel_weights)
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -159,7 +159,7 @@ def test_emit_stratified_rejects_a_block_larger_than_the_grid():
 
 
 # ---------------------------------------------------------------- shipped-artifact hygiene
-SHIP = ROOT / "evidence" / "h53_ship.json"
+SHIP = ROOT / "evidence" / "h54_ship.json"
 
 
 @pytest.mark.skipif(not SHIP.exists(), reason="no H53 build evidence in this checkout")
@@ -217,7 +217,7 @@ def test_every_download_raster_is_linked_from_the_site_or_the_registry():
 def test_the_emission_domain_excludes_the_near_catalogue_and_the_data_edge():
     """Two hard rules of the design, checked against the shipped bytes, not against the code."""
     import rasterio
-    from gems53.gridio import catalogue_distance, edge_distance_px, footprint
+    from gems54.gridio import catalogue_distance, edge_distance_px, footprint
     ship = json.loads(SHIP.read_text(encoding="utf-8"))
     path = ROOT / ship["outputs"]["primary_nan"]["path"]
     with rasterio.open(path) as ds:

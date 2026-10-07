@@ -38,8 +38,8 @@ from scipy.optimize import minimize
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from gems53.gridio import catalogue_distance, footprint, labels                       # noqa: E402
-from gems53.truthmodel import (ALPHA, BETA, EPS, _LEVELS, dti_exact,                  # noqa: E402
+from gems54.gridio import catalogue_distance, footprint, labels                       # noqa: E402
+from gems54.truthmodel import (ALPHA, BETA, EPS, _LEVELS, dti_exact,                  # noqa: E402
                                dti_weighted, kernel_weights)
 
 RUN = Path("/home/user/.arena/run")
@@ -92,10 +92,10 @@ def make_bases(belief: np.ndarray, foot: np.ndarray, cat: np.ndarray,
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--corpus", default=str(ROOT / "evidence/h53_corpus.json"))
-    ap.add_argument("--supports", default=str(RUN / "h53_corpus_supports.npz"))
-    ap.add_argument("--field", default=str(RUN / "h53_field.npz"))
-    ap.add_argument("--out", default=str(ROOT / "evidence/h53_fit.json"))
+    ap.add_argument("--corpus", default=str(ROOT / "evidence/h54_corpus.json"))
+    ap.add_argument("--supports", default=str(RUN / "h54_corpus_supports.npz"))
+    ap.add_argument("--field", default=str(RUN / "h54_field.npz"))
+    ap.add_argument("--out", default=str(ROOT / "evidence/h54_fit.json"))
     ap.add_argument("--evals", type=int, default=190)
     ap.add_argument("--loo-evals", type=int, default=45)
     ap.add_argument("--mc-draws", type=int, default=8)
@@ -115,7 +115,7 @@ def main() -> int:
     cat = catalogue_distance()
     thermal = None
     try:
-        from gems53 import field as F
+        from gems54 import field as F
         inp = F.load_inputs()
         thermal = (F.proximity_boost(inp.springs[:, :2], foot, 800.0, 2500.0)
                    + F.proximity_boost(inp.vents, foot, 800.0, 2500.0)).astype(np.float32)
@@ -242,7 +242,7 @@ def main() -> int:
               f"mc={np.mean(vals):.4f}+-{np.std(vals):.4f} obs={scores[i]:.4f}", flush=True)
 
     q_hat = (q_hat * (float(q_hat.sum()) / max(float(q_hat[foot].sum()), 1e-9))).astype(np.float32)
-    np.savez_compressed(RUN / "h53_prior.npz", q=q_hat, n_truth=np.array([n_hat]),
+    np.savez_compressed(RUN / "h54_prior.npz", q=q_hat, n_truth=np.array([n_hat]),
                         u=np.array([u_hat]), basis_names=np.array(names, dtype=object),
                         allow_pickle=True)
     out = {"generated_utc": __import__("datetime").datetime.now(__import__("datetime").timezone.utc)

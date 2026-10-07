@@ -2,14 +2,14 @@
 
 Modules
 -------
-:mod:`gems53.truthmodel`
+:mod:`gems54.truthmodel`
     The official distance-weighted Tversky index written as an optimisation objective over a
     *weighted* (probabilistic) truth set, plus the exact binary-truth reference used to verify it.
-:mod:`gems53.field`
+:mod:`gems54.field`
     Label-free belief field: 3DEP/LiDAR scarp + GeoDAWN radiometric structure-tensor families,
     a directional line-integral "fault-likeness" term, geothermal-manifestation anchoring and
     road/mining-claim suppression.
-:mod:`gems53.emitter`
+:mod:`gems54.emitter`
     Expected-DTI greedy emitter: no hand-set mass, no hand-set spacing; both are solved for.
 """
 from .field import DOMAIN, build_field, load_inputs

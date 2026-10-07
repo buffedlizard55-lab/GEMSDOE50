@@ -1,6 +1,6 @@
 """Expected-DTI greedy emitter: the mass and the spacing are *solved for*, not chosen.
 
-First-order condition (exact, from the official formula; see :mod:`gems53.truthmodel`): with
+First-order condition (exact, from the official formula; see :mod:`gems54.truthmodel`): with
 ``T`` the achieved true-positive weight, ``F`` the false-positive weight and ``N`` the truth size,
 adding one pixel of credit ``dT`` and penalty ``dF`` raises the score iff
 
@@ -19,7 +19,7 @@ credit is non-increasing (a maximum over an ever larger support) while ``k`` is 
 
 Step (1) uses a first-order (uncorrelated-cells) estimate of the marginal credit; the accepted
 set is then re-scored with the *exact* weighted evaluation, and Monte-Carlo-checked against drawn
-binary truths in ``scripts/h53_validate.py``.
+binary truths in ``scripts/h54_validate.py``.
 """
 from __future__ import annotations
 
@@ -157,7 +157,7 @@ def emit_stratified(field: np.ndarray, allowed: np.ndarray, mass: int, block: in
     per dot against 0.108 for a uniform-random control at the same mass.  Taking one dot per spatial
     block before any block may claim a second makes each dot contest a *distinct* neighbourhood
     first, and lifts the identical field to 0.105 credit per dot at ``block = 12``
-    (``evidence/h53_validation.json``, table ``layout_ablation``).
+    (``evidence/h54_validation.json``, table ``layout_ablation``).
 
     Round ``r`` places each block's ``r``-th best cell, ordered by value; the support therefore
     degrades gracefully into plain top-N once ``mass`` exceeds the number of occupied blocks.
