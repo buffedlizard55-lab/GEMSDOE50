@@ -45,8 +45,8 @@ INDEX_META_BASE = (
     'H53-A audit, and score provenance.">'
 )
 INDEX_META_H57 = (
-    '<meta name="description" content="Current NO-GO decision and historical H57/H56/H58 '
-    'research artifacts, audit evidence, and score provenance.">'
+    '<meta name="description" content="Current main recommendation: the H59 sharpened '
+    'topographic-scarp GeoTIFF; H55/H56/H57/H58 remain historical NO-GO research artifacts.">'
 )
 INDEX_H56_H2_BASE = '<h2>Historical H56 research TIFF — NO SLOT; retained for audit only</h2>'
 INDEX_H56_H2_H57 = (
@@ -57,11 +57,11 @@ SUBMISSION_META_BASE = (
     'retained for audit only; no upload is recommended.">'
 )
 SUBMISSION_META_H57 = (
-    '<meta name="description" content="Current NO-GO. Historical H57/H56/H58 artifacts are '
-    'retained for audit only; no upload is recommended.">'
+    '<meta name="description" content="H61 recommends the built H59 sharpened topographic-scarp '
+    'candidate; historical H55/H56/H57/H58 files remain NO-GO archive material.">'
 )
 SUBMISSION_TITLE_BASE = "<title>Submission guide · GEMSDOE50</title>"
-SUBMISSION_TITLE_H57 = "<title>Submission guide (NO-GO) · GEMSDOE50</title>"
+SUBMISSION_TITLE_H57 = "<title>Submission guide: H59 recommendation and historical NO-GO archives · GEMSDOE50</title>"
 
 
 def esc(value: object) -> str:

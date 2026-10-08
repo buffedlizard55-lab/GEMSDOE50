@@ -1,0 +1,74 @@
+{
+ "artifact": "gemsdoe50-h59-union-d0-75308-20261007T2250Z-allfinite.tif",
+ "artifact_sha256": "143bae71968c5fc2b70b2de579e6a33f61d9d3e07beac13f20272760758b3bda",
+ "frame": "F1_sgmc_off",
+ "frame_truth_px": 61664,
+ "frame_domain_px": 4722579,
+ "uniform_c_per_dot": 0.042066141963005066,
+ "candidate": {
+  "dots": 75308,
+  "credit": 6556.1123046875,
+  "c_per_dot": 0.08705731535411244,
+  "dti": 0.10181436907057155,
+  "coverage": 0.1063199322893017,
+  "dots_outside_domain": 0,
+  "lift_over_uniform": 2.0695341025253686
+ },
+ "comparators": {
+  "gemsdoe50-h57-scarpstep-80000-20261007T1830Z-allfinite.tif": {
+   "dots": 80000,
+   "credit": 5973.728515625,
+   "c_per_dot": 0.0746716064453125,
+   "dti": 0.09143760585485954,
+   "coverage": 0.09687546243553775,
+   "dots_total_in_file": 80000,
+   "lift_over_uniform": 1.7750999488135186
+  }
+ },
+ "controls": {
+  "uniform": {
+   "dots": 75308,
+   "dti_mean": 0.04947529435550248,
+   "dti_max": 0.05042136619651187,
+   "c_per_dot_mean": 0.04230430677185691,
+   "seeds": 5
+  },
+  "translation": {
+   "dti_mean": 0.0975115832381338,
+   "dti_max": 0.09898320980882216,
+   "offsets": [
+    [
+     4,
+     6
+    ],
+    [
+     -4,
+     6
+    ],
+    [
+     4,
+     -6
+    ],
+    [
+     -4,
+     -6
+    ],
+    [
+     9,
+     0
+    ],
+    [
+     0,
+     -9
+    ]
+   ]
+  }
+ },
+ "summary": {
+  "candidate_dti": 0.10181436907057155,
+  "candidate_beats_uniform_mean": true,
+  "candidate_beats_uniform_max": true,
+  "candidate_beats_translation_mean": true,
+  "note": "Pooled whole-map estimator (the competition's own pooling), F1 proxy truth. This is not the organizer truth and not a score."
+ }
+}

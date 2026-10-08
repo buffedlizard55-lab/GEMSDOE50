@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Five steps from download to scored submission, with the exact portal name, note, hashes and file facts."><title>How to submit the H59 file · GEMSDOE50</title><link rel="stylesheet" href="site.css"></head>
+<body><a class="skip" href="#main">Skip to content</a><header class="site-head"><div class="shell"><nav class="nav" aria-label="Main navigation"><a class="brand" href="h59.html">GEMSDOE50 / H59</a><div class="links"><a href="h59.html">H59 candidate</a><a href="h59-how-to-submit.html" aria-current="page">How to submit</a><a href="index.html">Earlier candidates</a><a href="results.html">H55/H56 results</a><a href="methods.html">Methods & sources</a></div></nav></div></header>
+<main id="main"><section class="pagehead"><div class="shell">
+<div class="eyebrow">Executive summary</div>
+<h1>How to submit the H59 file</h1>
+<p>Five steps, no ambiguity about which file is current. If the top of
+<a href="h59.html">the H59 page</a> says the format gate passed, the file linked there is the one to
+upload.</p></div></section>
+<section class="main" style="padding-top:8px"><div class="shell"><div class="grid">
+<article class="card span-12"><h2>The five steps</h2><ol class="steps"><li><b>Download</b> the GeoTIFF with the button at the top of <a href="h59.html">the H59 page</a>. If you want to be certain the bytes are intact, compare its SHA-256 with <span class="hash">838f9502fd4a2720374559db0947fb3372f97629401a617e5c9c95c1b1ce8be5</span>.</li><li><b>Open the competition page</b> at <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">drivendata.org/competitions/306/competition-doe-gems/</a> and sign in. The rules, the submission format and the data tab are the authoritative documents; the forum rulings quoted on this site are <a href="https://community.drivendata.org/t/scoring-clarification-are-known-usgs-ingenious-faults-masked-when-scoring-and-are-they-in-the-final-round-label-set/11516">here</a> and <a href="https://community.drivendata.org/t/where-do-you-draw-the-line/11536">here</a>.</li><li><b>Upload the file exactly as downloaded.</b> Do not re-save, re-project, re-compress, re-scale or convert it. Every gate reported on this site was run on the delivered bytes.</li><li><b>Use this submission name:</b> <code>GEMSDOE50-H59-SHARPENED-SCARP-SCATTER-90K</code>. <b>Paste the corrected H61 note:</b> <q>GEMSDOE50 H59 rev2: blue-noise scatter, 90,000 dots on a 3-px lattice, sampling a sharpened rank-mean of the official band-19 slope-edge map and USGS 3DEP LiDAR scarp descriptors; no dot on a supplied-catalogue pixel or any prior-artifact pixel. Research model; no organizer score.</q></li><li><b>Record the receipt.</b> Save the portal confirmation and the returned score into this repository before quoting any score. Until that file exists, this repository claims no score for this artifact.</li></ol>
+<div class="good"><b>Is it safe to submit?</b> The raster is one float32 band on the official
+3,730 &times; 3,292 grid, EPSG:32611, values exactly 0 or 1, every cell finite and inside [0, 1],
+zero cells outside the study footprint, zero cells on the supplied catalogue and zero cells shared
+with the 61-artifact prior union. The only inputs are the competition's own feature stack and
+public-domain USGS 3DEP products, so there is no external-data rights question.</div>
+<div class="notice"><b>Budget.</b> The competition allows a limited number of scored uploads per
+week. This artifact is a research candidate that passed every local gate; the decision to spend a
+weekly slot is the owner's. Nothing on this site has been uploaded, and no score is claimed.</div>
+</article>
+<article class="card span-12"><h2>Exact file facts</h2>
+<div class="wide"><table>
+<tr><th>field</th><th>value</th></tr>
+<tr><td>file</td><td><code>gemsdoe50-h59-sharpened-scarp-scatter-90k-20261007T171954Z-allfinite.tif</code></td></tr>
+<tr><td>bytes</td><td class="num">448,942</td></tr>
+<tr><td>SHA-256</td><td><span class="hash">838f9502fd4a2720374559db0947fb3372f97629401a617e5c9c95c1b1ce8be5</span></td></tr>
+<tr><td>grid</td><td class="num">3,730 rows &times; 3,292 cols, 100 m, EPSG:32611</td></tr>
+<tr><td>transform</td><td class="num">100, 0, 243350, 0, -100, 4508550</td></tr>
+<tr><td>dtype / bands</td><td>float32 / 1</td></tr>
+<tr><td>values</td><td>[0.0, 1.0]</td></tr>
+<tr><td>predicted cells</td><td class="num">90,000</td></tr>
+<tr><td>finite cells</td><td class="num">12,279,160 of 12,279,160 (no NaN)</td></tr>
+<tr><td>entry name</td><td><code>GEMSDOE50-H59-SHARPENED-SCARP-SCATTER-90K</code></td></tr>
+<tr><td>twin</td><td><code>gemsdoe50-h59-sharpened-scarp-scatter-90k-20261007T171954Z-nan.tif</code> (NaN outside the footprint, official sample convention)</td></tr>
+<tr><td>zip</td><td><code>gemsdoe50-h59-sharpened-scarp-scatter-90k-20261007T171954Z-allfinite.zip</code> &middot; SHA-256 <span class="hash">05a8a73aca13ffb00e3e515126936e2ee240953e7bff0e5f1085fae12a22b9f1</span></td></tr>
+</table></div></article>
+</div></div></section></main>
+<footer class="site-foot"><div class="shell"><b>Maximize P(Win) · Own the Outcome</b><br>Research artifact. No portal upload, organizer score, or weekly slot is represented here; every number on this page is rendered from a committed evidence file. <a href="evidence/h59_validation.json">validation</a> · <a href="evidence/h59_check.json">format and novelty</a> · <a href="evidence/h59_build.json">build receipt</a></div></footer></body></html>

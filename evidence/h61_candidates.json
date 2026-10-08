@@ -1,0 +1,358 @@
+{
+ "schema": "gemsdoe50.h61-candidates.v1",
+ "generated_utc": "2026-10-07T21:34:41Z",
+ "frozen_gate_source": "evidence/h60_gate_decision.json",
+ "rules": {
+  "eligibility": "zero dots on registry/prior_positive_union.npz (charter item 2: never copy prior prediction pixels) and no ComCat-derived input (contributor rights unresolved; charter item 13)",
+  "ranking": "frozen gate pooled DTI (validate_h56.py --truth-mode sgmc_off, as recorded in the H60 receipt); H61 frame A reported alongside"
+ },
+ "candidates": {
+  "H57-scarpstep-80000": {
+   "artifact": "docs/downloads/gemsdoe50-h57-scarpstep-80000-20261007T1830Z-allfinite.tif",
+   "sha256": "8027c4e9fe0f789e2d7180a7ccc031abec90b391cf9e42ebcc125752af9fb696",
+   "bytes": 395743,
+   "dots": 80000,
+   "dots_on_prior_union": 27248,
+   "dots_on_catalogue_pixels": 0,
+   "dots_within_300m_of_catalogue": 0,
+   "uses_comcat": false,
+   "frame_a_full_pooled": 0.21775791222753868,
+   "frame_a_core_pooled": 0.21175945324444248,
+   "frame_a_credit_per_dot": 0.1825270988363884,
+   "frame_a_folds": {
+    "NW": 0.17986706685502415,
+    "NE": 0.18393303277143774,
+    "SW": 0.14106598693394265,
+    "SE": 0.3256343005582244
+   },
+   "frozen_gate": {
+    "frozen_gate_pooled_dti": 0.20250216212197725,
+    "frozen_gate_uniform": 0.10533267462124099,
+    "frozen_gate_paired_ci95": [
+     0.06263211724359913,
+     0.13299334530051257
+    ],
+    "frozen_gate_folds_positive": 4,
+    "F1_pooled_dti": 0.09143760585485954
+   },
+   "eligible_charter_item_2": false,
+   "eligible_rights": true,
+   "bootstrap_vs_H59-sharpened-scarp-scatter-90k": {
+    "mean": -0.012372801999883824,
+    "ci95": [
+     -0.05386561882788757,
+     0.02250821139326559
+    ],
+    "replicates": 5000,
+    "seed": 55007,
+    "units": 16
+   },
+   "fold_wins_vs_H59-sharpened-scarp-scatter-90k": 2
+  },
+  "H59-sharpened-scarp-scatter-90k": {
+   "artifact": "docs/downloads/gemsdoe50-h59-sharpened-scarp-scatter-90k-20261007T171954Z-allfinite.tif",
+   "sha256": "838f9502fd4a2720374559db0947fb3372f97629401a617e5c9c95c1b1ce8be5",
+   "bytes": 448942,
+   "dots": 90000,
+   "dots_on_prior_union": 0,
+   "dots_on_catalogue_pixels": 0,
+   "dots_within_300m_of_catalogue": 4753,
+   "uses_comcat": false,
+   "frame_a_full_pooled": 0.24917419755084597,
+   "frame_a_core_pooled": 0.2527059035755468,
+   "frame_a_credit_per_dot": 0.1912237608871405,
+   "frame_a_folds": {
+    "NW": 0.22557970203561498,
+    "NE": 0.28060804293910574,
+    "SW": 0.10926280619353877,
+    "SE": 0.28546458135345615
+   },
+   "frozen_gate": {
+    "frozen_gate_pooled_dti": 0.21247218708664406,
+    "frozen_gate_uniform": 0.12864733790027197,
+    "frozen_gate_paired_ci95": [
+     0.055660890239037364,
+     0.11052428860219345
+    ],
+    "frozen_gate_folds_positive": 4,
+    "F1_pooled_dti": 0.1254659034887452
+   },
+   "eligible_charter_item_2": true,
+   "eligible_rights": true,
+   "bootstrap_vs_H57-scarpstep-80000": {
+    "mean": 0.012372801999883824,
+    "ci95": [
+     -0.022508211393265597,
+     0.05386561882788748
+    ],
+    "replicates": 5000,
+    "seed": 55007,
+    "units": 16
+   },
+   "fold_wins_vs_H57-scarpstep-80000": 2
+  },
+  "H60-union-d0-75308": {
+   "artifact": "docs/downloads/gemsdoe50-h60-union-d0-75308-20261007T2250Z-allfinite.tif",
+   "sha256": "143bae71968c5fc2b70b2de579e6a33f61d9d3e07beac13f20272760758b3bda",
+   "bytes": 373878,
+   "dots": 75308,
+   "dots_on_prior_union": 0,
+   "dots_on_catalogue_pixels": 0,
+   "dots_within_300m_of_catalogue": 0,
+   "uses_comcat": false,
+   "frame_a_full_pooled": 0.24307136121520556,
+   "frame_a_core_pooled": 0.241264930693263,
+   "frame_a_credit_per_dot": 0.2140122301177654,
+   "frame_a_folds": {
+    "NW": 0.17552827231886806,
+    "NE": 0.29585135013734615,
+    "SW": 0.1066277039624427,
+    "SE": 0.2864325615238535
+   },
+   "frozen_gate": {
+    "frozen_gate_pooled_dti": 0.20331483087748906,
+    "frozen_gate_uniform": 0.10495610755324697,
+    "frozen_gate_paired_ci95": [
+     0.06618928584685974,
+     0.13166071132222087
+    ],
+    "frozen_gate_folds_positive": 4,
+    "F1_pooled_dti": 0.10181436907057155
+   },
+   "eligible_charter_item_2": true,
+   "eligible_rights": true,
+   "bootstrap_vs_H57-scarpstep-80000": {
+    "mean": 0.0024121325129981327,
+    "ci95": [
+     -0.024102636897241906,
+     0.03874783601070649
+    ],
+    "replicates": 5000,
+    "seed": 55007,
+    "units": 16
+   },
+   "fold_wins_vs_H57-scarpstep-80000": 1,
+   "bootstrap_vs_H59-sharpened-scarp-scatter-90k": {
+    "mean": -0.009960669486885692,
+    "ci95": [
+     -0.03651763649069002,
+     0.010561364621596793
+    ],
+    "replicates": 5000,
+    "seed": 55007,
+    "units": 16
+   },
+   "fold_wins_vs_H59-sharpened-scarp-scatter-90k": 2
+  },
+  "H60-officialstack-50000": {
+   "artifact": "docs/downloads/gemsdoe50-h60-officialstack-50000-20261007T2100Z-allfinite.tif",
+   "sha256": "5a66ed4d96399f6a1dad1ba62e19cfa973ee2f8ae4e38e635262edec0466f000",
+   "bytes": 296076,
+   "dots": 50000,
+   "dots_on_prior_union": 0,
+   "dots_on_catalogue_pixels": 0,
+   "dots_within_300m_of_catalogue": 0,
+   "uses_comcat": false,
+   "frame_a_full_pooled": 0.18535214682792342,
+   "frame_a_core_pooled": 0.18974721750000037,
+   "frame_a_credit_per_dot": 0.22497375206203785,
+   "frame_a_folds": {
+    "NW": 0.13265645645023752,
+    "NE": 0.27535998805116263,
+    "SW": 0.02202673269464923,
+    "SE": 0.14318801639196505
+   },
+   "frozen_gate": {
+    "frozen_gate_pooled_dti": 0.12243108263617965,
+    "frozen_gate_uniform": 0.074880128788047,
+    "frozen_gate_paired_ci95": null,
+    "frozen_gate_folds_positive": null,
+    "F1_pooled_dti": null
+   },
+   "eligible_charter_item_2": true,
+   "eligible_rights": true,
+   "bootstrap_vs_H57-scarpstep-80000": {
+    "mean": -0.05456891971372011,
+    "ci95": [
+     -0.10845635880280466,
+     0.0015809286478783652
+    ],
+    "replicates": 5000,
+    "seed": 55007,
+    "units": 16
+   },
+   "fold_wins_vs_H57-scarpstep-80000": 1,
+   "bootstrap_vs_H59-sharpened-scarp-scatter-90k": {
+    "mean": -0.06694172171360394,
+    "ci95": [
+     -0.10674840119248026,
+     -0.03032996159402496
+    ],
+    "replicates": 5000,
+    "seed": 55007,
+    "units": 16
+   },
+   "fold_wins_vs_H59-sharpened-scarp-scatter-90k": 0
+  },
+  "H60-KDE-seiscombined-55000": {
+   "artifact": "docs/downloads/gemsdoe50-h60-combined-55000-20261007T212217Z-allfinite.tif",
+   "sha256": "a6486899cb9f1a170c2bbb5a27f81ea3f960bc496ab460f11a9d4d8ae04a30b4",
+   "bytes": 124313,
+   "dots": 55000,
+   "dots_on_prior_union": 14392,
+   "dots_on_catalogue_pixels": 0,
+   "dots_within_300m_of_catalogue": 0,
+   "uses_comcat": true,
+   "frame_a_full_pooled": 0.07440283997938417,
+   "frame_a_core_pooled": 0.07393337907957669,
+   "frame_a_credit_per_dot": 0.08209845738564361,
+   "frame_a_folds": {
+    "NW": 0.07609026441695388,
+    "NE": 0.004045513303638841,
+    "SW": 0.07622597725324766,
+    "SE": 0.16895564864107904
+   },
+   "frozen_gate": null,
+   "eligible_charter_item_2": false,
+   "eligible_rights": false,
+   "bootstrap_vs_H57-scarpstep-80000": {
+    "mean": -0.09268612761136816,
+    "ci95": [
+     -0.1420813962999486,
+     -0.046136331215481864
+    ],
+    "replicates": 5000,
+    "seed": 55007,
+    "units": 16
+   },
+   "fold_wins_vs_H57-scarpstep-80000": 0,
+   "bootstrap_vs_H59-sharpened-scarp-scatter-90k": {
+    "mean": -0.10505892961125199,
+    "ci95": [
+     -0.15281539015851142,
+     -0.059356736776478305
+    ],
+    "replicates": 5000,
+    "seed": 55007,
+    "units": 16
+   },
+   "fold_wins_vs_H59-sharpened-scarp-scatter-90k": 0
+  },
+  "H60-KDE-targeted-40000": {
+   "artifact": "docs/downloads/gemsdoe50-h60-targeted-40000-20261007T212429Z-allfinite.tif",
+   "sha256": "56bb722227c756618fa82bba8c112e326096d9f2e5ece063a72c82df1e75324c",
+   "bytes": 98110,
+   "dots": 40000,
+   "dots_on_prior_union": 10392,
+   "dots_on_catalogue_pixels": 0,
+   "dots_within_300m_of_catalogue": 0,
+   "uses_comcat": true,
+   "frame_a_full_pooled": 0.0427741697142048,
+   "frame_a_core_pooled": 0.035861491303024726,
+   "frame_a_credit_per_dot": 0.061508471083669074,
+   "frame_a_folds": {
+    "NW": 0.054949531322552564,
+    "NE": 0.010432750600780902,
+    "SW": 0.08052901744531164,
+    "SE": 0.030324453883221535
+   },
+   "frozen_gate": null,
+   "eligible_charter_item_2": false,
+   "eligible_rights": false,
+   "bootstrap_vs_H57-scarpstep-80000": {
+    "mean": -0.10081939540455899,
+    "ci95": [
+     -0.15378020203404555,
+     -0.05054441039805019
+    ],
+    "replicates": 5000,
+    "seed": 55007,
+    "units": 16
+   },
+   "fold_wins_vs_H57-scarpstep-80000": 0,
+   "bootstrap_vs_H59-sharpened-scarp-scatter-90k": {
+    "mean": -0.11319219740444282,
+    "ci95": [
+     -0.164427554058006,
+     -0.06104454681820084
+    ],
+    "replicates": 5000,
+    "seed": 55007,
+    "units": 16
+   },
+   "fold_wins_vs_H59-sharpened-scarp-scatter-90k": 0
+  },
+  "H59-topo-lineament-scatter-180k": {
+   "artifact": "docs/downloads/gemsdoe50-h59-topo-lineament-scatter-180k-20261007T170212Z-allfinite.tif",
+   "sha256": "ad9750be86acf6b8c253dcd8f1ee6487c2ea8327a582a8c9e6a765d16037d319",
+   "bytes": 629906,
+   "dots": 180000,
+   "dots_on_prior_union": 0,
+   "dots_on_catalogue_pixels": 0,
+   "dots_within_300m_of_catalogue": 13309,
+   "uses_comcat": false,
+   "frame_a_full_pooled": 0.2357529404441942,
+   "frame_a_core_pooled": 0.24214286329262966,
+   "frame_a_credit_per_dot": 0.11463484346959901,
+   "frame_a_folds": {
+    "NW": 0.20995078759993208,
+    "NE": 0.2836176018160085,
+    "SW": 0.10076172196696227,
+    "SE": 0.27888790405859376
+   },
+   "frozen_gate": null,
+   "eligible_charter_item_2": true,
+   "eligible_rights": true,
+   "bootstrap_vs_H57-scarpstep-80000": {
+    "mean": 0.0050587272386386955,
+    "ci95": [
+     -0.031328062000228876,
+     0.04751049129166551
+    ],
+    "replicates": 5000,
+    "seed": 55007,
+    "units": 16
+   },
+   "fold_wins_vs_H57-scarpstep-80000": 2,
+   "bootstrap_vs_H59-sharpened-scarp-scatter-90k": {
+    "mean": -0.007314074761245129,
+    "ci95": [
+     -0.014440620080196942,
+     -0.0010938229686533892
+    ],
+    "replicates": 5000,
+    "seed": 55007,
+    "units": 16
+   },
+   "fold_wins_vs_H59-sharpened-scarp-scatter-90k": 1
+  }
+ },
+ "eligible_ranked_by_frozen_gate": [
+  "H59-sharpened-scarp-scatter-90k",
+  "H60-union-d0-75308"
+ ],
+ "eligible_ranked_by_frame_a_core": [
+  "H59-sharpened-scarp-scatter-90k",
+  "H60-union-d0-75308"
+ ],
+ "instruments_agree_on_first": true,
+ "recommended": {
+  "name": "H59-sharpened-scarp-scatter-90k",
+  "artifact": "docs/downloads/gemsdoe50-h59-sharpened-scarp-scatter-90k-20261007T171954Z-allfinite.tif",
+  "sha256": "838f9502fd4a2720374559db0947fb3372f97629401a617e5c9c95c1b1ce8be5",
+  "bytes": 448942,
+  "zip": "docs/downloads/gemsdoe50-h59-sharpened-scarp-scatter-90k-20261007T171954Z-allfinite.zip",
+  "zip_sha256": "05a8a73aca13ffb00e3e515126936e2ee240953e7bff0e5f1085fae12a22b9f1",
+  "nan_twin": "docs/downloads/gemsdoe50-h59-sharpened-scarp-scatter-90k-20261007T171954Z-nan.tif",
+  "dots": 90000,
+  "entry_name": "GEMSDOE50-H59-SHARPENED-SCARP-SCATTER-90K",
+  "note": "GEMSDOE50 H59 rev2: blue-noise scatter, 90,000 dots on a 3-px lattice, sampling a sharpened rank-mean of the official band-19 slope-edge map and USGS 3DEP LiDAR scarp descriptors; no dot on a supplied-catalogue pixel or any prior-artifact pixel. Research model; no organizer score.",
+  "note_chars": 281
+ },
+ "flags": [
+  "H57 reuses prior prediction pixels and is therefore not eligible as the recommendation under charter item 2.",
+  "The sibling's published portal note cites the retracted transfer model (hidden operating point 0.45); a corrected note is used here.",
+  "The two H60-KDE files (PR #28) are ComCat-derived (rights unresolved), report their own off-catalogue DTI as 0.0744, and quote a 'modelled hidden DTI 0.54' from the retracted transfer model; they carry no frozen-gate receipt.",
+  "The recommended file places some dots within 300 m of the supplied catalogue (1-px buffer, per the sibling's reading of staff rulings); the GEMSDOE32 B2 result suggests such dots may cost false-positive weight on the hidden labels."
+ ]
+}

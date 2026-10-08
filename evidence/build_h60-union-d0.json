@@ -1,0 +1,105 @@
+{
+ "generated_utc": "20261007T2250Z",
+ "tag": "h60-union-d0",
+ "hypothesis": "H60-S1 official-stack four-family structural belief field",
+ "mass_requested": {
+  "total": 75308,
+  "morphology": 37654,
+  "official": 37654
+ },
+ "dots": 75308,
+ "min_chebyshev_spacing_px": 3,
+ "dots_within_300m_of_catalogue": 0,
+ "dots_on_prior_union": 0,
+ "prior_union_cells": 1405451,
+ "prior_exclusion_applied": true,
+ "written_min": 0.0,
+ "written_max": 1.0,
+ "written_all_finite": true,
+ "unique_positive_values": [
+  1.0
+ ],
+ "files": {
+  "all_finite": {
+   "path": "docs/downloads/gemsdoe50-h60-union-d0-75308-20261007T2250Z-allfinite.tif",
+   "sha256": "143bae71968c5fc2b70b2de579e6a33f61d9d3e07beac13f20272760758b3bda",
+   "bytes": 373878
+  },
+  "nan_outside": {
+   "path": "docs/downloads/gemsdoe50-h60-union-d0-75308-20261007T2250Z.tif",
+   "sha256": "f0b8b48fea7b682054ebc1c52105555858c3a1e753efbd5792c283ef83048ed7",
+   "bytes": 413973
+  },
+  "zip": {
+   "path": "docs/downloads/gemsdoe50-h60-union-d0-75308-20261007T2250Z-allfinite.zip",
+   "sha256": "793e95a06403abde2437bae3f0204f944e9351d95d39604cdc3f4435b0af08f4",
+   "bytes": 298056
+  }
+ },
+ "provenance": {
+  "official_topography": [
+   "raw::tf.det_elev",
+   "raw::tf.det_elev_slope",
+   "grad::tf.det_elev_slope",
+   "ridge2::tf.det_elev_slope"
+  ],
+  "official_magnetics": [
+   "grad::tf.tc",
+   "ridge2::tf.tc"
+  ],
+  "official_gravity": [
+   "raw::tf.iso_grav_anom"
+  ],
+  "official_geodesy": [
+   "ridge2::tf.geod_dilaterate"
+  ],
+  "measured_stratified_lifts": {
+   "raw::det_elev": 2.193,
+   "raw::det_elev_slope": 2.198,
+   "grad::det_elev_slope": 2.064,
+   "ridge2::det_elev_slope": 1.877,
+   "grad::tc": 1.969,
+   "ridge2::tc": 1.491,
+   "raw::iso_grav_anom": 1.909,
+   "ridge2::geod_dilaterate": 1.887
+  },
+  "union": {
+   "arm": "morphology field first, official-stack field on cells >= 3 px from every accepted dot",
+   "mass_morphology": 37654,
+   "mass_official": 37654,
+   "morphology_field": "build_h57.belief_field (LiDAR scarp + 10 m topographic step families, owner-mirrored rasters; rights chain disclosed)"
+  }
+ },
+ "grid": {
+  "shape": [
+   3730,
+   3292
+  ],
+  "crs": "EPSG:32611",
+  "transform": [
+   100.0,
+   0.0,
+   243350.0,
+   0.0,
+   -100.0,
+   4508550.0
+  ],
+  "dtype": "float32"
+ },
+ "inputs": [
+  {
+   "name": "training_features.tif (19-band organizer stack)",
+   "sha256": "476cd297a595ad4a",
+   "source": "DrivenData DOE GEMS competition data tab (organizer-provided); restored here from the owner's pinned GitHub mirror and verified against scripts/restore_inputs.sh's recorded SHA-256"
+  },
+  {
+   "name": "data/grid/labels.tif (given catalogue)",
+   "source": "organizer-provided; byte-identical to the competition labels raster (60,988 positive cells)"
+  },
+  {
+   "name": "data/grid/sample_submission.tif (footprint template)",
+   "source": "organizer-provided"
+  }
+ ],
+ "seconds": 39.2
+}

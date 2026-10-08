@@ -22,10 +22,15 @@ jobs:
       - name: Run the complete test suite and lint
         run: |
           python -m pytest -q
-          ruff check src/gemsdoe50 src/gems55 scripts/build_h50_site.py scripts/build_h55.py scripts/build_h55_site.py scripts/build_h58.py scripts/build_h58_site.py scripts/h58_uniqueness.py scripts/build_prior_union.py scripts/run_experiment.py scripts/freeze_holdout.py scripts/verify_claims.py tests/test_h50_*.py tests/test_h55.py tests/test_h55_site.py tests/test_h56.py tests/test_h58.py tests/test_site.py tests/test_raster.py tests/test_spatial.py tests/test_geometry.py tests/test_catalog.py
+          ruff check src/gemsdoe50 src/gems55 scripts/build_h50_site.py scripts/build_h55.py scripts/build_h55_site.py scripts/build_h58.py scripts/build_h58_site.py scripts/h58_uniqueness.py scripts/build_h59_site.py scripts/h59_delivered_metrics.py scripts/build_h60.py scripts/build_h60_site.py scripts/h60_validate.py scripts/h60_gate_decision.py scripts/build_prior_union.py scripts/run_experiment.py scripts/freeze_holdout.py scripts/verify_claims.py tests/test_h50_*.py tests/test_h55.py tests/test_h55_site.py tests/test_h56.py tests/test_h58.py tests/test_h59.py tests/test_site.py tests/test_raster.py tests/test_spatial.py tests/test_geometry.py tests/test_catalog.py scripts/build_h61.py scripts/build_h61_site.py scripts/h61_uniqueness.py scripts/h61_sensitivity.py scripts/h61_candidates.py scripts/fetch_prior_corpus.py tests/test_h61.py
       - name: Rebuild the static pages from committed evidence
         run: |
           python scripts/build_h55_site.py
           python scripts/build_h58_site.py
+          python scripts/build_h59_site.py
+          python scripts/build_h60_site.py
+          python scripts/build_h61_site.py
           git diff --check
-          git diff --exit-code -- index.html results.html methods.html submission.html site.css
+          git diff --exit-code -- index.html results.html methods.html submission.html site.css \
+                                 h59.html h59-how-to-submit.html \
+                                 docs/how-to-submit.html docs/executive-summary.html docs/index.html docs/submission-h60.html

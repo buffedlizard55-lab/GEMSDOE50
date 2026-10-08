@@ -1,16 +1,16 @@
-# H59 — withdrawn exploratory draft; not authorized or preregistered for execution
+# Legacy H59-01 — withdrawn standalone-radiometric draft (audit only)
 
-> **WITHDRAWN / SUPERSEDED — 2026-10-07.** This exploratory shortlist was never approved as the
-> current project preregistration. In particular, H59-01 is a standalone radiometric predictor and
-> conflicts with the README charter's binding requirement that earthquake **point geometry**, not
-> density or an independent sensor alone, be the primary candidate geometry. Do not implement,
-> score, build, relabel, or submit any H59 hypothesis from this draft. No H59 code or TIFF was built.
-> The material below is retained only as an audit record of considered, unapproved ideas; it is not
-> a frozen authorization. The active portfolio decision remains **NO-GO / NO SLOT**. Before a new
-> lead is tested, rerun the incumbent and matched controls at exactly 37,612 dots and preregister a
-> genuinely untried, charter-compliant point-geometry method with all rights and validation gates.
-> `evidence/h59_prior_corpus.json` is retained only as the frozen prior-support inventory from this
-> withdrawn exploration; it is not authorization, a candidate gate pass, or a scored result.
+> **WITHDRAWN / SUPERSEDED — 2026-10-07.** This exploratory shortlist was never approved as an
+> execution preregistration. H59-01 is a standalone-radiometric predictor and conflicts with the
+> README charter's binding requirement that earthquake **point geometry**, not density or an
+> independent sensor alone, be the primary candidate geometry. Do not implement, score, build,
+> relabel, or submit any hypothesis from this draft. No standalone-radiometric H59-01 code or TIFF was built. The material below is retained only as an audit record of considered, unapproved
+> ideas; it is not a frozen authorization. This withdrawal does **not** apply to the separate,
+> built H59 sharpened-topographic-scarp candidate selected by main's H61 adjudication. At withdrawal,
+> any future lead still required the 37,612-dot incumbent/matched-control rerun and the charter's
+> rights and validation gates. `evidence/legacy-h59-01-radiometric-prior-corpus-20261007.json` is
+> retained only as the prior-support inventory for this withdrawn exploration; it is not an
+> authorization, candidate gate pass, or scored result.
 
 **Exploratory record date:** 2026-10-07 UTC. **Approval status:** withdrawn; not an execution preregistration.
 

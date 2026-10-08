@@ -31,54 +31,77 @@ def _sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def test_h55_site_regeneration_is_deterministic_and_no_go_first():
+def test_h55_site_regeneration_is_deterministic_and_current_main_h59_is_explicit():
     tracked = [
         ROOT / name
-        for name in ("index.html", "results.html", "methods.html", "submission.html", "site.css")
+        for name in (
+            "index.html", "results.html", "methods.html", "submission.html", "site.css",
+            "h59.html", "h59-how-to-submit.html", "docs/how-to-submit.html",
+            "docs/executive-summary.html", "docs/index.html", "docs/submission-h60.html",
+        )
     ]
     before = {path: path.read_bytes() for path in tracked}
-    # The committed pages are produced by the two generators in sequence (the same
-    # order as the site workflow): build_h55_site.py regenerates from committed
-    # evidence, then build_h58_site.py reproduces the historical H57 audit band
-    # (docs/fragments/) and inserts H58's archived NO-SLOT research record.
-    subprocess.run(
-        [sys.executable, str(ROOT / "scripts/build_h55_site.py")],
-        cwd=ROOT,
-        check=True,
-        capture_output=True,
-        text=True,
-    )
-    subprocess.run(
-        [sys.executable, str(ROOT / "scripts/build_h58_site.py")],
-        cwd=ROOT,
-        check=True,
-        capture_output=True,
-        text=True,
-    )
+    # This is the exact production order in .github/workflows/site.yml. H61 is last:
+    # it preserves the main-branch H59 GO and H61 seismicity NO-SLOT decision while
+    # keeping H55/H56/H57/H58 as historical, name/note-free archives.
+    for script in (
+        "build_h55_site.py", "build_h58_site.py", "build_h59_site.py",
+        "build_h60_site.py", "build_h61_site.py",
+    ):
+        subprocess.run(
+            [sys.executable, str(ROOT / "scripts" / script)],
+            cwd=ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
     assert {path: path.read_bytes() for path in tracked} == before
 
     index = (ROOT / "index.html").read_text(encoding="utf-8")
-    assert "Download historical H57 all-finite TIFF" in index
-    # The top band is an archive download only, not an eligible submission. Its no-go
-    # decision must precede every historical TIFF link and local proxy summary.
-    first_download = index.index("Download historical H57 all-finite TIFF")
-    assert "Historical H57 research artifact — NO-GO" in index
+    first_download = index.index("Download the recommended GeoTIFF (portal-safe)")
+    start_here = index.index('<section class="main" id="start">')
+    h57 = index.index('<section class="main" id="h57">')
+    assert index.index("<!-- h59-banner -->") < start_here < first_download < h57
+    assert "GEMSDOE50-H59-SHARPENED-SCARP-SCATTER-90K" in index[:h57]
+    assert "OK to download and submit" in index[:h57]
+    assert "Current main decision: GO only for the distinct H59 sharpened topographic-scarp file" in index
+    assert "Current portfolio decision: NO-GO / NO SLOT" not in index
+    assert "Current decision: NO-GO / NO SLOT" not in index
+    assert "NO SLOT" in index and "Today&rsquo;s run (H61)" in index
     assert "Historical H56 research TIFF — NO SLOT" in index
     assert "Historical H58-S1 research artifact — NO SLOT" in index
+    assert "Historical H57 research artifact — NO-GO" in index
     assert "Download H55 audit TIFF" in index
-    assert first_download < index.index("Executive summary")
-    assert index.index("Download H55 audit TIFF") > first_download
-    assert "NO SLOT" in index and "Current portfolio decision: NO-GO / NO SLOT" in index
-    assert "0.019321" in index and "0.115822" in index
-    assert "0.2778" in index and "UNSCORED" in index
-    assert "xiaofanhu 0.3774 rank 1" in index
-    assert "extradr19 0.2778 rank 13" in index
+    assert "27,248" in index
+    assert "reduces exactly to <code>DTI = T / (0.2N + 0.8G)</code>" not in index
     assert "Portal name/note:</b> none authorized" in index
     assert "Draft optional note" not in index
-    assert "user-provided 0.3774 claim" not in index
+    assert "use only after rights clearance" not in index
+    for obsolete_name in (
+        "GEMSDOE50-H55-SEISGEOM", "GEMSDOE50-H56-SCARPDISPERSE",
+        "GEMSDOE50-H57-SCARPSTEP", "GEMSDOE50-H58-SEISLINEAGE",
+        "GEMSDOE50-H61-UPDIPSEIS-326-CC1F44DA",
+    ):
+        assert obsolete_name not in index
+    assert "<!-- h59-banner -->" in index
+    assert "0.2778" in index and "UNSCORED" in index
+    assert "0.3774" in index
     assert "mixed-network ComCat-derived geometry" in index
     assert "H53-A probe/TMI experiment: NO-GO / NO SLOT" in index
 
+    submission = (ROOT / "submission.html").read_text(encoding="utf-8")
+    assert "Current main decision: GO only for H59 topographic-scarp" in submission
+    assert "Do not submit or repackage those files" in submission
+    h59_guide = (ROOT / "h59-how-to-submit.html").read_text(encoding="utf-8")
+    assert "Paste the corrected H61 note" in h59_guide
+    assert "operating point at 0.45" not in h59_guide
+
+    h60_guide = (ROOT / "docs/submission-h60.html").read_text(encoding="utf-8")
+    assert "NO SLOT — DO NOT SUBMIT" in h60_guide
+    assert "Submission form details withdrawn" in h60_guide
+    assert "SAFE TO DOWNLOAD AND SUBMIT" not in h60_guide
+    assert "GEMSDOE50-H60-SEISCOMBINED-55000" not in h60_guide
+    assert "Paste the note" not in h60_guide
 
 def test_h55_site_local_links_exist():
     for page_name in ("index.html", "results.html", "methods.html", "submission.html"):
@@ -206,3 +229,67 @@ def test_h56_conditional_score_table_uses_the_documented_g_value():
     assert "30,000 | 5,956 | 48.7 % | **0.199**" in diagnosis
     assert "44,090 | 7,019 | 57.4 % | 0.159" in diagnosis
     assert "108,000 | 11,843 | 96.9 % | 0.110" in diagnosis
+
+
+def test_h60_band_is_an_alternative_below_the_current_candidate_and_says_what_to_submit():
+    index = (ROOT / "index.html").read_text(encoding="utf-8")
+    results = (ROOT / "results.html").read_text(encoding="utf-8")
+    assert "Alternative candidate (H60-union)" in index
+    assert "Charter compliance finding" in index
+    assert "no authorized portal name or note" in index
+    assert "Draft optional note" not in index
+    assert "Do not submit H60-union" in index
+    assert "NO SLOT for H60" in index
+    assert "Which file should you submit?" in index
+    # The current-candidate banner and H61 start band precede the H57 audit,
+    # H60 alternative, H56 archive, and H58 research-only record.
+    assert (
+        index.index("<!-- h59-banner -->")
+        < index.index('<section class="main" id="start">')
+        < index.index('id="h57"')
+        < index.index('id="h60"')
+        < index.index('id="h56"')
+        < index.index('id="h58"')
+    )
+    assert 'id="h60-decision"' in results
+    assert "H57 stays the recommendation" not in results
+    assert "historical NO-GO (prior-pixel reuse)" in results
+    assert "NO SLOT; archive only" in results
+    assert "the current repository recommendation is the distinct H59 sharpened topographic-scarp candidate selected by H61" in results
+    assert "not organizer scores" in results
+
+    download_guide = (ROOT / "docs/downloads/README.md").read_text(encoding="utf-8")
+    assert "only current recommendation" in download_guide
+    assert "No portal name or note is authorized for this alternative" in download_guide
+    assert "Historical NO-GO / NO SLOT — do not upload or repackage" in download_guide
+    assert "Historical NO-GO — do not submit or repackage" in download_guide
+    assert "Historical NO-GO / NO SLOT — do not upload, relabel, or repackage" in download_guide
+    assert "Do not upload until rights clearance" not in download_guide
+    archived_pages = (index, results, (ROOT / "submission.html").read_text(encoding="utf-8"), download_guide)
+    for archived_name in (
+        "GEMSDOE50-H55-SEISGEOM", "GEMSDOE50-H56-SCARPDISPERSE",
+        "GEMSDOE50-H57-SCARPSTEP", "GEMSDOE50-H58-SEISLINEAGE",
+    ):
+        assert all(archived_name not in page for page in archived_pages)
+
+    receipt = json.loads((ROOT / "evidence/h60_gate_decision.json").read_text(encoding="utf-8"))
+    verdict = receipt["verdict"]
+    assert verdict["decision"].startswith("NO SLOT for H60")
+    assert verdict["recommended_artifact"] == "main H59 sharpened-scarp-scatter-90k"
+    assert verdict["ranking_on_frozen_gate"][1]["artifact"] == "H60-union-d0-75308"
+    audit = receipt["prior_pixel_audit"]["overlap"]
+    assert audit["H57-scarpstep-80000"] > 0
+    assert audit["H60-union-d0-75308"] == 0
+    assert audit["main H59 sharpened-scarp-scatter-90k"] == 0
+    art = ROOT / "docs/downloads/gemsdoe50-h60-union-d0-75308-20261007T2250Z-allfinite.tif"
+    build = json.loads((ROOT / "evidence/build_h60-union-d0.json").read_text(encoding="utf-8"))
+    assert _sha256(art) == build["files"]["all_finite"]["sha256"]
+    assert build["dots_on_prior_union"] == 0
+    with rasterio.open(art) as ds:
+        values = ds.read(1)
+        assert ds.count == 1 and ds.dtypes[0] == "float32"
+        assert str(ds.crs) == "EPSG:32611" and ds.shape == (3730, 3292)
+        assert np.all(np.isfinite(values))
+        assert float(values.min()) == 0.0 and float(values.max()) == 1.0
+        assert set(np.unique(values)) == {0.0, 1.0}
+        assert int(np.count_nonzero(values)) == 75_308

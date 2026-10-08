@@ -70,21 +70,23 @@ def main() -> int:
         and "not a score or forecast" in README
         and "ComCat contributor rights and sponsor-sharing" in README,
     )
-    h59_draft = (ROOT / "docs/research/h59-hypotheses-preregistered-20261007.md").read_text(
+    h59_draft = (ROOT / "docs/research/legacy-h59-01-standalone-radiometric-draft-withdrawn-20261007.md").read_text(
         encoding="utf-8"
     )
     check(
-        "unapproved H59 draft is explicitly withdrawn and not executable",
+        "legacy standalone-radiometric H59-01 draft is explicitly withdrawn and not executable",
         "WITHDRAWN / SUPERSEDED" in h59_draft
         and "not an execution preregistration" in h59_draft
         and "Do not implement" in h59_draft
-        and "No H59 code or TIFF was built" in h59_draft
-        and "standalone radiometric predictor" in h59_draft,
+        and "No standalone-radiometric H59-01 code or TIFF was built" in h59_draft
+        and "standalone-radiometric predictor" in h59_draft,
     )
     check(
-        "README records the H59 withdrawal and current no-go",
-        "unapproved H59 standalone-radiometric shortlist has been explicitly withdrawn" in README
-        and "**Current decision: NO-GO / NO SLOT.**" in README,
+        "README distinguishes the withdrawn radiometric draft from main's topographic H59 GO",
+        "standalone-radiometric H59-01 draft was explicitly withdrawn" in README
+        and "main-branch H59 topographic-scarp candidate" in README
+        and "Current main decision (H61): GO only for the distinct H59 topographic-scarp candidate" in README
+        and "37,612 dots" in README,
     )
     check(
         "prior-work notes require organizer receipt for score-to-file mapping",
