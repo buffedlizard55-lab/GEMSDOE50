@@ -1,9 +1,15 @@
-# Pass-3 re-check against the original request (2026-10-06 UTC)
+# Historical pass-3 re-check against the original request (2026-10-06 UTC)
 
-This file closes the third review pass. Pass 1 built and verified the H51 candidate, Pass 2 hunted bugs
-and edge cases, and Pass 3 re-read the original request line by line and checked every clause against an
-artifact in this repository. Anything that could not be satisfied is listed as remaining work or a
-limitation, not as a claim.
+> **SUPERSEDED; historical audit only.** The H51 artifact, portal name/note, and upload guide below
+> are not a current candidate or authorized submission instructions. The H51 promotion statements
+> were superseded and withdrawn by later reviews. Current status is in [`README.md`](../README.md)
+> and [`submission.html`](../submission.html): **NO-GO / NO SLOT**; no historical portal name or
+> note is authorized.
+
+This file records the original third review pass as of 2026-10-06. Pass 1 built and verified the H51
+candidate, Pass 2 hunted bugs and edge cases, and Pass 3 re-read the original request line by line
+and checked every clause against an artifact in this repository. Anything that could not be
+satisfied is listed as remaining work or a limitation, not as a claim.
 
 ## 1. Requirement-by-requirement status
 

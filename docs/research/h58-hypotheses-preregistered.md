@@ -127,8 +127,9 @@ files.pythonhosted.org). A proxy pass is necessary, not sufficient, and is never
 - **Differs:** H55 used the *relocated* catalogue with stricter recurrence gates and **failed**
   (0.0193 vs 0.1158 incumbent, 0/4 folds); H56 used ComCat lineations only as a 0.25-weight
   **corroboration** on LiDAR (measured lift 0.96–0.99, neutral); H50-B/H51-B were legacy.
-  **No shipped artifact makes ComCat point geometry the primary field** with the metric-optimal
-  emitter, ridge snap, and uniqueness gate.
+  **No shipped artifact makes ComCat point geometry the primary field** with a hard 3 px
+  Euclidean distance rule, ridge snap, and uniqueness gate; these design choices are not a
+  proven metric optimum.
 - **Expected ΔDTI / cost:** **expected below the incumbent** on current measurements — built
   because the owner mandates it; the slot decision follows the frozen gate / **2/5**.
 
@@ -165,3 +166,32 @@ files.pythonhosted.org). A proxy pass is necessary, not sufficient, and is never
    gate passes (formal declustering validation, complete mine/injection inventory, event-specific
    covariance, resolved ComCat rights). Otherwise NO_SLOT; the artifact is still published as a
    unique research deliverable with the decision unmissable.
+
+## Post-run code audit — emitter-spacing correction (2026-10-07; does not rewrite the preregistration)
+
+A review of `src/gemsdoe50/h56.py::emit_blue_noise` and `tests/test_h56.py` found that the frozen
+protocol's claimed 3.0 px Poisson-disk spacing was not enforced by the then-current code. It chose
+one density-weighted pixel per 3×3 block, but never checked Euclidean distances between points in
+neighboring blocks. The old test asserted only that each block was unique, so it could not catch
+this defect. Reopening the H58 all-finite and NaN TIFFs and measuring pixel-centre nearest-neighbour
+distances found a 1.0 px minimum for both files (98,598 positives; median 2.828 px). The H56 90,000-
+dot artifact also measures 1.0 px; H57's separate emitter measures 3.0 px.
+
+`emit_blue_noise` is now implemented as density-weighted exponential-race sampling with exact
+Euclidean spatial-hash rejection. Its tests check the actual nearest-neighbour distance, seeded
+determinism, and cells on incomplete trailing blocks. This is a **post-run implementation correction**;
+it does not retroactively make the H58 artifact meet the preregistered spacing requirement. The
+H58 metric results still describe the exact bytes evaluated, but the spacing sub-gate failed. The
+existing verdict remains **NO SLOT**; do not rebuild, rename, or repackage H58-S1 as a new method.
+See `evidence/emitter-spacing-audit-20261007.json` for per-artifact measurements.
+
+## Post-run metric-algebra correction — 2026-10-07
+
+The frozen preregistration's simplified equation in §1 is conditional, not a general identity.
+For binary predictions, with `T = TP_w`, `M = sum_x max_g k(d(x,g))` over predicted cells, `N`
+predicted cells, and `G` truth cells, the exact DTI denominator is `0.2N + 0.8G + 0.2(T-M)`
+(plus epsilon). The reduced `0.2N + 0.8G` form requires `T=M`; a 3 px minimum prediction spacing
+does not prove that. This does not change the archived local score receipts, which use the full
+TP/FP/FN implementation, but the historical hidden-score/leaderboard arithmetic in this protocol
+must be treated as a conditional, unvalidated model, not a score forecast. H58 remains NO-GO / NO
+SLOT; no score-to-TIFF receipt exists.

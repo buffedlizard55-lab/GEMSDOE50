@@ -12,10 +12,11 @@ by finding defensible fault traces omitted from the supplied catalogue. Core val
 
 1. **Review before building.** Review the complete repository, competition prompt, supplied
    GEMSDOE results, source rights, and prior attempts. Explain at PhD level why GEMSDOE32 artifact
-   `h33-h33-2-b2-20261004T220000Z-e5eb6e7e` reportedly scored 0.2778 and whether a method could
-   exceed the user-provided 0.3774 high-score claim (0.3195 is a separate, older owner-quoted
-   snapshot). Never turn any owner/user report into an authenticated score without an organizer
-   receipt/hash crosswalk.
+   `h33-h33-2-b2-20261004T220000Z-e5eb6e7e` was associated with 0.2778 and whether a method could
+   exceed the public leaderboard leader. The 2026-10-07 leaderboard snapshot displays xiaofanhu at
+   0.3774 (rank 1) and extradr19 at 0.2778 (rank 13), but no receipt/hash crosswalk ties either score
+   to a TIFF. Treat the 0.3195 value as a separate older owner-quoted snapshot. Never turn a score
+   observation into an artifact attribution without an organizer receipt/hash crosswalk.
 2. **Deliver a genuinely new raster.** Build a unique competition-grid GeoTIFF from documented
    inputs and code. Never copy prior prediction pixels; prior files may be used only for learning,
    controls, and comparison. Run full-resolution byte and pixel/proximity comparisons against every
@@ -59,19 +60,20 @@ by finding defensible fault traces omitted from the supplied catalogue. Core val
 11. **Work autonomously and line by line.** Use official/trusted sources, link them for manual
     review, flag irregularities, state limitations and required access, and never ask the owner to
     perform research that can be completed in the repository.
-12. **Keep score context honest.** The 0.2778 artifact attribution, 0.3195 historical snapshot,
-    and user-provided 0.3774 high-score claim are unverified reports, not freshly checked leaderboard
-    observations. This project does not scrape/poll the leaderboard or map a score to bytes without
-    an organizer receipt. The 0.3774 claim is not treated as fact or as a proven ceiling.
+12. **Keep score context honest.** The live public leaderboard was checked on 2026-10-07: it
+    displayed xiaofanhu at 0.3774 (rank 1) and extradr19 at 0.2778 (rank 13). Preserve that dated
+    observation with a link, but do not infer a TIFF/hash or organizer receipt from a leaderboard
+    row. The H33-B2-to-0.2778 attribution and the older 0.3195 snapshot remain unresolved reports;
+    no local proxy or transfer model is an organizer score.
 13. **Follow competition rules.** External data must permit challenge use and sharing with the
     sponsor. AI use must be disclosed as required by the current NLR/DOE rules. Finalists must
     provide reproducible code/assets and documentation. Verify current official rules and deadline
     immediately before any real submission.
 14. **Use Arena's fixed branch.** Each Arena session must stay on its assigned branch. This
-    session works, commits, and pushes only on `arena/5550c3e4-gemsdoe50`; open the pull request from
-    that branch. This name is session-scoped, not a repository default for future sessions. Merge
-    to `main` only when repository/environment policy permits it. Never switch or push another
-    branch from this session.
+    session works, commits, and pushes only on the Arena-assigned branch `arena/d0c4e2dc-gemsdoe50`;
+    open any pull request from that branch. This name is session-scoped, not a repository default
+    for future sessions. Merge to `main` only when repository/environment policy permits it. Never
+    switch or push another branch from this session.
 
 ## H61 — current status (2026-10-07): which file to submit, and the mandated seismic map
 
@@ -122,45 +124,51 @@ the checks pass again. Full working, flags F1–F13 and next steps:
 for b in h55 h58 h59 h60 h61; do python scripts/build_${b}_site.py; done
 ```
 
-## H56 — the best-measured design in this repository, and an H51 provenance correction (this session)
+## H56 — historical best-measured local design; NO SLOT (and an H51 provenance correction)
 
-Read [`docs/research/h56-diagnosis.md`](docs/research/h56-diagnosis.md) (why the 0.2778 artifact
-topped the corpus, and the arithmetic of what 0.3774 requires) and
+Read [`docs/research/h56-diagnosis.md`](docs/research/h56-diagnosis.md) (conditional analysis of the
+0.2778 leaderboard observation and what 0.3774 would require; no TIFF/hash crosswalk is established) and
 [`docs/hypotheses-20261007-h56.md`](docs/hypotheses-20261007-h56.md) (five untried hypotheses,
 screened and ranked; four negative results recorded rather than buried). This session's candidate
-is numbered **H56** because `main` already carries unrelated H52, H53, H54 and H55 candidates.
+was numbered **H56** because `main` already carried unrelated H52, H53, H54 and H55 research artifacts.
 
-**One-click download (top of the site):**
+**Historical audit download (not a submission):**
 `docs/downloads/gemsdoe50-h56-scarpdisperse-90000-allfinite.tif` — 90,000 predicted pixels, values
 `0` / `1`, `float32`, EPSG:32611, 3730x3292, identical bounds and transform to the official
 template, **every one of the 12,279,160 cells finite and inside `[0, 1]`**. A `-nan.tif` sibling
 keeps `NaN` outside the study footprint to match the official sample, and a `.zip` carries the
-all-finite GeoTIFF. The all-finite variant is the primary download precisely because the portal
+all-finite GeoTIFF. The all-finite twin is retained as a historical format audit because the portal
 once rejected an upload with `Predicted values must be in range [0, 1]`: a non-finite cell makes a
-plain `min()/max()` validator see `NaN`, and `NaN <= 1` is false.
+plain `min()/max()` validator see `NaN`, and `NaN <= 1` is false. **NO-GO:** the historical H56 TIFF has a measured 1.0 px minimum nearest-neighbour distance, not the claimed 3.0 px, and its ComCat-derived corroboration has unresolved sponsor-sharing rights. The raster is retained only for research/audit; its historical entry name/note are not authorized. See the byte-level [spacing audit](evidence/emitter-spacing-audit-20261007.json).
 
-**Measured.** Off-catalogue DTI **0.1874** against a matched-mass uniform control 0.1401 (**1.34x**;
+**Measured on the exact historical bytes (not a submission recommendation).** Off-catalogue DTI **0.1874** against a matched-mass uniform control 0.1401 (**1.34x**;
 1.59x at 30,000 dots), versus 0.1468 for the best prior artifact on that frame. Frozen blocked
 holdout: **4/4** macrofolds positive, paired block-bootstrap 95% CI **[0.0261, 0.0854]**, beats
 translation controls 4/4. Format gate `all_checks_pass: true`. Uniqueness gate: worst full-pixel
 IoU **0.0154** against every prior artifact on disk, minimum novel fraction at 2 px 0.4805, no SHA
-match. Modelled hidden DTI **0.386** — that is a **model with a stated transfer assumption, not a
-receipt**; `docs/research/h56-diagnosis.md` sections 5 and 9 state the assumption and what beating
-0.3774 would actually require. It is numerically above the user-provided 0.3774 claim only under
-that model and does not show that any real organizer score exceeded it. **No weekly slot has been
-used; do not upload H56 until mixed-network ComCat contributor rights and sponsor-sharing
-eligibility are cleared.**
+match. Legacy modelled hidden DTI **0.386** — a **transfer-model output, not a score or forecast**;
+it used the simplified metric reduction later clarified below and has not been recalculated under
+the exact directional-credit expression. `docs/research/h56-diagnosis.md` records its assumptions. Its nominal 0.386 value is not comparable
+to the observed public leader and does not show that any real organizer score exceeded it. **NO-GO: no weekly slot was
+used; do not upload H56.** The historical raster also fails its claimed Euclidean-spacing gate,
+and mixed-network ComCat contributor rights and sponsor-sharing eligibility remain unresolved.
 
 **Three findings that are binding on anything built afterwards.**
 
-1. **The corpus's structural flaw is emission geometry, not detector content.** For binary unit dots
-   the official metric reduces exactly to `DTI = T / (0.2N + 0.8G)` *(erratum, H61: false — exact only
-   when T = M; see `docs/research/h61-verdict-20261007.md` §4)*, so every dot costs the same
-   0.2 in the denominator no matter what it earns. Top-*N* selection piles dots a few pixels deep on
-   the strongest feature, where the `max` in the numerator saturates and the cost does not. H56
-   emits **variable-density blue noise at exactly 3 px** — `R = 300 m`, the coarsest spacing at
-   which two dots never compete for the same truth pixel — which is also the geometry measured on
-   the group's best off-catalogue prior artifact.
+1. **H56/H58 did not enforce their claimed spacing; the exact metric also needs both directional
+   credit terms.** For binary unit dots, let `T = TP_w`, `M = sum_x max_g k(d(x,g))` over
+   predicted cells, `N` be the prediction count, and `G` the truth count. The exact expression is
+   `DTI = T / (0.2N + 0.8G + 0.2(T-M) + ε)`; the often-quoted `T/(0.2N + 0.8G)` is valid only
+   when `T=M`. A 3-pixel nearest-neighbour rule does not prove that equality or make full 300 m
+   kernel footprints disjoint. Top-*N* selection can still pile dots on a feature where truth-side
+   credit saturates. Earlier H56/H58 protocols used a 3-pixel (300 m) Euclidean minimum-separation
+   design rule, not a proven metric optimum. The 2026-10-07 byte audit found the old
+   `h56.emit_blue_noise` implementation only picked one cell per 3×3 block and did not reject
+   cross-block neighbours. The actual H56 90,000-dot and H58 98,598-dot rasters each have a
+   measured 1-pixel nearest-neighbour minimum; H57's separate emitter measures 3 px. The shared
+   H56 emitter is now fixed and tests check Euclidean nearest-neighbour distance. Historical
+   H56/H58 TIFFs were not rewritten. See
+   [`evidence/emitter-spacing-audit-20261007.json`](evidence/emitter-spacing-audit-20261007.json).
 2. **Only the LiDAR surface-morphology family carries information about faults the given catalogue
    does not contain.** Channel screen, enrichment over the scored domain: LiDAR up-face residual
    **1.42**, relief 1.40, the scarp family 1.21-1.42; **every** magnetic and radiometric residual
@@ -176,7 +184,10 @@ eligibility are cleared.**
    most consequential irregularity found in the project so far and it is recorded, not quietly
    fixed.
 
-**Reproduce:**
+**Research rerun only (not byte-identical; not a submission):** the historical TIFF was not
+regenerated. The shared emitter has changed, so the commands below would create a different H56
+raster; source rights and all submission gates would still need a fresh review. Do not use a rerun
+as an upload candidate.
 
 ```bash
 # needs the three staged GeoDAWN rasters; see .arena/work/g24/data/external or the sibling repo
@@ -186,7 +197,9 @@ python scripts/h56_uniqueness.py --novel-threshold 0.45
 python scripts/h56_holdout.py --n-boot 200        # frozen macrofold split
 ```
 
-## H59 — the current candidate of this session: sharpened topographic-scarp scatter (this session)
+## H59 — current main candidate: sharpened topographic-scarp scatter (sibling session; H61 adjudication)
+
+**Important distinction:** the earlier session’s unapproved standalone-radiometric H59-01 draft was explicitly withdrawn and never built. It is not this main-branch H59 topographic-scarp candidate, whose separate artifact and H61 adjudication are documented here. The withdrawn draft is archived as [`docs/research/legacy-h59-01-standalone-radiometric-draft-withdrawn-20261007.md`](docs/research/legacy-h59-01-standalone-radiometric-draft-withdrawn-20261007.md).
 
 **Note on numbering.** This session's work was originally numbered H57, but unrelated H57 and H58
 series were merged to `main` from other Arena sessions while this branch was in flight, so the series
@@ -208,8 +221,7 @@ its declared **Amendment 1**),
 `float32`, EPSG:32611, 3730 × 3292, **every one of the 12,279,160 cells finite and inside `[0, 1]`**,
 SHA-256 `838f9502fd4a2720374559db0947fb3372f97629401a617e5c9c95c1b1ce8be5`. A `-nan.tif` sibling keeps NaN outside the study
 footprint to match the official sample, and a `.zip` carries the all-finite GeoTIFF. Portal entry name
-`GEMSDOE50-H59-SHARPENED-SCARP-SCATTER-90K`; the note is the `portal_note` field of
-[`evidence/h59_build.json`](evidence/h59_build.json).
+`GEMSDOE50-H59-SHARPENED-SCARP-SCATTER-90K`; use only the corrected 281-character note in the H61 status section above. The older `portal_note` in [`evidence/h59_build.json`](evidence/h59_build.json) cites a retracted transfer model and must not be used.
 
 ### What it is, and what changed after the first build
 
@@ -274,11 +286,12 @@ Both readings are published; neither is an organizer score, and no score is clai
 6. The **seismicity point-pattern term is at chance** here: implemented, measured, reported as a
    negative, and excluded from the artifact.
 
-## H58 — the owner-mandated unique ComCat point-geometry artifact (this session)
+## H58 — historical ComCat point-geometry experiment; NO SLOT
 
-**H58-S1** is the unique submission generated as the session's mandated deliverable: **declustered
-USGS ComCat epicentre point geometry as the primary prediction field** — a genuinely new artifact,
-not a variant of any prior file. H55 used the *relocated* catalogue (and failed its gate); H56
+**H58-S1** is a unique research-only TIFF generated during that session, not an organizer upload:
+**declustered USGS ComCat epicentre point geometry as the primary prediction field** — a new
+artifact, not a variant of any prior file. The frozen gates returned NO SLOT; do not repackage or
+resubmit it as a new method. H55 used the *relocated* catalogue (and failed its gate); H56
 used ComCat lineations only as a 0.25-weight corroboration on the LiDAR scarp belief; no shipped
 artifact made ComCat point geometry the primary field. (Renumbered from H57 to H58 because the
 parallel H57 session's scarpstep artifact merged to `main` first via PRs #22/#23 and owns the H57
@@ -286,11 +299,11 @@ number; the repo convention is one unique number per hypothesis.) Preregistratio
 hypotheses, frozen before any scoring):
 [`docs/research/h58-hypotheses-preregistered.md`](docs/research/h58-hypotheses-preregistered.md).
 
-**One-click download (site band below the H56 band):**
+**Historical audit download (not a submission):**
 `docs/downloads/gemsdoe50-h58-seislineage-98598-20261007T180223Z-c4ff6db9-allfinite.tif` — 98,598
 predicted cells, values `{0, 1}`, `float32`, EPSG:32611, 3730x3292, identical bounds and transform
 to the official template, **every one of the 12,279,160 cells finite and inside `[0, 1]`** (the
-portal-safe variant that cannot reproduce `Predicted values must be in range [0, 1]`). A `-nan.tif`
+archived all-finite format variant; not a submission recommendation). A `-nan.tif`
 twin keeps the official sample's footprint semantics and passes `all_checks_pass`, and a `.zip`
 carries the all-finite GeoTIFF.
 
@@ -299,9 +312,10 @@ carries the all-finite GeoTIFF.
 anthropogenic-site buffer (522 explicit blast/mine centres), and the 2-D triangle-area
 declustering (unverified adaptation of Ouillon & Sornette 2011) → 1,374 linear, well-sampled 2-D
 covariance lineations → corridors whose half-width is the catalogue's own `horizontalError`
-(median 0.88 km — a corridor prior, not a trace) → blue-noise emission at the metric's own 300 m
-support (support caps at 98,598 cells) → placement step measured (identity kept; no ridge snap
-improved the proxy). Pooled off-catalogue proxy DTI **0.0997** vs smoothed-density control
+(median 0.88 km — a corridor prior, not a trace) → historical block-quantised emission (support
+caps at 98,598 cells; a later byte audit measured 1 px minimum nearest-neighbour spacing, so this
+was not a true 300 m Poisson-disk realization) → placement step measured (identity kept; no ridge
+snap improved the proxy). Pooled off-catalogue proxy DTI **0.0997** vs smoothed-density control
 **0.1078**, matched random **0.1329**, H56 incumbent **0.1874**; the paired 16-subtile bootstrap
 for candidate-minus-incumbent credit per dot is **[-0.1107, -0.0250]** — the candidate loses in
 **all four** macrofolds, and its 1-pixel enrichment against proxy truth is 1.03x (chance level).
@@ -310,22 +324,33 @@ novel fraction at 2 px **0.7537**, zero exact overlap with the frozen 1,405,451-
 no identical SHA-256 — **unique: true**. Format gate: NaN twin `all_checks_pass: true`; all-finite
 twin entirely finite in [0, 1].
 
-> **Decision: NO SLOT.** This is the requested unique deliverable and a recorded negative result,
-> not a submission recommendation — exactly as the prior measurements predicted (H55 failed as a
-> primary seismicity detector with a better-located catalogue; H56's ComCat-lineation component
-> measured neutral, lift 0.96-0.99). H56 remains the best-measured candidate on this branch. No
-> weekly slot was used; do not upload H58-S1.
+> **Decision: NO SLOT.** H58 is a recorded negative research result, not a submission
+> recommendation or current lead. It loses to the density, random, and H56 controls; H55 also failed
+> as a primary seismicity detector, while H56's ComCat-lineation component measured neutral. H56
+> remains the best-measured local design, but its historical TIFF fails spacing and its rights gate
+> is unresolved. Do not upload, relabel, or repackage H58-S1.
 
-**Defect found and fixed in shared code (disclosed, not hidden).** The H58 build exposed a latent
-bug in `gemsdoe50.h56.emit_blue_noise`: its tie-breaker jitter was an *absolute* `1e-6`, so in
-blocks whose belief spread is below ~1e-6 (H58 corridor tails) the jitter dominated the values and
-`argmax` could pick a cell **outside** the emission domain — 5,631 of 98,598 emitted dots landed on
-prior-union/catalogue cells before the fix. The jitter now scales with each block's own maximum
-(`src/gemsdoe50/h56.py`), with a regression test (`tests/test_h56.py`). **H56's and H55's shipped
-bytes are unaffected** (verified: 0 dots outside their domains); a future H56 rebuild would differ
-in low-belief/near-tie blocks. This is recorded here because the shared emitter changed.
+**Emitter defects found in review (disclosed; historical TIFFs not rewritten).** The first H58
+review found that an *absolute* `1e-6` tie-breaker could override tiny belief values and choose a
+cell outside the emission domain; 5,631 of 98,598 dots were outside the prior-union/catalogue mask
+before that fix. The tie perturbation was corrected, and the historical H56/H55 files remained
+byte-unchanged (the first correction concerned only future builds).
 
-**Reproduce:**
+A second line-by-line audit found a separate defect: the old `emit_blue_noise` implementation
+selected one pixel per rounded-size block but had no cross-block Euclidean rejection pass. The old
+test checked only block uniqueness, not the claimed minimum distance. Exact nearest-neighbour audit
+of written TIFFs measured **1.0 px** minimum for H56 (90,000 dots) and H58 (98,598 dots), while
+H57's separate emitter measured 3.0 px. `emit_blue_noise` is now a weighted exponential-race
+sampler with an exact Euclidean spatial-hash exclusion; the regression tests assert the actual
+nearest-neighbour distance and trailing-edge eligibility. The fix affects future builds only. H56
+and H58 retain their original bytes and **must not be described as 3-pixel-separated**; both remain
+historical research artifacts, and H58's decision remains NO SLOT. See
+[`evidence/emitter-spacing-audit-20261007.json`](evidence/emitter-spacing-audit-20261007.json).
+
+**Build-code note:** H58&rsquo;s stored TIFFs were not regenerated after fixing the shared emitter. The
+current builder calls the corrected code and therefore will not recreate the historical TIFF bytes;
+rerunning it would be a changed research experiment, not an authorized H58 resubmission. Do not run
+it to repackage or relabel H58-S1.
 
 ```bash
 python3 -m venv .venv && .venv/bin/pip install numpy scipy rasterio pyproj pandas pytest ruff
@@ -344,11 +369,12 @@ PYTHONPATH=src .venv/bin/python -m pytest -q
 
 ### This session's own artifact — H52-C (eight-family coincidence)
 
-The branch `arena/685c6059-gemsdoe50` also ships a file this session built and validated itself, kept
-separate from the H52/H52A/H53/H54/H55 artifacts that other sessions track (nothing here reads their
-pixels):
+A prior H52-C session (recorded on branch `arena/685c6059-gemsdoe50`) built a separate research
+artifact; this is historical context, not the active branch or a submission recommendation. It was
+kept separate from the H52/H52A/H53/H54/H55 artifacts that other sessions track (nothing here reads
+their prediction pixels):
 
-* **Portal file (NaN outside the footprint):**
+* **Historical NaN-outside raster:**
   [`gems50-h52-coincidence8-80000-20261007T032938Z-nanoutside.tif`](docs/downloads/gems50-h52-coincidence8-80000-20261007T032938Z-nanoutside.tif), SHA-256
   `c8292db9e2c6d16b99a32ceae3d1652eb15019c8faa6f9d8b6d8b052d15dd582`, 417,986 bytes, 80,000 positive cells.
 * **All-finite twin:** [`gems50-h52-coincidence8-80000-20261007T032938Z.tif`](docs/downloads/gems50-h52-coincidence8-80000-20261007T032938Z.tif), SHA-256 `a2ed87fac9fdb4b9604ab2850b5f750eefe51fa9795caa6a503fc4739de6475d`.
@@ -368,21 +394,22 @@ pixels):
   (`evidence/h52_validation_80k.json`); 57.2% of the dots are >= 300 m from every dot of the 16 prior
   artifacts compared and 87.8% lie outside the union of all prior supports
   (`registry/prior_artifact_sources.tsv`).
-* Budget: the recorded nested pair solves the metric exactly (G = 14,088.75 px, T = 5,223.14 px), which
-  yields the marginal-value rule (bar = 0.0588) and the ten-budget curve; the modelled optimum at 120k
-  comes from a saturation cap, so the shipped 80k sits inside the measured plateau deliberately
+* Budget: a legacy nested-pair model gives G ≈14,088.75 px and T ≈5,223.14 px only under the
+  simplified DTI equation and unverified score-to-file associations; 3 px spacing does not make that
+  inversion exact. Its marginal-value rule and ten-budget curve are conditional models, not verified
+  score arithmetic; the modelled 120k optimum comes from a saturation cap. See
   (`docs/h52-decision.md`, `evidence/h52_budget_curve.json`).
 * Delivery: the H52-C band at the top of `index.html` (immediately below the other sessions' bands)
-  carries the download links, the unique portal name `GEMSDOE50-H52-COINCIDENCE8-OFFCAT-80000` and a
-  172-character note.
+  carried download links and a historical portal name/note. The current site removes portal
+  instructions for this below-incumbent research artifact; no H52-C portal name or note is authorized.
 
 > **Not organizer-scored, no slot used.** The per-dot proxy quality of H52-C (0.1446) is below every
 > incumbent-family artifact measured (0.1573-0.1704) and the receipt records that an SGMC-family
 > submission scored 0.0512 on the hidden labels, so nothing here licenses a score claim.
 
-### One-click H55 research artifact
+### Historical H55 research artifact — NO SLOT
 
-**All-finite portal-range-safe TIFF:**
+**Historical all-finite TIFF (not a submission):**
 [`gemsdoe50-h55-seisgeom-ridgesnap-13591-20261007-bcb60d89-zeros.tif`](docs/downloads/gemsdoe50-h55-seisgeom-ridgesnap-13591-20261007-bcb60d89-zeros.tif)
 
 * SHA-256: `7a366b7bbe431533a9d4246cbcdde34eb379ebb34fa116a8667431916506498d`
@@ -395,9 +422,9 @@ pixels):
 SHA-256 `cd7f765a95ea9c71b22abffbf330434597c28057f8a80ed723b753cd0a32d3c6`.
 It uses NaN only outside the official footprint and passes the repository's published-format checker.
 
-> **Decision: NO SLOT. Do not spend a weekly submission on H55-S1.** The file is the requested
-> unique competition-format deliverable and a reproducible negative experiment, not a submission
-> recommendation. No portal upload or weekly slot was used.
+> **Decision: NO SLOT. Do not spend a weekly submission on H55-S1.** The TIFF is a historical
+> research artifact and negative experiment, not a current candidate or a submission
+> recommendation. No portal name/note, portal upload, or weekly slot is authorized.
 
 ### Why the candidate did not pass
 
@@ -578,28 +605,17 @@ changes (projection, filtering, thinning, screening, and derived geometry).
 * The all-finite twin addresses the historical range-parser error, while the NaN twin follows the
   sample footprint semantics. No portal receipt establishes which behavior the current portal
   prefers.
-* No upload occurred. No result is a current leaderboard observation or prediction of a prize win.
+* No upload occurred. Offline proxy values and transfer-model outputs are not leaderboard scores. A one-time public leaderboard check on 2026-10-07 is documented separately; it does not map score rows to local TIFF bytes.
 
-## Manual submission guide (not recommended for H55)
+## Submission status and historical archive gates
 
-Only if the owner explicitly overrides the frozen no-slot rule:
+The only current-main recommendation is the already-built H59 sharpened topographic-scarp file in the H61 status section above. Its entry name, corrected note, exact file, and adjudication are recorded there; proxy values are not organizer scores. This cleanup builds or scores no candidate.
 
-1. Download the all-finite TIFF above and verify SHA-256
-   `7a366b7bbe431533a9d4246cbcdde34eb379ebb34fa116a8667431916506498d`.
-2. Open the official competition manually and confirm the current rules, deadline, remaining weekly
-   feedback slots, external-data disclosure requirements, and AI disclosure.
-3. Upload the single `.tif` unchanged; do not re-save, reproject, unzip into another raster, or alter
-   nodata metadata.
-4. Use unique name `GEMSDOE50-H55-SEISGEOM-RIDGESNAP-13591-BCB60D89`.
-5. Optional note: “H55-S1 research artifact: space-time-thinned CC BY 4.0 relocated earthquake
-   point geometry; recurrent local 2-D covariance axes; cross-axis 3DEP/radiometric ridge snap;
-   supplied-fault and complete prior-pixel exclusion; 13,591 binary cells; local gate NO SLOT.”
-6. Save the portal's submission ID/receipt and exact returned error or score before making any
-   score-to-file claim.
+H55, H56, H57, and H58 remain historical NO-GO / NO SLOT. Do not upload or repackage them; no current portal name or note is authorized for these archived files. The standalone-radiometric H59-01 draft is separately withdrawn and is not the current H59 topographic candidate. The H60 alternative and H61 seismicity artifact are also NO SLOT.
 
-The site has the same guide at [`submission.html`](submission.html).
+Any future lead requires the **37,612-dot incumbent/matched-control rerun first**, followed by a genuinely new preregistered method and passing frozen-holdout, rights, scientific-validity, format, and uniqueness gates. A local proxy or transfer model is never an organizer score. The current guide is [`docs/how-to-submit.html`](docs/how-to-submit.html); it is not an authorization to submit any archived NO-GO artifact.
 
-Full review, evidence hashes, alternative explanations, official rules, and unresolved source/receipt issues: [`docs/research/h33-score-review-20261007.md`](docs/research/h33-score-review-20261007.md). No live leaderboard was queried in this review.
+Full review, evidence hashes, alternative explanations, official rules, and unresolved source/receipt issues: [`docs/research/h33-score-review-20261007.md`](docs/research/h33-score-review-20261007.md). The public leaderboard was checked once on 2026-10-07: xiaofanhu displayed 0.3774 (rank 1) and extradr19 displayed 0.2778 (rank 13). No organizer receipt links the local H33-B2 bytes to 0.2778; the H33-B2-to-0.2778 TIFF attribution remains unresolved.
 
 ## Reproduction
 
@@ -652,51 +668,41 @@ Primary evidence:
   prediction-equivalent twins, rebuilt the strict exclusion and all H55 outputs; reran tests, deterministic build/hash
   checks, format/range checks, and site-link validation before PR.
 
-## H57 — former candidate (superseded 2026-10-07: reuses 27,248 prior pixels), and an honest retraction
+## H57 — historical research artifact; NO-GO / NO SLOT (2026-10-07)
 
-**Download (one click, portal-safe):**
+The H57 TIFF is retained for audit, not as the current candidate or a submission recommendation:
 [`docs/downloads/gemsdoe50-h57-scarpstep-80000-20261007T1830Z-allfinite.tif`](docs/downloads/gemsdoe50-h57-scarpstep-80000-20261007T1830Z-allfinite.tif)
-— SHA-256 `8027c4e9fe0f789e2d7180a7ccc031abec90b391cf9e42ebcc125752af9fb696`, 395,743 bytes,
-80,000 predicted cells, 3 px minimum Chebyshev spacing, zero dots within 300 m of the given
-catalogue, every cell finite and in `[0,1]`. NaN-outside twin, `.zip`, unique entry name
-`GEMSDOE50-H57-SCARPSTEP`, the portal note, and the step-by-step upload guide are on
-[`submission.html`](submission.html). **It is fine to download and submit this file**: it is this
-project's own construction from public layers, it copies no prior submission pixel (maximum
-full-pixel IoU 0.0248 against the 26 pinned prior artifacts), and it uses **no earthquake
-catalogue**, so the unresolved ComCat contributor rights and sponsor-sharing question that blocks
-H56 does not apply.
+(SHA-256 `8027c4e9fe0f789e2d7180a7ccc031abec90b391cf9e42ebcc125752af9fb696`, 80,000 cells).
+Its separate emitter measures a 3.0 px nearest-neighbour minimum, but the auxiliary topographic
+source lineage and sponsor-sharing eligibility have not been cleared. A valid format, low prior
+IoU, or correct spacing does not waive the source-rights gate. **Do not upload H57. No portal name
+or short note is authorized.** The current submission guide labels the preserved download as
+historical and NO-GO.
 
-**What was measured.** The earlier screen's top channels were elevation itself (`dem_mean` 3.665,
-`det_elev` 3.657) because F1's truth is USGS SGMC faults, which live in the mountains: an
-unstratified F1 result is a terrain confound. `scripts/h57_stratified.py` re-screens inside five
-mean-elevation percentile strata and admits only channels that win 5/5; H57's two families survive
-(LiDAR scarp 2.41–2.73, topographic step 2.11–2.61) while the whole geodetic-strain family
-(0.28–0.38), every magnetic and radiometric channel (0.42–0.98) and every residualised 9×9 row are
-rejected. On the frozen spatially-blocked gate H57 pools **0.2025** against a matched-mass uniform
-control of 0.1053 (1.92×), positive in **4/4** macrofolds, paired 95 % CI [+0.0626, +0.1330] — the
-strongest result this repository has measured, versus 0.1021 for the incumbent
-`gems51-scarpradio-offcat-35000` and 0.0878 for the corpus's top artifact
-(`g32_h33b2_02778.tif`, owner-reported 0.2778).
+**Later uniqueness adjudication:** the full corpus audit found **27,248 of H57’s 80,000 dots reuse prior-positive pixels**, so H57 also fails the binding no-reuse gate; see [`evidence/h60_gate_decision.json`](evidence/h60_gate_decision.json) and the H61 adjudication above. The current H59 recommendation is the distinct sharpened topographic-scarp candidate, not this H57 artifact.
 
-**The retraction.** H57's earlier "modelled hidden DTI 0.385–0.394" came from multiplying F1 credit
-per dot by an assumed transfer factor of 1.8–2.0. Fitting that factor on the 21 scored corpus
-artifacts gives **R² = −0.872** — worse than predicting the mean — because the artifacts that score
-0.26–0.28 on the hidden frame have *lower* F1 credit per dot (0.064) than artifacts that score 0.03.
-The corpus-calibrated model (`h = 0.5305 − 0.1669·F1_c_per_dot − 0.0390·ln N`, R² = 0.651) puts
-H57's expected competition score at **≈0.23** (indicative band 0.05–0.41), with P(>0.2778) ≈ 29 %
-and **P(>0.3774) ≈ 4 %**. The F1 coefficient is negative but not significant (t = −1.05): the
-defensible statement is that F1 selectivity is *not measurably helping*, not that it hurts.
-**No page in this repository may claim H57 beats the public best 0.3774**, and the 0.386 figure
-below for H56 is likewise a model, not an organizer score.
+**What was measured (offline only).** After elevation-stratified screening, the LiDAR-scarp and
+topographic-step families survived 5/5 strata, while elevation confounding was reduced. The frozen
+spatially blocked local proxy measured pooled DTI **0.2025** against **0.1053** for the matched
+uniform control, positive in 4/4 macrofolds, with paired 95% CI [+0.0626, +0.1330]. Those are local
+proxy measurements on the frozen evaluation, not organizer scores or hidden-label results.
 
-**What beating 0.3774 would require.** `T > 0.3774·(0.2N + 11,271)`, i.e. 6,518 credit pixels at
-N = 30,000 (1.25× the best absolute credit ever observed, 5,223) or 10,292 at N = 80,000 (1.97×).
-The corpus's top seven artifacts all sit in the narrow mass band 37,654–44,090, so the route is
-*credit per dot* — the same credit with far fewer dots — not more dots. That is the next experiment.
+**Transfer-model correction.** An earlier linear transfer factor that produced a 0.385–0.394 hidden
+DTI has been retracted: its corpus fit was worse than predicting the mean (R² = −0.872). A later
+corpus-calibrated model estimated ≈0.23 with a broad 0.05–0.41 band, but this remains assumption-
+dependent modeling and is not a score or a basis for submission. The fitted F1 coefficient was
+negative but not significant; it does not show that F1 selectivity helps or hurts competition
+performance. See the [H57 verdict](docs/research/h57-verdict-20261007.md) and its dated addendum.
 
-Full working: [`docs/research/h57-verdict-20261007.md`](docs/research/h57-verdict-20261007.md)
-(§7 lists the flagged irregularities, including the F2 name collision between this repository's
-catalogue-holdout frame and the H52 register's INGENIOUS-holdout frame).
+**Leaderboard context, checked 2026-10-07.** The public page displayed xiaofanhu at **0.3774**
+(rank 1) and extradr19 at **0.2778** (rank 13). This verifies the displayed leaderboard values,
+not a score-to-TIFF hash crosswalk: in particular, the local H33-B2 TIFF attribution remains
+unresolved. No H57 proxy or transfer-model number is numerically interchangeable with those
+leaderboard scores. See the [score-provenance review](docs/research/h33-score-review-20261007.md)
+and [public leaderboard](https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/).
+
+**Current main decision (H61): GO only for the distinct H59 topographic-scarp candidate documented above.** The separate standalone-radiometric H59-01 draft remains withdrawn and unbuilt. H55, H56, H57, H58, the H60 alternative, and the H61 seismicity artifact remain historical NO-GO / NO SLOT; do not restore their stale upload steps, names, or notes. This cleanup builds or scores no candidate. Before considering any future lead, rerun the incumbent and matched controls at exactly **37,612 dots**, then preregister a genuinely untried charter-compliant hypothesis and pass the frozen holdout, rights, scientific, format, and uniqueness gates. Do not repackage or relabel H55 or H58.
+
 ## H60 — official-stack belief field, the union arm, and the price of novelty (2026-10-07)
 
 **Question.** Does the organizer's own 19-band `training_features.tif` carry off-catalogue fault
@@ -749,21 +755,21 @@ maximal-novelty control the corpus-calibrated model predicts 0.2518, its highest
 while that control scores 0.0618 and loses to uniform in every fold. Model-implied numbers are
 therefore reported as indicative only and are not used to choose between the two files.
 
-**Published artifact (alternative, not the recommendation).**
-`docs/downloads/gemsdoe50-h59-union-d0-75308-20261007T2250Z-allfinite.tif` (+ `-nan.tif` twin and
-`.zip`), SHA-256 `143bae71968c5fc2b70b2de579e6a33f61d9d3e07beac13f20272760758b3bda`, 75,308 cells,
-draft name `GEMSDOE50-H59-UNION-75308`; every cell finite and in [0,1], every dot ≥300 m from the
-given catalogue and on no prior positive pixel. The site leads with H57 and says plainly that H57 is
-the file to submit; [`docs/downloads/README.md`](docs/downloads/README.md) labels every file in the
-download directory.
+**Published artifact (alternative, research archive only; NO SLOT).**
+`docs/downloads/gemsdoe50-h60-union-d0-75308-20261007T2250Z-allfinite.tif` (+ `-nan.tif` twin and
+`.zip`), SHA-256 `143bae71968c5fc2b70b2de579e6a33f61d9d3e07beac13f20272760758b3bda`, 75,308 cells;
+every cell finite and in [0,1], every dot ≥300 m from the given catalogue and on no prior positive
+pixel. No portal name or note is authorized for this H60 alternative. The current site leads with the
+distinct H59 sharpened topographic-scarp file selected by H61; H60-union is retained only for audit.
+[`docs/downloads/README.md`](docs/downloads/README.md) labels the files in the download directory.
 
-**Next experiment (H60), in priority order.** (1) **The mass axis on the frozen gate**: the sweep
-and the arms disagree about the optimum number of dots, and the frozen gate is the only instrument
-with a matched control at every mass — measure 20k/30k/40k/50k/60k on H57's own field before any new
-family is tried; (2) only then, a genuinely new *family*: the screen's `grad::tc` (magnetic tilt
-gradient) and `ridge2::geod_dilaterate` (geodetic dilatation-ridge) are the two unexploited winners
-that are not topography; (3) resolve the strict-novelty threshold's semantics in the charter so it
-stops being read as a placement rule.
+**H60-era next-experiment note (historical; superseded by the current H61 decision).** The H60
+analysis proposed a 20k/30k/40k/50k/60k mass sweep on H57's field, then a separately tested channel
+family and clarification of the novelty threshold. Retain that as dated research history, not as
+current authorization or an instruction to submit H57. Before any future lead, the binding prerequisite
+is to rerun the incumbent and matched controls at exactly **37,612 dots**. Only afterward may a
+separately preregistered, genuinely new method be evaluated through the frozen-holdout, rights,
+scientific-validity, format, and uniqueness gates. This cleanup builds and scores no candidate.
 
 Full working: [`docs/research/h60-verdict-20261007.md`](docs/research/h60-verdict-20261007.md)
 (§7 lists the flagged limitations, including the missing H59 preregistration document — the H59
@@ -772,17 +778,18 @@ hypothesis-generating, not confirmatory).
 
 ## Standing project prompt — read at the start of every session (2026-10-07)
 
-This is the owner's standing instruction for this project, restated item by item (not a verbatim
-transcript) so it is read every time the project is worked on. It sits above the session-scoped
-charter items where they differ.
+This is the owner's standing instruction for this project, kept verbatim in summary so it is read
+every time the project is worked on. It sits above the session-scoped charter items where they
+differ.
 
 1. **The goal is to place at the top of the DrivenData #306 DOE GEMS Prize leaderboard**
    (<https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/>). The verified
    public leader on 2026-10-07 is **0.3774 (xiaofanhu)**; the design target is to beat it. The
-   metric is the distance-weighted Tversky index (alpha=0.2, beta=0.8, R=300 m); for binary dots
-   it is `DTI = T / (0.2N + 0.8G + 0.2(T − M))` with `M = Σ K(dot)` — **not** the
-   `T / (0.2N + 0.8G)` collapse earlier sessions wrote (exact only when T = M; dots < 6 px apart
-   compete). See `docs/research/h61-verdict-20261007.md` §4 and `tests/test_h61.py`.
+   metric is the distance-weighted Tversky index (alpha=0.2, beta=0.8, R=300 m); use the full
+   published TP/FP/FN equations for binary dots. With `T=TP_w`, predicted-side matched credit
+   `M=sum_x max_g k(d(x,g))`, prediction count `N`, and truth count `G`, the exact denominator is
+   `0.2N + 0.8G + 0.2(T-M)` (plus epsilon). The shorter `0.2N+0.8G` form requires `T=M` and is
+   not justified by nearest-neighbour spacing alone.
 2. **MUST GENERATE A UNIQUE TIF SUBMISSION for the competition.** Never copy a previous submission;
    prior files are for learning, controls, and comparison only. The generated submission must be
    **obvious to download** (one click, top of the site / executive summary) and **it must be
@@ -798,18 +805,13 @@ charter items where they differ.
    earthquake density, normalize to [0, 1], write the required GeoTIFF, run the uniqueness gate
    against all prior submissions, and snap the corridor to another layer's ridge in the placement
    step. The 2-D reduction of Ouillon & Sornette's 3-D tetrahedron test is our adaptation and is
-   unverified; say so everywhere. References named by the owner: Ouillon, Ducorbier & Sornette
-   (2008) JGR 113, B01306, doi:10.1029/2007JB005032; Ouillon & Sornette (2011) JGR 116, B02306,
-   doi:10.1029/2010JB007752; Wang, Ouillon, Woessner, Sornette & Husen (2013) arXiv:1304.6912.
+   unverified; say so everywhere.
 4. **Answer at PhD level, from verified sources, with links for manual review**: why the
-   group's best artifact reportedly scored 0.2778 (GEMSDOE32
-   `h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros`), and whether a submission can exceed it and the
-   leader. Keep deep geothermal research from official sources in `docs/research/`. Never turn an owner/user report into an authenticated score without an organizer
+   group's best artifact reportedly scored 0.2778, and whether a submission can exceed the
+   leader. Never turn an owner/user report into an authenticated score without an organizer
    receipt. Flag irregularities; no hallucinations; verify line by line.
-5. **Protect the weekly feedback slots.** Preregister 3-5 untried hypotheses before implementing
-   (layers combined, physical signature or transform, why it catches faults the catalogue misses,
-   how it differs from what the repository already tried); rank them by expected DTI improvement
-   and cost; validate the top candidate on the frozen
+5. **Protect the weekly feedback slots.** Preregister 3-5 hypotheses before implementing; rank
+   them by expected DTI improvement and cost; validate the top candidate on the frozen
    spatially-blocked holdout before touching a slot; do not spend a slot on an idea that has not
    beaten the current holdout best. If a candidate needs new external data, name the specific
    free official source and check it is obtainable first.
@@ -823,7 +825,5 @@ charter items where they differ.
    permission, treat failure and success as signals. Work autonomously; no manual input; work
    line by line; verify everything; run three passes (implement, review/fix, re-check).
 8. **Session mechanics.** Work, commit, and push only on this session's assigned branch
-   (`arena/5550c3e4-gemsdoe50` for the 2026-10-07 H61 session); open the pull request from it;
-   merge to `main` when the checks
-   pass. Keep large scratch data out of Git; keep hash-pinned derivatives needed to reproduce.
-   End every session with suggested next work, limitations, and any access still required.
+   (`arena/d0c4e2dc-gemsdoe50` for this session); open the pull request from it; merge to `main`
+   when the checks pass. Keep large scratch data out of Git; keep hash-pinned derivatives needed to reproduce.

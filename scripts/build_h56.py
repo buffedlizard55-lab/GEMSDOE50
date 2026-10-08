@@ -19,13 +19,15 @@ Design (all of it measured, none of it assumed; raw numbers in
    **multiplicatively as corroboration** rather than as an additive mixture, because the same screen
    measures a plain additive mixture as strictly worse than either component.
 
-3. **Emission — variable-density blue noise at exactly the metric's support.**  ``h56.emit_blue_noise``
-   places at most one dot per 3 x 3 block, keeps the block probability proportional to its belief
-   mass, and picks the highest-belief pixel inside the chosen block.  The 3 px separation is the
-   metric's own optimum: it is the coarsest spacing at which two dots never compete for the same
-   truth pixel, so no dot is charged ``0.2`` for credit another dot already earned.  It is also the
-   spacing measured on the group's single best off-catalogue artifact of the previous five weeks
-   (``gems50-seislin-44709``), whose dots are 100 % isolated at a 3.0 px nearest-neighbour median.
+3. **Emission — density-weighted Poisson-disk sampling.** ``h56.emit_blue_noise`` assigns an
+   exponential-race priority to every positive-score eligible cell, then accepts candidates only
+   when their Euclidean pixel-centre distance is at least ``min_sep_px``. At the frozen 3 px radius,
+   accepted dots are not closer than the 300 m kernel radius; this reduces immediate crowding but
+   does **not** make the full kernel footprints disjoint or establish a metric optimum. The emitter
+   returns the achieved count rather than relaxing spacing if the positive support is too small. The
+   historical H56 90,000-dot TIFF predates the corrected spatial exclusion and measures only 1 px
+   minimum nearest-neighbour distance; it was not regenerated. See
+   ``evidence/emitter-spacing-audit-20261007.json``.
 
 4. **Placement step — snap to an independent ridge.**  Every emitted dot is moved to the strongest
    pixel of the fused evidence ridge within ``+/- R``, and the snapped set is kept only if the
@@ -368,8 +370,8 @@ def main() -> int:
         "claim_note": (
             "H56 scarp-dispersion submission: a full-strength rank mean of five independent USGS "
             "3DEP 1 m LiDAR terrain descriptors, corroborated multiplicatively by declustered "
-            "USGS ComCat epicentre lineaments, emitted as dots at the metric's own 300 m "
-            "separation with no quantile threshold and no footprint shrinkage. Validated on an "
+            "USGS ComCat epicentre lineaments, emitted with a frozen 3 px / 300 m minimum-distance "
+            "design rule, with no quantile threshold and no footprint shrinkage. Validated on an "
             "independent fault population against matched uniform and translation controls. "
             "NOT organizer-scored; the modelled hidden score is a transfer-calibrated model, "
             "not a receipt."),
@@ -379,10 +381,14 @@ def main() -> int:
             "scarp": scarp_info, "geophysics": geo_info, "seismicity": seis_info,
         },
         "emitter": {"function": "gemsdoe50.h56.emit_blue_noise", "min_sep_px": R_PX,
-                    "why": "R is the coarsest spacing at which two dots never compete for the "
-                           "same truth pixel; measured on the group's best off-catalogue prior "
-                           "artifact, whose dots are 100% isolated at a 3.0 px NN median",
+                    "why": "frozen 3 px Euclidean minimum-separation design rule; this reduces "
+                           "immediate crowding but does not establish non-overlapping kernel "
+                           "footprints or a metric optimum",
                     "placement_snap": snap_info},
+        "metric_note": "All local proxy scores use exact TP/FP/FN components. Any hidden transfer "
+                       "model that uses T/(0.2N+0.8G) additionally assumes truth-side and "
+                       "prediction-side matched credit are equal; prediction spacing alone does "
+                       "not establish that assumption.",
         "mass_selection": {"rule": "argmax of the transfer-calibrated modelled hidden DTI, "
                                    "subject to the physical cap T <= G_hidden",
                            "G_hidden_px": G_HIDDEN, "transfer_factor": TRANSFER,

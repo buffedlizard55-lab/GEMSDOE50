@@ -1,41 +1,27 @@
 #!/usr/bin/env python3
-"""Build, validate, and gate the H58-S1 submission GeoTIFF.
+"""Archived H58-S1 build/validation workflow — NO-GO / NO SLOT; not a submission builder.
 
-H58-S1 is the owner-mandated unique artifact: **USGS ComCat epicentre
-point-geometry lineations as the primary prediction field** (declustered,
-site-screened, 2-D covariance eigenstructure, corridors whose half-width is the
-catalogue's own location error, off-catalogue scoring only, metric-optimal
-blue-noise emission, cross-axis snap to an independent ridge, prior-pixel
-exclusion).  It is distinct from every prior artifact: H55 used the relocated
-catalogue (and failed its gate), H56 used ComCat lineations only as a 0.25
-corroboration on LiDAR, and no shipped file makes ComCat point geometry primary.
+H58-S1 was a historical ComCat earthquake point-geometry experiment: declustering,
+site screening, local 2-D covariance axes, uncertainty-width corridors, off-catalogue
+scoring, a 3 px spacing design rule, ridge placement, and prior-pixel exclusion. Its
+frozen scientific/control gates returned NO SLOT; mixed-network ComCat rights remain
+unresolved, and the written TIFFs measured only 1 px minimum nearest-neighbour spacing.
+Do not upload, repackage, relabel, or rerun this as H58-S1. H55 used a relocated catalogue
+and failed its gate; H56 used ComCat lineations only as a LiDAR corroboration.
 
-The script never uploads to DrivenData.  A unique, format-valid, portal-safe
-TIFF is written even when the frozen no-slot gate fails, because the artifact is
-the deliverable and the audit trail; the report and the website preserve the
-decision.
+The shared emitter has since changed. Running this historical workflow would produce
+new research bytes, not reproduce the archived TIFFs or authorize a candidate. This code
+never uploads to DrivenData, grants a portal name/note, clears source rights, or changes
+the NO-GO decision. Do not run it to create a new submission; any new lead requires a
+separate charter-compliant preregistration and all gates.
 
-Pipeline (frozen constants are in ``src/gemsdoe50/h58.py`` and preregistered in
-``docs/research/h58-hypotheses-preregistered.md``):
-
-1.  hash-pin every input; load the competition grid, catalogue, SGMC proxy,
-    frozen holdout split, and the frozen prior-positive union;
-2.  ComCat -> tectonic/magnitude/depth/footprint screens -> 3 km anthropogenic
-    site buffer -> triangle-area declustering (unverified 2-D adaptation);
-3.  per-epicentre 2-D covariance eigenstructure -> linear, well-sampled
-    neighbourhoods -> corridors (half-width = catalogue location error);
-4.  mass sweep emitted as variable-density blue noise at the metric's own
-    300 m support, scored on the off-catalogue SGMC proxy against matched
-    uniform controls, with the transfer-modelled hidden DTI selecting the mass;
-5.  placement step: every dot is offered to independent ridge targets and the
-    identity placement is kept unless a snap improves the proxy;
-6.  falsification: smoothed earthquake density (same events, matched mass),
-    matched random, four translations, the H56 incumbent, the frozen
-    four-macrofold holdout, and a paired 16-subtile bootstrap;
-7.  write the all-finite portal-safe TIFF, the NaN-outside twin, and a zip;
-    re-read every file and assert the [0, 1] range guard;
-8.  run the uniqueness-by-construction check against the frozen prior union and
-    write the machine-readable evidence.
+For audit, the frozen constants are recorded in ``src/gemsdoe50/h58.py`` and the
+historical preregistration in ``docs/research/h58-hypotheses-preregistered.md``. The
+workflow hash-pins inputs; screens and declusters ComCat (unverified 2-D adaptation);
+fits local covariance axes; builds corridors; measures placement options and controls;
+re-reads format/uniqueness; and records local proxy results. The exact Euclidean emitter
+now enforces a 3 px minimum on future runs, but that rule does not prove disjoint metric
+kernel footprints or the simplified hidden-score identity.
 """
 from __future__ import annotations
 
@@ -652,17 +638,13 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         },
         "artifacts": {
             "stem": stem,
-            "recommended_portal_safe_allfinite": zero_meta,
+            "historical_allfinite_audit_only": zero_meta,
             "sample_semantics_nan_outside": nan_meta,
             "zip": {"path": str(zip_path), "bytes": zip_path.stat().st_size, "sha256": zip_sha},
             "positive_mask_sha256": support_hash,
-            "unique_portal_name": f"GEMSDOE50-H58-SEISLINEAGE-{mass}-{slug.upper()}",
-            "short_submission_note": (
-                f"H58-S1: declustered USGS ComCat epicentre point-geometry lineations (2-D "
-                f"covariance axes, catalogue-error corridor widths); known-fault 300 m exclusion; "
-                f"{mass:,} binary cells; proxy-validated research artifact, not organizer-scored."
-            ),
-            "range_guard": "Every finite value re-read in [0,1]; the all-finite twin is entirely finite.",
+            "portal_name_authorized": False,
+            "portal_note_authorized": False,
+            "range_guard": "All-finite research twin was re-read in [0,1]; format validity is not submission eligibility.",
         },
         "novelty_local_comparators": pairwise,
         "limitations": [

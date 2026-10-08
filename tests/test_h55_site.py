@@ -31,22 +31,23 @@ def _sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def test_h55_site_regeneration_is_deterministic_and_download_first():
+def test_h55_site_regeneration_is_deterministic_and_current_main_h59_is_explicit():
     tracked = [
         ROOT / name
-        for name in ("index.html", "results.html", "methods.html", "submission.html", "site.css",
-                     "docs/how-to-submit.html", "docs/executive-summary.html", "docs/index.html")
+        for name in (
+            "index.html", "results.html", "methods.html", "submission.html", "site.css",
+            "h59.html", "h59-how-to-submit.html", "docs/how-to-submit.html",
+            "docs/executive-summary.html", "docs/index.html", "docs/submission-h60.html",
+        )
     ]
     before = {path: path.read_bytes() for path in tracked}
-    # The committed pages are produced by three generators in sequence, the same
-    # order as the site workflow: build_h55_site.py regenerates from committed
-    # evidence, build_h58_site.py reproduces the preserved H57-scarpstep band and
-    # inserts the H58 band, and build_h59_site.py adds this session's H59 banner.
-    # build_h61_site.py (last) adds the single start-here band with the evidence-backed
-    # recommendation (evidence/h61_candidates.json), marks the H57 band superseded, and
-    # regenerates the docs/ submission pages.
-    for script in ("build_h55_site.py", "build_h58_site.py", "build_h59_site.py",
-                   "build_h60_site.py", "build_h61_site.py"):
+    # This is the exact production order in .github/workflows/site.yml. H61 is last:
+    # it preserves the main-branch H59 GO and H61 seismicity NO-SLOT decision while
+    # keeping H55/H56/H57/H58 as historical, name/note-free archives.
+    for script in (
+        "build_h55_site.py", "build_h58_site.py", "build_h59_site.py",
+        "build_h60_site.py", "build_h61_site.py",
+    ):
         subprocess.run(
             [sys.executable, str(ROOT / "scripts" / script)],
             cwd=ROOT,
@@ -57,34 +58,50 @@ def test_h55_site_regeneration_is_deterministic_and_download_first():
     assert {path: path.read_bytes() for path in tracked} == before
 
     index = (ROOT / "index.html").read_text(encoding="utf-8")
-    assert "Download portal-safe TIFF" in index
-    # Charter rule: a one-click download and the executive summary sit at the very top of the
-    # site.  Later sessions may legitimately place their own download band above this one, so the
-    # assertion is about ordering and presence, not about which session's artifact is first.
-    # The current top band is the H57-scarpstep session's; the H56 band below it was reworded
-    # to "Previous candidate (H56)" by that session, and this session's H58 band follows it.
     first_download = index.index("Download the recommended GeoTIFF (portal-safe)")
-    former_h57 = index.index("Former candidate (H57) &mdash; superseded, do not submit")
-    assert first_download < former_h57
-    assert "GEMSDOE50-H59-SHARPENED-SCARP-SCATTER-90K" in index[:former_h57]
-    assert "Yes &mdash; you may download this file and submit it as your entry." not in index
-    assert '<a class="skip" href="#start">' in index
+    start_here = index.index('<section class="main" id="start">')
+    h57 = index.index('<section class="main" id="h57">')
+    assert index.index("<!-- h59-banner -->") < start_here < first_download < h57
+    assert "GEMSDOE50-H59-SHARPENED-SCARP-SCATTER-90K" in index[:h57]
+    assert "OK to download and submit" in index[:h57]
+    assert "Current main decision: GO only for the distinct H59 sharpened topographic-scarp file" in index
+    assert "Current portfolio decision: NO-GO / NO SLOT" not in index
+    assert "Current decision: NO-GO / NO SLOT" not in index
+    assert "NO SLOT" in index and "Today&rsquo;s run (H61)" in index
+    assert "Historical H56 research TIFF — NO SLOT" in index
+    assert "Historical H58-S1 research artifact — NO SLOT" in index
+    assert "Historical H57 research artifact — NO-GO" in index
+    assert "Download H55 audit TIFF" in index
+    assert "27,248" in index
     assert "reduces exactly to <code>DTI = T / (0.2N + 0.8G)</code>" not in index
-    assert "Previous candidate (H56)" in index
-    assert "GEMSDOE50-H58-SEISLINEAGE-98598-C4FF6DB9" in index
-    assert first_download < index.index("Executive summary")
-    assert index.index("Download portal-safe TIFF") > first_download
-    # the sibling H59 banner (same recommended file) stays above the H57 band
+    assert "Portal name/note:</b> none authorized" in index
+    assert "Draft optional note" not in index
+    assert "use only after rights clearance" not in index
+    for obsolete_name in (
+        "GEMSDOE50-H55-SEISGEOM", "GEMSDOE50-H56-SCARPDISPERSE",
+        "GEMSDOE50-H57-SCARPSTEP", "GEMSDOE50-H58-SEISLINEAGE",
+        "GEMSDOE50-H61-UPDIPSEIS-326-CC1F44DA",
+    ):
+        assert obsolete_name not in index
     assert "<!-- h59-banner -->" in index
-    assert index.index("<!-- h59-banner -->") < former_h57
-    assert "NO SLOT" in index
-    assert "0.019321" in index and "0.115822" in index
     assert "0.2778" in index and "UNSCORED" in index
-    assert "user-provided 0.3774 claim" in index
-    assert "Draft optional note (use only after rights clearance)" in index
+    assert "0.3774" in index
     assert "mixed-network ComCat-derived geometry" in index
     assert "H53-A probe/TMI experiment: NO-GO / NO SLOT" in index
 
+    submission = (ROOT / "submission.html").read_text(encoding="utf-8")
+    assert "Current main decision: GO only for H59 topographic-scarp" in submission
+    assert "Do not submit or repackage those files" in submission
+    h59_guide = (ROOT / "h59-how-to-submit.html").read_text(encoding="utf-8")
+    assert "Paste the corrected H61 note" in h59_guide
+    assert "operating point at 0.45" not in h59_guide
+
+    h60_guide = (ROOT / "docs/submission-h60.html").read_text(encoding="utf-8")
+    assert "NO SLOT — DO NOT SUBMIT" in h60_guide
+    assert "Submission form details withdrawn" in h60_guide
+    assert "SAFE TO DOWNLOAD AND SUBMIT" not in h60_guide
+    assert "GEMSDOE50-H60-SEISCOMBINED-55000" not in h60_guide
+    assert "Paste the note" not in h60_guide
 
 def test_h55_site_local_links_exist():
     for page_name in ("index.html", "results.html", "methods.html", "submission.html"):
@@ -219,19 +236,41 @@ def test_h60_band_is_an_alternative_below_the_current_candidate_and_says_what_to
     results = (ROOT / "results.html").read_text(encoding="utf-8")
     assert "Alternative candidate (H60-union)" in index
     assert "Charter compliance finding" in index
-    assert "GEMSDOE50-H60-UNION-75308" in index
+    assert "no authorized portal name or note" in index
+    assert "Draft optional note" not in index
+    assert "Do not submit H60-union" in index
     assert "NO SLOT for H60" in index
     assert "Which file should you submit?" in index
-    # the current-candidate banner stays first, then the H61 start band (same recommended
-    # file), then the superseded H57 band, then the H60 alternative
+    # The current-candidate banner and H61 start band precede the H57 audit,
+    # H60 alternative, H56 archive, and H58 research-only record.
     assert (
         index.index("<!-- h59-banner -->")
         < index.index('<section class="main" id="start">')
-        < index.index("Former candidate (H57) &mdash; superseded, do not submit")
+        < index.index('id="h57"')
         < index.index('id="h60"')
         < index.index('id="h56"')
+        < index.index('id="h58"')
     )
     assert 'id="h60-decision"' in results
+    assert "H57 stays the recommendation" not in results
+    assert "historical NO-GO (prior-pixel reuse)" in results
+    assert "NO SLOT; archive only" in results
+    assert "the current repository recommendation is the distinct H59 sharpened topographic-scarp candidate selected by H61" in results
+    assert "not organizer scores" in results
+
+    download_guide = (ROOT / "docs/downloads/README.md").read_text(encoding="utf-8")
+    assert "only current recommendation" in download_guide
+    assert "No portal name or note is authorized for this alternative" in download_guide
+    assert "Historical NO-GO / NO SLOT — do not upload or repackage" in download_guide
+    assert "Historical NO-GO — do not submit or repackage" in download_guide
+    assert "Historical NO-GO / NO SLOT — do not upload, relabel, or repackage" in download_guide
+    assert "Do not upload until rights clearance" not in download_guide
+    archived_pages = (index, results, (ROOT / "submission.html").read_text(encoding="utf-8"), download_guide)
+    for archived_name in (
+        "GEMSDOE50-H55-SEISGEOM", "GEMSDOE50-H56-SCARPDISPERSE",
+        "GEMSDOE50-H57-SCARPSTEP", "GEMSDOE50-H58-SEISLINEAGE",
+    ):
+        assert all(archived_name not in page for page in archived_pages)
 
     receipt = json.loads((ROOT / "evidence/h60_gate_decision.json").read_text(encoding="utf-8"))
     verdict = receipt["verdict"]

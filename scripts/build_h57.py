@@ -1,31 +1,21 @@
-"""H57-S submission builder — metric-exact scarp/step corridor emission.
+"""Archived H57 research builder — scarp/step corridor emission; NO-GO / NO SLOT.
 
-Design constraints, each of which is a *measured* or *proved* requirement rather
-than a preference:
+The historical H57 raster is not authorized for portal use. Its auxiliary topographic
+source-rights chain remains unresolved, and this builder is retained for audit only.
 
-1.  **Spacing >= 3 px.**  For a binary emitter whose positive cells are at least
-    the kernel support (3 px = 300 m) apart, no two dots compete for the same
-    truth pixel, so the metric collapses **exactly** to
-    ``DTI = T / (0.2 N + 0.8 G)``.  Both quantities are then interpretable: ``N``
-    is the dot count and ``T`` the hidden credit captured.  The best recorded
-    artifacts in the corpus have a verified minimum nearest-neighbour spacing of
-    2.83-3.00 px, so this is also the empirically winning geometry.
-2.  **>= 300 m from the given catalogue.**  The scored truth is a set of faults
-    the given catalogue does *not* contain, so a dot on a catalogue fault is a
-    pure false positive (0.2) with no credit.  The corpus's best artifact
-    (`h33-h33-2-b2`, 0.2778) is exactly its parent with the 6,436 dots that lie
-    within 2 px of the catalogue deleted.
-3.  **Raw, un-residualised scarp/step channels.**  On the F1 frame
-    (`scripts/h57_screen_f1.py`) every LiDAR scarp descriptor scores higher raw
-    than 9 x 9-residualised: `step_max` 2.94x vs 1.72x, `ex_max` 2.93x vs 2.10x,
-    `downface_max` 2.85x vs 1.75x.  The H52/H56 builds shipped the residual
-    form; this builder uses the raw one and mixes in an independent topographic
-    step family taken from the 10 m DEM derivatives.
-4.  **Whole-footprint emission.**  The LiDAR coverage mask covers 75.4 % of the
-    study footprint, so a LiDAR-only emitter can never reach more than about
-    three quarters of the truth however good it is.  Dots are therefore drawn
-    from the union of a LiDAR scarp corridor set and a 10 m topographic step
-    corridor set, and the mask is used only as a *rank* input.
+The old design used a minimum 3-cell Chebyshev spacing rule (which implies at least 3 px
+Euclidean centre distance) and an at-least-300 m catalogue buffer. Neither condition proves
+that kernel footprints are disjoint or that truth-side and prediction-side credit are equal.
+For binary predictions the exact DTI keeps both directional terms:
+``T / (T + 0.2(N-M) + 0.8(G-T))``, where ``T=TP_w`` and ``M`` is summed prediction-side
+matched credit. The shorter ``T/(0.2N+0.8G)`` model is conditional on ``T=M`` and is not
+validated by a spacing rule. Use the full metric implementation for local scores; historical
+hidden-score estimates remain conditional models, not forecasts or organizer scores.
+
+Other H57 design notes: the historical belief field combined raw LiDAR scarp/step descriptors
+with topographic derivatives, based on stratified offline proxy measurements. Those experiments
+do not resolve source rights, scientific validity, organizer performance, or eligibility.
+Nothing in this builder authorizes rebuilding, relabeling, or submitting H57.
 
 This builder does **not** claim to beat the leaderboard record.  See
 `docs/research/h57-verdict-20261007.md`: no offline frame in this repository has
@@ -115,13 +105,12 @@ def belief_field(inputs: str, footprint: np.ndarray):
 
 def metric_emit(belief: np.ndarray, eligible: np.ndarray, mass: int,
                 block: int = 3, spacing: int = 3):
-    """Metric-exact emission.
+    """Historical tile-argmax emission with a Chebyshev-distance exclusion.
 
-    One candidate per ``block`` x ``block`` tile (the tile's highest-belief
-    eligible cell), then a greedy pass that accepts candidates in descending
-    belief order while keeping every accepted pair at least ``spacing`` cells
-    apart in Chebyshev distance.  With ``spacing = 3`` the accepted set satisfies
-    the exact metric collapse ``DTI = T / (0.2 N + 0.8 G)``.
+    The restriction gives an explicit lower bound on Euclidean centre distance, but
+    it does not imply disjoint kernel footprints or validate the simplified hidden-score
+    equation. This helper reproduces the archived H57 design only; use the full published
+    TP/FP/FN metric to score any output.
     """
     h, w = belief.shape
     b = np.where(eligible & np.isfinite(belief), belief, -np.inf)

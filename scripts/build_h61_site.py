@@ -26,6 +26,7 @@ from __future__ import annotations
 import hashlib
 import html
 import json
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -196,7 +197,7 @@ def start_band(ev: dict, prefix: str = "") -> str:
 <p class="warning"><b>Read before submitting.</b> (1) The lead over H57 is real on the pooled scores but not uniform: it wins {n['rec_wins']} of 4 macrofolds against H57 and the paired 16-subtile interval is [{n['rec_ci'][0]:+.4f}, {n['rec_ci'][1]:+.4f}], which includes zero. (2) {n['rec_near']:,} of its dots lie within 300&nbsp;m of the supplied catalogue ({n['rec_oncat']} on catalogue pixels); the GEMSDOE32 B2 result suggests such dots may cost false-positive weight on the hidden labels. (3) Every number here is a proxy (USGS SGMC faults away from the given catalogue), not the organizers&rsquo; expert labels; expect roughly the low 0.2s. Beating the public best 0.3774 would need about 10,500 hidden-truth credit at 80,000&ndash;90,000 dots under the corrected metric algebra. No organizer score exists for any GEMSDOE50 file.</p>
 <p><b>Uniqueness.</b> 0 of its dots sit on any of the 1,405,451 pixels of the 61 registered prior artifacts (the charter rule). Against the wider corpus of {n['priors']} distinct rasters from all 54 sibling repositories plus this one &mdash; which also holds archives and dense ensemble rasters never registered as submissions &mdash; it is not a copy of anything: largest exact-pixel Jaccard {f4(n['rec_j'])} and largest share of its dots on one file {n['rec_c']*100:.0f}&nbsp;%, both against <code>{esc(n['rec_c_prior'][:60])}</code> (the same session&rsquo;s never-submitted first revision). Its dots do sit close to earlier scarp-based files (chance-corrected 2-pixel proximity {f4(n['rec_e'])} to the dense <code>{esc(n['rec_e_prior'][:48])}</code>); every scarp-based file does, and forcing 2-pixel novelty was measured by H60 to collapse the score below random. <b>Why not H57 any more:</b> {n['h57_reuse']:,} of H57&rsquo;s 80,000 dots ({n['union_frac']*100:.0f}&nbsp;%) reuse prior prediction pixels, and it now ranks third on the frozen gate. It stays published below for the record only.</p>
 <h3>Today&rsquo;s run (H61): the required seismic-lineation map &mdash; <span class="tag fail">NO SLOT</span></h3>
-<p>Built as specified: {n['events']:,} screened USGS ComCat earthquakes, declustered with the Zaliapin&ndash;Ben-Zion nearest-neighbour method ({n['bg']:,} background events kept), a 2-D triangle test (my unverified adaptation of the Ouillon&ndash;Sornette 3-D tetrahedron test), local 2-D covariance with location-error removal, corridors as wide as the catalogue location error plus up-dip copies, and dots snapped to the H57 ridge. Result: only {n['lin']} lineations and <b>{n['h61s_n']} dots</b>; holdout DTI <b>{f4(n['h61s'])}</b>, credit/dot {f4(n['h61s_cpd'])} versus {f4(n['rand_cpd'])} for random dots. On withheld catalogue faults the corridors lose to smoothed density ({f4(n['fb']['H61-S'])} vs {f4(n['fb']['density-best'])}). Within every H57-strength decile, the corridors hold <i>less</i> fault credit than the cells outside them (median ratio {n['enr_median']:.3f}, {n['enr_gt1']}/10 deciles above 1); loosening every screen (up to {n['sens_max_lin']:,} lineations) never lifts that ratio above {n['sens_max_enr']:.2f}. A corridor/H57 hybrid ({f4(n['hyb'])}) and spacing H57&rsquo;s dots 4 or 5 px apart ({f4(n['sp4'])}, {f4(n['sp5'])}) also lost. The H61 file is unique (Jaccard &le; {n['h61_j']:.4f}) and valid, but <b>do not submit it</b>: <a href="{prefix}{esc(a['all_finite']['path'])}" download>H61 research file</a> (SHA-256 <span class="hash">{esc(a['all_finite']['sha256'][:16])}&hellip;</span>, entry name if ever used <code>{esc(a['entry_name'])}</code>).</p>
+<p>Built as specified: {n['events']:,} screened USGS ComCat earthquakes, declustered with the Zaliapin&ndash;Ben-Zion nearest-neighbour method ({n['bg']:,} background events kept), a 2-D triangle test (my unverified adaptation of the Ouillon&ndash;Sornette 3-D tetrahedron test), local 2-D covariance with location-error removal, corridors as wide as the catalogue location error plus up-dip copies, and dots snapped to the H57 ridge. Result: only {n['lin']} lineations and <b>{n['h61s_n']} dots</b>; holdout DTI <b>{f4(n['h61s'])}</b>, credit/dot {f4(n['h61s_cpd'])} versus {f4(n['rand_cpd'])} for random dots. On withheld catalogue faults the corridors lose to smoothed density ({f4(n['fb']['H61-S'])} vs {f4(n['fb']['density-best'])}). Within every H57-strength decile, the corridors hold <i>less</i> fault credit than the cells outside them (median ratio {n['enr_median']:.3f}, {n['enr_gt1']}/10 deciles above 1); loosening every screen (up to {n['sens_max_lin']:,} lineations) never lifts that ratio above {n['sens_max_enr']:.2f}. A corridor/H57 hybrid ({f4(n['hyb'])}) and spacing H57&rsquo;s dots 4 or 5 px apart ({f4(n['sp4'])}, {f4(n['sp5'])}) also lost. The H61 file is unique (Jaccard &le; {n['h61_j']:.4f}) and format-valid, but <b>NO SLOT: do not submit it</b>: <a href="{prefix}{esc(a['all_finite']['path'])}" download>H61 research-only archive</a> (SHA-256 <span class="hash">{esc(a['all_finite']['sha256'][:16])}&hellip;</span>). No portal name or note is authorized for this NO-SLOT artifact.</p>
 <h3>Flags for manual review</h3>
 <ul class="list">
 <li><b>Two &ldquo;current candidates&rdquo; on main</b> (fixed here): after two parallel merges the page led with H57 while the H60 receipt recommended the sharpened-scarp file; the H57 band is now marked superseded.</li>
@@ -376,6 +377,57 @@ def retire_h57(text: str, ev: dict) -> str:
     )
 
 
+def withdraw_h60_instructions(text: str, recommended_name: str) -> str:
+    """Retain the legacy H60 ComCat page as research, but remove its stale upload guide."""
+    text = text.replace(
+        "<title>GEMSDOE50 — H60 Seismicity Lineation Submission</title>",
+        "<title>H60 ComCat seismicity-KDE archive — NO SLOT</title>",
+    )
+    text = text.replace(
+        "<h1>GEMSDOE50 — H60 Seismicity Lineation Submission</h1>",
+        "<h1>H60 ComCat seismicity-KDE archive — NO SLOT</h1>",
+    )
+    text = text.replace("📋 How to Submit", "Submission steps withdrawn")
+    text = text.replace("⬇ ONE-CLICK SUBMISSION FILE", "Historical audit download — not a submission")
+    text = text.replace("Download H60 Primary Submission (.tif)", "Download H60 historical research TIFF (.tif)")
+    text = text.replace(
+        "<tr><td>Submitted?</td><td>This file</td>",
+        "<tr><td>Submitted?</td><td>No — NO SLOT</td>",
+    )
+    gate = '''<div class="gate"><p class="label">NO SLOT — DO NOT SUBMIT</p>
+  <p>This is a legacy ComCat-derived H60 seismicity-KDE artifact retained for audit only. Contributor-specific rights are unresolved, its 0.54 transfer-model output was retracted, and the full-corpus gate found prior-pixel reuse. It is distinct from the current H60 official-stack/union analysis and the H59 candidate selected by H61. No portal name or note is authorized for this file.</p>
+</div>'''
+    text, count = re.subn(r'<div class="gate ok">.*?</div>', gate, text, count=1, flags=re.DOTALL)
+    if count != 1 and "NO SLOT — DO NOT SUBMIT" not in text:
+        raise SystemExit("H60 archive page lost its submission-status gate")
+    no_form = '''<div class="card"><h3>Submission form details withdrawn</h3>
+  <p>No portal entry name or note is authorized for this NO-SLOT archive. Do not paste the historical draft label or note into the portal.</p>
+</div>'''
+    text, count = re.subn(
+        r'<div class="card">\s*<h3>Submission Form Details</h3>.*?</div>',
+        no_form,
+        text,
+        count=1,
+        flags=re.DOTALL,
+    )
+    if count != 1 and "Submission form details withdrawn" not in text:
+        raise SystemExit("H60 archive page lost its portal-name/note archive notice")
+    steps = '''<h2 id="how-to-submit">Submission steps withdrawn</h2>
+<p>This archive page is not an upload guide. Do not submit this file. The only current recommendation is the already-built H59 sharpened topographic-scarp file named in the H61 start-here band: <code>''' + html.escape(recommended_name) + '''</code>. Proxy values and transfer models are not organizer scores.</p>
+
+'''
+    text, count = re.subn(
+        r'<h2 id="how-to-submit">.*?(?=<!--\s*=+\s*-->\s*<h2 id="method">)',
+        steps,
+        text,
+        count=1,
+        flags=re.DOTALL,
+    )
+    if count != 1:
+        raise SystemExit("H60 archive page lost its old step-by-step upload guide")
+    return text
+
+
 def main() -> int:
     ev = load()
     index = ROOT / "index.html"
@@ -435,18 +487,19 @@ def main() -> int:
     h60k = ROOT / "docs/submission-h60.html"
     if h60k.exists():
         k = h60k.read_text(encoding="utf-8")
+        n = numbers(ev)
         if "<!-- h61-warning -->" not in k and "<body" in k:
             cut = k.index(">", k.index("<body")) + 1
-            n = numbers(ev)
             warn = (
                 '<!-- h61-warning --><div style="margin:0;padding:14px 18px;background:#fde8e8;border-bottom:4px solid #b42318;'
-                'font:600 16px/1.5 system-ui,sans-serif;color:#3b0d0c">Not recommended &mdash; do not submit the file on this page. '
-                "It is ComCat-derived (contributor rights unresolved), reuses prior prediction pixels, scores far below the "
-                "recommended file on the repository&rsquo;s frozen frame, and its &ldquo;modelled hidden DTI 0.54&rdquo; uses a "
-                f'retracted transfer model. Submit <code>{esc(n["rec"]["entry_name"])}</code> instead: '
-                '<a href="how-to-submit.html">how to submit</a>.</div>'
+                'font:600 16px/1.5 system-ui,sans-serif;color:#3b0d0c">NO SLOT &mdash; do not submit this legacy ComCat-derived H60 seismicity-KDE file. '
+                "Contributor rights are unresolved, it reuses prior prediction pixels, and the &ldquo;0.54 hidden DTI&rdquo; is a retracted model, not a score. "
+                f'The only current recommendation is <code>{esc(n["rec"]["entry_name"])}</code>: '
+                '<a href="how-to-submit.html">current H61 guide</a>.</div>'
             )
-            h60k.write_text(k[:cut] + warn + k[cut:], encoding="utf-8")
+            k = k[:cut] + warn + k[cut:]
+        k = withdraw_h60_instructions(k, n["rec"]["entry_name"])
+        h60k.write_text(k, encoding="utf-8")
     (ROOT / "docs/how-to-submit.html").write_text(how_to_submit(ev), encoding="utf-8")
     (ROOT / "docs/executive-summary.html").write_text(executive_summary(ev), encoding="utf-8")
     (ROOT / "docs/index.html").write_text(docs_index(ev), encoding="utf-8")

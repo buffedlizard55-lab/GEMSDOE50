@@ -96,6 +96,10 @@ def main() -> None:
                           POWER, SWEEP, EXT, NOVEL, DELIV))
     if not b:
         raise SystemExit("evidence/h59_build.json missing - run scripts/build_h59.py first")
+    current = load(ROOT / "evidence/h61_candidates.json")
+    current_recommendation = current.get("recommended", {})
+    current_name = current_recommendation.get("entry_name", b["portal_name"])
+    current_note = current_recommendation.get("note", b["portal_note"])
 
     allfin = Path(b["files"]["allfinite_tif"]["path"])
     nanf = Path(b["files"]["nan_tif"]["path"])
@@ -521,8 +525,8 @@ buffer {fmd["catalogue_buffer_px"]} px, probability floor {fmd["floor_frac"]}, R
          'here</a>.'),
         ("<b>Upload the file exactly as downloaded.</b> Do not re-save, re-project, re-compress, "
          "re-scale or convert it. Every gate reported on this site was run on the delivered bytes."),
-        (f'<b>Use this submission name:</b> <code>{esc(b["portal_name"])}</code>. '
-         "<b>Paste this optional note:</b> <q>" + esc(b["portal_note"]) + "</q>"),
+        (f'<b>Use this submission name:</b> <code>{esc(current_name)}</code>. '
+         "<b>Paste the corrected H61 note:</b> <q>" + esc(current_note) + "</q>"),
         ("<b>Record the receipt.</b> Save the portal confirmation and the returned score into this "
          "repository before quoting any score. Until that file exists, this repository claims no "
          "score for this artifact."),
@@ -557,7 +561,7 @@ weekly slot is the owner's. Nothing on this site has been uploaded, and no score
 <tr><td>values</td><td>{b["reread"]["values"]}</td></tr>
 <tr><td>predicted cells</td><td class="num">{n:,}</td></tr>
 <tr><td>finite cells</td><td class="num">{b["reread"]["finite_cells"]:,} of 12,279,160 (no NaN)</td></tr>
-<tr><td>entry name</td><td><code>{esc(b["portal_name"])}</code></td></tr>
+<tr><td>entry name</td><td><code>{esc(current_name)}</code></td></tr>
 <tr><td>twin</td><td><code>{esc(nanf.name)}</code> (NaN outside the footprint, official sample convention)</td></tr>
 <tr><td>zip</td><td><code>{esc(zipf.name)}</code> &middot; SHA-256 <span class="hash">{esc(b["files"]["zip"]["sha256"])}</span></td></tr>
 </table></div></article>
@@ -576,7 +580,7 @@ weekly slot is the owner's. Nothing on this site has been uploaded, and no score
         + '<div style="background:#00695d;color:#fff;padding:11px 0">'
         '<div class="shell" style="display:flex;flex-wrap:wrap;gap:14px;align-items:center;'
         'justify-content:space-between">'
-        '<span style="font-weight:800">Current candidate: H59 topographic-lineament scatter '
+        '<span style="font-weight:800">Current main recommendation: H59 sharpened topographic-scarp scatter (selected by H61) '
         f'&mdash; format and novelty gates passed, {fm["dti"]:.4f} off-catalogue proxy DTI '
         f'({fm["dti"]/uni_all["mean"]:.2f}&times; matched-mass uniform), 4/4 spatial folds.</span>'
         '<span style="display:flex;gap:10px;flex-wrap:wrap">'

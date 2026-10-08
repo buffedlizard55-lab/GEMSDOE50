@@ -13,9 +13,9 @@
 **Written** 2026-10-07 UTC, before the H52 build. Every number is labelled:
 **[OFFICIAL]** read from the organizer's own page, **[MEASURED]** computed here from pinned bytes,
 **[MODEL]** arithmetic from the published equations under stated assumptions, **[LIMIT]** a known
-weakness. No live leaderboard value is read, polled or published here; `0.2778`, `0.3195` and
-`0.3774` are unverified owner/user-reported snapshots, not organizer receipts. The current task's
-0.3774 high-score claim is user-provided; 0.3195 is a separate older snapshot.
+weakness. The original analysis did not read or poll a live leaderboard. A one-time public
+leaderboard check on 2026-10-07 later displayed 0.3774 at rank 1 and 0.2778 at rank 13; it did not
+provide a score-to-TIFF hash crosswalk. The older 0.3195 value remains an owner-quoted snapshot.
 
 ---
 
@@ -71,12 +71,13 @@ dot count, not by detector.
 performer in the group's history, `gems50-seislin-44709` (44,709 dots):
 
 * **every dot is 8-connected-isolated** (44,709 components of size 1);
-* nearest-neighbour separation is **3.0 px at the 10th, 50th and 90th percentiles** — exactly the
-  metric's own support `R = 3 px`;
+* nearest-neighbour separation is **3.0 px at the 10th, 50th and 90th percentiles**, matching
+  the historical 3 px spacing rule;
 * the dots occupy **44 % of the map's 128 x 128 blocks**.
 
-`R` is the metric's optimum separation: it is the coarsest spacing at which two dots never compete
-for the same truth pixel, so no dot is charged `0.2` for credit another dot already earned.
+These measurements describe the archived raster only. The original interpretation that `R=3 px`
+is a metric optimum, prevents competition for truth support, or makes every dot pay a fixed 0.2
+is withdrawn in the metric-algebra correction at the end of this document.
 
 ## 3. The corpus's structural flaw: spatial over-concentration **[MEASURED]**
 
@@ -107,8 +108,8 @@ From (1), and with `G = 12,226`:
 
 | target | N | required `T` | required coverage `T/G` | required `T/N` |
 | ---: | ---: | ---: | ---: | ---: |
-| 0.2778 (repository best; attribution unverified) | 37,654 | 4,809 | 39.3 % | 0.1277 |
-| 0.3774 (user-provided claim; unverified) | 30,000 | 5,956 | 48.7 % | **0.199** |
+| 0.2778 (leaderboard rank 13 on 2026-10-07; local TIFF link unverified) | 37,654 | 4,809 | 39.3 % | 0.1277 |
+| 0.3774 (leaderboard rank 1 on 2026-10-07; local TIFF link unverified) | 30,000 | 5,956 | 48.7 % | **0.199** |
 | 0.3774 | 44,090 | 7,019 | 57.4 % | 0.159 |
 | 0.3774 | 108,000 | 11,843 | 96.9 % | 0.110 |
 
@@ -158,11 +159,12 @@ is used. The conservatively rounded value used by the H52 build is **4.2** (band
 
 Two changes follow directly from §2-§4.
 
-**(a) Emission geometry.** Because `R = 3 px` is the metric's own optimum separation, H52 emits
-with `h52.emit_blue_noise`: at most one dot per 3 x 3 block, the block chosen with probability
-proportional to its belief mass, and the position inside the block at the highest-belief allowed
-pixel. This is a variable-density blue-noise sample at exactly `R`. It cannot pile dots one pixel
-deep on a ridge, and it cannot waste `0.2` on a dot whose credit a neighbour already earned.
+**(a) Emission geometry.** The archived H52 design used `h52.emit_blue_noise`: at most one dot
+per 3 x 3 block, the block chosen with probability proportional to its belief mass, and the
+position inside the block at the highest-belief allowed pixel. This block-quantized design is not
+a verified Euclidean Poisson-disk emitter, and it does not establish non-overlapping kernel support
+or a metric optimum. It may still concentrate nearby points across block boundaries; score any
+output with the exact full TP/FP/FN metric.
 
 **(b) The mass is chosen by the metric's own stopping rule, not by taste.** The build sweeps
 30,000 - 220,000 dots and selects the mass maximising the transfer-calibrated modelled hidden DTI,
@@ -233,23 +235,53 @@ translates into a competitive leaderboard number is untested.**
 
 ## 9. What would actually be needed to beat 0.3774, stated plainly
 
-1. **Higher precision or near-saturated coverage.** Under equation (1), the user-claimed 0.3774
-   corresponds to about 48.7% weighted coverage at 30,000 dots and about 96.9% at 108,000 dots,
+1. **Higher precision or near-saturated coverage.** Under equation (1), the public leaderboard's
+   0.3774 rank-1 value (observed 2026-10-07; no local TIFF hash crosswalk) corresponds to about
+   48.7% weighted coverage at 30,000 dots and about 96.9% at 108,000 dots,
    given the assumed `G = 12,226`; the same-mass H33 case needs about 57.4%. Those are conditional
    arithmetic targets, not evidence that hidden truth has that mass. A detector that improves
    1-pixel enrichment without duplicating support is a plausible route. H56 later produced a
-   local blocked-holdout gain and a transfer-model estimate of 0.386, but that is not an organizer
-   score and depends on a stated, uncertain transfer factor.
+   local blocked-holdout gain and a transfer-model estimate of 0.386, but the historical raster has
+   only 1.0 px minimum spacing, the ComCat rights gate is unresolved, and the model is not an
+   organizer score.
 2. **Treat location precision and family controls seriously.** The seismicity screen found `seislin`
    earns `k` at 1 px from proxy truth 2.93x more often than chance while being depleted at 3 px.
    Since `k(0)=1`, `k(1)=0.67`, and `k(2)=0.33`, any future detector should be judged on
    1-pixel enrichment as well as buffer coverage, against smoothed-density and matched random
    controls. H53-A's separate probe/TMI geometry failed its own frozen gate; it supplies no evidence
    for beating 0.3774.
-3. **Do not spend a slot merely to calibrate a model.** No score receipt was obtained here, and
-   this project does not monitor the live leaderboard. Any future upload would require a preregistered
+3. **Do not spend a slot merely to calibrate a model.** No score receipt was obtained here; the
+   leaderboard was checked once on 2026-10-07 and is not polled. Any future upload would require a preregistered
    candidate that beats the frozen holdout incumbent, complete scientific/format/uniqueness gates,
    and cleared external-data rights/shareability. The H56 ComCat-derived lineations still have
    unresolved contributor-specific challenge-use and sponsor-sharing rights; until cleared, no
    weekly slot is recommended. If a permitted submission later occurs, preserve the exact bytes,
    submission ID, timestamp, and score receipt before making any score claim.
+
+## Post-run status — 2026-10-07
+
+The byte audit measured a 1.0 px nearest-neighbour minimum in the historical 90,000-dot H56 TIFF,
+so it did not meet its claimed 3 px Euclidean spacing. `h56.emit_blue_noise` has since been corrected
+to use weighted exponential-race priorities with exact Euclidean spatial-hash rejection, but the
+historical TIFF was not rebuilt or rescored. Its old proxy metrics remain measurements on the old
+bytes; they do not validate the corrected emitter or a future H56 build. H56 is NO-GO / NO SLOT due
+to both the spacing defect and unresolved ComCat contributor rights/sharing. See
+[`evidence/emitter-spacing-audit-20261007.json`](../../evidence/emitter-spacing-audit-20261007.json).
+
+## Metric-algebra correction — 2026-10-07
+
+The earlier simplification in §§1–6, `DTI = T / (0.2 N + 0.8 G)`, is **not generally exact**.
+For binary unit predictions, let `T = TP_w`, `M = sum_x max_g k(d(x,g))` over predicted cells,
+`N` be the prediction count, and `G` the truth count. Then `FN_w = G - T`, `FP_w = N - M`, and
+the exact expression is
+
+```text
+DTI = T / (0.2 N + 0.8 G + 0.2 (T - M) + epsilon)
+```
+
+The shortened form requires `T = M`; a 3 px prediction-to-prediction minimum distance does not
+establish that equality. Thus the old claim that a 3 px separation prevents competition for the
+same truth support is withdrawn. Local H56 proxy scores computed from the exact TP/FP/FN code remain
+measurements on their stated frame and bytes; the old score-to-hidden-mass inversions, transfer
+estimates, and nominal 0.386 figure depend on the simplified model and must not be treated as score
+forecasts. No organizer score is established by this analysis.

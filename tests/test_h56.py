@@ -44,17 +44,46 @@ def test_score_dots_matches_published_worked_example_identity():
     assert abs(s["tp"] + s["fn"] - s["g"]) < 1e-9
 
 
-def test_emit_blue_noise_respects_separation_and_budget():
+def test_emit_blue_noise_respects_euclidean_separation_and_budget():
+    from scipy.spatial import cKDTree
+
     dens = np.ones((60, 60))
     dom = np.ones((60, 60), dtype=bool)
-    em = h56.emit_blue_noise(dens, dom, n_target=60, min_sep_px=3.0, seed=1)
-    assert em.rows.size > 0
+    min_sep_px = 3.0
+    em = h56.emit_blue_noise(dens, dom, n_target=60, min_sep_px=min_sep_px, seed=1)
+    assert em.rows.size == 60
     pts = np.column_stack([em.rows, em.cols]).astype(float)
-    # block-quantised: at most one dot per 3x3 block, so same-block collisions are impossible
-    blocks = (em.rows // 3) * 1000 + (em.cols // 3)
-    assert np.unique(blocks).size == blocks.size
-    assert em.rows.size <= 60
-    del pts
+    nearest, _ = cKDTree(pts).query(pts, k=2)
+    assert float(nearest[:, 1].min()) >= min_sep_px
+    assert dom[em.rows, em.cols].all()
+
+
+def test_emit_blue_noise_can_use_trailing_edge_pixels():
+    """Non-multiple grid edges must not disappear into block-reshape truncation."""
+    density = np.zeros((8, 10))
+    domain = np.zeros((8, 10), dtype=bool)
+    density[-1, -1] = 1.0
+    domain[-1, -1] = True
+    em = h56.emit_blue_noise(density, domain, n_target=1, min_sep_px=3.0, seed=4)
+    assert list(zip(em.rows.tolist(), em.cols.tolist())) == [(7, 9)]
+
+
+def test_emit_blue_noise_does_not_relax_spacing_when_support_is_too_small():
+    density = np.zeros((5, 5))
+    domain = np.ones_like(density, dtype=bool)
+    density[2, 2:4] = 1.0
+    em = h56.emit_blue_noise(density, domain, n_target=2, min_sep_px=3.0, seed=2)
+    assert em.rows.size == 1
+    assert domain[em.rows, em.cols].all()
+
+
+def test_emit_blue_noise_is_deterministic_for_a_fixed_seed():
+    density = np.ones((25, 31))
+    domain = np.ones_like(density, dtype=bool)
+    first = h56.emit_blue_noise(density, domain, n_target=40, min_sep_px=3.0, seed=19)
+    second = h56.emit_blue_noise(density, domain, n_target=40, min_sep_px=3.0, seed=19)
+    assert np.array_equal(first.rows, second.rows)
+    assert np.array_equal(first.cols, second.cols)
 
 
 def test_emit_blue_noise_never_leaves_the_domain():
@@ -66,12 +95,11 @@ def test_emit_blue_noise_never_leaves_the_domain():
 
 
 def test_emit_blue_noise_never_leaves_the_domain_with_tiny_belief():
-    """Regression test for the absolute-tie-breaker bug measured on H57 (2026-10-07).
+    """Tiny positive weights still produce only eligible candidates.
 
-    With belief spreads below ~1e-6 the old absolute ``1e-6`` jitter dominated the
-    values and ``argmax`` could pick a cell outside the emission domain.  The jitter
-    is now scaled by each block's own maximum, so a max-belief (in-domain) cell always
-    wins.
+    The earlier block-argmax implementation could let an absolute tie jitter select a
+    cell outside the domain. The weighted-race implementation samples directly from
+    finite, positive-density cells, so neither jitter nor grid-edge truncation can do so.
     """
     rng = np.random.default_rng(11)
     dens = np.zeros((90, 90))
